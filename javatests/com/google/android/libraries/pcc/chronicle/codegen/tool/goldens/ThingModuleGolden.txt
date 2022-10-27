@@ -1,0 +1,98 @@
+package com.google.android.libraries.pcc.chronicle.codegen;
+
+import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor;
+import com.google.android.libraries.pcc.chronicle.api.optics.Lens;
+import dagger.Module;
+import dagger.Provides;
+import dagger.hilt.InstallIn;
+import dagger.hilt.components.SingletonComponent;
+import dagger.multibindings.IntoSet;
+import javax.inject.Singleton;
+
+@Module
+@InstallIn(SingletonComponent.class)
+public abstract class Thing_GeneratedModule {
+  @Provides
+  @Singleton
+  @IntoSet
+  public static Lens<?, ?, ?, ?> provideThingField1Lens() {
+    return Thing_GeneratedKt.THING_FIELD1_GENERATED_LENS;
+  }
+
+  @Provides
+  @Singleton
+  @IntoSet
+  public static Lens<?, ?, ?, ?> provideThingField2Lens() {
+    return Thing_GeneratedKt.THING_FIELD2_GENERATED_LENS;
+  }
+
+  @Provides
+  @Singleton
+  @IntoSet
+  public static Lens<?, ?, ?, ?> provideThingField3Lens() {
+    return Thing_GeneratedKt.THING_FIELD3_GENERATED_LENS;
+  }
+
+  @Provides
+  @Singleton
+  @IntoSet
+  public static Lens<?, ?, ?, ?> provideThingField4Lens() {
+    return Thing_GeneratedKt.THING_FIELD4_GENERATED_LENS;
+  }
+
+  @Provides
+  @Singleton
+  @IntoSet
+  public static Lens<?, ?, ?, ?> provideThingField5Lens() {
+    return Thing_GeneratedKt.THING_FIELD5_GENERATED_LENS;
+  }
+
+  @Provides
+  @Singleton
+  @IntoSet
+  public static Lens<?, ?, ?, ?> provideThingField6Lens() {
+    return Thing_GeneratedKt.THING_FIELD6_GENERATED_LENS;
+  }
+
+  @Provides
+  @Singleton
+  @IntoSet
+  public static Lens<?, ?, ?, ?> provideThingField7Lens() {
+    return Thing_GeneratedKt.THING_FIELD7_GENERATED_LENS;
+  }
+
+  @Provides
+  @Singleton
+  @IntoSet
+  public static Lens<?, ?, ?, ?> provideThingField8Lens() {
+    return Thing_GeneratedKt.THING_FIELD8_GENERATED_LENS;
+  }
+
+  @Provides
+  @Singleton
+  @IntoSet
+  public static Lens<?, ?, ?, ?> provideThingField9Lens() {
+    return Thing_GeneratedKt.THING_FIELD9_GENERATED_LENS;
+  }
+
+  @Provides
+  @Singleton
+  @IntoSet
+  public static Lens<?, ?, ?, ?> provideThingField10Lens() {
+    return Thing_GeneratedKt.THING_FIELD10_GENERATED_LENS;
+  }
+
+  @Provides
+  @Singleton
+  @IntoSet
+  public static Lens<?, ?, ?, ?> provideThingField11Lens() {
+    return Thing_GeneratedKt.THING_FIELD11_GENERATED_LENS;
+  }
+
+  @Provides
+  @Singleton
+  @IntoSet
+  public static DataTypeDescriptor provideThingDataTypeDescriptor() {
+    return Thing_GeneratedKt.THING_GENERATED_DTD;
+  }
+}

@@ -1,0 +1,13 @@
+meta
+  namespace: com.google.android.libraries.pcc.chronicle.codegen
+
+schema MapOfEntity
+  mapOfEntity: [inline TextToSimpleThingMapEntry]
+
+schema SimpleThing
+  field1: Text
+
+schema TextToSimpleThingMapEntry
+  key: Text
+  value: inline SimpleThing
+

@@ -1,0 +1,10 @@
+meta
+  namespace: com.google.android.libraries.pcc.chronicle.codegen
+
+schema NestedThing
+  field1: List<Text>
+  field2: inline SimpleThing
+
+schema SimpleThing
+  field1: Text
+

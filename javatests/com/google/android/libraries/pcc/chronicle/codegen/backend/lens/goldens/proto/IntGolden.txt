@@ -1,0 +1,23 @@
+package com.google.test
+
+import com.google.TestProto
+import com.google.android.libraries.pcc.chronicle.api.optics.Lens
+import com.google.android.libraries.pcc.chronicle.api.optics.OpticalAccessPath
+import kotlin.Int
+import kotlin.jvm.JvmField
+
+@JvmField
+public val TEST_PROTO_INT_FIELD_GENERATED_LENS: Lens<TestProto, TestProto, Int, Int> =
+    Lens.create<TestProto, Int>(
+  focusAccessPath = OpticalAccessPath("proto.TestProto", "intField"),
+  getter = { entity ->
+    entity.intField
+  },
+  setter = { entity, newValue ->
+    entity.toBuilder()
+      .apply {
+        intField = newValue
+      }
+      .build()
+  }
+)

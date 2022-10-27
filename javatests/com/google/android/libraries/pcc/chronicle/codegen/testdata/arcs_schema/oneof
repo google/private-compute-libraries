@@ -1,0 +1,27 @@
+meta
+  namespace: com.google.android.libraries.pcc.chronicle.codegen
+
+schema IntThing
+  field1: Int
+
+schema OneOfThing
+  // Part of OneOf: field1
+  intThing: inline IntThing
+  // Part of OneOf: field2
+  intThing2: inline IntThing
+  // Part of OneOf: field1
+  otherThing: inline OtherThing
+  // Part of OneOf: field2
+  otherThing2: inline OtherThing
+  // Part of OneOf: field1
+  stringThing: inline StringThing
+  // Part of OneOf: field2
+  stringThing2: inline StringThing
+
+schema OtherThing
+  field1: Text
+  field2: Text
+
+schema StringThing
+  field1: Text
+

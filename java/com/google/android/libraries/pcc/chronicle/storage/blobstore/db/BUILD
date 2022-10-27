@@ -1,0 +1,18 @@
+load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library")
+
+package(default_visibility = ["//java/com/google/android/libraries/pcc/chronicle:internal_visibility"])
+
+kt_android_library(
+    name = "db",
+    srcs = [
+        "BlobDao.kt",
+        "BlobDatabase.kt",
+        "BlobEntity.kt",
+        "PackageEntity.kt",
+    ],
+    deps = [
+        "//java/com/google/android/libraries/pcc/chronicle/storage/blobstore:management_info",
+        "//third_party/java/androidx/room",
+        "@maven//:androidx_room_room_ktx",
+    ],
+)

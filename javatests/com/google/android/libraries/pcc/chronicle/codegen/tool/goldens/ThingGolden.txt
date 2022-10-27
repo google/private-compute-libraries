@@ -1,0 +1,259 @@
+package com.google.android.libraries.pcc.chronicle.codegen
+
+import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor
+import com.google.android.libraries.pcc.chronicle.api.FieldType
+import com.google.android.libraries.pcc.chronicle.api.dataTypeDescriptor
+import com.google.android.libraries.pcc.chronicle.api.optics.Lens
+import com.google.android.libraries.pcc.chronicle.api.optics.OpticalAccessPath
+import com.google.protobuf.Timestamp
+import java.lang.SuppressWarnings
+import kotlin.Boolean
+import kotlin.ByteArray
+import kotlin.Double
+import kotlin.Float
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.jvm.JvmField
+
+@SuppressWarnings("deprecation")
+@Suppress("DEPRECATION")
+@JvmField
+public val THING_GENERATED_DTD: DataTypeDescriptor = dataTypeDescriptor(name =
+    "javatest.com.google.android.libraries.pcc.chronicle.codegen.CodegenTestProto.Thing", cls =
+    CodegenTestProto.Thing::class) {
+      "field1" to FieldType.String
+      "field2" to FieldType.ByteArray
+      "field3" to FieldType.Integer
+      "field4" to FieldType.Long
+      "field5" to FieldType.Float
+      "field6" to FieldType.Double
+      "field7" to FieldType.Boolean
+      "field8" to
+          FieldType.Enum("javatest.com.google.android.libraries.pcc.chronicle.codegen.CodegenTestProto.ThingEnum",
+          listOf("UNKNOWN", "FIRST", "SECOND"))
+      "field9" to FieldType.List(FieldType.String)
+      "field10" to FieldType.List(dataTypeDescriptor(name = "MapStringValueToBooleanValue", cls =
+          Map.Entry::class) {
+        "key" to FieldType.String
+        "value" to FieldType.Boolean
+      })
+      "field11" to dataTypeDescriptor(name = "google.protobuf.Timestamp", cls = Timestamp::class) {
+        "seconds" to FieldType.Long
+        "nanos" to FieldType.Integer
+      }
+    }
+
+@JvmField
+public val THING_FIELD1_GENERATED_LENS:
+    Lens<CodegenTestProto.Thing, CodegenTestProto.Thing, String, String> =
+    Lens.create<CodegenTestProto.Thing, String>(
+  focusAccessPath =
+    OpticalAccessPath("javatest.com.google.android.libraries.pcc.chronicle.codegen.CodegenTestProto.Thing",
+    "field1"),
+  getter = { entity ->
+    entity.field1
+  },
+  setter = { entity, newValue ->
+    entity.toBuilder()
+      .apply {
+        field1 = newValue
+      }
+      .build()
+  }
+)
+
+@JvmField
+public val THING_FIELD2_GENERATED_LENS:
+    Lens<CodegenTestProto.Thing, CodegenTestProto.Thing, ByteArray, ByteArray> =
+    Lens.create<CodegenTestProto.Thing, ByteArray>(
+  focusAccessPath =
+    OpticalAccessPath("javatest.com.google.android.libraries.pcc.chronicle.codegen.CodegenTestProto.Thing",
+    "field2"),
+  getter = { entity ->
+    entity.field2
+  },
+  setter = { entity, newValue ->
+    entity.toBuilder()
+      .apply {
+        field2 = newValue
+      }
+      .build()
+  }
+)
+
+@JvmField
+public val THING_FIELD3_GENERATED_LENS:
+    Lens<CodegenTestProto.Thing, CodegenTestProto.Thing, Int, Int> =
+    Lens.create<CodegenTestProto.Thing, Int>(
+  focusAccessPath =
+    OpticalAccessPath("javatest.com.google.android.libraries.pcc.chronicle.codegen.CodegenTestProto.Thing",
+    "field3"),
+  getter = { entity ->
+    entity.field3
+  },
+  setter = { entity, newValue ->
+    entity.toBuilder()
+      .apply {
+        field3 = newValue
+      }
+      .build()
+  }
+)
+
+@JvmField
+public val THING_FIELD4_GENERATED_LENS:
+    Lens<CodegenTestProto.Thing, CodegenTestProto.Thing, Long, Long> =
+    Lens.create<CodegenTestProto.Thing, Long>(
+  focusAccessPath =
+    OpticalAccessPath("javatest.com.google.android.libraries.pcc.chronicle.codegen.CodegenTestProto.Thing",
+    "field4"),
+  getter = { entity ->
+    entity.field4
+  },
+  setter = { entity, newValue ->
+    entity.toBuilder()
+      .apply {
+        field4 = newValue
+      }
+      .build()
+  }
+)
+
+@JvmField
+public val THING_FIELD5_GENERATED_LENS:
+    Lens<CodegenTestProto.Thing, CodegenTestProto.Thing, Float, Float> =
+    Lens.create<CodegenTestProto.Thing, Float>(
+  focusAccessPath =
+    OpticalAccessPath("javatest.com.google.android.libraries.pcc.chronicle.codegen.CodegenTestProto.Thing",
+    "field5"),
+  getter = { entity ->
+    entity.field5
+  },
+  setter = { entity, newValue ->
+    entity.toBuilder()
+      .apply {
+        field5 = newValue
+      }
+      .build()
+  }
+)
+
+@JvmField
+public val THING_FIELD6_GENERATED_LENS:
+    Lens<CodegenTestProto.Thing, CodegenTestProto.Thing, Double, Double> =
+    Lens.create<CodegenTestProto.Thing, Double>(
+  focusAccessPath =
+    OpticalAccessPath("javatest.com.google.android.libraries.pcc.chronicle.codegen.CodegenTestProto.Thing",
+    "field6"),
+  getter = { entity ->
+    entity.field6
+  },
+  setter = { entity, newValue ->
+    entity.toBuilder()
+      .apply {
+        field6 = newValue
+      }
+      .build()
+  }
+)
+
+@JvmField
+public val THING_FIELD7_GENERATED_LENS:
+    Lens<CodegenTestProto.Thing, CodegenTestProto.Thing, Boolean, Boolean> =
+    Lens.create<CodegenTestProto.Thing, Boolean>(
+  focusAccessPath =
+    OpticalAccessPath("javatest.com.google.android.libraries.pcc.chronicle.codegen.CodegenTestProto.Thing",
+    "field7"),
+  getter = { entity ->
+    entity.field7
+  },
+  setter = { entity, newValue ->
+    entity.toBuilder()
+      .apply {
+        field7 = newValue
+      }
+      .build()
+  }
+)
+
+@JvmField
+public val THING_FIELD8_GENERATED_LENS:
+    Lens<CodegenTestProto.Thing, CodegenTestProto.Thing, CodegenTestProto.ThingEnum, CodegenTestProto.ThingEnum>
+    = Lens.create<CodegenTestProto.Thing, CodegenTestProto.ThingEnum>(
+  focusAccessPath =
+    OpticalAccessPath("javatest.com.google.android.libraries.pcc.chronicle.codegen.CodegenTestProto.Thing",
+    "field8"),
+  getter = { entity ->
+    entity.field8
+  },
+  setter = { entity, newValue ->
+    entity.toBuilder()
+      .apply {
+        field8 = newValue
+      }
+      .build()
+  }
+)
+
+@JvmField
+public val THING_FIELD9_GENERATED_LENS:
+    Lens<CodegenTestProto.Thing, CodegenTestProto.Thing, List<String>, List<String>> =
+    Lens.create<CodegenTestProto.Thing, List<String>>(
+  focusAccessPath =
+    OpticalAccessPath("javatest.com.google.android.libraries.pcc.chronicle.codegen.CodegenTestProto.Thing",
+    "field9"),
+  getter = { entity ->
+    entity.field9List
+  },
+  setter = { entity, newValue ->
+    entity.toBuilder()
+      .apply {
+        clearField9()
+        addAllField9(newValue)
+      }
+      .build()
+  }
+)
+
+@JvmField
+public val THING_FIELD10_GENERATED_LENS:
+    Lens<CodegenTestProto.Thing, CodegenTestProto.Thing, Map<String, Boolean>, Map<String, Boolean>>
+    = Lens.create<CodegenTestProto.Thing, Map<String, Boolean>>(
+  focusAccessPath =
+    OpticalAccessPath("javatest.com.google.android.libraries.pcc.chronicle.codegen.CodegenTestProto.Thing",
+    "field10"),
+  getter = { entity ->
+    entity.field10Map
+  },
+  setter = { entity, newValue ->
+    entity.toBuilder()
+      .apply {
+        clearField10()
+        putAllField10(newValue)
+      }
+      .build()
+  }
+)
+
+@JvmField
+public val THING_FIELD11_GENERATED_LENS:
+    Lens<CodegenTestProto.Thing, CodegenTestProto.Thing, Timestamp, Timestamp> =
+    Lens.create<CodegenTestProto.Thing, Timestamp>(
+  focusAccessPath =
+    OpticalAccessPath("javatest.com.google.android.libraries.pcc.chronicle.codegen.CodegenTestProto.Thing",
+    "field11"),
+  getter = { entity ->
+    entity.field11
+  },
+  setter = { entity, newValue ->
+    entity.toBuilder()
+      .apply {
+        field11 = newValue
+      }
+      .build()
+  }
+)

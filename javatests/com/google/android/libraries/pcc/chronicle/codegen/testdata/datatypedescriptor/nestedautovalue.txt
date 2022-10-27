@@ -1,0 +1,31 @@
+/* ktlint-disable */
+package chronicle.test
+
+import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor
+import com.google.android.libraries.pcc.chronicle.api.FieldType
+import com.google.android.libraries.pcc.chronicle.api.dataTypeDescriptor
+import com.google.android.libraries.pcc.chronicle.codegen.NestedAutoValue
+import com.google.android.libraries.pcc.chronicle.codegen.SimpleAutoValue
+import com.google.android.libraries.pcc.chronicle.codegen.SourceClasses
+
+public val dataTypeDescriptor: DataTypeDescriptor = dataTypeDescriptor(name =
+    "com.google.android.libraries.pcc.chronicle.codegen.NestedAutoValue", cls =
+    NestedAutoValue::class) {
+      "field1" to FieldType.String
+      "field2" to FieldType.Integer
+      "field3" to FieldType.List(FieldType.String)
+      "field4" to FieldType.String
+      "field5" to dataTypeDescriptor(name =
+          "com.google.android.libraries.pcc.chronicle.codegen.SimpleAutoValue", cls =
+          SimpleAutoValue::class) {
+        "field1" to FieldType.String
+        "field2" to FieldType.Integer
+        "field3" to FieldType.List(FieldType.String)
+        "field4" to FieldType.String
+      }
+      "field6" to dataTypeDescriptor(name =
+          "com.google.android.libraries.pcc.chronicle.codegen.SourceClasses.SimpleThing", cls =
+          SourceClasses.SimpleThing::class) {
+        "field1" to FieldType.String
+      }
+    }

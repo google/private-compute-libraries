@@ -1,0 +1,26 @@
+meta
+  namespace: com.google.android.libraries.pcc.chronicle.codegen
+
+schema TextToBooleanMapEntry
+  key: Text
+  value: Boolean
+
+schema Thing
+  field1: Text
+  field10: List<Text>
+  field11: [Int]
+  field12: [inline TextToBooleanMapEntry]
+  field13: Text
+  field14: Instant
+  field15: Duration
+  field16: [inline TextToBooleanMapEntry]
+  field17: Text
+  field2: Byte
+  field3: Short
+  field4: Char
+  field5: Int
+  field6: Long
+  field7: Float
+  field8: Double
+  field9: Boolean
+

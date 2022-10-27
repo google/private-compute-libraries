@@ -1,0 +1,20 @@
+load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library")
+
+package(default_visibility = ["//java/com/google/android/libraries/pcc/chronicle:internal_visibility"])
+
+kt_android_library(
+    name = "in_memory",
+    srcs = [
+        "InMemoryBlobStore.kt",
+        "InMemoryBlobStoreManagement.kt",
+        "InMemoryStorage.kt",
+    ],
+    manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
+    deps = [
+        "//java/com/google/android/libraries/pcc/chronicle/api/storage",
+        "//java/com/google/android/libraries/pcc/chronicle/storage/blobstore",
+        "//java/com/google/android/libraries/pcc/chronicle/storage/blobstore:management_info",
+        "//java/com/google/android/libraries/pcc/chronicle/util:timesource",
+        "@maven//:org_jetbrains_kotlinx_atomicfu",
+    ],
+)

@@ -1,0 +1,52 @@
+// Copyright 2022 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package pcc.chronicle.api.storage;
+
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.android.libraries.pcc.chronicle.api.storage";
+
+/**
+ * Encompasses metadata related to entities which may be useful for policy
+ * enforcement or deletion propagation purposes.
+ */
+message EntityMetadata {
+  /**
+   * Unique Identifier for the entity associated with this metadata.
+   */
+  string id = 1;
+
+  /**
+   * Timestamp corresponding to when the entity associated with this metadata
+   * was created.
+   */
+  google.protobuf.Timestamp created = 2;
+
+  /**
+   * Timestamp corresponding to when the entity associated with this metadata
+   * was last updated.
+   */
+  google.protobuf.Timestamp updated = 3;
+
+  /**
+   * PackageNames of the applications from which the entity associated with this
+   * metadata originated, or the applications it may be related-to via an entity
+   * or entities it was derived-from.
+   */
+  repeated string associated_package_names = 4;
+}

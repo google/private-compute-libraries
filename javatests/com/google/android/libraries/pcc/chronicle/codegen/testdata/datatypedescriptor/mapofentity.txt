@@ -1,0 +1,22 @@
+/* ktlint-disable */
+package chronicle.test
+
+import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor
+import com.google.android.libraries.pcc.chronicle.api.FieldType
+import com.google.android.libraries.pcc.chronicle.api.dataTypeDescriptor
+import com.google.android.libraries.pcc.chronicle.codegen.SourceClasses
+import kotlin.collections.Map
+
+public val dataTypeDescriptor: DataTypeDescriptor = dataTypeDescriptor(name =
+    "com.google.android.libraries.pcc.chronicle.codegen.SourceClasses.MapOfEntity", cls =
+    SourceClasses.MapOfEntity::class) {
+      "mapOfEntity" to FieldType.List(dataTypeDescriptor(name = "MapStringValueToNestedTypeValue",
+          cls = Map.Entry::class) {
+        "key" to FieldType.String
+        "value" to dataTypeDescriptor(name =
+            "com.google.android.libraries.pcc.chronicle.codegen.SourceClasses.SimpleThing", cls =
+            SourceClasses.SimpleThing::class) {
+          "field1" to FieldType.String
+        }
+      })
+    }

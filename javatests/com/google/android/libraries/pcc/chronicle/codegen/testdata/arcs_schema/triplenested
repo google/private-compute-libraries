@@ -1,0 +1,12 @@
+meta
+  namespace: com.google.android.libraries.pcc.chronicle.codegen
+
+schema Thing1
+  field1: inline Thing2
+
+schema Thing2
+  field1: inline Thing3
+
+schema Thing3
+  field1: Text
+

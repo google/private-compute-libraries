@@ -1,0 +1,27 @@
+package com.google.test
+
+import com.google.TestProto
+import com.google.android.libraries.pcc.chronicle.api.optics.Lens
+import com.google.android.libraries.pcc.chronicle.api.optics.OpticalAccessPath
+import kotlin.jvm.JvmField
+
+@JvmField
+public val TEST_PROTO_NULLABLE_NESTED_FIELD_GENERATED_LENS:
+    Lens<TestProto, TestProto, TestProto?, TestProto?> = Lens.create<TestProto, TestProto?>(
+  focusAccessPath = OpticalAccessPath("proto.TestProto", "nullableNestedField"),
+  getter = { entity ->
+    if (entity.hasNullableNestedField()) {
+      entity.nullableNestedField
+    } else {
+      null
+    }
+  },
+  setter = { entity, newValue ->
+    entity.toBuilder()
+      .apply {
+        nullableNestedField = requireNotNull(newValue) {
+            "Optional proto field: nullableNestedField may only take on non-null values." }
+      }
+      .build()
+  }
+)

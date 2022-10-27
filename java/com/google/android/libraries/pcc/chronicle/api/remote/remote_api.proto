@@ -1,0 +1,172 @@
+// Copyright 2022 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package pcc.chronicle.api.remote;
+
+import "google/protobuf/empty.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.android.libraries.pcc.chronicle.api.remote";
+
+// Metadata accompanying a request to a Chronicle remote server.
+message RemoteRequestMetadata {
+  // Type of usage intended by the requester. This will be used to determine
+  // which policy applies to the request and the data returned by it (if any).
+  // TODO(b/210998515): PolicyId will be passed in place of usage-type until
+  //  this bug is resolved - both policy id and usage type will be supported
+  //  until further notice.
+  string usage_type = 1;
+
+  // The type of request.
+  oneof request_type {
+    StoreRequest store = 101;
+
+    StreamRequest stream = 102;
+
+    ComputeRequest compute = 103;
+  }
+}
+
+// Defines a request based on "pull" semantics. Meaning: clients explicitly
+// request to receive or store data. The responses may consist of multiple
+// pages of data, but the stream of those pages is finite and stops after all
+// data is transmitted.
+message StoreRequest {
+  // Name of the data type the request pertains-to. This is the type of data
+  // being managed/stored.
+  string data_type_name = 1;
+
+  oneof operation {
+    // Request a count of all entities.
+    google.protobuf.Empty count = 2;
+
+    // Request all entities.
+    google.protobuf.Empty fetch_all = 3;
+
+    // Fetch a subset of entities by their IDs.
+    IdentifierList fetch_by_id = 4;
+
+    // Delete all entities.
+    google.protobuf.Empty delete_all = 5;
+
+    // Delete a subset of entities by their IDs.
+    IdentifierList delete_by_id = 6;
+
+    // Create new entities from the RemoteRequest's RemoteEntity list. If an
+    // entity already exists with an ID specified in that list, update it.
+    google.protobuf.Empty create = 7;
+
+    // Update existing entities from the RemoteRequest's RemoteEntity list. If
+    // an entity doesn't exist with an ID specified in that list, skip it
+    // (don't create a new instance).
+    google.protobuf.Empty update = 8;
+  }
+
+  // Message encapsulating a list of identifiers for use in request metadata.
+  // These identifiers are defined as part of EntityMetadata included with
+  // WrappedEntities.
+  message IdentifierList {
+    repeated string ids = 1;
+  }
+}
+
+// Defines a request to either publish or subscribe to an infinite stream of
+// entities.
+message StreamRequest {
+  // Name of the data type the request pertains-to. This is the type of data
+  // being streamed.
+  string data_type_name = 1;
+
+  // The stream operation to apply.
+  Operation operation = 2;
+
+  enum Operation {
+    UNSPECIFIED = 0;
+
+    // Publish entities from the RemoteRequest's RemoteEntity list to a
+    // pass-thru bus, in order.
+    PUBLISH = 1;
+
+    // Subscribe to entities from a pass-thru bus.
+    SUBSCRIBE = 2;
+  }
+}
+
+// Defines requests to perform general computation on the request payload,
+// receiving computation results in response.
+message ComputeRequest {
+  /**
+   * Data type name for the entities that are the results of computation.
+   */
+  string result_data_type_name = 1;
+
+  /**
+   * Data type names of the entities passed as parameters for computation.
+   * Note: this is a single-item list in practice.
+   */
+  repeated string parameter_data_type_names = 2;
+
+  /** Specifies which method to run on the server. */
+  MethodId method_id = 3;
+
+  enum MethodId {
+    UNKNOWN = 0;
+    // Runs the MoiraiApiInterface classify method.
+    MOIRAI_CLASSIFY = 1;
+  }
+}
+
+// Metadata accompanying a response from a Chronicle remote server.
+message RemoteResponseMetadata {
+  // Count of the entities, only provided in response to 'count' requests.
+  uint32 count = 1;
+}
+
+// Metadata accompanying an error reported by a Chronicle remote server to a
+// client.
+message RemoteErrorMetadata {
+  Type error_type = 1;  // Type of error.
+  string message = 2;   // Human-readable message about the error.
+
+  enum Type {
+    // Catch-all for as-yet-unknown issues. This value is used when an
+    // unanticipated exception is thrown while handling a request.
+    UNKNOWN = 0;
+
+    // The request type is not supported by any known implementations for the
+    // given data type, or there is no serializer known for the data type.
+    UNSUPPORTED = 1;
+
+    // The policy referenced by the request (based on usage type, data type, and
+    // other context) is invalid as evaluated on the server.
+    POLICY_VIOLATION = 2;
+
+    // No policy matching the request could be found on the server (given the
+    // usage type, data type, and other context).
+    POLICY_NOT_FOUND = 3;
+
+    // The request received by the server could not be validate. One or more of
+    // its fields contained unexpected or missing values.
+    INVALID = 4;
+
+    // The server app has had its Chronicle instance disabled.
+    SERVER_DISABLED = 5;
+
+    // The connection provider serving remote connections for the requested
+    // data type has been disabled.
+    CONNECTION_DISABLED = 6;
+  }
+}

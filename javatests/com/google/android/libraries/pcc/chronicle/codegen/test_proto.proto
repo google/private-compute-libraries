@@ -1,0 +1,138 @@
+// Copyright 2022 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// LINT: ALLOW_GROUPS
+// Groups are deprecated, but lets make sure we support them.
+
+syntax = "proto2";
+
+package javatest.com.google.android.libraries.pcc.chronicle.codegen;
+
+import "google/protobuf/timestamp.proto";
+import "javatests/com/google/android/libraries/pcc/chronicle/codegen/test_sub_proto.proto";
+
+option java_package = "com.google.android.libraries.pcc.chronicle.codegen";
+option java_outer_classname = "CodegenTestProto";
+
+enum ThingEnum {
+  UNKNOWN = 0;
+  FIRST = 1;
+  SECOND = 2;
+}
+
+message Thing {
+  optional string field1 = 1;
+  optional bytes field2 = 2;
+  optional int32 field3 = 3;
+  optional int64 field4 = 4;
+  optional float field5 = 5;
+  optional double field6 = 6;
+  optional bool field7 = 7;
+  optional ThingEnum field8 = 8;
+  repeated string field9 = 9;
+  map<string, bool> field10 = 10;
+  optional .google.protobuf.Timestamp field11 = 11;
+}
+
+// Below are the protos for the nested tests, both nested and non-nested message
+// definitions are used to confirm they both work with the codegen.
+message NestedThing {
+  repeated string field1 = 1;
+  optional SimpleThing field2 = 2;
+}
+
+message NestedType {
+  message InnerType {
+    optional string field1 = 1;
+    message InnerInnerType {
+      optional string field1 = 1;
+    }
+    optional InnerInnerType field2 = 2;
+  }
+  optional InnerType field1 = 1;
+}
+
+message Thing1 {
+  optional Thing2 field1 = 1;
+}
+
+message Thing2 {
+  optional Thing3 field1 = 1;
+}
+
+message Thing3 {
+  optional string field1 = 1;
+}
+
+message OneOfThing {
+  message StringThing {
+    optional string field1 = 1;
+  }
+  message IntThing {
+    optional int32 field1 = 1;
+  }
+  message OtherThing {
+    optional ThingEnum field1 = 1;
+    optional string field2 = 2;
+  }
+  oneof field1 {
+    StringThing string_thing = 1;
+    IntThing int_thing = 2;
+    OtherThing other_thing = 3;
+  }
+  oneof field2 {
+    StringThing string_thing_2 = 4;
+    IntThing int_thing_2 = 5;
+    OtherThing other_thing_2 = 6;
+  }
+}
+
+message ListOfEntity {
+  repeated SimpleThing list_of_entity = 1;
+}
+
+message MapOfEntity {
+  map<string, SimpleThing> map_of_entity = 1;
+}
+
+message RecursiveRefA {
+  optional RecursiveRefB other = 1;
+}
+
+message RecursiveRefB {
+  optional RecursiveRefA other = 1;
+}
+
+message RecursiveListRefA {
+  repeated RecursiveListRefB others = 1;
+}
+
+message RecursiveListRefB {
+  repeated RecursiveListRefA others = 1;
+}
+
+message RecursiveMapRefA {
+  map<string, RecursiveMapRefB> others = 10;
+}
+
+message RecursiveMapRefB {
+  map<string, RecursiveMapRefA> others = 10;
+}
+
+message RepeatedGroup {
+  repeated group Inner = 1 {
+    optional string field1 = 1;
+    optional NestedThing field2 = 2;
+  }
+}

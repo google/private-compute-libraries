@@ -1,0 +1,40 @@
+/* ktlint-disable */
+package chronicle.test
+
+import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor
+import com.google.android.libraries.pcc.chronicle.api.FieldType
+import com.google.android.libraries.pcc.chronicle.api.dataTypeDescriptor
+import com.google.android.libraries.pcc.chronicle.codegen.SourceClasses
+import kotlin.collections.Map
+
+public val dataTypeDescriptor: DataTypeDescriptor = dataTypeDescriptor(name =
+    "com.google.android.libraries.pcc.chronicle.codegen.SourceClasses.Thing", cls =
+    SourceClasses.Thing::class) {
+      "field1" to FieldType.String
+      "field2" to FieldType.Byte
+      "field3" to FieldType.Short
+      "field4" to FieldType.Char
+      "field5" to FieldType.Integer
+      "field6" to FieldType.Long
+      "field7" to FieldType.Float
+      "field8" to FieldType.Double
+      "field9" to FieldType.Boolean
+      "field10" to FieldType.List(FieldType.String)
+      "field11" to FieldType.List(FieldType.Integer)
+      "field12" to FieldType.List(dataTypeDescriptor(name = "MapStringValueToBooleanValue", cls =
+          Map.Entry::class) {
+        "key" to FieldType.String
+        "value" to FieldType.Boolean
+      })
+      "field13" to
+          FieldType.Enum("com.google.android.libraries.pcc.chronicle.codegen.SourceClasses.ThingEnum",
+          listOf("UNKNOWN", "FIRST", "SECOND"))
+      "field14" to FieldType.Instant
+      "field15" to FieldType.Duration
+      "field16" to FieldType.List(dataTypeDescriptor(name = "MapStringValueToBooleanValue", cls =
+          Map.Entry::class) {
+        "key" to FieldType.String
+        "value" to FieldType.Boolean
+      })
+      "field17" to FieldType.ByteArray
+    }

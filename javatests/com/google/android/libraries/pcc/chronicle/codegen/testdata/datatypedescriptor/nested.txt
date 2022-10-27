@@ -1,0 +1,18 @@
+/* ktlint-disable */
+package chronicle.test
+
+import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor
+import com.google.android.libraries.pcc.chronicle.api.FieldType
+import com.google.android.libraries.pcc.chronicle.api.dataTypeDescriptor
+import com.google.android.libraries.pcc.chronicle.codegen.SourceClasses
+
+public val dataTypeDescriptor: DataTypeDescriptor = dataTypeDescriptor(name =
+    "com.google.android.libraries.pcc.chronicle.codegen.SourceClasses.NestedThing", cls =
+    SourceClasses.NestedThing::class) {
+      "field1" to FieldType.List(FieldType.String)
+      "field2" to dataTypeDescriptor(name =
+          "com.google.android.libraries.pcc.chronicle.codegen.SourceClasses.SimpleThing", cls =
+          SourceClasses.SimpleThing::class) {
+        "field1" to FieldType.String
+      }
+    }

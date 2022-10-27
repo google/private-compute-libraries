@@ -1,0 +1,9 @@
+meta
+  namespace: com.google.android.libraries.pcc.chronicle.codegen
+
+schema ListOfEntity
+  listOfEntity: List<inline SimpleThing>
+
+schema SimpleThing
+  field1: Text
+
