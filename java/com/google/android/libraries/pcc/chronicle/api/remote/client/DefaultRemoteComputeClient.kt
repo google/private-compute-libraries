@@ -35,7 +35,7 @@ class DefaultRemoteComputeClient<T : Any>(
     methodId: ComputeRequest.MethodId,
     parameters: Parameters<Arg>
   ): Flow<WrappedEntity<T>> {
-    logcat.atVerbose().log("Compute: run(%s, %s)", methodId, parameters)
+    logcat.v("Compute: run(%s, %s)", methodId, parameters)
     val request =
       RemoteRequest(
         metadata =

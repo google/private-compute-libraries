@@ -32,7 +32,7 @@ class DefaultRemoteStreamClient<T : Any>(
   private val transport: Transport
 ) : BaseRemoteClient<T>(serializer), RemoteStreamClient<T> {
   override suspend fun publish(policy: Policy?, entities: List<WrappedEntity<T>>) {
-    logcat.atVerbose().log("Stream: publish(#entities: %d)", entities.size)
+    logcat.v("Stream: publish(#entities: %d)", entities.size)
     val request =
       RemoteRequest(
         metadata = buildStreamRequestMetadata(policy, StreamRequest.Operation.PUBLISH),
@@ -44,7 +44,7 @@ class DefaultRemoteStreamClient<T : Any>(
   }
 
   override fun subscribe(policy: Policy?): Flow<WrappedEntity<T>> {
-    logcat.atVerbose().log("Stream: subscribe()")
+    logcat.v("Stream: subscribe()")
     val request =
       RemoteRequest(buildStreamRequestMetadata(policy, StreamRequest.Operation.SUBSCRIBE))
     return transport.serveAsWrappedEntityFlow(request)

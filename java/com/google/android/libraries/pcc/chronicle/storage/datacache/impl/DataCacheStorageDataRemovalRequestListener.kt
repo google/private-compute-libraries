@@ -37,9 +37,9 @@ class DataCacheStorageDataRemovalRequestListener(
     if (flags.config.value.disableChronicleDataRemovalRequestListener) return
 
     // TODO(b/232848132): Don't just delete everything.
-    logger.atDebug().log("Handling data removal request.")
+    logger.d("Handling data removal request.")
     val countRemoved = dataStorageCache.purgeAllEntities()
-    logger.atDebug().log("Number of items removed: %d.", countRemoved)
+    logger.d("Number of items removed: %d.", countRemoved)
 
     downstreamListeners.forEach { it.onDataRemoval(request) }
   }

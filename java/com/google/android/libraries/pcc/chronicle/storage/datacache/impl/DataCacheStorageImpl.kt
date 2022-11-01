@@ -22,7 +22,6 @@ import com.google.android.libraries.pcc.chronicle.api.storage.toInstant
 import com.google.android.libraries.pcc.chronicle.storage.datacache.DataCacheStorage
 import com.google.android.libraries.pcc.chronicle.util.Logcat
 import com.google.android.libraries.pcc.chronicle.util.TimeSource
-import com.google.common.flogger.android.AndroidFluentLogger
 import java.time.Duration
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.update
@@ -45,13 +44,13 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
       currentMap + (cls to newEntry)
     }
 
-    logger.atDebug().log("[%s] registerDataType : %s", className, cls.name)
+    logger.d("[%s] registerDataType : %s", className, cls.name)
   }
 
   override fun <T> unregisterDataType(cls: Class<T>) {
     removeAll(cls)
     entityStore.update { it - cls }
-    logger.atDebug().log("[%s] unregisterDataType : %s", className, cls.name)
+    logger.d("[%s] unregisterDataType : %s", className, cls.name)
   }
 
   override fun <T> size(cls: Class<T>): Int = all(cls).size
@@ -92,7 +91,7 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
   }
 
   override fun purgeExpiredEntities() {
-    logger.atDebug().log("[%s]: purging entities from data cache.", className)
+    logger.d("[%s]: purging entities from data cache.", className)
     entityStore.value.values.forEach { dataCacheWrapper ->
       val ttl = dataCacheWrapper.config.ttl
       dataCacheWrapper.purgeEntitiesWhere { it.isExpired(ttl) }
@@ -100,7 +99,7 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
   }
 
   override fun purgeAllEntitiesForPackage(packageName: String): Int {
-    logger.atDebug().log("[%s]: purging all entities for package removal.", className)
+    logger.d("[%s]: purging all entities for package removal.", className)
     return entityStore.value.values
       .map { dataCacheWrapper ->
         dataCacheWrapper.purgeEntitiesWhere {
@@ -111,7 +110,7 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
   }
 
   override fun <T> purgeEntitiesForPackage(cls: Class<T>, packageName: String): Int {
-    logger.atDebug().log("[%s]: purging %s entities for package removal.", className, cls.name)
+    logger.d("[%s]: purging %s entities for package removal.", className, cls.name)
     return dataCacheWrapperForClass(cls)?.purgeEntitiesWhere {
       packageName in it.metadata.associatedPackageNamesList
     }
@@ -119,7 +118,7 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
   }
 
   override fun purgeAllEntitiesNotInPackages(packages: Set<String>): Int {
-    logger.atDebug().log("[%s]: purging entities for package reconciliation.", className)
+    logger.d("[%s]: purging entities for package reconciliation.", className)
     return entityStore.value.values
       .map { dataCacheWrapper ->
         dataCacheWrapper.purgeEntitiesWhere {
@@ -162,13 +161,13 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
   private fun <T> dataCacheWrapperForClass(cls: Class<T>): DataCacheWrapper<T>? {
     val result = entityStore.value[cls] as? DataCacheWrapper<T>
     if (result == null) {
-      logger.atDebug().log("[%s] no store registered for %s.", className, cls)
+      logger.d("[%s] no store registered for %s.", className, cls)
     }
     return result
   }
 
   companion object {
-    private val logger: AndroidFluentLogger = Logcat.default
+    private val logger = Logcat.default
     private val className = DataCacheStorageImpl::class.java.simpleName
   }
 }

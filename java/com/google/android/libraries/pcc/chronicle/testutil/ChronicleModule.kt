@@ -80,7 +80,7 @@ abstract class ChronicleModule {
       // goes from true -> false have to wait for an app restart to get the real impl back.
       val current = flags.config.value
       if (current.failNewConnections || current.emergencyDisable) {
-        log.atDebug().log("Staring Chronicle in no-op mode.")
+        log.d("Starting Chronicle in no-op mode.")
         return NoOpChronicle(disabledFromStartupFlags = true)
       }
       // This listener is here rather than in ChronicleImpl to make the decision on whether to use
@@ -91,12 +91,12 @@ abstract class ChronicleModule {
           if (value.emergencyDisable) {
             // Force exit the app. It will be restarted by SystemServer and when it comes back up
             // we will be using the no-op impl.
-            log.atInfo().log("Emergency disable engaged, restarting APK.")
+            log.i("Emergency disable engaged, restarting APK.")
             exitProcess(0)
           }
         }
         .launchIn(GlobalScope)
-      log.atDebug().log("Staring Chronicle in enabled mode.")
+      log.d("Starting Chronicle in enabled mode.")
       return DefaultChronicle(
         context,
         engine,

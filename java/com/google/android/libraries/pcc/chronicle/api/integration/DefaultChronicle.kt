@@ -39,7 +39,6 @@ import com.google.android.libraries.pcc.chronicle.api.policy.builder.PolicyCheck
 import com.google.android.libraries.pcc.chronicle.api.policy.builder.PolicyCheckResult
 import com.google.android.libraries.pcc.chronicle.util.Logcat
 import com.google.android.libraries.pcc.chronicle.util.TypedMap
-import com.google.android.libraries.pcc.chronicle.util.timeVerbose
 import kotlin.reflect.KClass
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.update
@@ -57,7 +56,10 @@ class DefaultChronicle(
     config.policyConformanceCheck.checkPoliciesConform(chronicleContext.policySet.toSet())
 
     chronicleContext.connectionProviders.forEach {
-      logger.atDebug().log("ConnectionProvider: %s", it::class.qualifiedName)
+      // Log if not null
+      it::class.qualifiedName?.let { qualifiedName ->
+        logger.d("ConnectionProvider: %s", qualifiedName)
+      }
     }
 
     // Verify that all provided write connections match all associated policies, and that they all
@@ -108,9 +110,10 @@ class DefaultChronicle(
     }
 
     if (!request.requester.requiredConnectionTypes.contains(request.connectionType)) {
-      logger
-        .atDebug()
-        .log("Connection is not declared as required in `ProcessorNode` of a request: %s", request)
+      logger.d(
+        "Connection is not declared as required in `ProcessorNode` of a request: %s",
+        request
+      )
       return ConnectionResult.Failure(ConnectionNotDeclared(request))
     }
 
@@ -164,7 +167,7 @@ class DefaultChronicle(
     return when (config.policyMode) {
       Config.PolicyMode.STRICT -> error
       Config.PolicyMode.LOG -> {
-        logger.atSevere().log("Policy violation detected: %s", error.message)
+        error.message?.let { logger.e("Policy violation detected: %s", it) }
         null
       }
     }

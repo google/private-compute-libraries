@@ -40,21 +40,21 @@ import kotlinx.coroutines.flow.mapNotNull
  */
 class AidlTransport(private val connector: ChronicleServiceConnector) : Transport {
   override fun serve(request: RemoteRequest): Flow<RemoteResponse> = callbackFlow {
-    logcat.atVerbose().log("AidlTransport: serve called %s", request.metadata)
+    logcat.v("AidlTransport: serve called %s", request.metadata)
     val iRemote =
       connector.connectionState
         .mapNotNull { it as? ChronicleServiceConnector.State.Connected }
         .first()
         .binder
 
-    logcat.atDebug().log("AidlTransport: received binder")
+    logcat.d("AidlTransport: received binder")
 
     // We will need to be careful to manage the reference to our cancellation signal so that it is
     // releasable. At the end of any operation, this reference should be nulled-out.
     val cancellationSignal = atomic<ICancellationSignal?>(null)
     val deathRecipient =
       IBinder.DeathRecipient {
-        logcat.atDebug().log("AidlTransport: iRemote death recipient triggered")
+        logcat.d("AidlTransport: iRemote death recipient triggered")
         // Ensure we null-out the cancellation signal reference to not leak it.
         cancellationSignal.value = null
         channel.close(CONNECTION_LOST.copy())
@@ -63,14 +63,14 @@ class AidlTransport(private val connector: ChronicleServiceConnector) : Transpor
     val callback =
       object : IResponseCallback.Stub() {
         override fun onData(data: RemoteResponse) {
-          logcat.atVerbose().log("AidlTransport: onData [entities=%d]", data.entities.size)
+          logcat.v("AidlTransport: onData [entities=%d]", data.entities.size)
           trySendBlocking(data)
         }
 
         override fun onError(error: RemoteError) {
           // We null-out the signal before closing the channel so we avoid attempting to send a
           // cancel signal in the awaitClose block below.
-          logcat.atVerbose().withCause(error).log("AidlTransport: onError")
+          logcat.v(error, "AidlTransport: onError")
           cancellationSignal.value = null
           channel.close(error)
         }
@@ -78,13 +78,13 @@ class AidlTransport(private val connector: ChronicleServiceConnector) : Transpor
         override fun onComplete() {
           // We null-out the signal before closing the channel so we avoid attempting to send a
           // cancel signal in the awaitClose block below.
-          logcat.atVerbose().log("AidlTransport: onComplete")
+          logcat.v("AidlTransport: onComplete")
           cancellationSignal.value = null
           channel.close()
         }
 
         override fun provideCancellationSignal(signal: ICancellationSignal) {
-          logcat.atVerbose().log("AidlTransport: provideCancellationSignal")
+          logcat.v("AidlTransport: provideCancellationSignal")
           cancellationSignal.value = signal
         }
       }
@@ -93,16 +93,17 @@ class AidlTransport(private val connector: ChronicleServiceConnector) : Transpor
     } catch (e: Throwable) {
       channel.close(
         CONNECTION_LOST.copy(
-          extras = Bundle().apply {
-            putString("ORIGINAL_MESSAGE", e.message)
-            putString("ORIGINAL_TYPE", e.javaClass.name)
-          }
+          extras =
+            Bundle().apply {
+              putString("ORIGINAL_MESSAGE", e.message)
+              putString("ORIGINAL_TYPE", e.javaClass.name)
+            }
         )
       )
     }
 
     awaitClose {
-      logcat.atVerbose().log("AidlTransport: done")
+      logcat.v("AidlTransport: done")
       iRemote.asBinder()?.unlinkToDeath(deathRecipient, 0)
 
       // If the coroutine was canceled, we should still have a non-null reference to the

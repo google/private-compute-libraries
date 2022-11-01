@@ -57,7 +57,7 @@ abstract class BaseRemoteClient<T : Any>(protected val serializer: Serializer<T>
       serve(request).collect {
         it.entities.forEach { entity ->
           val deserialized = serializer.deserialize<T>(entity)
-          logcat.atVerbose().log("%s: onEntity(%s)", request.metadata.requestTypeCase, deserialized)
+          logcat.v("%s: onEntity(%s)", request.metadata.requestTypeCase, deserialized)
           emit(deserialized)
         }
       }

@@ -28,7 +28,6 @@ import com.google.android.libraries.pcc.chronicle.api.remote.createCoroutineExce
 import com.google.android.libraries.pcc.chronicle.api.remote.server.RemoteServer
 import com.google.android.libraries.pcc.chronicle.remote.handler.RemoteServerHandlerFactory
 import com.google.android.libraries.pcc.chronicle.util.Logcat
-import com.google.android.libraries.pcc.chronicle.util.timeVerbose
 import java.lang.ref.WeakReference
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.CoroutineScope
@@ -72,14 +71,12 @@ class RemoteRouter(
       scope.launch(callback.createCoroutineExceptionHandler()) {
         val metadata = request.metadata
 
-        logcat
-          .atVerbose()
-          .log(
-            "RemoteRouter[%d] checking policy\n\t%s\n\t%s]",
-            requestNumber,
-            clientDetails,
-            metadata
-          )
+        logcat.v(
+          "RemoteRouter[%d] checking policy\n\t%s\n\t%s]",
+          requestNumber,
+          clientDetails,
+          metadata
+        )
 
         // Find the server, check the policy, and fetch a handler. If no server can be found, a
         // RemoteError will be thrown and passed to the client by the CoroutineExceptionHandler.
@@ -99,7 +96,7 @@ class RemoteRouter(
         // will be caught by the CoroutineExceptionHandler and sent to the client.
         val handler = handlerFactory.buildServerHandler(metadata, server)
 
-        logcat.atVerbose().log("RemoteRouter[%d] handling request", requestNumber)
+        logcat.v("RemoteRouter[%d] handling request", requestNumber)
 
         // Handle the call! If the server throws while handling, the exception will be caught by
         // the CoroutineExceptionHandler and sent to the client.
@@ -110,24 +107,24 @@ class RemoteRouter(
           handler.handle(policy, request.entities, callback)
 
           // Mark the whole operation as done.
-          logcat.atVerbose().log("RemoteRouter[%d] calling onComplete", requestNumber)
+          logcat.v("RemoteRouter[%d] calling onComplete", requestNumber)
           callback.onComplete()
         }
       }
 
     // Register a death recipient with the callback, so we can cancel the job if the client dies.
     val deathRecipient = DeathRecipient(serveJob::cancel)
-    logcat.atVerbose().log("RemoteRouter[%d] linking death recipient", requestNumber)
+    logcat.v("RemoteRouter[%d] linking death recipient", requestNumber)
     callback.asBinder().linkToDeath(deathRecipient, 0)
     serveJob.invokeOnCompletion {
       // Remove our death recipient when the job is done/fails, this is important to avoid leaking
       // the death recipient in the BinderProxy.
-      logcat.atVerbose().log("RemoteRouter[%d] unlinking death recipient", requestNumber)
+      logcat.v("RemoteRouter[%d] unlinking death recipient", requestNumber)
       callback.asBinder().unlinkToDeath(deathRecipient, 0)
     }
 
     // Provide a cancellation signal which cancels the serveJob if used.
-    logcat.atVerbose().log("RemoteRouter[%d] providing cancellation signal", requestNumber)
+    logcat.v("RemoteRouter[%d] providing cancellation signal", requestNumber)
     callback.provideCancellationSignal(
       CancellationSignal(requestNumber, WeakReference(serveJob), WeakReference(callback))
     )
@@ -143,7 +140,7 @@ class RemoteRouter(
     private val callback: WeakReference<IResponseCallback>
   ) : ICancellationSignal.Stub() {
     override fun cancel() {
-      logcat.atVerbose().log("RemoteRouter[%d] cancellation signal triggered", requestNumber)
+      logcat.v("RemoteRouter[%d] cancellation signal triggered", requestNumber)
 
       // Cancel the job and, if the callback is still active - send complete (cancellation is
       // considered a successful end result of the interaction).

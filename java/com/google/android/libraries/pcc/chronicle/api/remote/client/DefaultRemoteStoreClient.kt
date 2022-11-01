@@ -34,21 +34,21 @@ class DefaultRemoteStoreClient<T : Any>(
   private val transport: Transport
 ) : BaseRemoteClient<T>(serializer), RemoteStoreClient<T> {
   override suspend fun count(policy: Policy?): Int {
-    logcat.atVerbose().log("Store: count()")
+    logcat.v("Store: count()")
     val request =
       RemoteRequest(buildStoreRequestMetadata(policy) { count = Empty.getDefaultInstance() })
     return transport.serve(request).first().metadata.count
   }
 
   override fun fetchAll(policy: Policy?): Flow<WrappedEntity<T>> {
-    logcat.atVerbose().log("Store: fetchAll()")
+    logcat.v("Store: fetchAll()")
     val request =
       RemoteRequest(buildStoreRequestMetadata(policy) { fetchAll = Empty.getDefaultInstance() })
     return transport.serveAsWrappedEntityFlow(request)
   }
 
   override fun fetchById(policy: Policy?, ids: List<String>): Flow<WrappedEntity<T>> {
-    logcat.atVerbose().log("Store: fetchById(#ids: %d)", ids.size)
+    logcat.v("Store: fetchById(#ids: %d)", ids.size)
     val request =
       RemoteRequest(
         buildStoreRequestMetadata(policy) {
@@ -59,14 +59,14 @@ class DefaultRemoteStoreClient<T : Any>(
   }
 
   override suspend fun deleteAll(policy: Policy?) {
-    logcat.atVerbose().log("Store: deleteByAll()")
+    logcat.v("Store: deleteByAll()")
     val request =
       RemoteRequest(buildStoreRequestMetadata(policy) { deleteAll = Empty.getDefaultInstance() })
     transport.serve(request).collect()
   }
 
   override suspend fun deleteById(policy: Policy?, ids: List<String>) {
-    logcat.atVerbose().log("Store: deleteById(#ids: %d)", ids.size)
+    logcat.v("Store: deleteById(#ids: %d)", ids.size)
     val request =
       RemoteRequest(
         buildStoreRequestMetadata(policy) {
@@ -77,7 +77,7 @@ class DefaultRemoteStoreClient<T : Any>(
   }
 
   override suspend fun create(policy: Policy?, entities: List<WrappedEntity<T>>) {
-    logcat.atVerbose().log("Store: create(#entities: %d)", entities.size)
+    logcat.v("Store: create(#entities: %d)", entities.size)
     val request =
       RemoteRequest(
         metadata = buildStoreRequestMetadata(policy) { create = Empty.getDefaultInstance() },
@@ -87,7 +87,7 @@ class DefaultRemoteStoreClient<T : Any>(
   }
 
   override suspend fun update(policy: Policy?, entities: List<WrappedEntity<T>>) {
-    logcat.atVerbose().log("Store: update(#entities: %d)", entities.size)
+    logcat.v("Store: update(#entities: %d)", entities.size)
     val request =
       RemoteRequest(
         metadata = buildStoreRequestMetadata(policy) { update = Empty.getDefaultInstance() },

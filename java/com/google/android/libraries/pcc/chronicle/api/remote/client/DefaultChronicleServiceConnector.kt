@@ -50,6 +50,7 @@ import kotlinx.coroutines.withTimeout
  *
  * The reconnection/retry flow works as follows:
  *
+ * ```
  * 1. While we haven't seen [maximumFailures] failures in a row:
  *    1. emit([State.Disconnected])
  *    1. delay for any backoff time from previous attempts
@@ -68,13 +69,14 @@ import kotlinx.coroutines.withTimeout
  *       1. go to the top of the loop
  * 1. emit([State.Unavailable])
  * 1. Exit the flow
+ * ```
  *
  * @param connectionScope A coroutine scope to which the lifecycle of the service binding should be
- *   scoped. When this scope is canceled, [Context.unbindService] will be used to release a bind to
- *   the ChronicleService.
+ * scoped. When this scope is canceled, [Context.unbindService] will be used to release a bind to
+ * the ChronicleService.
  * @param serviceComponentName The [ComponentName] where the ChronicleService can be found.
  * @param timeout Maximum amount of time to spend trying to bind to the ChronicleService before
- *   trying again after a backoff.
+ * trying again after a backoff.
  */
 class DefaultChronicleServiceConnector(
   private val context: Context,
@@ -87,99 +89,99 @@ class DefaultChronicleServiceConnector(
 
   override val connectionState: SharedFlow<State> =
     flow {
-      val intent = Intent().apply { component = serviceComponentName }
-      var retryDelayMillis = 0L
-      var repeatedFailures = 0
+        val intent = Intent().apply { component = serviceComponentName }
+        var retryDelayMillis = 0L
+        var repeatedFailures = 0
 
-      while (currentCoroutineContext().isActive && repeatedFailures < maximumFailures) {
-        // We start off disconnected.
-        emit(State.Disconnected)
+        while (currentCoroutineContext().isActive && repeatedFailures < maximumFailures) {
+          // We start off disconnected.
+          emit(State.Disconnected)
 
-        // Suspend for a backoff (if any is necessary) in the case that this is a retry.
-        delay(retryDelayMillis)
+          // Suspend for a backoff (if any is necessary) in the case that this is a retry.
+          delay(retryDelayMillis)
 
-        try {
-          // Let downstream users know we are going to try to connect.
-          emit(State.Connecting)
+          try {
+            // Let downstream users know we are going to try to connect.
+            emit(State.Connecting)
 
-          // Create a deferred we can use to be notified when the connection is dropped.
-          val disconnectedDeferred = CompletableDeferred<Unit>()
+            // Create a deferred we can use to be notified when the connection is dropped.
+            val disconnectedDeferred = CompletableDeferred<Unit>()
 
-          // Try to connect, with a timeout.
-          val remote =
-            withTimeout(timeout.toMillis()) {
-              suspendCancellableCoroutine<IRemote> { continuation ->
-                val connection: ServiceConnection =
-                  object : ServiceConnection {
-                    override fun onServiceConnected(name: ComponentName, service: IBinder?) {
-                      if (!continuation.isActive) return
-                      if (service != null) {
-                        continuation.resume(IRemote.Stub.asInterface(service))
-                      } else {
-                        continuation.resumeWithException(
-                          IllegalStateException(
-                            "IBinder was null for service: $serviceComponentName"
+            // Try to connect, with a timeout.
+            val remote =
+              withTimeout(timeout.toMillis()) {
+                suspendCancellableCoroutine<IRemote> { continuation ->
+                  val connection: ServiceConnection =
+                    object : ServiceConnection {
+                      override fun onServiceConnected(name: ComponentName, service: IBinder?) {
+                        if (!continuation.isActive) return
+                        if (service != null) {
+                          continuation.resume(IRemote.Stub.asInterface(service))
+                        } else {
+                          continuation.resumeWithException(
+                            IllegalStateException(
+                              "IBinder was null for service: $serviceComponentName"
+                            )
                           )
-                        )
+                        }
+                      }
+
+                      override fun onServiceDisconnected(name: ComponentName) {
+                        logcat.i("Default CSC: onServiceDisconnected")
+                        if (!continuation.isActive) return
+                        serviceConnection.value = null
+                        disconnectedDeferred.complete(Unit)
                       }
                     }
 
-                    override fun onServiceDisconnected(name: ComponentName) {
-                      logcat.atInfo().log("Default CSC: onServiceDisconnected")
-                      if (!continuation.isActive) return
-                      serviceConnection.value = null
-                      disconnectedDeferred.complete(Unit)
-                    }
+                  continuation.invokeOnCancellation {
+                    logcat.d("Default CSC: connection coroutine canceled")
+                    context.unbindService(connection)
                   }
-
-                continuation.invokeOnCancellation {
-                  logcat.atDebug().log("Default CSC: connection coroutine canceled")
-                  context.unbindService(connection)
+                  if (!context.bindService(intent, connection, Context.BIND_AUTO_CREATE)) {
+                    continuation.resumeWithException(
+                      IllegalStateException("Could not start service: $serviceComponentName")
+                    )
+                  }
+                  serviceConnection.value = connection
                 }
-                if (!context.bindService(intent, connection, Context.BIND_AUTO_CREATE)) {
-                  continuation.resumeWithException(
-                    IllegalStateException("Could not start service: $serviceComponentName")
-                  )
-                }
-                serviceConnection.value = connection
               }
-            }
 
-          // If we've reached this line we're connected! Reset the failure count and backoff
-          // delay.
-          emit(State.Connected(remote))
-          repeatedFailures = 0
-          retryDelayMillis = 0
+            // If we've reached this line we're connected! Reset the failure count and backoff
+            // delay.
+            emit(State.Connected(remote))
+            repeatedFailures = 0
+            retryDelayMillis = 0
 
-          // Wait for disconnect, to retry connecting again.
-          disconnectedDeferred.await()
-        } catch (e: TimeoutCancellationException) {
-          logcat.atWarning().withCause(e)
-            .log("Default CSC: timeout - [repeatedFailures = %d]", repeatedFailures)
-          repeatedFailures++
-          retryDelayMillis = retryDelayMillis * repeatedFailures + RETRY_DELAY_INCREMENT_MS
-        } catch (e: IllegalStateException) {
-          logcat.atWarning().withCause(e)
-            .log("Default CSC: illegal state exception - [repeatedFailures = %d]", repeatedFailures)
-          repeatedFailures++
-          retryDelayMillis = retryDelayMillis * repeatedFailures + RETRY_DELAY_INCREMENT_MS
+            // Wait for disconnect, to retry connecting again.
+            disconnectedDeferred.await()
+          } catch (e: TimeoutCancellationException) {
+            logcat.w(e, "Default CSC: timeout - [repeatedFailures = %d]", repeatedFailures)
+            repeatedFailures++
+            retryDelayMillis = retryDelayMillis * repeatedFailures + RETRY_DELAY_INCREMENT_MS
+          } catch (e: IllegalStateException) {
+            logcat.w(
+              e,
+              "Default CSC: illegal state exception - [repeatedFailures = %d]",
+              repeatedFailures
+            )
+            repeatedFailures++
+            retryDelayMillis = retryDelayMillis * repeatedFailures + RETRY_DELAY_INCREMENT_MS
+          }
         }
-      }
 
-      if (repeatedFailures == maximumFailures) {
-        // Exited the loop due to too many failures in a row.
-        emit(
-          State.Unavailable(
-            IllegalStateException(
-              "Tried to connect to $serviceComponentName, failed $maximumFailures times in a row"
+        if (repeatedFailures == maximumFailures) {
+          // Exited the loop due to too many failures in a row.
+          emit(
+            State.Unavailable(
+              IllegalStateException(
+                "Tried to connect to $serviceComponentName, failed $maximumFailures times in a row"
+              )
             )
           )
-        )
+        }
       }
-    }
-      .onEach {
-        logcat.atInfo().log("Default CSC: State = %s", it)
-      }
+      .onEach { logcat.i("Default CSC: State = %s", it) }
       .onCompletion {
         // If the scope was canceled while we were still connected, unbind the service.
         val connection = serviceConnection.getAndUpdate { null }
