@@ -20,23 +20,7 @@ package com.google.android.libraries.pcc.chronicle.api
 enum class ChronicleAnalyticsClient {
   /* [NOOP] is used by clients which do not have a real implementation but needed as a NoOpModule */
   NOOP,
-  ECHO,
-  PECAN,
-  AUTOFILL,
   CONTENTCAPTURE,
-  OVERVIEW,
-  SAFECOMMS,
-  SIMPLESTORAGE,
-  TEXTCLASSIFIER,
-  ARCS,
   TEST,
-  INTERESTSMODEL,
-  CONTENTSUGGESTIONS,
-  LIVETRANSLATE,
-  NOWPLAYING,
-  NEXTCONVERSATION,
-  SMARTSELECT,
-  SEARCH,
-  PEOPLE_SERVICE_PLATFORM,
   BLOBSTORE,
 }
