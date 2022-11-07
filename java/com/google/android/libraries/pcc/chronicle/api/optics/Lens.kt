@@ -40,7 +40,7 @@ import com.google.android.libraries.pcc.chronicle.api.operation.Action
  *
  * ### What is it used for?
  *
- * See [the cantrips design doc](go/chronicle-cantrips).
+ * See [the cantrips design doc](http://go/chronicle-cantrips).
  *
  * ### Examples
  *
