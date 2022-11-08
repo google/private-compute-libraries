@@ -18,7 +18,7 @@
 
 This is a copy of Google's internal code, intended to assist developers and
 researchers who are interested in the implementation details of Google's
-Provable Privacy Libraries. Changes to this code are made by Google first, and
+Private Compute Libraries. Changes to this code are made by Google first, and
 then mirrored to this repository. External contributions are currently not
 accepted. When/if they are accepted, you must sign the Contributor License
 Agreement. See below for details.

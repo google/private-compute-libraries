@@ -14,10 +14,10 @@
  limitations under the License.
 -->
 
-# Provable Privacy Libraries
+# Private Compute Libraries
 
 This repository contains source code for the following libraries, which work
-together under the name "Provable Privacy Libraries":
+together under the name "Private Compute Libraries":
 
 * Chronicle
 * Plugins
