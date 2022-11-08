@@ -29,7 +29,7 @@ import com.google.android.libraries.pcc.chronicle.api.remote.RemoteRequestMetada
 import com.google.android.libraries.pcc.chronicle.api.remote.isReadRequest
 import com.google.android.libraries.pcc.chronicle.api.remote.server.RemoteServer
 import com.google.android.libraries.pcc.chronicle.remote.ClientDetails
-import com.google.android.libraries.pcc.chronicle.remote.ClientDetails.IsolationType
+import com.google.android.libraries.pcc.chronicle.remote.ClientDetails.IsolationType.ISOLATED_PROCESS
 import com.google.android.libraries.pcc.chronicle.remote.RemotePolicyChecker
 
 /** Implementation of [RemotePolicyChecker]. */
@@ -70,11 +70,13 @@ class RemotePolicyCheckerImpl(
     val connectionRequest =
       ConnectionRequest(
         connectionClass,
-        if (clientDetails.isolationType == IsolationType.ISOLATED_PROCESS) {
-          SandboxProcessorNode(processorNode)
-        } else processorNode,
+        processorNode.let {
+          if (clientDetails.isolationType == ISOLATED_PROCESS) SandboxProcessorNode(it) else it
+        },
         policy
       )
+    // TODO(b/251283239): extract policy checker from within the getConnection call, and then call
+    // it here and remove the need to get a connection (it's not used anyway).
     chronicle.getConnectionOrThrow(connectionRequest)
 
     return policy

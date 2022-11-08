@@ -38,7 +38,6 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/analysis",
         "//java/com/google/android/libraries/pcc/chronicle/api",
         "//java/com/google/android/libraries/pcc/chronicle/api:chronicle",
-        "//java/com/google/android/libraries/pcc/chronicle/api:connection",
         "//java/com/google/android/libraries/pcc/chronicle/api:sandbox_processor_node",
         "//java/com/google/android/libraries/pcc/chronicle/api/error",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy/builder",

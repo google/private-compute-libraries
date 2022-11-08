@@ -23,3 +23,17 @@ sealed class ConnectionName<T : Connection> {
   data class Reader<T : Connection>(override val name: Name) : ConnectionName<T>()
   data class Writer<T : Connection>(override val name: Name) : ConnectionName<T>()
 }
+
+/**
+ * Special cased [ConnectionName]s for remote connections. This allows the remote connections system
+ * to call Chronicle.getConnection for policy-checking purposes and bypasses actually getting the
+ * connection.
+ *
+ * **Note** this should not be used generally. Use [ConnectionName] instead.
+ */
+sealed class ConnectionNameForRemoteConnections<T : Connection> : ConnectionName<T>() {
+  // TODO(b/251283239): Remove these two subclasses and their uses after policy checking is
+  // separated from getting a connection in Chronicle.
+  data class Reader<T : Connection>(override val name: Name) : ConnectionName<T>()
+  data class Writer<T : Connection>(override val name: Name) : ConnectionName<T>()
+}

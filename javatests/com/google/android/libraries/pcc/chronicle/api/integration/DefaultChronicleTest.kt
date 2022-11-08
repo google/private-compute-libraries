@@ -24,12 +24,15 @@ import com.google.android.libraries.pcc.chronicle.analysis.PolicyEngine
 import com.google.android.libraries.pcc.chronicle.analysis.PolicySet
 import com.google.android.libraries.pcc.chronicle.api.Chronicle
 import com.google.android.libraries.pcc.chronicle.api.Connection
+import com.google.android.libraries.pcc.chronicle.api.ConnectionName
+import com.google.android.libraries.pcc.chronicle.api.ConnectionNameForRemoteConnections
 import com.google.android.libraries.pcc.chronicle.api.ConnectionProvider
 import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
 import com.google.android.libraries.pcc.chronicle.api.ConnectionResult
 import com.google.android.libraries.pcc.chronicle.api.DataType
 import com.google.android.libraries.pcc.chronicle.api.ManagedDataType
 import com.google.android.libraries.pcc.chronicle.api.ManagementStrategy
+import com.google.android.libraries.pcc.chronicle.api.Name
 import com.google.android.libraries.pcc.chronicle.api.ProcessorNode
 import com.google.android.libraries.pcc.chronicle.api.ReadConnection
 import com.google.android.libraries.pcc.chronicle.api.WriteConnection
@@ -220,6 +223,19 @@ class DefaultChronicleTest {
   }
 
   @Test
+  fun getConnection_skipsGetConnectionCallIfOnlyUsedForPolicyChecking() {
+    val chronicle = DefaultChronicle(context, policyEngine, config, flags)
+    val req = connectionRequestForRemoteConnection()
+
+    val connectionResult = chronicle.getConnection(req)
+
+    verify(policyEngine).checkPolicy(eq(POLICY), eq(req), any())
+    assertThat(connectionResult).isInstanceOf(ConnectionResult.Success::class.java)
+    assertThat((connectionResult as ConnectionResult.Success).connection)
+      .isInstanceOf(DefaultChronicle.Companion.AnonymousConnection::class.java)
+  }
+
+  @Test
   fun getAvailableConnectionTypes_kClass() {
     val chronicle = DefaultChronicle(context, policyEngine, config, flags)
 
@@ -259,11 +275,17 @@ class DefaultChronicleTest {
         override val requiredConnectionTypes: Set<Class<out Connection>> = setOf(connectionType)
       },
     policy: Policy? = POLICY,
-  ): ConnectionRequest<T> {
+  ): ConnectionRequest<T> = ConnectionRequest(connectionType, requester, policy)
+
+  private fun connectionRequestForRemoteConnection(): ConnectionRequest<Connection> {
+    val connName = ConnectionNameForRemoteConnections.Reader<Connection>(Name("foo"))
     return ConnectionRequest(
-      connectionType = connectionType,
-      requester = requester,
-      policy = policy
+      connName,
+      object : ProcessorNode {
+        override val requiredConnectionTypes: Set<Class<out Connection>> = emptySet()
+        override val requiredConnectionNames: Set<ConnectionName<out Connection>> = setOf(connName)
+      },
+      POLICY
     )
   }
 

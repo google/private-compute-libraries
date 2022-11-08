@@ -39,6 +39,7 @@ import com.google.android.libraries.pcc.chronicle.api.policy.builder.PolicyCheck
 import com.google.android.libraries.pcc.chronicle.api.policy.builder.PolicyCheckResult
 import com.google.android.libraries.pcc.chronicle.util.Logcat
 import com.google.android.libraries.pcc.chronicle.util.TypedMap
+import com.google.common.annotations.VisibleForTesting
 import kotlin.reflect.KClass
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.update
@@ -118,11 +119,6 @@ class DefaultChronicle(
     }
 
     val currentContext = context.value
-    // TODO(b/251295492) the first part of this Elvis can disappear.
-    val connectionProvider =
-      currentContext.findConnectionProvider(request.connectionType)
-        ?: currentContext.findConnectionProvider(request.connectionName)
-          ?: return ConnectionResult.Failure(ConnectionProviderNotFound(request))
 
     val policy = request.policy
     if (policy != null && policy !in currentContext.policySet) {
@@ -159,7 +155,21 @@ class DefaultChronicle(
       updated
     }
 
-    return ConnectionResult.Success(connectionProvider.getTypedConnection(request))
+    return ConnectionResult.Success(
+      if (request.isForRemoteConnections()) {
+        // TODO(b/251283239): Passing an anonymous class object is okay because the result of this
+        // method isn't consumed by RemotePolicyCheckerImpl anyway. Once policy checking and
+        // returning a connection are separated, we can drop this if branch.
+        supplyAnonymousConnection()
+      } else {
+        // TODO(b/251295492) the first part of this Elvis can disappear.
+        val connectionProvider =
+          currentContext.findConnectionProvider(request.connectionType)
+            ?: currentContext.findConnectionProvider(request.connectionName)
+              ?: return ConnectionResult.Failure(ConnectionProviderNotFound(request))
+        connectionProvider.getTypedConnection(request)
+      }
+    )
   }
 
   private fun handlePolicyCheckFail(failure: PolicyCheckResult.Fail): ChronicleError? =
@@ -174,6 +184,9 @@ class DefaultChronicle(
       }
     }
   }
+
+  @Suppress("UNCHECKED_CAST") // safe cast since T is supposed to be a kind of Connection
+  private fun <T : Connection> supplyAnonymousConnection(): T = AnonymousConnection as T
 
   /**
    * Allows [Chronicle] to use a new `connectionContext` by updating the [ChronicleContext].
@@ -205,5 +218,7 @@ class DefaultChronicle(
 
   companion object {
     private val logger = Logcat.default
+
+    @VisibleForTesting internal object AnonymousConnection : Connection
   }
 }
