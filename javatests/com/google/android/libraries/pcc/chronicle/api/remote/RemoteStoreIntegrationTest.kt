@@ -380,7 +380,7 @@ class RemoteStoreIntegrationTest {
         override fun getConnection(
           connectionRequest: ConnectionRequest<out Connection>
         ): Connection =
-          if (connectionRequest.connectionType.isReadConnection) readConnection else writeConnection
+          if (connectionRequest.isReadConnection()) readConnection else writeConnection
 
         override suspend fun count(policy: Policy?): Int = throw NotImplementedError("")
 

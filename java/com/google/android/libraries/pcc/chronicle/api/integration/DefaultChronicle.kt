@@ -109,7 +109,7 @@ class DefaultChronicle(
       return ConnectionResult.Failure(Disabled("Chronicle disabled via flags."))
     }
 
-    if (!request.requester.requiredConnectionTypes.contains(request.connectionType)) {
+    if (!request.requester.requiredConnectionNames.contains(request.connectionName)) {
       logger.d(
         "Connection is not declared as required in `ProcessorNode` of a request: %s",
         request
@@ -118,9 +118,11 @@ class DefaultChronicle(
     }
 
     val currentContext = context.value
+    // TODO(b/251295492) the first part of this Elvis can disappear.
     val connectionProvider =
       currentContext.findConnectionProvider(request.connectionType)
-        ?: return ConnectionResult.Failure(ConnectionProviderNotFound(request))
+        ?: currentContext.findConnectionProvider(request.connectionName)
+          ?: return ConnectionResult.Failure(ConnectionProviderNotFound(request))
 
     val policy = request.policy
     if (policy != null && policy !in currentContext.policySet) {
@@ -128,7 +130,7 @@ class DefaultChronicle(
         return ConnectionResult.Failure(it)
       }
     }
-    if (policy == null && request.connectionType.isReadConnection) {
+    if (policy == null && request.isReadConnection()) {
       handlePolicyCheckFail(
           PolicyCheckResult.Fail(
             listOf(
@@ -145,7 +147,7 @@ class DefaultChronicle(
     context.update { existing ->
       val updated = existing.withNode(request.requester)
 
-      if (policy != null && request.connectionType.isReadConnection) {
+      if (policy != null && request.isReadConnection()) {
         val checkResult = policyEngine.checkPolicy(policy, request, updated)
         if (checkResult is PolicyCheckResult.Fail) {
           handlePolicyCheckFail(checkResult)?.let {

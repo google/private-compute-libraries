@@ -17,6 +17,7 @@
 package com.google.android.libraries.pcc.chronicle.analysis
 
 import com.google.android.libraries.pcc.chronicle.api.Connection
+import com.google.android.libraries.pcc.chronicle.api.ConnectionName
 import com.google.android.libraries.pcc.chronicle.api.ConnectionProvider
 import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor
 import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptorSet
@@ -52,10 +53,23 @@ interface ChronicleContext {
    * Returns a [ConnectionProvider] capable of providing [Connection]s of the specified
    * [connectionType].
    */
-  fun <T : Connection> findConnectionProvider(connectionType: Class<T>): ConnectionProvider?
+  // TODO(b/251295492) This function can disappear.
+  fun <T : Connection> findConnectionProvider(connectionType: Class<T>?): ConnectionProvider?
+
+  /**
+   * Returns a [ConnectionProvider] capable of providing [Connection]s of the specified
+   * [ConnectionName].
+   */
+  fun <T : Connection> findConnectionProvider(
+    connectionName: ConnectionName<T>
+  ): ConnectionProvider?
 
   /** Returns the [DataTypeDescriptor] associated with the provided [connectionType], if found. */
-  fun <T : Connection> findDataType(connectionType: Class<T>): DataTypeDescriptor?
+  // TODO(b/251295492) This function can disappear.
+  fun <T : Connection> findDataType(connectionType: Class<T>?): DataTypeDescriptor?
+
+  /** Returns the [DataTypeDescriptor] associated with the provided [ConnectionName], if found. */
+  fun <T : Connection> findDataType(connectionName: ConnectionName<T>): DataTypeDescriptor?
 
   /** Returns a new [ChronicleContext] containing the provided [ProcessorNode]. */
   fun withNode(node: ProcessorNode): ChronicleContext

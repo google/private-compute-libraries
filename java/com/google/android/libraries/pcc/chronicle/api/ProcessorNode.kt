@@ -22,6 +22,22 @@ package com.google.android.libraries.pcc.chronicle.api
  * back to them (or any mix of the two).
  */
 interface ProcessorNode {
-  /** The classes of the connections required by this [ProcessorNode]. */
+  /**
+   * The classes of the connections required by this [ProcessorNode].
+   *
+   * NOTE: override this if you plan on using Class objects in [ConnectionProvider] and
+   * [ConnectionRequest].
+   */
+  // TODO(b/251295492) this property can disappear.
   val requiredConnectionTypes: Set<Class<out Connection>>
+
+  /**
+   * The [ConnectionName]s of the connections required by this [ProcessorNode].
+   *
+   * NOTE: override this if you plan on using [ConnectionName] in [ConnectionProvider] and
+   * [ConnectionRequest]. If you do, override [ProcessorNode.requiredConnectionTypes] by adding a
+   * getter which returns an emptySet().
+   */
+  val requiredConnectionNames: Set<ConnectionName<out Connection>>
+    get() = requiredConnectionTypes.map { Connection.connectionName(it) }.toSet()
 }

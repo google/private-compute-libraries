@@ -23,4 +23,19 @@ package com.google.android.libraries.pcc.chronicle.api
  * Do not extend directly, instead: extend from [ReadConnection], [WriteConnection], or something
  * more concrete than them.
  */
-interface Connection
+interface Connection {
+  companion object {
+    /**
+     * Factory/convenience method to create a [ConnectionName] from a Class that extends from
+     * [ReadConnection] or [WriteConnection]. The result is either [ConnectionName.Reader] or
+     * [ConnectionName.Writer].
+     */
+    @JvmStatic
+    fun <T : Connection> connectionName(clazz: Class<T>) =
+      if (clazz.isReadConnection) {
+        ReadConnection.connectionName(clazz)
+      } else {
+        WriteConnection.connectionName(clazz)
+      }
+  }
+}

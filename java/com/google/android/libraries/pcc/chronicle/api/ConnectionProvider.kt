@@ -26,7 +26,12 @@ package com.google.android.libraries.pcc.chronicle.api
 interface ConnectionProvider {
   val dataType: DataType
 
-  /** Builds and returns a connection of the provided [connectionRequest]. */
+  /**
+   * Builds and returns a connection of the provided [connectionRequest].
+   *
+   * NOTE: the [ConnectionRequest] here will contain either [ConnectionRequest.connectionType] or
+   * [ConnectionRequest.connectionName], which should match what was specified in [ProcessorNode].
+   */
   fun getConnection(connectionRequest: ConnectionRequest<out Connection>): Connection
 
   @Suppress("UNCHECKED_CAST")

@@ -72,7 +72,9 @@ kt_android_library(
     name = "connection",
     srcs = [
         "Connection.kt",
+        "ConnectionName.kt",
         "ConnectionUtils.kt",
+        "Name.kt",
         "ReadConnection.kt",
         "WriteConnection.kt",
     ],
@@ -82,7 +84,9 @@ kt_jvm_library(
     name = "connection_jvm",
     srcs = [
         "Connection.kt",
+        "ConnectionName.kt",
         "ConnectionUtils.kt",
+        "Name.kt",
         "ReadConnection.kt",
         "WriteConnection.kt",
     ],

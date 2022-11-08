@@ -43,8 +43,12 @@ interface DataType {
   val descriptor: DataTypeDescriptor
   /** The storage management strategy for the data. */
   val managementStrategy: ManagementStrategy
-  /** The connections supported for accessing this [DataType] */
+  /** The connections (via [Class]) supported for accessing this [DataType] */
+  // TODO(b/251295492) this property can disappear.
   val connectionTypes: Set<Class<out Connection>>
+  /** The connections (via [ConnectionName]) supported for accessing this [DataType] */
+  val connectionNames: Set<ConnectionName<out Connection>>
+    get() = emptySet()
   /** Extracts and returns the ttl from [managementStrategy][DataType.managementStrategy]. */
   val ttl: Duration
     get() = managementStrategy.ttl()

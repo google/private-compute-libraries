@@ -17,13 +17,9 @@
 package com.google.android.libraries.pcc.chronicle.api
 
 /**
- * Only for use by SandboxDataAccessService. This class is for ProcessorNodes that run in an
- * isolated sandbox
+ * Used to describe a [ConnectionName] using a string. E.g.
+ * ```
+ * ConnectionName.Reader(Name(MyReadConnection::class.toString()))
+ * ```
  */
-class SandboxProcessorNode(private val processorNode: ProcessorNode) : ProcessorNode {
-  override val requiredConnectionTypes: Set<Class<out Connection>>
-    get() = processorNode.requiredConnectionTypes
-
-  override val requiredConnectionNames: Set<ConnectionName<out Connection>>
-    get() = processorNode.requiredConnectionNames
-}
+data class Name(val name: String)

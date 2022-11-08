@@ -98,10 +98,15 @@ class ChroniclePolicyEngine : PolicyEngine {
     policy: Policy,
     request: ConnectionRequest<T>,
   ): List<PolicyCheck> {
+    // TODO(b/251295492) the first part of this Elvis can disappear.
     val dtd =
       context.findDataType(request.connectionType)
-        ?: return listOf(
-          PolicyCheck("s:${request.connectionType} is $CONNECTON_NOT_FOUND_PREDICATE")
+        ?: context.findDataType(request.connectionName)
+          ?: return listOf(
+          PolicyCheck(
+            "s:${request.connectionType ?: request.connectionName} is " +
+              CONNECTON_NOT_FOUND_PREDICATE
+          )
         )
 
     val policyTarget =

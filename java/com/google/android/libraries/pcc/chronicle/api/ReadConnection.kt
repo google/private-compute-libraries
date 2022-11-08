@@ -26,4 +26,21 @@ package com.google.android.libraries.pcc.chronicle.api
  * data-flow checking algorithm and is not intended to impose API requirements on implementations of
  * [ConnectionProvider] and the types of connections they provide.
  */
-interface ReadConnection : Connection
+interface ReadConnection : Connection {
+  companion object {
+    /**
+     * Factory/convenience method to create a [ConnectionName] from a Class that extends from
+     * [ReadConnection]. The result is [ConnectionName.Reader].
+     */
+    @JvmStatic
+    fun <T : Connection> connectionName(clazz: Class<T>) =
+      ConnectionName.Reader<T>(Name(clazz.toString()))
+
+    /**
+     * Factory/convenience method to create a [ConnectionName] from a string. The result is
+     * [ConnectionName.Reader].
+     */
+    @JvmStatic
+    fun <T : Connection> connectionName(name: String) = ConnectionName.Reader<T>(Name(name))
+  }
+}

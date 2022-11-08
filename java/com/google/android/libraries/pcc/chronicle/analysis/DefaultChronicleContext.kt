@@ -17,10 +17,10 @@
 package com.google.android.libraries.pcc.chronicle.analysis
 
 import com.google.android.libraries.pcc.chronicle.api.Connection
+import com.google.android.libraries.pcc.chronicle.api.ConnectionName
 import com.google.android.libraries.pcc.chronicle.api.ConnectionProvider
 import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor
 import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptorSet
-import com.google.android.libraries.pcc.chronicle.api.ManagementStrategy
 import com.google.android.libraries.pcc.chronicle.api.ProcessorNode
 import com.google.android.libraries.pcc.chronicle.api.error.ConnectionTypeAmbiguity
 import com.google.android.libraries.pcc.chronicle.util.TypedMap
@@ -36,71 +36,82 @@ class DefaultChronicleContext(
   override val dataTypeDescriptorSet: DataTypeDescriptorSet,
   override val connectionContext: TypedMap = TypedMap()
 ) : ChronicleContext {
-  private val connectionProviderByType: Map<Class<out Connection>, ConnectionProvider>
-  private val dtdByType: Map<Class<out Connection>, DataTypeDescriptor>
-  private val mgmtStrategyByType: Map<Class<out Connection>, ManagementStrategy>
+  // TODO(b/251295492) these properties can disappear or be renamed.
+  private val connectionProviderByType: Map<Class<out Connection>?, ConnectionProvider>
+  private val connectionProviderByName: Map<ConnectionName<out Connection>, ConnectionProvider>
+  private val dtdByType: Map<Class<out Connection>?, DataTypeDescriptor>
+  private val dtdByConnectionName: Map<ConnectionName<out Connection>, DataTypeDescriptor>
 
   // Note: It would be nice to not have to do this much work each time we create a new
   // ChronicleContextImpl when adding a node.
   init {
-    val tempConnectionProviders = mutableMapOf<Class<out Connection>, ConnectionProvider>()
-    val tempDtds = mutableMapOf<Class<out Connection>, DataTypeDescriptor>()
-    val tempMgmtProperties = mutableMapOf<Class<out Connection>, ManagementStrategy>()
+    val tempProvidersByClass = mutableMapOf<Class<out Connection>?, ConnectionProvider>()
+    val tempProvidersByName = mutableMapOf<ConnectionName<out Connection>, ConnectionProvider>()
+    val tempDtdsByClass = mutableMapOf<Class<out Connection>?, DataTypeDescriptor>()
+    val tempDtdsByName = mutableMapOf<ConnectionName<out Connection>, DataTypeDescriptor>()
 
     connectionProviders.forEach { connectionProvider ->
       val dataType = connectionProvider.dataType
-      dataType.connectionTypes.forEach { connectionType ->
-        // Make sure we do not have connection ambiguity.
-        val existingConnectionProvider = tempConnectionProviders[connectionType]
-        if (existingConnectionProvider != null) {
-          throw ConnectionTypeAmbiguity(
-            connectionType,
-            setOf(existingConnectionProvider, connectionProvider)
-          )
-        }
-        tempConnectionProviders[connectionType] = connectionProvider
-        tempDtds[connectionType] = dataType.descriptor
-        tempMgmtProperties[connectionType] = dataType.managementStrategy
+      dataType.connectionTypes.forEach {
+        ensureNoConnectionAmbiguity(tempProvidersByClass[it], connectionProvider, it.toString())
+        tempProvidersByClass[it] = connectionProvider
+        tempDtdsByClass[it] = dataType.descriptor
+      }
+      dataType.connectionNames.forEach {
+        ensureNoConnectionAmbiguity(tempProvidersByName[it], connectionProvider, it.toString())
+        tempProvidersByName[it] = connectionProvider
+        tempDtdsByName[it] = dataType.descriptor
       }
     }
 
-    connectionProviderByType = tempConnectionProviders
-    dtdByType = tempDtds
-    mgmtStrategyByType = tempMgmtProperties
+    connectionProviderByType = tempProvidersByClass
+    connectionProviderByName = tempProvidersByName
+    dtdByType = tempDtdsByClass
+    dtdByConnectionName = tempDtdsByName
+  }
+
+  private fun ensureNoConnectionAmbiguity(
+    existing: ConnectionProvider?,
+    new: ConnectionProvider,
+    connectionTypeAsString: String
+  ) {
+    if (existing != null) {
+      throw ConnectionTypeAmbiguity(connectionTypeAsString, setOf(existing, new))
+    }
   }
 
   override fun <T : Connection> findConnectionProvider(
-    connectionType: Class<T>
-  ): ConnectionProvider? {
-    return connectionProviderByType[connectionType]
-  }
+    connectionType: Class<T>?
+  ): ConnectionProvider? = connectionProviderByType[connectionType]
 
-  override fun <T : Connection> findDataType(connectionType: Class<T>): DataTypeDescriptor? {
-    return dtdByType[connectionType]
-  }
+  override fun <T : Connection> findConnectionProvider(
+    connectionName: ConnectionName<T>
+  ): ConnectionProvider? = connectionProviderByName[connectionName]
 
-  override fun withNode(node: ProcessorNode): ChronicleContext {
-    return DefaultChronicleContext(
+  override fun <T : Connection> findDataType(connectionType: Class<T>?): DataTypeDescriptor? =
+    dtdByType[connectionType]
+
+  override fun <T : Connection> findDataType(
+    connectionName: ConnectionName<T>
+  ): DataTypeDescriptor? = dtdByConnectionName[connectionName]
+
+  override fun withNode(node: ProcessorNode): ChronicleContext =
+    DefaultChronicleContext(
       connectionProviders = connectionProviders,
       processorNodes = processorNodes + node,
       policySet = policySet,
       dataTypeDescriptorSet = dataTypeDescriptorSet,
       connectionContext = connectionContext
     )
-  }
 
-  /**
-   * Returns a copy of the current [ChronicleContext] containing the provided [connectionContext].
-   */
-  override fun withConnectionContext(connectionContext: TypedMap): ChronicleContext {
-    return DefaultChronicleContext(
+  override fun withConnectionContext(connectionContext: TypedMap): ChronicleContext =
+    DefaultChronicleContext(
       connectionProviders = connectionProviders,
       processorNodes = processorNodes,
       policySet = policySet,
       dataTypeDescriptorSet = dataTypeDescriptorSet,
       connectionContext = connectionContext
     )
-  }
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

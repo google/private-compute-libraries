@@ -45,6 +45,34 @@ class ConnectionTest {
     assertThat(String::class.java.isWriteConnection).isFalse()
   }
 
+  @Test
+  fun connectionNameFromReadConnection_isConnectionNameReader() {
+    val connectionName: ConnectionName<TestReadConnection> =
+      Connection.connectionName(TestReadConnection::class.java)
+    assertThat(connectionName).isInstanceOf(ConnectionName.Reader::class.java)
+  }
+
+  @Test
+  fun connectionNameFromWriteConnection_isConnectionNameWriter() {
+    val connectionName: ConnectionName<TestWriteConnection> =
+      Connection.connectionName(TestWriteConnection::class.java)
+    assertThat(connectionName).isInstanceOf(ConnectionName.Writer::class.java)
+  }
+
+  @Test
+  fun readConnectionNameFromString_isConnectionNameReader() {
+    val connectionName: ConnectionName<TestReadConnection> =
+      ReadConnection.connectionName(TestReadConnection::class.toString())
+    assertThat(connectionName).isInstanceOf(ConnectionName.Reader::class.java)
+  }
+
+  @Test
+  fun writeConnectionNameFromString_isConnectionNameWriter() {
+    val connectionName: ConnectionName<TestWriteConnection> =
+      WriteConnection.connectionName(TestWriteConnection::class.toString())
+    assertThat(connectionName).isInstanceOf(ConnectionName.Writer::class.java)
+  }
+
   interface TestReadConnection : ReadConnection
   interface TestWriteConnection : WriteConnection
   interface TestReadWriteConnection : ReadConnection, WriteConnection

@@ -20,8 +20,8 @@ import com.google.android.libraries.pcc.chronicle.api.Connection
 import com.google.android.libraries.pcc.chronicle.api.ConnectionProvider
 
 /**
- * Thrown if a particular [Connection] type is supported more than once by the [ConnectionProvider]s
- * registered with Chronicle.
+ * Thrown if a particular [Connection] name/type is supported more than once by the
+ * [ConnectionProvider]s registered with Chronicle.
  *
  * **Why is this an error?**
  *
@@ -29,15 +29,15 @@ import com.google.android.libraries.pcc.chronicle.api.ConnectionProvider
  * support precise data flow structure and policy enforcement.
  */
 class ConnectionTypeAmbiguity(
-  connectionType: Class<out Connection>,
+  connectionAsString: String,
   connectionProviders: Set<ConnectionProvider>
-) : ChronicleError(constructMessage(connectionType, connectionProviders)) {
+) : ChronicleError(constructMessage(connectionAsString, connectionProviders)) {
   companion object {
     private fun constructMessage(
-      connectionType: Class<out Connection>,
+      connectionAsString: String,
       connectionProviders: Set<ConnectionProvider>
     ): String {
-      return "Connection type $connectionType supported more than once by " +
+      return "Connection name/type $connectionAsString supported more than once by " +
         "connectionProviders(s): $connectionProviders"
     }
   }
