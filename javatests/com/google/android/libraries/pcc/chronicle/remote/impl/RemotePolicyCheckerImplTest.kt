@@ -19,7 +19,10 @@ package com.google.android.libraries.pcc.chronicle.remote.impl
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.libraries.pcc.chronicle.analysis.PolicySet
 import com.google.android.libraries.pcc.chronicle.api.Chronicle
+import com.google.android.libraries.pcc.chronicle.api.Connection
+import com.google.android.libraries.pcc.chronicle.api.ConnectionNameForRemoteConnections
 import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
+import com.google.android.libraries.pcc.chronicle.api.Name
 import com.google.android.libraries.pcc.chronicle.api.ReadConnection
 import com.google.android.libraries.pcc.chronicle.api.SandboxProcessorNode
 import com.google.android.libraries.pcc.chronicle.api.WriteConnection
@@ -65,7 +68,8 @@ class RemotePolicyCheckerImplTest {
     checker.checkAndGetPolicyOrThrow(FOUND_POLICY_READ_REQUEST_METADATA, server, DEFAULT_DETAILS)
 
     val connectionRequest = requestCaptor.firstValue
-    assertThat(connectionRequest.connectionType).isEqualTo(FooReader::class.java)
+    assertThat(connectionRequest.connectionName)
+      .isEqualTo(ConnectionNameForRemoteConnections.Reader<Connection>(Name(DTD_TYPE_NAME)))
     assertThat(connectionRequest.requester).isNotInstanceOf(SandboxProcessorNode::class.java)
     assertThat(connectionRequest.policy).isNotNull()
   }
@@ -86,7 +90,8 @@ class RemotePolicyCheckerImplTest {
     )
 
     val connectionRequest = requestCaptor.firstValue
-    assertThat(connectionRequest.connectionType).isEqualTo(FooReader::class.java)
+    assertThat(connectionRequest.connectionName)
+      .isEqualTo(ConnectionNameForRemoteConnections.Reader<Connection>(Name(DTD_TYPE_NAME)))
     assertThat(connectionRequest.requester).isInstanceOf(SandboxProcessorNode::class.java)
     assertThat(connectionRequest.policy).isNotNull()
   }
@@ -169,6 +174,8 @@ class RemotePolicyCheckerImplTest {
   object FooWriter : WriteConnection
 
   companion object {
+    private const val DTD_TYPE_NAME = "Foo"
+
     private val FOUND_POLICY_READ_REQUEST_METADATA =
       RemoteRequestMetadata.newBuilder()
         .apply {
@@ -176,7 +183,7 @@ class RemotePolicyCheckerImplTest {
           stream =
             StreamRequest.newBuilder()
               .apply {
-                dataTypeName = "Foo"
+                dataTypeName = DTD_TYPE_NAME
                 operation = StreamRequest.Operation.SUBSCRIBE
               }
               .build()
@@ -188,7 +195,7 @@ class RemotePolicyCheckerImplTest {
           stream =
             StreamRequest.newBuilder()
               .apply {
-                dataTypeName = "Foo"
+                dataTypeName = DTD_TYPE_NAME
                 operation = StreamRequest.Operation.PUBLISH
               }
               .build()

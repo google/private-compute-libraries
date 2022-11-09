@@ -19,13 +19,17 @@ package com.google.android.libraries.pcc.chronicle.remote.impl
 import com.google.android.libraries.pcc.chronicle.analysis.PolicySet
 import com.google.android.libraries.pcc.chronicle.api.Chronicle
 import com.google.android.libraries.pcc.chronicle.api.Connection
+import com.google.android.libraries.pcc.chronicle.api.ConnectionName
 import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
 import com.google.android.libraries.pcc.chronicle.api.ProcessorNode
+import com.google.android.libraries.pcc.chronicle.api.ReadConnection
 import com.google.android.libraries.pcc.chronicle.api.SandboxProcessorNode
+import com.google.android.libraries.pcc.chronicle.api.WriteConnection
 import com.google.android.libraries.pcc.chronicle.api.policy.Policy
 import com.google.android.libraries.pcc.chronicle.api.remote.RemoteError
 import com.google.android.libraries.pcc.chronicle.api.remote.RemoteErrorMetadata
 import com.google.android.libraries.pcc.chronicle.api.remote.RemoteRequestMetadata
+import com.google.android.libraries.pcc.chronicle.api.remote.dataTypeName
 import com.google.android.libraries.pcc.chronicle.api.remote.isReadRequest
 import com.google.android.libraries.pcc.chronicle.api.remote.server.RemoteServer
 import com.google.android.libraries.pcc.chronicle.remote.ClientDetails
@@ -44,10 +48,6 @@ class RemotePolicyCheckerImpl(
     server: RemoteServer<*>,
     clientDetails: ClientDetails
   ): Policy? {
-    val connectionClass =
-      if (metadata.isReadRequest) server.readConnection.javaClass
-      else server.writeConnection.javaClass
-
     // TODO(b/210998515): Use usage type to find policy instead of id.
     val policy = policySet.findByName(metadata.usageType)
     if (metadata.usageType.isNotBlank() && policy == null) {
@@ -56,11 +56,14 @@ class RemotePolicyCheckerImpl(
         message = "No policy found with id/usageType [${metadata.usageType}]"
       )
     }
+
+    val connectionName: ConnectionName<Connection> = connectionNameFrom(metadata)
+
     val processorNode =
       synchronized(this) {
         val node =
-          processorNodes[clientDetails]?.also { it.connectionClasses.add(connectionClass) }
-            ?: RemoteProcessorNode(mutableSetOf(connectionClass))
+          processorNodes[clientDetails]?.also { it.connectionNames.add(connectionName) }
+            ?: RemoteProcessorNode(mutableSetOf(connectionName))
         processorNodes[clientDetails] = node
         node
       }
@@ -69,7 +72,7 @@ class RemotePolicyCheckerImpl(
     // If it throws, the exception will be picked up by the CoroutineExceptionHandler.
     val connectionRequest =
       ConnectionRequest(
-        connectionClass,
+        connectionName,
         processorNode.let {
           if (clientDetails.isolationType == ISOLATED_PROCESS) SandboxProcessorNode(it) else it
         },
@@ -82,9 +85,30 @@ class RemotePolicyCheckerImpl(
     return policy
   }
 
+  /**
+   * The remote connection system is able to construct a connection name using the
+   * [DataTypeDescriptor.name][com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor],
+   * which is supplied via [RemoteRequestMetadata], which should match a provided
+   * [DataType.connectionNames][com.google.android.libraries.pcc.chronicle.api.DataType] via the
+   * [RemoteServer] set up. A convenient way to do this could be to use the
+   * [ManagedDataTypeWithRemoteConnectionNames]
+   * [com.google.android.libraries.pcc.chronicle.api.ManagedDataTypeWithRemoteConnectionNames]
+   * class.
+   */
+  private fun connectionNameFrom(metadata: RemoteRequestMetadata): ConnectionName<Connection> =
+    if (metadata.isReadRequest) {
+      ReadConnection.connectionNameForRemoteConnections(metadata.dataTypeName)
+    } else {
+      WriteConnection.connectionNameForRemoteConnections(metadata.dataTypeName)
+    }
+
   /** Simple [ProcessorNode] implementation used to represent a remote store request. */
-  private class RemoteProcessorNode(val connectionClasses: MutableSet<Class<out Connection>>) :
-    ProcessorNode {
-    override val requiredConnectionTypes: Set<Class<out Connection>> = connectionClasses
+  private class RemoteProcessorNode(
+    val connectionNames: MutableSet<ConnectionName<out Connection>>
+  ) : ProcessorNode {
+    override val requiredConnectionTypes: Set<Class<out Connection>>
+      get() = emptySet() // not used since [ProcessorNode.requiredConnectionNames] is in use.
+
+    override val requiredConnectionNames: Set<ConnectionName<out Connection>> = connectionNames
   }
 }

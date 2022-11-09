@@ -23,22 +23,34 @@ package com.google.android.libraries.pcc.chronicle.api.remote
 val RemoteRequestMetadata.isReadRequest: Boolean
   get() =
     when (requestTypeCase) {
-      RemoteRequestMetadata.RequestTypeCase.STORE -> when (store.operationCase) {
-        StoreRequest.OperationCase.COUNT,
-        StoreRequest.OperationCase.FETCH_ALL,
-        StoreRequest.OperationCase.FETCH_BY_ID -> true
-        StoreRequest.OperationCase.DELETE_ALL,
-        StoreRequest.OperationCase.DELETE_BY_ID,
-        StoreRequest.OperationCase.CREATE,
-        StoreRequest.OperationCase.UPDATE -> false
-        StoreRequest.OperationCase.OPERATION_NOT_SET -> false
-      }
-      RemoteRequestMetadata.RequestTypeCase.STREAM -> when (stream.operation) {
-        StreamRequest.Operation.PUBLISH -> false
-        StreamRequest.Operation.SUBSCRIBE -> true
-        StreamRequest.Operation.UNSPECIFIED,
-        StreamRequest.Operation.UNRECOGNIZED -> false
-      }
+      RemoteRequestMetadata.RequestTypeCase.STORE ->
+        when (store.operationCase) {
+          StoreRequest.OperationCase.COUNT,
+          StoreRequest.OperationCase.FETCH_ALL,
+          StoreRequest.OperationCase.FETCH_BY_ID -> true
+          StoreRequest.OperationCase.DELETE_ALL,
+          StoreRequest.OperationCase.DELETE_BY_ID,
+          StoreRequest.OperationCase.CREATE,
+          StoreRequest.OperationCase.UPDATE -> false
+          StoreRequest.OperationCase.OPERATION_NOT_SET -> false
+        }
+      RemoteRequestMetadata.RequestTypeCase.STREAM ->
+        when (stream.operation) {
+          StreamRequest.Operation.PUBLISH -> false
+          StreamRequest.Operation.SUBSCRIBE -> true
+          StreamRequest.Operation.UNSPECIFIED,
+          StreamRequest.Operation.UNRECOGNIZED -> false
+        }
       RemoteRequestMetadata.RequestTypeCase.COMPUTE -> true
       RemoteRequestMetadata.RequestTypeCase.REQUESTTYPE_NOT_SET -> false
+    }
+
+/** Extracts dataTypeName from RemoteRequestMetadata. */
+val RemoteRequestMetadata.dataTypeName: String
+  get() =
+    when (requestTypeCase) {
+      RemoteRequestMetadata.RequestTypeCase.STORE -> store.dataTypeName
+      RemoteRequestMetadata.RequestTypeCase.STREAM -> stream.dataTypeName
+      RemoteRequestMetadata.RequestTypeCase.COMPUTE -> compute.resultDataTypeName
+      RemoteRequestMetadata.RequestTypeCase.REQUESTTYPE_NOT_SET -> "UnsetTypeName"
     }

@@ -26,6 +26,7 @@ import com.google.android.libraries.pcc.chronicle.api.Connection
 import com.google.android.libraries.pcc.chronicle.api.ConnectionProvider
 import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
 import com.google.android.libraries.pcc.chronicle.api.DataType
+import com.google.android.libraries.pcc.chronicle.api.ManagedDataTypeWithRemoteConnectionNames
 import com.google.android.libraries.pcc.chronicle.api.ManagementStrategy
 import com.google.android.libraries.pcc.chronicle.api.ProcessorNode
 import com.google.android.libraries.pcc.chronicle.api.ReadConnection
@@ -36,7 +37,6 @@ import com.google.android.libraries.pcc.chronicle.api.flags.FakeFlagsReader
 import com.google.android.libraries.pcc.chronicle.api.flags.Flags
 import com.google.android.libraries.pcc.chronicle.api.getConnectionOrThrow
 import com.google.android.libraries.pcc.chronicle.api.integration.DefaultChronicle
-import com.google.android.libraries.pcc.chronicle.api.isReadConnection
 import com.google.android.libraries.pcc.chronicle.api.policy.DefaultPolicyConformanceCheck
 import com.google.android.libraries.pcc.chronicle.api.policy.Policy
 import com.google.android.libraries.pcc.chronicle.api.policy.StorageMedium
@@ -360,17 +360,17 @@ class RemoteStoreIntegrationTest {
     private val simpleProtoMessageServer =
       object : RemoteStoreServer<SimpleProtoMessage> {
         override val dataType =
-          object : DataType {
-            override val descriptor = SIMPLE_PROTO_MESSAGE_DTD
-            override val managementStrategy = managedDataCache.managementStrategy
-            override val connectionTypes =
-              setOf(
-                SimpleProtoMessageReader::class.java,
-                SimpleProtoMessageWriter::class.java,
-                SimpleProtoMessageReaderImpl::class.java,
-                SimpleProtoMessageWriterImpl::class.java
-              )
-          }
+          ManagedDataTypeWithRemoteConnectionNames(
+            SIMPLE_PROTO_MESSAGE_DTD,
+            managedDataCache.managementStrategy,
+            setOf(
+              SimpleProtoMessageReader::class.java,
+              SimpleProtoMessageWriter::class.java,
+              SimpleProtoMessageReaderImpl::class.java,
+              SimpleProtoMessageWriterImpl::class.java
+            )
+          )
+
         override val dataTypeDescriptor = SIMPLE_PROTO_MESSAGE_DTD
         override val serializer =
           ProtoSerializer.createFrom(SimpleProtoMessage.getDefaultInstance())
