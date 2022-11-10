@@ -119,8 +119,7 @@ fun target(
 
 /** Builder of [Policy] instances. */
 @DataDsl
-class PolicyBuilder
-internal constructor(
+class PolicyBuilder(
   private val name: String,
   private val egressType: String,
 ) {
@@ -138,7 +137,7 @@ internal constructor(
   internal val configs = mutableMapOf<String, PolicyConfig>()
 
   /** Clones the PolicyBuilder. */
-  internal constructor(
+  constructor(
     policyBuilder: PolicyBuilder,
   ) : this(policyBuilder.name, policyBuilder.egressType) {
     this.apply {

@@ -39,6 +39,7 @@ kt_android_library(
         ":connection",
         ":data_type_descriptor",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy",
+        "//java/com/google/android/libraries/pcc/policies/builder:flavor",
         "@maven//:com_google_dagger_dagger",
     ],
 )
@@ -51,7 +52,6 @@ kt_jvm_library(
         "ConnectionRequest.kt",
         "DataType.kt",
         "DeletionTrigger.kt",
-        "Flavor.kt",
         "ManagedDataType.kt",
         "ManagementStrategy.kt",
         "ProcessorNode.kt",
@@ -65,6 +65,7 @@ kt_jvm_library(
         ":connection_jvm",
         ":data_type_descriptor_jvm",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy",
+        "//java/com/google/android/libraries/pcc/policies/builder:flavor_jvm",
     ],
 )
 

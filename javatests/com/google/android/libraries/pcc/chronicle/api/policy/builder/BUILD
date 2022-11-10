@@ -20,6 +20,7 @@ kt_android_local_test(
     deps = [
         ":base",
         "//java/com/google/android/libraries/pcc/chronicle/api",
+        "//java/com/google/android/libraries/pcc/chronicle/api:data_type_descriptor",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy/builder",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy/contextrules",

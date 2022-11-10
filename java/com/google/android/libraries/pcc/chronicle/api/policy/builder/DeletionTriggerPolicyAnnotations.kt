@@ -35,7 +35,7 @@ fun PolicyTarget.deletionTriggers(): Set<DeletionTrigger> {
 }
 
 /** Encodes a trigger as a Policy annotation */
-internal fun Trigger.toAnnotation(field: String): Annotation {
+fun Trigger.toAnnotation(field: String): Annotation {
   return Annotation(
     DeletionTriggerPolicyAnnotations.ANNOTATION_NAME,
     mapOf(

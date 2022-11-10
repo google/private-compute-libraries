@@ -16,6 +16,8 @@
 
 package com.google.android.libraries.pcc.chronicle.api
 
+import com.google.android.libraries.pcc.policies.builder.Flavor
+
 /** Host-specific functionality such as fetching the hosting APK's current flavor. */
 interface ChronicleHost {
   val flavor: Flavor
