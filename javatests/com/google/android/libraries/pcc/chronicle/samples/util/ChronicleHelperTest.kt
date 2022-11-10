@@ -22,7 +22,7 @@ import com.google.android.libraries.pcc.chronicle.api.Connection
 import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
 import com.google.android.libraries.pcc.chronicle.api.DataType
 import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor
-import com.google.android.libraries.pcc.chronicle.api.ManagedDataType
+import com.google.android.libraries.pcc.chronicle.api.ManagedDataTypeWithRemoteConnectionNames
 import com.google.android.libraries.pcc.chronicle.api.ManagementStrategy
 import com.google.android.libraries.pcc.chronicle.api.ProcessorNode
 import com.google.android.libraries.pcc.chronicle.api.ReadConnection
@@ -169,14 +169,12 @@ class ChronicleHelperTest {
 
   open inner class PeopleServer : RemoteStoreServer<Person> {
     override val dataType: DataType =
-      ManagedDataType(
+      ManagedDataTypeWithRemoteConnectionNames(
         PERSON_GENERATED_DTD,
         ManagementStrategy.Stored(false, StorageMedia.MEMORY, Duration.ofHours(5)),
         setOf(
           PeopleReader::class.java,
           PeopleWriter::class.java,
-          reader.javaClass,
-          writer.javaClass
         )
       )
     override val dataTypeDescriptor: DataTypeDescriptor = dataType.descriptor
@@ -187,10 +185,8 @@ class ChronicleHelperTest {
 
     override fun getConnection(connectionRequest: ConnectionRequest<out Connection>): Connection {
       return when (connectionRequest.connectionType) {
-        PeopleReader::class.java,
-        reader.javaClass -> readerSpy
-        PeopleWriter::class.java,
-        writer.javaClass -> writerSpy
+        PeopleReader::class.java -> readerSpy
+        PeopleWriter::class.java -> writerSpy
         else -> throw IllegalArgumentException()
       }
     }
