@@ -89,144 +89,139 @@ class RemoteStoreIntegrationTest {
   private val serviceConnector = ManualChronicleServiceConnector()
 
   @Test
-  fun clientHasValidPolicy_serverHasInvalidPolicy() =
-    runBlocking<Unit> {
-      // Initialize our "processes".
-      val server = ServerProcess(setOf(INVALID_POLICY_MISSING_FIELDS))
-      serviceConnector.binder = server.router
-      val client = ClientProcess(setOf(VALID_POLICY), serviceConnector)
+  fun clientHasValidPolicy_serverHasInvalidPolicy(): Unit = runBlocking {
+    // Initialize our "processes".
+    val server = ServerProcess(setOf(INVALID_POLICY_MISSING_FIELDS))
+    serviceConnector.binder = server.router
+    val client = ClientProcess(setOf(VALID_POLICY), serviceConnector)
 
-      // Put together a simple processor node we can use to access both connection types.
-      val processorNode =
-        object : ProcessorNode {
-          override val requiredConnectionTypes: Set<Class<out Connection>> =
-            setOf(SimpleProtoMessageWriter::class.java, SimpleProtoMessageReader::class.java)
-        }
-
-      // Populate the store from the server.
-      val serverWriteConnection =
-        server.chronicle.getConnectionOrThrow<SimpleProtoMessageWriter>(processorNode)
-      serverWriteConnection.writeMessage(protoGenerator.generateSimpleProtoMessage())
-
-      // Get connection from our client "process"'s Chronicle.
-      // - Getting a connection should pass, since at this point the only policy check performed is
-      //   on the client.
-      val clientReadConnection =
-        client.chronicle.getConnectionOrThrow<SimpleProtoMessageReader>(processorNode, VALID_POLICY)
-
-      // Use the connection. This step should fail because the server-side check performed when the
-      // connection impl sends a grpc message won't see a policy which allows egress of the full
-      // data.
-      val error = assertFailsWith<RemoteError> { clientReadConnection.getMessages() }
-      assertThat(error.metadata.errorType).isEqualTo(RemoteErrorMetadata.Type.POLICY_VIOLATION)
-    }
-
-  @Test
-  fun clientHasInvalidPolicy_serverHasValidPolicy() =
-    runBlocking<Unit> {
-      // Initialize our "processes".
-      val server = ServerProcess(setOf(VALID_POLICY))
-      serviceConnector.binder = server.router
-      val client = ClientProcess(setOf(INVALID_POLICY_MISSING_FIELDS), serviceConnector)
-
-      // Put together a simple processor node we can use to access both connection types.
-      val processorNode =
-        object : ProcessorNode {
-          override val requiredConnectionTypes: Set<Class<out Connection>> =
-            setOf(SimpleProtoMessageWriter::class.java, SimpleProtoMessageReader::class.java)
-        }
-
-      // Populate the store from the server.
-      val serverWriteConnection =
-        server.chronicle.getConnectionOrThrow<SimpleProtoMessageWriter>(processorNode)
-      serverWriteConnection.writeMessage(protoGenerator.generateSimpleProtoMessage())
-
-      // Get connection from our client "process"'s Chronicle.
-      // - Getting a connection should fail, since at this point we are checking policy at the
-      //   client.
-      assertFailsWith<PolicyViolation> {
-        client.chronicle.getConnectionOrThrow<SimpleProtoMessageReader>(
-          processorNode,
-          INVALID_POLICY_MISSING_FIELDS
-        )
+    // Put together a simple processor node we can use to access both connection types.
+    val processorNode =
+      object : ProcessorNode {
+        override val requiredConnectionTypes: Set<Class<out Connection>> =
+          setOf(SimpleProtoMessageWriter::class.java, SimpleProtoMessageReader::class.java)
       }
-    }
+
+    // Populate the store from the server.
+    val serverWriteConnection =
+      server.chronicle.getConnectionOrThrow<SimpleProtoMessageWriter>(processorNode)
+    serverWriteConnection.writeMessage(protoGenerator.generateSimpleProtoMessage())
+
+    // Get connection from our client "process"'s Chronicle.
+    // - Getting a connection should pass, since at this point the only policy check performed is
+    //   on the client.
+    val clientReadConnection =
+      client.chronicle.getConnectionOrThrow<SimpleProtoMessageReader>(processorNode, VALID_POLICY)
+
+    // Use the connection. This step should fail because the server-side check performed when the
+    // connection impl sends a grpc message won't see a policy which allows egress of the full
+    // data.
+    val error = assertFailsWith<RemoteError> { clientReadConnection.getMessages() }
+    assertThat(error.metadata.errorType).isEqualTo(RemoteErrorMetadata.Type.POLICY_VIOLATION)
+  }
 
   @Test
-  fun clientWrites_clientAndServerRead() =
-    runBlocking<Unit> {
+  fun clientHasInvalidPolicy_serverHasValidPolicy(): Unit = runBlocking {
+    // Initialize our "processes".
+    val server = ServerProcess(setOf(VALID_POLICY))
+    serviceConnector.binder = server.router
+    val client = ClientProcess(setOf(INVALID_POLICY_MISSING_FIELDS), serviceConnector)
 
-      // Initialize our "processes".
-      val server = ServerProcess(setOf(VALID_POLICY))
-      serviceConnector.binder = server.router
-      val client = ClientProcess(setOf(VALID_POLICY), serviceConnector)
+    // Put together a simple processor node we can use to access both connection types.
+    val processorNode =
+      object : ProcessorNode {
+        override val requiredConnectionTypes: Set<Class<out Connection>> =
+          setOf(SimpleProtoMessageWriter::class.java, SimpleProtoMessageReader::class.java)
+      }
 
-      // Put together a simple processor node we can use to access both connection types.
-      val processorNode =
-        object : ProcessorNode {
-          override val requiredConnectionTypes: Set<Class<out Connection>> =
-            setOf(SimpleProtoMessageWriter::class.java, SimpleProtoMessageReader::class.java)
-        }
+    // Populate the store from the server.
+    val serverWriteConnection =
+      server.chronicle.getConnectionOrThrow<SimpleProtoMessageWriter>(processorNode)
+    serverWriteConnection.writeMessage(protoGenerator.generateSimpleProtoMessage())
 
-      // Get connections from our client "process"'s Chronicle
-      val clientWriteConnection =
-        client.chronicle.getConnectionOrThrow<SimpleProtoMessageWriter>(processorNode, VALID_POLICY)
-      val clientReadConnection =
-        client.chronicle.getConnectionOrThrow<SimpleProtoMessageReader>(processorNode, VALID_POLICY)
-
-      // Get connections from our server "process"'s Chronicle
-      val serverReadConnection =
-        server.chronicle.getConnectionOrThrow<SimpleProtoMessageReader>(processorNode, VALID_POLICY)
-
-      // Create some data.
-      val messageA = protoGenerator.generateDistinctSimpleProtoMessage()
-      val messageB = protoGenerator.generateDistinctSimpleProtoMessage(messageA)
-
-      // Write from the client.
-      clientWriteConnection.writeMessage(messageA)
-      clientWriteConnection.writeMessage(messageB)
-
-      // Verify that the client and server each have *both* written objects.
-      assertThat(clientReadConnection.getMessages()).containsExactly(messageA, messageB)
-      assertThat(serverReadConnection.getMessages()).containsExactly(messageA, messageB)
+    // Get connection from our client "process"'s Chronicle.
+    // - Getting a connection should fail, since at this point we are checking policy at the
+    //   client.
+    assertFailsWith<PolicyViolation> {
+      client.chronicle.getConnectionOrThrow<SimpleProtoMessageReader>(
+        processorNode,
+        INVALID_POLICY_MISSING_FIELDS
+      )
     }
+  }
 
   @Test
-  fun serverWrites_clientAndServerRead() =
-    runBlocking<Unit> {
-      // Initialize our "processes".
-      val server = ServerProcess(setOf(VALID_POLICY))
-      serviceConnector.binder = server.router
-      val client = ClientProcess(setOf(VALID_POLICY), serviceConnector)
+  fun clientWrites_clientAndServerRead(): Unit = runBlocking {
+    // Initialize our "processes".
+    val server = ServerProcess(setOf(VALID_POLICY))
+    serviceConnector.binder = server.router
+    val client = ClientProcess(setOf(VALID_POLICY), serviceConnector)
 
-      // Put together a simple processor node we can use to access both connection types.
-      val processorNode =
-        object : ProcessorNode {
-          override val requiredConnectionTypes: Set<Class<out Connection>> =
-            setOf(SimpleProtoMessageWriter::class.java, SimpleProtoMessageReader::class.java)
-        }
+    // Put together a simple processor node we can use to access both connection types.
+    val processorNode =
+      object : ProcessorNode {
+        override val requiredConnectionTypes: Set<Class<out Connection>> =
+          setOf(SimpleProtoMessageWriter::class.java, SimpleProtoMessageReader::class.java)
+      }
 
-      // Get connections from our server "process"'s Chronicle
-      val serverWriteConnection =
-        server.chronicle.getConnectionOrThrow<SimpleProtoMessageWriter>(processorNode, VALID_POLICY)
-      val serverReadConnection =
-        server.chronicle.getConnectionOrThrow<SimpleProtoMessageReader>(processorNode, VALID_POLICY)
+    // Get connections from our client "process"'s Chronicle
+    val clientWriteConnection =
+      client.chronicle.getConnectionOrThrow<SimpleProtoMessageWriter>(processorNode, VALID_POLICY)
+    val clientReadConnection =
+      client.chronicle.getConnectionOrThrow<SimpleProtoMessageReader>(processorNode, VALID_POLICY)
 
-      val clientReadConnection =
-        client.chronicle.getConnectionOrThrow<SimpleProtoMessageReader>(processorNode, VALID_POLICY)
+    // Get connections from our server "process"'s Chronicle
+    val serverReadConnection =
+      server.chronicle.getConnectionOrThrow<SimpleProtoMessageReader>(processorNode, VALID_POLICY)
 
-      // Create some data.
-      val messageA = protoGenerator.generateDistinctSimpleProtoMessage()
-      val messageB = protoGenerator.generateDistinctSimpleProtoMessage(messageA)
+    // Create some data.
+    val messageA = protoGenerator.generateDistinctSimpleProtoMessage()
+    val messageB = protoGenerator.generateDistinctSimpleProtoMessage(messageA)
 
-      // Write from the server.
-      serverWriteConnection.writeMessage(messageA)
-      serverWriteConnection.writeMessage(messageB)
+    // Write from the client.
+    clientWriteConnection.writeMessage(messageA)
+    clientWriteConnection.writeMessage(messageB)
 
-      // Verify that the client and server each have *both* written objects.
-      assertThat(clientReadConnection.getMessages()).containsExactly(messageA, messageB)
-      assertThat(serverReadConnection.getMessages()).containsExactly(messageA, messageB)
-    }
+    // Verify that the client and server each have *both* written objects.
+    assertThat(clientReadConnection.getMessages()).containsExactly(messageA, messageB)
+    assertThat(serverReadConnection.getMessages()).containsExactly(messageA, messageB)
+  }
+
+  @Test
+  fun serverWrites_clientAndServerRead(): Unit = runBlocking {
+    // Initialize our "processes".
+    val server = ServerProcess(setOf(VALID_POLICY))
+    serviceConnector.binder = server.router
+    val client = ClientProcess(setOf(VALID_POLICY), serviceConnector)
+
+    // Put together a simple processor node we can use to access both connection types.
+    val processorNode =
+      object : ProcessorNode {
+        override val requiredConnectionTypes: Set<Class<out Connection>> =
+          setOf(SimpleProtoMessageWriter::class.java, SimpleProtoMessageReader::class.java)
+      }
+
+    // Get connections from our server "process"'s Chronicle
+    val serverWriteConnection =
+      server.chronicle.getConnectionOrThrow<SimpleProtoMessageWriter>(processorNode, VALID_POLICY)
+    val serverReadConnection =
+      server.chronicle.getConnectionOrThrow<SimpleProtoMessageReader>(processorNode, VALID_POLICY)
+
+    val clientReadConnection =
+      client.chronicle.getConnectionOrThrow<SimpleProtoMessageReader>(processorNode, VALID_POLICY)
+
+    // Create some data.
+    val messageA = protoGenerator.generateDistinctSimpleProtoMessage()
+    val messageB = protoGenerator.generateDistinctSimpleProtoMessage(messageA)
+
+    // Write from the server.
+    serverWriteConnection.writeMessage(messageA)
+    serverWriteConnection.writeMessage(messageB)
+
+    // Verify that the client and server each have *both* written objects.
+    assertThat(clientReadConnection.getMessages()).containsExactly(messageA, messageB)
+    assertThat(serverReadConnection.getMessages()).containsExactly(messageA, messageB)
+  }
 
   /**
    * Generates a new [SimpleProtoMessage] with distinct [SimpleProtoMessage.getStringField] values
