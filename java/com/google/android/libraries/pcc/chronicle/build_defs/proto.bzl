@@ -53,7 +53,7 @@ chronicle_data_proto_library_helper = rule(
         ),
         # the actual code-generator binary
         generator = attr.label(
-            cfg = "host",
+            cfg = "exec",
             executable = True,
         ),
     ),
