@@ -145,10 +145,7 @@ class ClassToTypeConverterWithProtoAlternatesTest {
 
   private fun classToTypeTest(cls: KClass<*>, vararg expect: Type) {
     val javaProtoConverter = JavaProtoTypeConverter()
-    val converter =
-      com.google.android.libraries.pcc.chronicle.codegen.frontend.ClassToTypeConverter(
-        alternateConverters = listOf(javaProtoConverter)
-      )
+    val converter = ClassToTypeConverter(alternateConverters = listOf(javaProtoConverter))
     assertThat(converter.convertToTypes(cls.java)).isEqualTo(TypeSet(*expect))
   }
 }

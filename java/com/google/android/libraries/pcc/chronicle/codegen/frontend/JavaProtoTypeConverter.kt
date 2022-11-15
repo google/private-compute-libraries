@@ -44,15 +44,20 @@ class JavaProtoTypeConverter(
   }
 
   private fun java.lang.reflect.Type.getProtobufDescriptor(): Descriptors.Descriptor? {
-    // Check if it's a GeneratedMessage
     if (this !is Class<*>) return null
-    if (!GeneratedMessage::class.java.isAssignableFrom(this)) return null
 
-    // Create a new instance of the type
-    val builderMethod = this.getDeclaredMethod("newBuilder")
-    val builder = builderMethod.invoke(null) as GeneratedMessage.Builder<*>
+    // Create a new instance of the type using ProtoClass.newBuilder().getDescriptorForType() via
+    // reflection.
+    return try {
+      val builderMethod = getDeclaredMethod("newBuilder")
+      val builder = builderMethod.invoke(null)
+      val descriptorMethod = builder.javaClass.getDeclaredMethod("getDescriptorForType")
 
-    // Return the descriptor on the new instance.
-    @Suppress("UsePropertyAccessSyntax") return builder.getDescriptorForType()
+      // Return the descriptor on the new instance.
+      descriptorMethod.invoke(builder) as Descriptors.Descriptor
+    } catch (e: NoSuchMethodException) {
+      // The class must not have been a Java proto class.
+      null
+    }
   }
 }

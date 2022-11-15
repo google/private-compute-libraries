@@ -23,5 +23,6 @@ kt_jvm_library(
 
 java_test(
     name = "ProtoChronicleDataGeneratorTest",
+    resources = glob(["goldens/**"]),
     runtime_deps = [":ProtoChronicleDataGeneratorTest_LIB"],
 )
