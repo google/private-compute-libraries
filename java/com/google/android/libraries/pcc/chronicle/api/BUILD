@@ -20,7 +20,6 @@ kt_android_library(
     srcs = [
         "ChronicleAnalyticsClient.kt",
         "ChronicleDeletionListener.kt",
-        "ChronicleHost.kt",
         "ConnectionProvider.kt",
         "ConnectionRequest.kt",
         "DataType.kt",
@@ -39,7 +38,6 @@ kt_android_library(
         ":connection",
         ":data_type_descriptor",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy",
-        "//java/com/google/android/libraries/pcc/policies/builder:flavor",
         "@maven//:com_google_dagger_dagger",
     ],
 )
@@ -47,7 +45,6 @@ kt_android_library(
 kt_jvm_library(
     name = "api_jvm",
     srcs = [
-        "ChronicleHost.kt",
         "ConnectionProvider.kt",
         "ConnectionRequest.kt",
         "DataType.kt",
@@ -65,7 +62,6 @@ kt_jvm_library(
         ":connection_jvm",
         ":data_type_descriptor_jvm",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy",
-        "//java/com/google/android/libraries/pcc/policies/builder:flavor_jvm",
     ],
 )
 
