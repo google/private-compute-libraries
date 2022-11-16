@@ -112,6 +112,8 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/remote/impl",
         "//java/com/google/android/libraries/pcc/chronicle/storage/datacache",
         "//java/com/google/android/libraries/pcc/chronicle/storage/datacache/impl",
+        "//java/com/google/android/libraries/pcc/chronicle/storage/stream",
+        "//java/com/google/android/libraries/pcc/chronicle/storage/stream/impl",
         "//java/com/google/android/libraries/pcc/chronicle/util:timesource",
         "//javatests/com/google/android/libraries/pcc/chronicle/api/remote/testutil",
         "//third_party/java/grpc:inprocess_android",

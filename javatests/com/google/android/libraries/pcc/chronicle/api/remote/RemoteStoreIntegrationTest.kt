@@ -45,9 +45,11 @@ import com.google.android.libraries.pcc.chronicle.api.policy.builder.policy
 import com.google.android.libraries.pcc.chronicle.api.remote.client.AidlTransport
 import com.google.android.libraries.pcc.chronicle.api.remote.client.ChronicleServiceConnector
 import com.google.android.libraries.pcc.chronicle.api.remote.client.DefaultRemoteStoreClient
+import com.google.android.libraries.pcc.chronicle.api.remote.client.DefaultRemoteStreamClient
 import com.google.android.libraries.pcc.chronicle.api.remote.client.ManualChronicleServiceConnector
 import com.google.android.libraries.pcc.chronicle.api.remote.serialization.ProtoSerializer
 import com.google.android.libraries.pcc.chronicle.api.remote.server.RemoteStoreServer
+import com.google.android.libraries.pcc.chronicle.api.remote.server.RemoteStreamServer
 import com.google.android.libraries.pcc.chronicle.api.remote.testutil.RandomProtoGenerator
 import com.google.android.libraries.pcc.chronicle.api.remote.testutil.SIMPLE_PROTO_MESSAGE_DTD
 import com.google.android.libraries.pcc.chronicle.api.remote.testutil.SimpleProtoMessage
@@ -61,6 +63,9 @@ import com.google.android.libraries.pcc.chronicle.remote.impl.RemoteContextImpl
 import com.google.android.libraries.pcc.chronicle.remote.impl.RemotePolicyCheckerImpl
 import com.google.android.libraries.pcc.chronicle.storage.datacache.ManagedDataCache
 import com.google.android.libraries.pcc.chronicle.storage.datacache.impl.DataCacheStorageImpl
+import com.google.android.libraries.pcc.chronicle.storage.stream.EntityStream
+import com.google.android.libraries.pcc.chronicle.storage.stream.ManagedEntityStreamServer
+import com.google.android.libraries.pcc.chronicle.storage.stream.impl.EntityStreamProviderImpl
 import com.google.android.libraries.pcc.chronicle.util.TimeSource
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.mock
@@ -68,12 +73,18 @@ import java.time.Duration
 import java.time.Instant
 import kotlin.test.assertFailsWith
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -91,7 +102,7 @@ class RemoteStoreIntegrationTest {
   @Test
   fun clientHasValidPolicy_serverHasInvalidPolicy(): Unit = runBlocking {
     // Initialize our "processes".
-    val server = ServerProcess(setOf(INVALID_POLICY_MISSING_FIELDS))
+    val server = ServerProcess(setOf(INVALID_POLICY_MISSING_FIELDS), enableStoreServer = true)
     serviceConnector.binder = server.router
     val client = ClientProcess(setOf(VALID_POLICY), serviceConnector)
 
@@ -123,7 +134,7 @@ class RemoteStoreIntegrationTest {
   @Test
   fun clientHasInvalidPolicy_serverHasValidPolicy(): Unit = runBlocking {
     // Initialize our "processes".
-    val server = ServerProcess(setOf(VALID_POLICY))
+    val server = ServerProcess(setOf(VALID_POLICY), enableStoreServer = true)
     serviceConnector.binder = server.router
     val client = ClientProcess(setOf(INVALID_POLICY_MISSING_FIELDS), serviceConnector)
 
@@ -153,7 +164,7 @@ class RemoteStoreIntegrationTest {
   @Test
   fun clientWrites_clientAndServerRead(): Unit = runBlocking {
     // Initialize our "processes".
-    val server = ServerProcess(setOf(VALID_POLICY))
+    val server = ServerProcess(setOf(VALID_POLICY), enableStoreServer = true)
     serviceConnector.binder = server.router
     val client = ClientProcess(setOf(VALID_POLICY), serviceConnector)
 
@@ -170,7 +181,7 @@ class RemoteStoreIntegrationTest {
     val clientReadConnection =
       client.chronicle.getConnectionOrThrow<SimpleProtoMessageReader>(processorNode, VALID_POLICY)
 
-    // Get connections from our server "process"'s Chronicle
+    // Get connection from our server "process"'s Chronicle
     val serverReadConnection =
       server.chronicle.getConnectionOrThrow<SimpleProtoMessageReader>(processorNode, VALID_POLICY)
 
@@ -190,7 +201,7 @@ class RemoteStoreIntegrationTest {
   @Test
   fun serverWrites_clientAndServerRead(): Unit = runBlocking {
     // Initialize our "processes".
-    val server = ServerProcess(setOf(VALID_POLICY))
+    val server = ServerProcess(setOf(VALID_POLICY), enableStoreServer = true)
     serviceConnector.binder = server.router
     val client = ClientProcess(setOf(VALID_POLICY), serviceConnector)
 
@@ -207,6 +218,7 @@ class RemoteStoreIntegrationTest {
     val serverReadConnection =
       server.chronicle.getConnectionOrThrow<SimpleProtoMessageReader>(processorNode, VALID_POLICY)
 
+    // Get connection from our client "process"'s Chronicle
     val clientReadConnection =
       client.chronicle.getConnectionOrThrow<SimpleProtoMessageReader>(processorNode, VALID_POLICY)
 
@@ -221,6 +233,76 @@ class RemoteStoreIntegrationTest {
     // Verify that the client and server each have *both* written objects.
     assertThat(clientReadConnection.getMessages()).containsExactly(messageA, messageB)
     assertThat(serverReadConnection.getMessages()).containsExactly(messageA, messageB)
+  }
+
+  @OptIn(ExperimentalCoroutinesApi::class) // for CoroutineStart.ATOMIC
+  @Test
+  fun clientAndServerBothPublishAndSubscribe(): Unit = runBlocking {
+    // Initialize our "processes".
+    val server = ServerProcess(setOf(VALID_POLICY), enableStreamServer = true)
+    serviceConnector.binder = server.router
+    val client = ClientProcess(setOf(VALID_POLICY), serviceConnector)
+
+    // Put together a simple processor node we can use to access both connection types.
+    val processorNode =
+      object : ProcessorNode {
+        override val requiredConnectionTypes: Set<Class<out Connection>> =
+          setOf(SimpleProtoMessageSubscriber::class.java, SimpleProtoMessagePublisher::class.java)
+      }
+
+    // Get connections from our client "process"'s Chronicle
+    val clientWriteConnection =
+      client.chronicle.getConnectionOrThrow<SimpleProtoMessagePublisher>(
+        processorNode,
+        VALID_POLICY
+      )
+    val clientReadConnection =
+      client.chronicle.getConnectionOrThrow<SimpleProtoMessageSubscriber>(
+        processorNode,
+        VALID_POLICY
+      )
+
+    // Get connections from our server "process"'s Chronicle
+    val serverWriteConnection =
+      server.chronicle.getConnectionOrThrow<SimpleProtoMessagePublisher>(
+        processorNode,
+        VALID_POLICY
+      )
+    val serverReadConnection =
+      server.chronicle.getConnectionOrThrow<SimpleProtoMessageSubscriber>(
+        processorNode,
+        VALID_POLICY
+      )
+
+    // Create some data.
+    val messageA = protoGenerator.generateDistinctSimpleProtoMessage()
+    val messageB = protoGenerator.generateDistinctSimpleProtoMessage(messageA)
+
+    val messagesReceivedByClient = mutableListOf<SimpleProtoMessage>()
+    val messagesReceivedByServer = mutableListOf<SimpleProtoMessage>()
+
+    val clientSubscription =
+      launch(start = CoroutineStart.ATOMIC) {
+        clientReadConnection.subscribe().take(2).collect { messagesReceivedByClient.add(it) }
+      }
+    val serverSubscription =
+      launch(start = CoroutineStart.ATOMIC) {
+        serverReadConnection.subscribe().take(2).collect { messagesReceivedByServer.add(it) }
+      }
+
+    withContext(Dispatchers.Default) {
+      // Write from the server and the client.
+      clientWriteConnection.publish(messageA)
+      serverWriteConnection.publish(messageB)
+
+      // Wait until both subscribers have seen both messages.
+      clientSubscription.join()
+      serverSubscription.join()
+
+      // Verify that the client and server each received both objects.
+      assertThat(messagesReceivedByClient).containsExactly(messageA, messageB).inOrder()
+      assertThat(messagesReceivedByServer).containsExactly(messageA, messageB).inOrder()
+    }
   }
 
   /**
@@ -258,6 +340,13 @@ class RemoteStoreIntegrationTest {
         transport = AidlTransport(serviceConnector)
       )
 
+    private val remoteStreamClient =
+      DefaultRemoteStreamClient(
+        dataTypeName = SIMPLE_PROTO_MESSAGE_DTD.name,
+        serializer = ProtoSerializer.createFrom(SimpleProtoMessage.getDefaultInstance()),
+        transport = AidlTransport(serviceConnector)
+      )
+
     /**
      * Connection provider instance using the [remoteStoreClient] to back the
      * [SimpleProtoMessageReader]/[SimpleProtoMessageWriter] interfaces.
@@ -269,7 +358,12 @@ class RemoteStoreIntegrationTest {
             override val descriptor = SIMPLE_PROTO_MESSAGE_DTD
             override val managementStrategy = MANAGEMENT_STRATEGY
             override val connectionTypes =
-              setOf(SimpleProtoMessageReader::class.java, SimpleProtoMessageWriter::class.java)
+              setOf(
+                SimpleProtoMessageReader::class.java,
+                SimpleProtoMessageWriter::class.java,
+                SimpleProtoMessageSubscriber::class.java,
+                SimpleProtoMessagePublisher::class.java
+              )
           }
 
         override fun getConnection(
@@ -304,6 +398,26 @@ class RemoteStoreIntegrationTest {
                   )
                 }
               }
+            SimpleProtoMessageSubscriber::class.java ->
+              object : SimpleProtoMessageSubscriber {
+                override fun subscribe(): Flow<SimpleProtoMessage> {
+                  return remoteStreamClient.subscribe(connectionRequest.policy).map { it.entity }
+                }
+              }
+            SimpleProtoMessagePublisher::class.java ->
+              object : SimpleProtoMessagePublisher {
+                override suspend fun publish(message: SimpleProtoMessage) {
+                  remoteStreamClient.publish(
+                    connectionRequest.policy,
+                    listOf(
+                      WrappedEntity(
+                        EntityMetadata.newBuilder().setId(message.toString()).build(),
+                        message
+                      )
+                    )
+                  )
+                }
+              }
             else -> throw IllegalArgumentException("not supported: $connectionRequest")
           }
         }
@@ -331,11 +445,20 @@ class RemoteStoreIntegrationTest {
 
   /**
    * Defines what amounts to a "Process" acting as a server in a Client-Server remote storage
-   * scenario.
+   * scenario. Currently, remote connection servers are either Store or Stream servers, not both
+   * simultaneously. This construct represents what we have in reality at this point in time.
    *
    * @param policies set of [Policies][Policy] to support in the [chronicle] instance.
+   * @param enableStoreServer only use the internal [simpleProtoMessageStoreServer] when serving
+   * connections.
+   * @param enableStreamServer only use the internal [simpleProtoMessageStreamServer] when serving
+   * connections.
    */
-  class ServerProcess(private val policies: Set<Policy>) {
+  class ServerProcess(
+    private val policies: Set<Policy>,
+    enableStoreServer: Boolean = false,
+    enableStreamServer: Boolean = false
+  ) {
     private val fakeTime = Instant.now()
     private val timeSource = TimeSource { fakeTime }
     private val dataCache = DataCacheStorageImpl(timeSource)
@@ -352,7 +475,7 @@ class RemoteStoreIntegrationTest {
       )
 
     /** [RemoteStoreServer] instance to expose the [managedDataCache] to the client "process". */
-    private val simpleProtoMessageServer =
+    private val simpleProtoMessageStoreServer =
       object : RemoteStoreServer<SimpleProtoMessage> {
         override val dataType =
           ManagedDataTypeWithRemoteConnectionNames(
@@ -413,16 +536,56 @@ class RemoteStoreIntegrationTest {
           ids.forEach { managedDataCache.remove(it) }
       }
 
+    private val entityStreamProvider = EntityStreamProviderImpl()
+
+    /**
+     * [RemoteStreamServer] instance to expose the [entityStreamProvider] to the client "process".
+     */
+    private val simpleProtoMessageStreamServer: RemoteStreamServer<SimpleProtoMessage> =
+      ManagedEntityStreamServer(
+        SIMPLE_PROTO_MESSAGE_DTD,
+        ProtoSerializer.createFrom(SimpleProtoMessage.getDefaultInstance()),
+        entityStreamProvider,
+        object : ReadConnection {},
+        object : WriteConnection {},
+        mapOf<
+          Class<out Connection>,
+          (ConnectionRequest<out Connection>, EntityStream<SimpleProtoMessage>) -> Connection
+        >(
+          SimpleProtoMessageSubscriber::class.java to
+            { _, stream: EntityStream<SimpleProtoMessage> ->
+              object : SimpleProtoMessageSubscriber {
+                override fun subscribe(): Flow<SimpleProtoMessage> {
+                  return stream.subscribe().map { it.entity }
+                }
+              }
+            },
+          SimpleProtoMessagePublisher::class.java to
+            { _, stream: EntityStream<SimpleProtoMessage> ->
+              object : SimpleProtoMessagePublisher {
+                override suspend fun publish(message: SimpleProtoMessage) {
+                  stream.publish(
+                    WrappedEntity(
+                      EntityMetadata.newBuilder().setId(message.toString()).build(),
+                      message
+                    )
+                  )
+                }
+              }
+            }
+        )
+      )
+
+    val servers = buildSet {
+      if (enableStoreServer) add(simpleProtoMessageStoreServer)
+      if (enableStreamServer) add(simpleProtoMessageStreamServer)
+    }
+
     /** [Chronicle] instance "running" in the server "process". */
     val chronicle: Chronicle =
       DefaultChronicle(
         chronicleContext =
-          DefaultChronicleContext(
-            setOf(simpleProtoMessageServer),
-            emptySet(),
-            DefaultPolicySet(policies),
-            mock()
-          ),
+          DefaultChronicleContext(servers, emptySet(), DefaultPolicySet(policies), mock()),
         policyEngine = ChroniclePolicyEngine(),
         config =
           DefaultChronicle.Config(
@@ -435,7 +598,7 @@ class RemoteStoreIntegrationTest {
     val router: RemoteRouter =
       RemoteRouter(
         CoroutineScope(SupervisorJob()),
-        RemoteContextImpl(setOf(simpleProtoMessageServer)),
+        RemoteContextImpl(servers),
         RemotePolicyCheckerImpl(chronicle, DefaultPolicySet(policies)),
         RemoteServerHandlerFactory(),
         ClientDetailsProviderImpl(ApplicationProvider.getApplicationContext())
@@ -466,6 +629,14 @@ class RemoteStoreIntegrationTest {
         WrappedEntity(EntityMetadata(message.stringField, "no-package", timeSource.now()), message)
       )
     }
+  }
+
+  interface SimpleProtoMessageSubscriber : ReadConnection {
+    fun subscribe(): Flow<SimpleProtoMessage>
+  }
+
+  interface SimpleProtoMessagePublisher : WriteConnection {
+    suspend fun publish(message: SimpleProtoMessage)
   }
 
   companion object {
