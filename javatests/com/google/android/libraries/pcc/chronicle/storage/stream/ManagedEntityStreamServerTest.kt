@@ -44,8 +44,6 @@ import org.junit.runner.RunWith
 class ManagedEntityStreamServerTest {
   private val serializer = ProtoSerializer.createFrom(Person.getDefaultInstance())
   private val entityStreamProvider = EntityStreamProviderImpl()
-  private val dummyReadConnection = object : ReadConnection {}
-  private val dummyWriteConnection = object : WriteConnection {}
 
   @Test
   fun dataType_isPassThruWithProvidedDtdAndConnectionTypes() {
@@ -54,8 +52,6 @@ class ManagedEntityStreamServerTest {
         dataTypeDescriptor = PERSON_DTD,
         serializer = serializer,
         entityStreamProvider = entityStreamProvider,
-        dummyRemoteReadConnection = dummyReadConnection,
-        dummyRemoteWriteConnection = dummyWriteConnection,
         localConnectionBuilders =
           mapOf(
             PersonReader::class.java to { _, _ -> PersonReader() },
@@ -67,36 +63,7 @@ class ManagedEntityStreamServerTest {
     assertThat(server.dataType.managementStrategy).isEqualTo(ManagementStrategy.PassThru)
     assertThat(server.dataType.ttl).isEqualTo(Duration.ZERO)
     assertThat(server.dataType.connectionTypes)
-      .containsExactly(
-        PersonReader::class.java,
-        PersonWriter::class.java,
-        dummyReadConnection.javaClass,
-        dummyWriteConnection.javaClass
-      )
-  }
-
-  // TODO(b/194315757): Remove this test once dummy connections are no longer needed.
-  @Test
-  fun getConnection_dummyStoreReadWriteConnections() {
-    val server =
-      ManagedEntityStreamServer(
-        dataTypeDescriptor = PERSON_DTD,
-        serializer = serializer,
-        entityStreamProvider = entityStreamProvider,
-        dummyRemoteReadConnection = dummyReadConnection,
-        dummyRemoteWriteConnection = dummyWriteConnection
-      )
-
-    assertThat(server.readConnection).isSameInstanceAs(dummyReadConnection)
-    assertThat(server.writeConnection).isSameInstanceAs(dummyWriteConnection)
-    assertThat(
-        server.getConnection(ConnectionRequest(server.readConnection.javaClass, ProcNode, null))
-      )
-      .isSameInstanceAs(dummyReadConnection)
-    assertThat(
-        server.getConnection(ConnectionRequest(server.writeConnection.javaClass, ProcNode, null))
-      )
-      .isSameInstanceAs(dummyWriteConnection)
+      .containsExactly(PersonReader::class.java, PersonWriter::class.java)
   }
 
   @Test
@@ -113,12 +80,7 @@ class ManagedEntityStreamServerTest {
         dataTypeDescriptor = PERSON_DTD,
         serializer = serializer,
         entityStreamProvider = entityStreamProvider,
-        dummyRemoteReadConnection = dummyReadConnection,
-        dummyRemoteWriteConnection = dummyWriteConnection,
-        localConnectionBuilders =
-          mapOf(
-            PersonReader::class.java to readerBuilder,
-          ),
+        localConnectionBuilders = mapOf(PersonReader::class.java to readerBuilder),
       )
 
     val readerRequest = ConnectionRequest(PersonReader::class.java, ProcNode, null)
@@ -136,12 +98,7 @@ class ManagedEntityStreamServerTest {
         dataTypeDescriptor = PERSON_DTD,
         serializer = serializer,
         entityStreamProvider = entityStreamProvider,
-        dummyRemoteReadConnection = dummyReadConnection,
-        dummyRemoteWriteConnection = dummyWriteConnection,
-        localConnectionBuilders =
-          mapOf(
-            PersonReader::class.java to { _, _ -> PersonReader() },
-          ),
+        localConnectionBuilders = mapOf(PersonReader::class.java to { _, _ -> PersonReader() }),
       )
 
     val writerRequest = ConnectionRequest(PersonWriter::class.java, ProcNode, null)
@@ -175,9 +132,7 @@ class ManagedEntityStreamServerTest {
       ManagedEntityStreamServer(
         dataTypeDescriptor = PERSON_DTD,
         serializer = serializer,
-        entityStreamProvider = entityStreamProvider,
-        dummyRemoteReadConnection = dummyReadConnection,
-        dummyRemoteWriteConnection = dummyWriteConnection
+        entityStreamProvider = entityStreamProvider
       )
 
     val subscriptionResults =

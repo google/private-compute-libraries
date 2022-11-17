@@ -41,7 +41,8 @@ interface RemoteServer<T : Any> : ConnectionProvider {
 
   /**
    * Serializer used by the ChronicleService / RemoteRouter to translate between RemoteEntity
-   * instances and domain-specific [WrappedEntities] of type [T].
+   * instances and domain-specific [WrappedEntities]
+   * [com.google.android.libraries.pcc.chronicle.api.storage.WrappedEntity] of type [T].
    */
   val serializer: Serializer<T>
 
@@ -55,6 +56,7 @@ interface RemoteServer<T : Any> : ConnectionProvider {
    * direction.
    */
   val readConnection: ReadConnection
+    get() = object : ReadConnection {}
 
   /**
    * Object/Class used to identify a write-only connection to the remote store for data-flow/policy-
@@ -66,12 +68,13 @@ interface RemoteServer<T : Any> : ConnectionProvider {
    * direction.
    */
   val writeConnection: WriteConnection
+    get() = object : WriteConnection {}
 
-  override fun getConnection(connectionRequest: ConnectionRequest<out Connection>): Connection {
-    return if (connectionRequest.connectionType == readConnection.javaClass) {
-      readConnection
-    } else {
-      writeConnection
-    }
-  }
+  /**
+   * It is not required that a RemoteServer serve local requests, thus this method is defaulted. And
+   * an error is thrown in an attempt to signal to the user/caller that if local-to-the-server
+   * connections are required, then this method must be overridden.
+   */
+  override fun getConnection(connectionRequest: ConnectionRequest<out Connection>): Connection =
+    throw NotImplementedError("RemoteServers only serve remote connections.")
 }

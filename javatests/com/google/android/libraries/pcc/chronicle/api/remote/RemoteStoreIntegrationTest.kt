@@ -546,8 +546,6 @@ class RemoteStoreIntegrationTest {
         SIMPLE_PROTO_MESSAGE_DTD,
         ProtoSerializer.createFrom(SimpleProtoMessage.getDefaultInstance()),
         entityStreamProvider,
-        object : ReadConnection {},
-        object : WriteConnection {},
         mapOf<
           Class<out Connection>,
           (ConnectionRequest<out Connection>, EntityStream<SimpleProtoMessage>) -> Connection

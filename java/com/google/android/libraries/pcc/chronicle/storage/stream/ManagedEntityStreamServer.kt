@@ -23,8 +23,6 @@ import com.google.android.libraries.pcc.chronicle.api.DataType
 import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor
 import com.google.android.libraries.pcc.chronicle.api.ManagedDataTypeWithRemoteConnectionNames
 import com.google.android.libraries.pcc.chronicle.api.ManagementStrategy
-import com.google.android.libraries.pcc.chronicle.api.ReadConnection
-import com.google.android.libraries.pcc.chronicle.api.WriteConnection
 import com.google.android.libraries.pcc.chronicle.api.policy.Policy
 import com.google.android.libraries.pcc.chronicle.api.remote.serialization.Serializer
 import com.google.android.libraries.pcc.chronicle.api.remote.server.RemoteStreamServer
@@ -48,10 +46,6 @@ private typealias LocalConnectionBuilders<T> = Map<Class<out Connection>, LocalC
  * To enable remote publish/subscribe behavior, ManagedEntityStream instances should be provided on
  * the server-side of a client/server relationship.
  *
- * TODO(b/194315757): Remove dummyRemoteReadConnection and dummyRemoteWriteConnection when data flow
- * analysis system no longer depends solely on Class objects for edges. It should be able to be
- * accomplished with a tuple of Schema/DTD name and direction.
- *
  * @param dataTypeDescriptor The [DataTypeDescriptor] for [T].
  * @param serializer A [Serializer] capable of serializing/deserializing [T] instances for remote
  * transmission.
@@ -64,20 +58,14 @@ class ManagedEntityStreamServer<T : Any>(
   override val dataTypeDescriptor: DataTypeDescriptor,
   override val serializer: Serializer<T>,
   entityStreamProvider: EntityStreamProvider,
-  dummyRemoteReadConnection: ReadConnection,
-  dummyRemoteWriteConnection: WriteConnection,
   private val localConnectionBuilders: LocalConnectionBuilders<T> = emptyMap(),
 ) : ConnectionProvider, RemoteStreamServer<T> {
   override val dataType: DataType =
     ManagedDataTypeWithRemoteConnectionNames(
       descriptor = dataTypeDescriptor,
       managementStrategy = ManagementStrategy.PassThru,
-      connectionTypes =
-        localConnectionBuilders.keys +
-          setOf(dummyRemoteReadConnection::class.java, dummyRemoteWriteConnection::class.java)
+      connectionTypes = localConnectionBuilders.keys
     )
-  override val readConnection: ReadConnection = dummyRemoteReadConnection
-  override val writeConnection: WriteConnection = dummyRemoteWriteConnection
 
   @Suppress("UNCHECKED_CAST") // Checked by privacy review and policy.
   private val entityStream: EntityStream<T> =
@@ -89,16 +77,11 @@ class ManagedEntityStreamServer<T : Any>(
   override suspend fun publish(policy: Policy?, entities: List<WrappedEntity<T>>) =
     entityStream.publishGroup(entities)
 
-  override fun getConnection(connectionRequest: ConnectionRequest<out Connection>): Connection =
-    when (val type = connectionRequest.connectionType) {
-      readConnection::class.java -> readConnection
-      writeConnection::class.java -> writeConnection
-      else -> {
-        val builder =
-          requireNotNull(localConnectionBuilders[type]) {
-            "No connection builder found for $connectionRequest"
-          }
-        builder(connectionRequest, entityStream)
+  override fun getConnection(connectionRequest: ConnectionRequest<out Connection>): Connection {
+    val builder =
+      requireNotNull(localConnectionBuilders[connectionRequest.connectionType]) {
+        "No connection builder found for $connectionRequest"
       }
-    }
+    return builder(connectionRequest, entityStream)
+  }
 }
