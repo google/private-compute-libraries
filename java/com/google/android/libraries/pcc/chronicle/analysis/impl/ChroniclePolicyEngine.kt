@@ -20,10 +20,10 @@ import com.google.android.libraries.pcc.chronicle.analysis.ChronicleContext
 import com.google.android.libraries.pcc.chronicle.analysis.ManagementStrategyComparator.compare
 import com.google.android.libraries.pcc.chronicle.analysis.PolicyEngine
 import com.google.android.libraries.pcc.chronicle.api.Connection
-import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
 import com.google.android.libraries.pcc.chronicle.api.DataType
 import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor
 import com.google.android.libraries.pcc.chronicle.api.FieldType
+import com.google.android.libraries.pcc.chronicle.api.ProcessorNode
 import com.google.android.libraries.pcc.chronicle.api.SandboxProcessorNode
 import com.google.android.libraries.pcc.chronicle.api.isWriteConnection
 import com.google.android.libraries.pcc.chronicle.api.policy.Policy
@@ -47,14 +47,15 @@ import com.google.android.libraries.pcc.chronicle.api.policy.canEgress
 class ChroniclePolicyEngine : PolicyEngine {
   override fun checkPolicy(
     policy: Policy,
-    request: ConnectionRequest<*>,
     context: ChronicleContext,
+    dataTypeDescriptor: DataTypeDescriptor,
+    requester: ProcessorNode
   ): PolicyCheckResult {
     // Verify the ManagementStrategies involved against the Policy, and verify the checks using
     // the results of the data-flow analysis.
     val violations =
       policy.verifyManagementStrategies(context.connectionProviders) +
-        checkAllFieldsAreAllowedForEgress(context, policy, request) +
+        checkAllFieldsAreAllowedForEgress(policy, dataTypeDescriptor, requester, context) +
         policy.verifyContext(context.connectionContext)
 
     return PolicyCheckResult.make(violations)
@@ -93,36 +94,26 @@ class ChroniclePolicyEngine : PolicyEngine {
     return emptyList()
   }
 
-  private fun <T : Connection> checkAllFieldsAreAllowedForEgress(
-    context: ChronicleContext,
+  private fun checkAllFieldsAreAllowedForEgress(
     policy: Policy,
-    request: ConnectionRequest<T>,
+    dataTypeDescriptor: DataTypeDescriptor,
+    requestingProcessorNode: ProcessorNode,
+    context: ChronicleContext,
   ): List<PolicyCheck> {
-    // TODO(b/251295492) the first part of this Elvis can disappear.
-    val dtd =
-      context.findDataType(request.connectionType)
-        ?: context.findDataType(request.connectionName)
-          ?: return listOf(
-          PolicyCheck(
-            "s:${request.connectionType ?: request.connectionName} is " +
-              CONNECTON_NOT_FOUND_PREDICATE
-          )
-        )
-
     val policyTarget =
-      policy.targets.find { it.schemaName == dtd.name }
-        ?: return listOf(PolicyCheck("s:${dtd.name} is $DTD_NOT_FOUND_PREDICATE"))
+      policy.targets.find { it.schemaName == dataTypeDescriptor.name }
+        ?: return listOf(PolicyCheck("s:${dataTypeDescriptor.name} is $DTD_NOT_FOUND_PREDICATE"))
 
     val violatingFields = mutableListOf<String>()
-    dtd.fields.forEach { (fieldName, type) ->
+    dataTypeDescriptor.fields.forEach { (fieldName, type) ->
       policyTarget.fields
         .find { it.fieldPath.last() == fieldName }
         ?.let { policyField ->
           violatingFields.addAll(
             type.findPolicyViolations(
-              "${dtd.name}.$fieldName",
+              "${dataTypeDescriptor.name}.$fieldName",
               policyField,
-              if (request.requester is SandboxProcessorNode) {
+              if (requestingProcessorNode is SandboxProcessorNode) {
                 { !(it.rawUsages.canEgress() || it.rawUsages.contains(UsageType.SANDBOX)) }
               } else {
                 { !it.rawUsages.canEgress() }
@@ -131,7 +122,7 @@ class ChroniclePolicyEngine : PolicyEngine {
             )
           )
         }
-        ?: violatingFields.add("${dtd.name}.$fieldName")
+        ?: violatingFields.add("${dataTypeDescriptor.name}.$fieldName")
     }
 
     return violatingFields.map { PolicyCheck("s:$it is $FIELD_CANNOT_BE_EGRESSED_PREDICATE") }
@@ -218,15 +209,6 @@ class ChroniclePolicyEngine : PolicyEngine {
      */
     private const val MANAGEMENT_STRATEGY_NOT_STRICT_ENOUGH_PREDICATE =
       "\"management is at least as restrained as the most conservative policy\""
-
-    /**
-     * Predicate with special label used in the [Checks][Check] rendered as errors for a
-     * [PolicyCheckResult.Fail] to let the user know that a given [Connection], the corresponding
-     * [DataTypeDescriptor] is not registered with [Chronicle].
-     *
-     * Not intended to be propagated with label propagation, it's for error-messaging only.
-     */
-    private const val CONNECTON_NOT_FOUND_PREDICATE = "not a registered connection"
 
     /**
      * Predicate with special label used in the [Checks][Check] rendered as errors for a

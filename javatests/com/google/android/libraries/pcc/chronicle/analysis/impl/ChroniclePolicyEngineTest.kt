@@ -22,7 +22,6 @@ import com.google.android.libraries.pcc.chronicle.analysis.DefaultPolicySet
 import com.google.android.libraries.pcc.chronicle.analysis.impl.testdata.BusinessConnectionProvider
 import com.google.android.libraries.pcc.chronicle.analysis.impl.testdata.HOUSEHOLD_DESCRIPTOR
 import com.google.android.libraries.pcc.chronicle.analysis.impl.testdata.HouseholdConnectionProvider
-import com.google.android.libraries.pcc.chronicle.analysis.impl.testdata.HouseholdReader
 import com.google.android.libraries.pcc.chronicle.analysis.impl.testdata.HouseholdReaderNode
 import com.google.android.libraries.pcc.chronicle.analysis.impl.testdata.PERSON_DESCRIPTOR
 import com.google.android.libraries.pcc.chronicle.analysis.impl.testdata.PET_DESCRIPTOR
@@ -39,6 +38,7 @@ import com.google.android.libraries.pcc.chronicle.api.Connection
 import com.google.android.libraries.pcc.chronicle.api.ConnectionProvider
 import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
 import com.google.android.libraries.pcc.chronicle.api.DataType
+import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor
 import com.google.android.libraries.pcc.chronicle.api.ManagedDataType
 import com.google.android.libraries.pcc.chronicle.api.ManagementStrategy
 import com.google.android.libraries.pcc.chronicle.api.ProcessorNode
@@ -76,7 +76,7 @@ class ChroniclePolicyEngineTest {
   @Test
   fun checkPolicy_succeeds() {
     val result =
-      checkPolicyOnRead<PersonReader>(
+      checkPolicyOnRead(
         processorNode = PeopleReader(),
         connectionProviders = setOf(PersonConnectionProvider()),
         policy = EVERYTHING_PERSON_ALLOWED_POLICY
@@ -86,9 +86,22 @@ class ChroniclePolicyEngineTest {
   }
 
   @Test
+  fun checkPolicy_nonNullDataTypeName_succeeds() {
+    val result =
+      checkPolicyOnRead(
+        processorNode = PeopleReader(),
+        connectionProviders = setOf(PersonConnectionProvider()),
+        policy = EVERYTHING_PERSON_ALLOWED_POLICY,
+        dataTypeDescriptor = PERSON_DESCRIPTOR
+      )
+
+    assertThat(result).isEqualTo(PolicyCheckResult.Pass)
+  }
+
+  @Test
   fun checkPolicy_ageMissingPolicy_shouldFail() {
     val result =
-      checkPolicyOnRead<PersonReader>(
+      checkPolicyOnRead(
         processorNode = PeopleReader(),
         connectionProviders = setOf(PersonConnectionProvider()),
         policy = AGE_MISSING_POLICY,
@@ -102,7 +115,7 @@ class ChroniclePolicyEngineTest {
   @Test
   fun checkPolicy_emptyPolicy_shouldFail() {
     val result =
-      checkPolicyOnRead<PersonReader>(
+      checkPolicyOnRead(
         processorNode = PeopleReader(),
         connectionProviders = setOf(PersonConnectionProvider()),
         policy = EMPTY_POLICY,
@@ -114,7 +127,7 @@ class ChroniclePolicyEngineTest {
   @Test
   fun checkPolicy_ageJoinPolicy_shouldFail() {
     val result =
-      checkPolicyOnRead<PersonReader>(
+      checkPolicyOnRead(
         processorNode = PeopleReader(),
         connectionProviders = setOf(PersonConnectionProvider()),
         policy = AGE_JOIN_POLICY,
@@ -128,7 +141,7 @@ class ChroniclePolicyEngineTest {
   @Test
   fun checkPolicy_incorrectPolicy_shouldFail() {
     val result =
-      checkPolicyOnRead<PersonReader>(
+      checkPolicyOnRead(
         processorNode = PeopleReader(),
         connectionProviders = setOf(PersonConnectionProvider()),
         policy = PET_VALID_POLICY,
@@ -142,7 +155,7 @@ class ChroniclePolicyEngineTest {
   @Test
   fun checkPolicy_sandboxPolicy_shouldPass() {
     val result =
-      checkPolicyOnRead<PetReader>(
+      checkPolicyOnRead(
         processorNode = SandboxProcessorNode(PetProcessor()),
         connectionProviders = setOf(PetConnectionProvider()),
         policy = PET_SANDBOX_POLICY,
@@ -154,7 +167,7 @@ class ChroniclePolicyEngineTest {
   @Test
   fun checkPolicy_sandboxPolicy_shouldFail() {
     val result =
-      checkPolicyOnRead<PetReader>(
+      checkPolicyOnRead(
         processorNode = PetProcessor(),
         connectionProviders = setOf(PetConnectionProvider()),
         policy = PET_SANDBOX_POLICY,
@@ -165,7 +178,7 @@ class ChroniclePolicyEngineTest {
   @Test
   fun checkPolicy_householdAllAllowedPolicy_succeeds() {
     val result =
-      checkPolicyOnRead<HouseholdReader>(
+      checkPolicyOnRead(
         processorNode = HouseholdReaderNode(),
         connectionProviders = setOf(HouseholdConnectionProvider()),
         policy = HOUSEHOLD_ALL_ALLOWED_POLICY,
@@ -177,7 +190,7 @@ class ChroniclePolicyEngineTest {
   @Test
   fun checkPolicy_householdRestrictedPolicy_shouldFail() {
     val result =
-      checkPolicyOnRead<HouseholdReader>(
+      checkPolicyOnRead(
         processorNode = HouseholdReaderNode(),
         connectionProviders = setOf(HouseholdConnectionProvider()),
         policy = HOUSEHOLD_RESTRICTED_POLICY,
@@ -191,28 +204,14 @@ class ChroniclePolicyEngineTest {
   }
 
   @Test
-  fun checkPolicy_noHouseholdConnectionProvider_shouldFail() {
-    val result =
-      checkPolicyOnRead<HouseholdReader>(
-        processorNode = HouseholdReaderNode(),
-        // Note: we have an incorrect [ConnectionProvider].
-        connectionProviders = setOf(PersonConnectionProvider()),
-        policy = HOUSEHOLD_ALL_ALLOWED_POLICY,
-      )
-
-    assertThat(result).isInstanceOf(PolicyCheckResult.Fail::class.java)
-    result as PolicyCheckResult.Fail
-    assertThat(result.message).contains("testdata.HouseholdReader is not a registered connection")
-  }
-
-  @Test
   fun checkPolicy_validRetention_shouldPass() {
     val result =
-      checkPolicyOnRead<PetReader>(
+      checkPolicyOnRead(
         processorNode = PetProcessor(),
         connectionProviders =
           setOf(BusinessConnectionProvider(), PetConnectionProvider(), PersonConnectionProvider()),
         policy = PET_VALID_POLICY,
+        dataTypeDescriptor = PET_DESCRIPTOR
       )
 
     assertThat(result).isInstanceOf(PolicyCheckResult.Pass::class.java)
@@ -221,10 +220,11 @@ class ChroniclePolicyEngineTest {
   @Test
   fun checkPolicy_invalidTTL_shouldFail() {
     val result =
-      checkPolicyOnRead<PetReader>(
+      checkPolicyOnRead(
         processorNode = PetProcessor(),
         connectionProviders = setOf(PetConnectionProvider(), PersonConnectionProvider()),
         policy = PET_INVALID_POLICY_MAX_AGE_TOO_SHORT,
+        dataTypeDescriptor = PET_DESCRIPTOR
       )
 
     assertThat(result).isInstanceOf(PolicyCheckResult.Fail::class.java)
@@ -233,10 +233,11 @@ class ChroniclePolicyEngineTest {
   @Test
   fun checkPolicy_unencryptedConnectionProvider_whenEncryptionRequired_shouldFail() {
     val result =
-      checkPolicyOnRead<PetReader>(
+      checkPolicyOnRead(
         processorNode = PetProcessor(),
         connectionProviders = setOf(UnencryptedPetConnectionProvider(), PersonConnectionProvider()),
         policy = PET_POLICY_DISK_ENCRYPTION_REQUIRED,
+        dataTypeDescriptor = PET_DESCRIPTOR
       )
 
     assertThat(result).isInstanceOf(PolicyCheckResult.Fail::class.java)
@@ -248,7 +249,7 @@ class ChroniclePolicyEngineTest {
     testContext[NameKey] = "other test"
 
     val result =
-      checkPolicyOnRead<PersonReader>(
+      checkPolicyOnRead(
         processorNode = PeopleReader(),
         connectionProviders = setOf(PersonConnectionProvider()),
         policy = NAME_CONTEXT_POLICY,
@@ -264,7 +265,7 @@ class ChroniclePolicyEngineTest {
     testContext[NameKey] = "test"
 
     val result =
-      checkPolicyOnRead<PersonReader>(
+      checkPolicyOnRead(
         processorNode = PeopleReader(),
         connectionProviders = setOf(PersonConnectionProvider()),
         policy = NAME_CONTEXT_POLICY,
@@ -505,21 +506,17 @@ class ChroniclePolicyEngineTest {
     }
   }
   /**
-   * Get a connection of type [T] with the given [processorNode], [connectionProviders], and
-   * [policy] as part of the [ChronicleContext].
+   * Get a connection with the given [processorNode], [connectionProviders], and [policy] as part of
+   * the [ChronicleContext].
    */
-  private inline fun <reified T : Connection> checkPolicyOnRead(
+  private fun checkPolicyOnRead(
     processorNode: ProcessorNode,
     connectionProviders: Set<ConnectionProvider>,
     policy: Policy,
-    connectionContext: TypedMap = TypedMap()
+    connectionContext: TypedMap = TypedMap(),
+    dataTypeDescriptor: DataTypeDescriptor =
+      connectionProviders.map { it.dataType.descriptor }.first()
   ): PolicyCheckResult {
-    val connectionRequest =
-      ConnectionRequest<T>(
-        connectionType = T::class.java,
-        requester = processorNode,
-        policy = policy
-      )
     val context =
       DefaultChronicleContext(
         connectionProviders,
@@ -528,7 +525,7 @@ class ChroniclePolicyEngineTest {
         DefaultDataTypeDescriptorSet(connectionProviders.map { it.dataType.descriptor }.toSet()),
         connectionContext
       )
-    return engine.checkPolicy(policy, connectionRequest, context)
+    return engine.checkPolicy(policy, context, dataTypeDescriptor, processorNode)
   }
 
   private companion object {

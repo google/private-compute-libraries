@@ -51,13 +51,7 @@ data class ConnectionRequest<T : Connection>(
   }
 
   fun isReadConnection(): Boolean =
-    connectionType?.isReadConnection
-      ?: (connectionName is ConnectionName.Reader ||
-        connectionName is ConnectionNameForRemoteConnections.Reader)
-
-  fun isForRemoteConnections(): Boolean =
-    connectionName is ConnectionNameForRemoteConnections.Reader ||
-      connectionName is ConnectionNameForRemoteConnections.Writer
+    connectionType?.isReadConnection ?: (connectionName is ConnectionName.Reader)
 
   override fun toString(): String =
     """

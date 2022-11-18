@@ -24,21 +24,19 @@ import com.google.android.libraries.pcc.chronicle.analysis.PolicyEngine
 import com.google.android.libraries.pcc.chronicle.analysis.PolicySet
 import com.google.android.libraries.pcc.chronicle.api.Chronicle
 import com.google.android.libraries.pcc.chronicle.api.Connection
-import com.google.android.libraries.pcc.chronicle.api.ConnectionName
-import com.google.android.libraries.pcc.chronicle.api.ConnectionNameForRemoteConnections
 import com.google.android.libraries.pcc.chronicle.api.ConnectionProvider
 import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
 import com.google.android.libraries.pcc.chronicle.api.ConnectionResult
 import com.google.android.libraries.pcc.chronicle.api.DataType
 import com.google.android.libraries.pcc.chronicle.api.ManagedDataType
 import com.google.android.libraries.pcc.chronicle.api.ManagementStrategy
-import com.google.android.libraries.pcc.chronicle.api.Name
 import com.google.android.libraries.pcc.chronicle.api.ProcessorNode
 import com.google.android.libraries.pcc.chronicle.api.ReadConnection
 import com.google.android.libraries.pcc.chronicle.api.WriteConnection
 import com.google.android.libraries.pcc.chronicle.api.dataTypeDescriptor
 import com.google.android.libraries.pcc.chronicle.api.error.ConnectionNotDeclared
 import com.google.android.libraries.pcc.chronicle.api.error.ConnectionProviderNotFound
+import com.google.android.libraries.pcc.chronicle.api.error.DataTypeDescriptorNotFound
 import com.google.android.libraries.pcc.chronicle.api.error.Disabled
 import com.google.android.libraries.pcc.chronicle.api.error.PolicyNotFound
 import com.google.android.libraries.pcc.chronicle.api.error.PolicyViolation
@@ -84,8 +82,7 @@ class DefaultChronicleTest {
   private val policyEngine =
     mock<PolicyEngine> {
       on { checkWriteConnections(eq(context)) } doReturn PolicyCheckResult.Pass
-      on { checkPolicy(any(), any<ConnectionRequest<out Connection>>(), any()) } doReturn
-        PolicyCheckResult.Pass
+      on { checkPolicy(any(), any(), any(), any()) } doReturn PolicyCheckResult.Pass
     }
 
   @Test
@@ -114,11 +111,45 @@ class DefaultChronicleTest {
   }
 
   @Test
+  fun checkPolicy_happyPath_returnsNoErrors() {
+    val chronicle = DefaultChronicle(context, policyEngine, config, flags)
+    val request = createConnectionRequest<FooReader>()
+
+    assertThat(
+        chronicle.checkPolicy(
+          FOO_DTD.name,
+          request.policy,
+          request.isReadConnection(),
+          request.requester
+        )
+      )
+      .isEqualTo(Result.success(Unit))
+  }
+
+  @Test
+  fun checkPolicy_noDataTypeDescriptorInContext_returnsError() {
+    val chronicle = DefaultChronicle(context, policyEngine, config, flags)
+    val request = createConnectionRequest<FooReader>()
+
+    assertThat(
+        chronicle
+          .checkPolicy(
+            dataTypeName = "Baz",
+            request.policy,
+            request.isReadConnection(),
+            request.requester
+          )
+          .exceptionOrNull()
+      )
+      .isInstanceOf(DataTypeDescriptorNotFound::class.java)
+  }
+
+  @Test
   fun getConnection_happyPath_returnsConnectionSuccess() {
     val chronicle = DefaultChronicle(context, policyEngine, config, flags)
-    val req = createConnectionRequest<FooReader>()
+    val request = createConnectionRequest<FooReader>()
 
-    assertThat(chronicle.getConnection(req)).isInstanceOf(ConnectionResult.Success::class.java)
+    assertThat(chronicle.getConnection(request)).isInstanceOf(ConnectionResult.Success::class.java)
   }
 
   @Test
@@ -126,9 +157,9 @@ class DefaultChronicleTest {
     ShadowLog.setLoggable("Chronicle", Log.VERBOSE)
 
     val chronicle = DefaultChronicle(context, policyEngine, config, flags)
-    val req = createConnectionRequest<FooReader>()
+    val request = createConnectionRequest<FooReader>()
 
-    assertThat(chronicle.getConnection(req)).isInstanceOf(ConnectionResult.Success::class.java)
+    assertThat(chronicle.getConnection(request)).isInstanceOf(ConnectionResult.Success::class.java)
 
     val lastLogMessage = ShadowLog.getLogs().last().msg
     assertThat(lastLogMessage).contains("ChronicleImpl.getConnection")
@@ -138,20 +169,20 @@ class DefaultChronicleTest {
   @Test
   fun getConnection_requestReadConnectionWithNonNullPolicy_checksPolicy() {
     val chronicle = DefaultChronicle(context, policyEngine, config, flags)
-    val req = createConnectionRequest<FooReader>()
+    val request = createConnectionRequest<FooReader>()
 
-    chronicle.getConnection(req)
+    chronicle.getConnection(request)
 
-    verify(policyEngine).checkPolicy(eq(POLICY), eq(req), any())
+    verify(policyEngine).checkPolicy(eq(POLICY), any(), any(), eq(request.requester))
   }
 
   @Test
   fun getConnection_configFailNewConnections_returnsFailure() {
     flags.config.update { it.copy(failNewConnections = true) }
     val chronicle = DefaultChronicle(context, policyEngine, config, flags)
-    val req = createConnectionRequest<FooReader>()
+    val request = createConnectionRequest<FooReader>()
 
-    val result = chronicle.getConnection(req) as ConnectionResult.Failure
+    val result = chronicle.getConnection(request) as ConnectionResult.Failure
 
     assertThat(result.error).isInstanceOf(Disabled::class.java)
   }
@@ -159,7 +190,7 @@ class DefaultChronicleTest {
   @Test
   fun getConnection_requestConnectionTypeNotMemberOfProcessorNodeRequiredTypes_returnsFailure() {
     val chronicle = DefaultChronicle(context, policyEngine, config, flags)
-    val req =
+    val request =
       createConnectionRequest<BogusReadConnection>(
         requester =
           object : ProcessorNode {
@@ -168,7 +199,7 @@ class DefaultChronicleTest {
           }
       )
 
-    val result = chronicle.getConnection(req) as ConnectionResult.Failure
+    val result = chronicle.getConnection(request) as ConnectionResult.Failure
 
     assertThat(result.error).isInstanceOf(ConnectionNotDeclared::class.java)
   }
@@ -176,9 +207,9 @@ class DefaultChronicleTest {
   @Test
   fun getConnection_noConnectionProviderForRequestedConnection_returnsFailure() {
     val chronicle = DefaultChronicle(context, policyEngine, config, flags)
-    val req = createConnectionRequest<BogusReadConnection>()
+    val request = createConnectionRequest<BogusReadConnection>()
 
-    val result = chronicle.getConnection(req) as ConnectionResult.Failure
+    val result = chronicle.getConnection(request) as ConnectionResult.Failure
 
     assertThat(result.error).isInstanceOf(ConnectionProviderNotFound::class.java)
   }
@@ -188,9 +219,9 @@ class DefaultChronicleTest {
     whenever(policySet.contains(any())).thenReturn(false)
 
     val chronicle = DefaultChronicle(context, policyEngine, config, flags)
-    val req = createConnectionRequest<FooReader>()
+    val request = createConnectionRequest<FooReader>()
 
-    val result = chronicle.getConnection(req) as ConnectionResult.Failure
+    val result = chronicle.getConnection(request) as ConnectionResult.Failure
 
     assertThat(result.error).isInstanceOf(PolicyNotFound::class.java)
   }
@@ -198,9 +229,9 @@ class DefaultChronicleTest {
   @Test
   fun getConnection_requestReadConnectionWithNoPolicy_returnsFailure() {
     val chronicle = DefaultChronicle(context, policyEngine, config, flags)
-    val req = createConnectionRequest<FooReader>(policy = null)
+    val request = createConnectionRequest<FooReader>(policy = null)
 
-    val result = chronicle.getConnection(req) as ConnectionResult.Failure
+    val result = chronicle.getConnection(request) as ConnectionResult.Failure
 
     assertThat(result.error).isInstanceOf(PolicyViolation::class.java)
     assertThat(result.error)
@@ -211,28 +242,15 @@ class DefaultChronicleTest {
   @Test
   fun getConnection_requestReadConnectionWithNonNullInvalidPolicy_returnsFailure() {
     val policyResult = PolicyCheckResult.Fail(listOf(PolicyCheck("MyCheck")))
-    whenever(policyEngine.checkPolicy(any(), any(), any())).thenReturn(policyResult)
+    whenever(policyEngine.checkPolicy(any(), any(), any(), any())).thenReturn(policyResult)
 
     val chronicle = DefaultChronicle(context, policyEngine, config, flags)
-    val req = createConnectionRequest<FooReader>()
+    val request = createConnectionRequest<FooReader>()
 
-    val result = chronicle.getConnection(req) as ConnectionResult.Failure
+    val result = chronicle.getConnection(request) as ConnectionResult.Failure
     val error = result.error as PolicyViolation
 
     assertThat(error).hasMessageThat().contains(policyResult.message)
-  }
-
-  @Test
-  fun getConnection_skipsGetConnectionCallIfOnlyUsedForPolicyChecking() {
-    val chronicle = DefaultChronicle(context, policyEngine, config, flags)
-    val req = connectionRequestForRemoteConnection()
-
-    val connectionResult = chronicle.getConnection(req)
-
-    verify(policyEngine).checkPolicy(eq(POLICY), eq(req), any())
-    assertThat(connectionResult).isInstanceOf(ConnectionResult.Success::class.java)
-    assertThat((connectionResult as ConnectionResult.Success).connection)
-      .isInstanceOf(DefaultChronicle.Companion.AnonymousConnection::class.java)
   }
 
   @Test
@@ -276,18 +294,6 @@ class DefaultChronicleTest {
       },
     policy: Policy? = POLICY,
   ): ConnectionRequest<T> = ConnectionRequest(connectionType, requester, policy)
-
-  private fun connectionRequestForRemoteConnection(): ConnectionRequest<Connection> {
-    val connName = ConnectionNameForRemoteConnections.Reader<Connection>(Name("foo"))
-    return ConnectionRequest(
-      connName,
-      object : ProcessorNode {
-        override val requiredConnectionTypes: Set<Class<out Connection>> = emptySet()
-        override val requiredConnectionNames: Set<ConnectionName<out Connection>> = setOf(connName)
-      },
-      POLICY
-    )
-  }
 
   interface BogusReadConnection : ReadConnection
 

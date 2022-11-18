@@ -21,7 +21,7 @@ import com.google.android.libraries.pcc.chronicle.api.ConnectionProvider
 import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
 import com.google.android.libraries.pcc.chronicle.api.DataType
 import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor
-import com.google.android.libraries.pcc.chronicle.api.ManagedDataTypeWithRemoteConnectionNames
+import com.google.android.libraries.pcc.chronicle.api.ManagedDataType
 import com.google.android.libraries.pcc.chronicle.api.ManagementStrategy
 import com.google.android.libraries.pcc.chronicle.api.policy.Policy
 import com.google.android.libraries.pcc.chronicle.api.remote.serialization.Serializer
@@ -61,7 +61,7 @@ class ManagedEntityStreamServer<T : Any>(
   private val localConnectionBuilders: LocalConnectionBuilders<T> = emptyMap(),
 ) : ConnectionProvider, RemoteStreamServer<T> {
   override val dataType: DataType =
-    ManagedDataTypeWithRemoteConnectionNames(
+    ManagedDataType(
       descriptor = dataTypeDescriptor,
       managementStrategy = ManagementStrategy.PassThru,
       connectionTypes = localConnectionBuilders.keys

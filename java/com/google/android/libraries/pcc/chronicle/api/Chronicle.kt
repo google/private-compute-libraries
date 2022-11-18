@@ -23,6 +23,17 @@ import kotlin.reflect.KClass
 /** Chronicle is the primary entry point for features when accessing or manipulating data. */
 interface Chronicle {
   /**
+   * Checks policy adherence of the [ConnectionRequest.requester] and the data being requested.
+   * @param isForReading true if the policy will be used in conjunction with a [ReadConnection]
+   */
+  fun checkPolicy(
+    dataTypeName: String,
+    policy: Policy?,
+    isForReading: Boolean,
+    requester: ProcessorNode
+  ): Result<Unit>
+
+  /**
    * Returns the [ConnectionTypes] associated with the provided [dataTypeClass] which are available
    * via [getConnection].
    */

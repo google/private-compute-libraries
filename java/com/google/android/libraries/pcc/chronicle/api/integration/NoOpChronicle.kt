@@ -20,7 +20,10 @@ import com.google.android.libraries.pcc.chronicle.api.Chronicle
 import com.google.android.libraries.pcc.chronicle.api.Connection
 import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
 import com.google.android.libraries.pcc.chronicle.api.ConnectionResult
+import com.google.android.libraries.pcc.chronicle.api.ProcessorNode
+import com.google.android.libraries.pcc.chronicle.api.error.ChronicleError
 import com.google.android.libraries.pcc.chronicle.api.error.Disabled
+import com.google.android.libraries.pcc.chronicle.api.policy.Policy
 import kotlin.reflect.KClass
 
 /**
@@ -32,6 +35,13 @@ class NoOpChronicle(
   /** Set if the reason for the no-op impl was flags. This enables debugging no-op results. */
   private val disabledFromStartupFlags: Boolean = false
 ) : Chronicle {
+  override fun checkPolicy(
+    dataTypeName: String,
+    policy: Policy?,
+    isForReading: Boolean,
+    requester: ProcessorNode
+  ): Result<Unit> = Result.failure(ChronicleError("Chronicle is set to no-op."))
+
   override fun getAvailableConnectionTypes(dataTypeClass: KClass<*>): Chronicle.ConnectionTypes =
     Chronicle.ConnectionTypes.EMPTY
 

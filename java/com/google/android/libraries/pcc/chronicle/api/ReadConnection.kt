@@ -42,17 +42,5 @@ interface ReadConnection : Connection {
      */
     @JvmStatic
     fun <T : Connection> connectionName(name: String) = ConnectionName.Reader<T>(Name(name))
-
-    /**
-     * Special cased [ConnectionName] for remote connections. This allows the remote connections
-     * system call Chronicle.getConnection for policy-checking purposes and bypasses actually
-     * getting the connection.
-     *
-     * **Note** this should not be used generally. Use [ReadConnection.connectionName] instead.
-     */
-    // TODO(b/251283239): Remove this convenience method and its uses after policy checking is
-    // separated from getting a connection in Chronicle.
-    fun <T : Connection> connectionNameForRemoteConnections(name: String) =
-      ConnectionNameForRemoteConnections.Reader<T>(Name(name))
   }
 }

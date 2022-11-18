@@ -20,7 +20,6 @@ import com.google.android.libraries.pcc.chronicle.analysis.PolicySet
 import com.google.android.libraries.pcc.chronicle.api.Chronicle
 import com.google.android.libraries.pcc.chronicle.api.Connection
 import com.google.android.libraries.pcc.chronicle.api.ConnectionName
-import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
 import com.google.android.libraries.pcc.chronicle.api.ProcessorNode
 import com.google.android.libraries.pcc.chronicle.api.ReadConnection
 import com.google.android.libraries.pcc.chronicle.api.SandboxProcessorNode
@@ -68,38 +67,25 @@ class RemotePolicyCheckerImpl(
         node
       }
 
-    // Create a ConnectionRequest and try to use it. If it succeeds then we can proceed.
-    // If it throws, the exception will be picked up by the CoroutineExceptionHandler.
-    val connectionRequest =
-      ConnectionRequest(
-        connectionName,
+    chronicle
+      .checkPolicy(
+        metadata.dataTypeName,
+        policy,
+        metadata.isReadRequest,
         processorNode.let {
           if (clientDetails.isolationType == ISOLATED_PROCESS) SandboxProcessorNode(it) else it
-        },
-        policy
+        }
       )
-    // TODO(b/251283239): extract policy checker from within the getConnection call, and then call
-    // it here and remove the need to get a connection (it's not used anyway).
-    chronicle.getConnectionOrThrow(connectionRequest)
+      .getOrThrow()
 
     return policy
   }
 
-  /**
-   * The remote connection system is able to construct a connection name using the
-   * [DataTypeDescriptor.name][com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor],
-   * which is supplied via [RemoteRequestMetadata], which should match a provided
-   * [DataType.connectionNames][com.google.android.libraries.pcc.chronicle.api.DataType] via the
-   * [RemoteServer] set up. A convenient way to do this could be to use the
-   * [ManagedDataTypeWithRemoteConnectionNames]
-   * [com.google.android.libraries.pcc.chronicle.api.ManagedDataTypeWithRemoteConnectionNames]
-   * class.
-   */
   private fun connectionNameFrom(metadata: RemoteRequestMetadata): ConnectionName<Connection> =
     if (metadata.isReadRequest) {
-      ReadConnection.connectionNameForRemoteConnections(metadata.dataTypeName)
+      ReadConnection.connectionName(metadata.dataTypeName)
     } else {
-      WriteConnection.connectionNameForRemoteConnections(metadata.dataTypeName)
+      WriteConnection.connectionName(metadata.dataTypeName)
     }
 
   /** Simple [ProcessorNode] implementation used to represent a remote store request. */

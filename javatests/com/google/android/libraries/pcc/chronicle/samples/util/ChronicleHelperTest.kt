@@ -22,7 +22,7 @@ import com.google.android.libraries.pcc.chronicle.api.Connection
 import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
 import com.google.android.libraries.pcc.chronicle.api.DataType
 import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor
-import com.google.android.libraries.pcc.chronicle.api.ManagedDataTypeWithRemoteConnectionNames
+import com.google.android.libraries.pcc.chronicle.api.ManagedDataType
 import com.google.android.libraries.pcc.chronicle.api.ManagementStrategy
 import com.google.android.libraries.pcc.chronicle.api.ProcessorNode
 import com.google.android.libraries.pcc.chronicle.api.ReadConnection
@@ -169,7 +169,7 @@ class ChronicleHelperTest {
 
   open inner class PeopleServer : RemoteStoreServer<Person> {
     override val dataType: DataType =
-      ManagedDataTypeWithRemoteConnectionNames(
+      ManagedDataType(
         PERSON_GENERATED_DTD,
         ManagementStrategy.Stored(false, StorageMedia.MEMORY, Duration.ofHours(5)),
         setOf(

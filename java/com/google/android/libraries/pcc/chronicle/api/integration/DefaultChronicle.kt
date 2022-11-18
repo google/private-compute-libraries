@@ -22,11 +22,14 @@ import com.google.android.libraries.pcc.chronicle.api.Chronicle
 import com.google.android.libraries.pcc.chronicle.api.Connection
 import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
 import com.google.android.libraries.pcc.chronicle.api.ConnectionResult
+import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor
+import com.google.android.libraries.pcc.chronicle.api.ProcessorNode
 import com.google.android.libraries.pcc.chronicle.api.ReadConnection
 import com.google.android.libraries.pcc.chronicle.api.WriteConnection
 import com.google.android.libraries.pcc.chronicle.api.error.ChronicleError
 import com.google.android.libraries.pcc.chronicle.api.error.ConnectionNotDeclared
 import com.google.android.libraries.pcc.chronicle.api.error.ConnectionProviderNotFound
+import com.google.android.libraries.pcc.chronicle.api.error.DataTypeDescriptorNotFound
 import com.google.android.libraries.pcc.chronicle.api.error.Disabled
 import com.google.android.libraries.pcc.chronicle.api.error.PolicyNotFound
 import com.google.android.libraries.pcc.chronicle.api.error.PolicyViolation
@@ -39,7 +42,6 @@ import com.google.android.libraries.pcc.chronicle.api.policy.builder.PolicyCheck
 import com.google.android.libraries.pcc.chronicle.api.policy.builder.PolicyCheckResult
 import com.google.android.libraries.pcc.chronicle.util.Logcat
 import com.google.android.libraries.pcc.chronicle.util.TypedMap
-import com.google.common.annotations.VisibleForTesting
 import kotlin.reflect.KClass
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.update
@@ -69,6 +71,60 @@ class DefaultChronicle(
     if (writeConnectionCheckResult is PolicyCheckResult.Fail) {
       handlePolicyCheckFail(writeConnectionCheckResult)?.let { throw it }
     }
+  }
+
+  override fun checkPolicy(
+    dataTypeName: String,
+    policy: Policy?,
+    isForReading: Boolean,
+    requester: ProcessorNode
+  ): Result<Unit> {
+    val dataTypeDescriptor =
+      context.value.dataTypeDescriptorSet.getOrNull(dataTypeName)
+        ?: return Result.failure(DataTypeDescriptorNotFound(dataTypeName))
+    return checkPolicy(policy, isForReading, requester, dataTypeDescriptor)
+  }
+
+  private fun checkPolicy(
+    policy: Policy?,
+    isForReading: Boolean,
+    requester: ProcessorNode,
+    dataTypeDescriptor: DataTypeDescriptor
+  ): Result<Unit> {
+    if (policy != null && policy !in context.value.policySet) {
+      handlePolicyCheckException(PolicyNotFound(policy))?.let {
+        return Result.failure(it)
+      }
+    }
+    if (policy == null && isForReading) {
+      handlePolicyCheckFail(
+          PolicyCheckResult.Fail(
+            listOf(
+              PolicyCheck("ConnectionRequest.policy must be non-null for ReadConnection requests")
+            )
+          )
+        )
+        ?.let {
+          return Result.failure(it)
+        }
+    }
+
+    // Add to the graph and check the policy within an atomic update to the graph.
+    context.update { existing ->
+      val updated = existing.withNode(requester)
+
+      if (policy != null && isForReading) {
+        val checkResult = policyEngine.checkPolicy(policy, updated, dataTypeDescriptor, requester)
+        if (checkResult is PolicyCheckResult.Fail) {
+          handlePolicyCheckFail(checkResult)?.let {
+            return Result.failure(it)
+          }
+        }
+      }
+
+      updated
+    }
+    return Result.success(Unit)
   }
 
   @Suppress("UNCHECKED_CAST") // Checks happen, just not in a way that is compiler-verifiable.
@@ -120,56 +176,26 @@ class DefaultChronicle(
 
     val currentContext = context.value
 
-    val policy = request.policy
-    if (policy != null && policy !in currentContext.policySet) {
-      handlePolicyCheckException(PolicyNotFound(policy))?.let {
-        return ConnectionResult.Failure(it)
-      }
+    // TODO(b/251295492) the first part of this Elvis can disappear.
+    val connectionProvider =
+      currentContext.findConnectionProvider(request.connectionType)
+        ?: currentContext.findConnectionProvider(request.connectionName)
+          ?: return ConnectionResult.Failure(ConnectionProviderNotFound(request))
+
+    // TODO(b/251295492) the first part of this Elvis can disappear.
+    val dataTypeDescriptor =
+      currentContext.findDataType(request.connectionType)
+        ?: currentContext.findDataType(request.connectionName)
+          ?: return ConnectionResult.Failure(DataTypeDescriptorNotFound(request))
+
+    val checkPolicyResult =
+      checkPolicy(request.policy, request.isReadConnection(), request.requester, dataTypeDescriptor)
+
+    return if (checkPolicyResult.isFailure) {
+      ConnectionResult.Failure(checkPolicyResult.exceptionOrNull() as ChronicleError)
+    } else {
+      ConnectionResult.Success(connectionProvider.getTypedConnection(request))
     }
-    if (policy == null && request.isReadConnection()) {
-      handlePolicyCheckFail(
-          PolicyCheckResult.Fail(
-            listOf(
-              PolicyCheck("ConnectionRequest.policy must be non-null for ReadConnection requests")
-            )
-          )
-        )
-        ?.let {
-          return ConnectionResult.Failure(it)
-        }
-    }
-
-    // Add to the graph and check the policy within an atomic update to the graph.
-    context.update { existing ->
-      val updated = existing.withNode(request.requester)
-
-      if (policy != null && request.isReadConnection()) {
-        val checkResult = policyEngine.checkPolicy(policy, request, updated)
-        if (checkResult is PolicyCheckResult.Fail) {
-          handlePolicyCheckFail(checkResult)?.let {
-            return ConnectionResult.Failure(it)
-          }
-        }
-      }
-
-      updated
-    }
-
-    return ConnectionResult.Success(
-      if (request.isForRemoteConnections()) {
-        // TODO(b/251283239): Passing an anonymous class object is okay because the result of this
-        // method isn't consumed by RemotePolicyCheckerImpl anyway. Once policy checking and
-        // returning a connection are separated, we can drop this if branch.
-        supplyAnonymousConnection()
-      } else {
-        // TODO(b/251295492) the first part of this Elvis can disappear.
-        val connectionProvider =
-          currentContext.findConnectionProvider(request.connectionType)
-            ?: currentContext.findConnectionProvider(request.connectionName)
-              ?: return ConnectionResult.Failure(ConnectionProviderNotFound(request))
-        connectionProvider.getTypedConnection(request)
-      }
-    )
   }
 
   private fun handlePolicyCheckFail(failure: PolicyCheckResult.Fail): ChronicleError? =
@@ -184,9 +210,6 @@ class DefaultChronicle(
       }
     }
   }
-
-  @Suppress("UNCHECKED_CAST") // safe cast since T is supposed to be a kind of Connection
-  private fun <T : Connection> supplyAnonymousConnection(): T = AnonymousConnection as T
 
   /**
    * Allows [Chronicle] to use a new `connectionContext` by updating the [ChronicleContext].
@@ -218,7 +241,5 @@ class DefaultChronicle(
 
   companion object {
     private val logger = Logcat.default
-
-    @VisibleForTesting internal object AnonymousConnection : Connection
   }
 }

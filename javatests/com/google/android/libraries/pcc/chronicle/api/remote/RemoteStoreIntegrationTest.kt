@@ -26,7 +26,7 @@ import com.google.android.libraries.pcc.chronicle.api.Connection
 import com.google.android.libraries.pcc.chronicle.api.ConnectionProvider
 import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
 import com.google.android.libraries.pcc.chronicle.api.DataType
-import com.google.android.libraries.pcc.chronicle.api.ManagedDataTypeWithRemoteConnectionNames
+import com.google.android.libraries.pcc.chronicle.api.ManagedDataType
 import com.google.android.libraries.pcc.chronicle.api.ManagementStrategy
 import com.google.android.libraries.pcc.chronicle.api.ProcessorNode
 import com.google.android.libraries.pcc.chronicle.api.ReadConnection
@@ -37,6 +37,7 @@ import com.google.android.libraries.pcc.chronicle.api.flags.FakeFlagsReader
 import com.google.android.libraries.pcc.chronicle.api.flags.Flags
 import com.google.android.libraries.pcc.chronicle.api.getConnectionOrThrow
 import com.google.android.libraries.pcc.chronicle.api.integration.DefaultChronicle
+import com.google.android.libraries.pcc.chronicle.api.integration.DefaultDataTypeDescriptorSet
 import com.google.android.libraries.pcc.chronicle.api.policy.DefaultPolicyConformanceCheck
 import com.google.android.libraries.pcc.chronicle.api.policy.Policy
 import com.google.android.libraries.pcc.chronicle.api.policy.StorageMedium
@@ -68,7 +69,6 @@ import com.google.android.libraries.pcc.chronicle.storage.stream.ManagedEntitySt
 import com.google.android.libraries.pcc.chronicle.storage.stream.impl.EntityStreamProviderImpl
 import com.google.android.libraries.pcc.chronicle.util.TimeSource
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.mock
 import java.time.Duration
 import java.time.Instant
 import kotlin.test.assertFailsWith
@@ -305,6 +305,30 @@ class RemoteStoreIntegrationTest {
     }
   }
 
+  @Test
+  fun serverCanServeBothStoreAndStreamConnectionsSimultaneously(): Unit = runBlocking {
+    // Initialize our "processes".
+    val server =
+      ServerProcess(setOf(VALID_POLICY), enableStoreServer = true, enableStreamServer = true)
+    serviceConnector.binder = server.router
+    val client = ClientProcess(setOf(VALID_POLICY), serviceConnector)
+
+    // Put together a simple processor node we can use to access both connection types.
+    val processorNode =
+      object : ProcessorNode {
+        override val requiredConnectionTypes: Set<Class<out Connection>> =
+          setOf(SimpleProtoMessageSubscriber::class.java, SimpleProtoMessagePublisher::class.java)
+      }
+
+    // Get connections from our client "process"'s Chronicle
+    client.chronicle.getConnectionOrThrow<SimpleProtoMessagePublisher>(processorNode, VALID_POLICY)
+    client.chronicle.getConnectionOrThrow<SimpleProtoMessageSubscriber>(processorNode, VALID_POLICY)
+
+    // Get connections from our server "process"'s Chronicle
+    server.chronicle.getConnectionOrThrow<SimpleProtoMessagePublisher>(processorNode, VALID_POLICY)
+    server.chronicle.getConnectionOrThrow<SimpleProtoMessageSubscriber>(processorNode, VALID_POLICY)
+  }
+
   /**
    * Generates a new [SimpleProtoMessage] with distinct [SimpleProtoMessage.getStringField] values
    * from any of the [distinctFrom] values.
@@ -431,7 +455,7 @@ class RemoteStoreIntegrationTest {
             setOf(connectionProvider),
             emptySet(),
             DefaultPolicySet(policies),
-            mock()
+            DefaultDataTypeDescriptorSet(setOf(connectionProvider.dataType.descriptor))
           ),
         policyEngine = ChroniclePolicyEngine(),
         config =
@@ -446,12 +470,13 @@ class RemoteStoreIntegrationTest {
   /**
    * Defines what amounts to a "Process" acting as a server in a Client-Server remote storage
    * scenario. Currently, remote connection servers are either Store or Stream servers, not both
-   * simultaneously. This construct represents what we have in reality at this point in time.
+   * simultaneously. This construct represents what we have in reality at this point in time, though
+   * technically Chronicle can support having both simultaneously.
    *
    * @param policies set of [Policies][Policy] to support in the [chronicle] instance.
-   * @param enableStoreServer only use the internal [simpleProtoMessageStoreServer] when serving
+   * @param enableStoreServer use the internal [simpleProtoMessageStoreServer] when serving
    * connections.
-   * @param enableStreamServer only use the internal [simpleProtoMessageStreamServer] when serving
+   * @param enableStreamServer use the internal [simpleProtoMessageStreamServer] when serving
    * connections.
    */
   class ServerProcess(
@@ -478,7 +503,7 @@ class RemoteStoreIntegrationTest {
     private val simpleProtoMessageStoreServer =
       object : RemoteStoreServer<SimpleProtoMessage> {
         override val dataType =
-          ManagedDataTypeWithRemoteConnectionNames(
+          ManagedDataType(
             SIMPLE_PROTO_MESSAGE_DTD,
             managedDataCache.managementStrategy,
             setOf(
@@ -583,7 +608,12 @@ class RemoteStoreIntegrationTest {
     val chronicle: Chronicle =
       DefaultChronicle(
         chronicleContext =
-          DefaultChronicleContext(servers, emptySet(), DefaultPolicySet(policies), mock()),
+          DefaultChronicleContext(
+            servers,
+            emptySet(),
+            DefaultPolicySet(policies),
+            DefaultDataTypeDescriptorSet(servers.map { it.dataTypeDescriptor }.toSet())
+          ),
         policyEngine = ChroniclePolicyEngine(),
         config =
           DefaultChronicle.Config(

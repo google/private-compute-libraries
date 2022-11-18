@@ -37,14 +37,3 @@ data class ManagedDataType(
     vararg connectionTypes: KClass<out Connection>
   ) : this(descriptor, managementStrategy, connectionTypes.map { it.java }.toSet())
 }
-
-data class ManagedDataTypeWithRemoteConnectionNames(
-  override val descriptor: DataTypeDescriptor,
-  override val managementStrategy: ManagementStrategy,
-  override val connectionTypes: Set<Class<out Connection>>,
-  override val connectionNames: Set<ConnectionName<out Connection>> =
-    setOf(
-      ReadConnection.connectionNameForRemoteConnections(descriptor.name),
-      WriteConnection.connectionNameForRemoteConnections(descriptor.name)
-    )
-) : DataType

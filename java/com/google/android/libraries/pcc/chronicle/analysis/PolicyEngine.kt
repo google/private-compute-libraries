@@ -16,7 +16,8 @@
 
 package com.google.android.libraries.pcc.chronicle.analysis
 
-import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
+import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor
+import com.google.android.libraries.pcc.chronicle.api.ProcessorNode
 import com.google.android.libraries.pcc.chronicle.api.policy.Policy
 import com.google.android.libraries.pcc.chronicle.api.policy.builder.PolicyCheckResult
 
@@ -31,8 +32,9 @@ interface PolicyEngine {
    */
   fun checkPolicy(
     policy: Policy,
-    request: ConnectionRequest<*>,
     context: ChronicleContext,
+    dataTypeDescriptor: DataTypeDescriptor,
+    requester: ProcessorNode
   ): PolicyCheckResult
 
   /**

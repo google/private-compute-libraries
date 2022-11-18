@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package com.google.android.libraries.pcc.chronicle.api
+package com.google.android.libraries.pcc.chronicle.api.error
 
-/** Used to describe a [Connection], specifying whether it's a Read or Write connection. */
-sealed class ConnectionName<T : Connection> {
-  internal abstract val name: Name
+import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
 
-  data class Reader<T : Connection>(override val name: Name) : ConnectionName<T>()
-  data class Writer<T : Connection>(override val name: Name) : ConnectionName<T>()
+/**
+ * Implies that no [DataTypeDescriptor] was found which could fulfill the [dataTypeNode] or
+ * [request].
+ */
+class DataTypeDescriptorNotFound(
+  dataTypeName: String,
+) : ChronicleError("No DataTypeDescriptor found for $dataTypeName") {
+  constructor(request: ConnectionRequest<*>) : this(request.toString())
 }

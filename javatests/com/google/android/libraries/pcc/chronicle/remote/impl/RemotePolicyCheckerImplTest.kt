@@ -19,10 +19,7 @@ package com.google.android.libraries.pcc.chronicle.remote.impl
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.libraries.pcc.chronicle.analysis.PolicySet
 import com.google.android.libraries.pcc.chronicle.api.Chronicle
-import com.google.android.libraries.pcc.chronicle.api.Connection
-import com.google.android.libraries.pcc.chronicle.api.ConnectionNameForRemoteConnections
-import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
-import com.google.android.libraries.pcc.chronicle.api.Name
+import com.google.android.libraries.pcc.chronicle.api.ProcessorNode
 import com.google.android.libraries.pcc.chronicle.api.ReadConnection
 import com.google.android.libraries.pcc.chronicle.api.SandboxProcessorNode
 import com.google.android.libraries.pcc.chronicle.api.WriteConnection
@@ -36,10 +33,13 @@ import com.google.android.libraries.pcc.chronicle.api.remote.server.RemoteServer
 import com.google.android.libraries.pcc.chronicle.remote.ClientDetails
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.notNull
+import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.whenever
 import kotlin.test.assertFailsWith
 import org.junit.Test
@@ -62,22 +62,35 @@ class RemotePolicyCheckerImplTest {
 
   @Test
   fun checkAndGetPolicyOrThrow_defaultClientDetails_doesNotUseSandboxProcessorNode() {
-    val requestCaptor = argumentCaptor<ConnectionRequest<FooReader>>()
-    whenever(chronicle.getConnectionOrThrow(requestCaptor.capture())) doReturn FooReader
+    val dataTypeNameCaptor = argumentCaptor<String>()
+    val processorNodeCaptor = argumentCaptor<ProcessorNode>()
+    whenever(
+      chronicle.checkPolicy(
+        dataTypeNameCaptor.capture(),
+        notNull(),
+        eq(true),
+        processorNodeCaptor.capture()
+      )
+    ) doReturn Result.success(Unit)
 
     checker.checkAndGetPolicyOrThrow(FOUND_POLICY_READ_REQUEST_METADATA, server, DEFAULT_DETAILS)
 
-    val connectionRequest = requestCaptor.firstValue
-    assertThat(connectionRequest.connectionName)
-      .isEqualTo(ConnectionNameForRemoteConnections.Reader<Connection>(Name(DTD_TYPE_NAME)))
-    assertThat(connectionRequest.requester).isNotInstanceOf(SandboxProcessorNode::class.java)
-    assertThat(connectionRequest.policy).isNotNull()
+    assertThat(processorNodeCaptor.firstValue).isNotInstanceOf(SandboxProcessorNode::class.java)
+    assertThat(dataTypeNameCaptor.firstValue).isEqualTo(DTD_TYPE_NAME)
   }
 
   @Test
   fun checkAndGetPolicyOrThrow_isolatedClientDetails_usesSandboxProcessorNode() {
-    val requestCaptor = argumentCaptor<ConnectionRequest<FooReader>>()
-    whenever(chronicle.getConnectionOrThrow(requestCaptor.capture())) doReturn FooReader
+    val dataTypeNameCaptor = argumentCaptor<String>()
+    val processorNodeCaptor = argumentCaptor<ProcessorNode>()
+    whenever(
+      chronicle.checkPolicy(
+        dataTypeNameCaptor.capture(),
+        notNull(),
+        eq(true),
+        processorNodeCaptor.capture()
+      )
+    ) doReturn Result.success(Unit)
 
     checker.checkAndGetPolicyOrThrow(
       FOUND_POLICY_READ_REQUEST_METADATA,
@@ -89,17 +102,15 @@ class RemotePolicyCheckerImplTest {
       )
     )
 
-    val connectionRequest = requestCaptor.firstValue
-    assertThat(connectionRequest.connectionName)
-      .isEqualTo(ConnectionNameForRemoteConnections.Reader<Connection>(Name(DTD_TYPE_NAME)))
-    assertThat(connectionRequest.requester).isInstanceOf(SandboxProcessorNode::class.java)
-    assertThat(connectionRequest.policy).isNotNull()
+    assertThat(processorNodeCaptor.firstValue).isInstanceOf(SandboxProcessorNode::class.java)
+    assertThat(dataTypeNameCaptor.firstValue).isEqualTo(DTD_TYPE_NAME)
   }
 
   @Test
   fun checkAndGetPolicyOrThrow_differentClientDetails_usesDifferentProcessorNodes() {
-    val requestCaptor = argumentCaptor<ConnectionRequest<FooReader>>()
-    whenever(chronicle.getConnectionOrThrow(requestCaptor.capture())) doReturn FooReader
+    val processorNodeCaptor = argumentCaptor<ProcessorNode>()
+    whenever(chronicle.checkPolicy(any(), any(), any(), processorNodeCaptor.capture())) doReturn
+      Result.success(Unit)
 
     checker.checkAndGetPolicyOrThrow(
       FOUND_POLICY_READ_REQUEST_METADATA,
@@ -121,24 +132,20 @@ class RemotePolicyCheckerImplTest {
       )
     )
 
-    val firstRequest = requestCaptor.firstValue
-    val secondRequest = requestCaptor.secondValue
-
-    assertThat(firstRequest.requester).isNotSameInstanceAs(secondRequest.requester)
+    with(processorNodeCaptor) { assertThat(this.firstValue).isNotSameInstanceAs(this.secondValue) }
   }
 
   @Test
   fun checkAndGetPolicyOrThrow_sameClientDetails_reusesSameProcessorNode() {
-    val requestCaptor = argumentCaptor<ConnectionRequest<*>>()
-    whenever(chronicle.getConnectionOrThrow(requestCaptor.capture())) doReturn FooReader
+    val processorNodeCaptor = argumentCaptor<ProcessorNode>()
+    whenever(
+      chronicle.checkPolicy(any(), anyOrNull(), any(), processorNodeCaptor.capture())
+    ) doReturn Result.success(Unit)
 
     checker.checkAndGetPolicyOrThrow(FOUND_POLICY_READ_REQUEST_METADATA, server, DEFAULT_DETAILS)
     checker.checkAndGetPolicyOrThrow(FOUND_POLICY_WRITE_REQUEST_METADATA, server, DEFAULT_DETAILS)
 
-    val firstRequest = requestCaptor.firstValue
-    val secondRequest = requestCaptor.secondValue
-
-    assertThat(firstRequest.requester).isSameInstanceAs(secondRequest.requester)
+    with(processorNodeCaptor) { assertThat(this.firstValue).isSameInstanceAs(this.secondValue) }
   }
 
   @Test
@@ -155,7 +162,7 @@ class RemotePolicyCheckerImplTest {
   @Test
   fun checkAndGetPolicyOrThrow_chronicleThrows_throws() {
     val exception = PolicyViolation("Boo")
-    whenever(chronicle.getConnectionOrThrow<FooReader>(any())).then { throw exception }
+    whenever(chronicle.checkPolicy(any(), any(), any(), any())) doReturn Result.failure(exception)
 
     val e =
       assertFailsWith<PolicyViolation> {
