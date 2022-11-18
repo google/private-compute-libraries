@@ -506,24 +506,22 @@ class RemoteStoreIntegrationTest {
           ManagedDataType(
             SIMPLE_PROTO_MESSAGE_DTD,
             managedDataCache.managementStrategy,
-            setOf(
-              SimpleProtoMessageReader::class.java,
-              SimpleProtoMessageWriter::class.java,
-              SimpleProtoMessageReaderImpl::class.java,
-              SimpleProtoMessageWriterImpl::class.java
-            )
+            setOf(SimpleProtoMessageReader::class.java, SimpleProtoMessageWriter::class.java)
           )
 
         override val dataTypeDescriptor = SIMPLE_PROTO_MESSAGE_DTD
         override val serializer =
           ProtoSerializer.createFrom(SimpleProtoMessage.getDefaultInstance())
-        override val readConnection = SimpleProtoMessageReaderImpl(managedDataCache)
-        override val writeConnection = SimpleProtoMessageWriterImpl(managedDataCache, timeSource)
 
         override fun getConnection(
           connectionRequest: ConnectionRequest<out Connection>
         ): Connection =
-          if (connectionRequest.isReadConnection()) readConnection else writeConnection
+          when (connectionRequest.connectionType) {
+            SimpleProtoMessageReader::class.java -> SimpleProtoMessageReaderImpl(managedDataCache)
+            SimpleProtoMessageWriter::class.java ->
+              SimpleProtoMessageWriterImpl(managedDataCache, timeSource)
+            else -> throw IllegalArgumentException("not supported: $connectionRequest")
+          }
 
         override suspend fun count(policy: Policy?): Int = throw NotImplementedError("")
 

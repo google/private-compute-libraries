@@ -25,9 +25,7 @@ import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor
 import com.google.android.libraries.pcc.chronicle.api.ManagedDataType
 import com.google.android.libraries.pcc.chronicle.api.ManagementStrategy
 import com.google.android.libraries.pcc.chronicle.api.ProcessorNode
-import com.google.android.libraries.pcc.chronicle.api.ReadConnection
 import com.google.android.libraries.pcc.chronicle.api.StorageMedia
-import com.google.android.libraries.pcc.chronicle.api.WriteConnection
 import com.google.android.libraries.pcc.chronicle.api.flags.Flags
 import com.google.android.libraries.pcc.chronicle.api.policy.Policy
 import com.google.android.libraries.pcc.chronicle.api.remote.ICancellationSignal
@@ -54,13 +52,13 @@ import com.nhaarman.mockitokotlin2.verify
 import java.time.Duration
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 import kotlin.test.assertFails
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.suspendCancellableCoroutine
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -143,7 +141,7 @@ class ChronicleHelperTest {
     runBlocking {
       // Act:
       // Call binder.serve, and suspend the coroutine until the callback's onComplete is triggered.
-      suspendCoroutine { cont ->
+      suspendCancellableCoroutine { cont ->
         val callback =
           object : IResponseCallback.Stub() {
             override fun onData(data: RemoteResponse?) = Unit
@@ -180,8 +178,6 @@ class ChronicleHelperTest {
     override val dataTypeDescriptor: DataTypeDescriptor = dataType.descriptor
     override val serializer: Serializer<Person> =
       ProtoSerializer.createFrom(Person.getDefaultInstance())
-    override val readConnection: ReadConnection = reader
-    override val writeConnection: WriteConnection = writer
 
     override fun getConnection(connectionRequest: ConnectionRequest<out Connection>): Connection {
       return when (connectionRequest.connectionType) {

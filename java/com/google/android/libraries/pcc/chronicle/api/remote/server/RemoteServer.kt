@@ -20,8 +20,6 @@ import com.google.android.libraries.pcc.chronicle.api.Connection
 import com.google.android.libraries.pcc.chronicle.api.ConnectionProvider
 import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
 import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor
-import com.google.android.libraries.pcc.chronicle.api.ReadConnection
-import com.google.android.libraries.pcc.chronicle.api.WriteConnection
 import com.google.android.libraries.pcc.chronicle.api.remote.serialization.Serializer
 
 /**
@@ -45,30 +43,6 @@ interface RemoteServer<T : Any> : ConnectionProvider {
    * [com.google.android.libraries.pcc.chronicle.api.storage.WrappedEntity] of type [T].
    */
   val serializer: Serializer<T>
-
-  /**
-   * Object/Class used to identify a read-only connection to the remote store for data-flow/policy-
-   * checking purposes. This connection class is never actually used, so can be declared as a new
-   * empty interface for each [RemoteConnectionProvider].
-   *
-   * TODO(b/194315757): Remove this when data flow analysis system no longer depends solely on Class
-   * objects for edges. It should be able to be accomplished with a tuple of Schema/DTD name and
-   * direction.
-   */
-  val readConnection: ReadConnection
-    get() = object : ReadConnection {}
-
-  /**
-   * Object/Class used to identify a write-only connection to the remote store for data-flow/policy-
-   * checking purposes. This connection class is never actually used, so can be declared as a new
-   * empty interface for each [RemoteConnectionProvider].
-   *
-   * TODO(b/194315757): Remove this when data flow analysis system no longer depends solely on Class
-   * objects for edges. It should be able to be accomplished with a tuple of Schema/DTD name and
-   * direction.
-   */
-  val writeConnection: WriteConnection
-    get() = object : WriteConnection {}
 
   /**
    * It is not required that a RemoteServer serve local requests, thus this method is defaulted. And

@@ -14,6 +14,7 @@ kt_android_library(
         "//java/com/google/android/libraries/pcc/chronicle/api/remote/server",
         "//java/com/google/android/libraries/pcc/chronicle/api/storage",
         "//java/com/google/android/libraries/pcc/chronicle/samples/datahub/peopleproto",
+        "//java/com/google/android/libraries/pcc/chronicle/samples/datahub/peopleproto:person_proto_java_proto_lite",
         "@maven//:androidx_annotation_annotation",
         "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
     ],

@@ -20,17 +20,15 @@ import com.google.android.libraries.pcc.chronicle.api.Connection
 import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
 import com.google.android.libraries.pcc.chronicle.api.ManagedDataType
 import com.google.android.libraries.pcc.chronicle.api.ManagementStrategy
-import com.google.android.libraries.pcc.chronicle.api.ReadConnection
 import com.google.android.libraries.pcc.chronicle.api.StorageMedia
-import com.google.android.libraries.pcc.chronicle.api.WriteConnection
 import com.google.android.libraries.pcc.chronicle.api.policy.Policy
 import com.google.android.libraries.pcc.chronicle.api.remote.serialization.ProtoSerializer
 import com.google.android.libraries.pcc.chronicle.api.remote.server.RemoteStoreServer
 import com.google.android.libraries.pcc.chronicle.api.storage.WrappedEntity
+import com.google.android.libraries.pcc.chronicle.samples.datahub.peopleproto.PERSON_GENERATED_DTD
 import com.google.android.libraries.pcc.chronicle.samples.datahub.peopleproto.PeopleReader
 import com.google.android.libraries.pcc.chronicle.samples.datahub.peopleproto.PeopleWriter
 import com.google.android.libraries.pcc.chronicle.samples.datahub.peopleproto.Person
-import com.google.android.libraries.pcc.chronicle.samples.datahub.peopleproto.PERSON_GENERATED_DTD
 import java.time.Duration
 import kotlinx.coroutines.flow.Flow
 
@@ -52,25 +50,14 @@ class PeopleServer(private val store: PeopleStore) : RemoteStoreServer<Person> {
         ManagementStrategy.Stored(encrypted = false, media = StorageMedia.LOCAL_DISK, ttl = ttl),
       PeopleReader::class,
       PeopleWriter::class,
-      // TODO(b/194315757): Remove these when data flow analysis system no longer depends solely on
-      //  Class objects for edges.
-      ServerLocalPeopleReader::class,
-      ServerLocalPeopleWriter::class,
     )
   override val dataTypeDescriptor = dataType.descriptor
   override val serializer = ProtoSerializer.createFrom(Person.getDefaultInstance())
 
-  // TODO(b/194315757): Remove these when data flow analysis system no longer depends solely on
-  //  Class objects for edges.
-  override val readConnection: ReadConnection = ServerLocalPeopleReader(store)
-  override val writeConnection: WriteConnection = ServerLocalPeopleWriter(store)
-
   override fun getConnection(connectionRequest: ConnectionRequest<out Connection>): Connection {
     return when (connectionRequest.connectionType) {
-      PeopleReader::class.java,
-      ServerLocalPeopleReader::class.java -> readConnection
-      PeopleWriter::class.java,
-      ServerLocalPeopleWriter::class.java -> writeConnection
+      PeopleReader::class.java -> ServerLocalPeopleReader(store)
+      PeopleWriter::class.java -> ServerLocalPeopleWriter(store)
       else -> throw IllegalArgumentException("$connectionRequest not supported")
     }
   }

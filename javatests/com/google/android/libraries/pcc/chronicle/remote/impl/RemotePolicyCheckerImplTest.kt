@@ -53,11 +53,7 @@ class RemotePolicyCheckerImplTest {
       on { findByName(eq("WillNotBeFound")) } doReturn null
       on { findByName(eq("WillBeFound")) } doReturn policy("WillBeFound", "Testing")
     }
-  private val server =
-    mock<RemoteServer<Foo>> {
-      on { readConnection } doReturn FooReader
-      on { writeConnection } doReturn FooWriter
-    }
+  private val server = mock<RemoteServer<Foo>>()
   private val checker = RemotePolicyCheckerImpl(chronicle, policySet)
 
   @Test

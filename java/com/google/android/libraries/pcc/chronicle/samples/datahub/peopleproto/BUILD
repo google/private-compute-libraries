@@ -16,6 +16,6 @@ kt_android_library(
     ],
     deps = [
         ":person_proto",
-        "//java/com/google/android/libraries/pcc/chronicle/api",
+        "//java/com/google/android/libraries/pcc/chronicle/api:connection",
     ],
 )

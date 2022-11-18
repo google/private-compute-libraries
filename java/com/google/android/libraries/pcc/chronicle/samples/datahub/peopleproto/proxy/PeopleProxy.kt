@@ -16,14 +16,11 @@
 
 package com.google.android.libraries.pcc.chronicle.samples.datahub.peopleproto.proxy
 
-import androidx.annotation.Keep
 import android.util.Log
 import com.google.android.libraries.pcc.chronicle.api.DataType
 import com.google.android.libraries.pcc.chronicle.api.DataTypeDescriptor
 import com.google.android.libraries.pcc.chronicle.api.ManagedDataType
 import com.google.android.libraries.pcc.chronicle.api.ManagementStrategy
-import com.google.android.libraries.pcc.chronicle.api.ReadConnection
-import com.google.android.libraries.pcc.chronicle.api.WriteConnection
 import com.google.android.libraries.pcc.chronicle.api.policy.Policy
 import com.google.android.libraries.pcc.chronicle.api.remote.client.DefaultRemoteStoreClient
 import com.google.android.libraries.pcc.chronicle.api.remote.client.Transport
@@ -44,11 +41,10 @@ class PeopleProxy(
   private val pageSize: Int = 10,
 ) : RemoteStoreServer<Person> {
   override val dataType: DataType =
-    ManagedDataType(PERSON_GENERATED_DTD, ManagementStrategy.PassThru, Reader::class, Writer::class)
+    ManagedDataType(PERSON_GENERATED_DTD, ManagementStrategy.PassThru)
   override val dataTypeDescriptor: DataTypeDescriptor = PERSON_GENERATED_DTD
   override val serializer = ProtoSerializer.createFrom(Person.getDefaultInstance())
-  override val readConnection: ReadConnection = Reader
-  override val writeConnection: WriteConnection = Writer
+
   private val remoteClient =
     DefaultRemoteStoreClient(PERSON_GENERATED_DTD.name, serializer, transport)
 
@@ -86,9 +82,6 @@ class PeopleProxy(
     Log.i("ChroniclePeopleProxy", "Proxying deleteByid Request to Server")
     remoteClient.deleteById(policy, ids)
   }
-
-  @Keep private object Reader : ReadConnection
-  @Keep private object Writer : WriteConnection
 
   /**
    * Chunks the Flow of [T] into a Flow of lists of length [pageSize] of [T]. The last page may be
