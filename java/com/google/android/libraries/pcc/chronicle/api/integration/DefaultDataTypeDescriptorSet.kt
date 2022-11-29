@@ -24,13 +24,31 @@ import java.time.Instant
 import kotlin.reflect.KClass
 
 /** Default implementation of [DataTypeDescriptorSet]. */
-class DefaultDataTypeDescriptorSet(private val dtds: Set<DataTypeDescriptor>) :
-  DataTypeDescriptorSet {
-  private val dtdsByName: Map<String, DataTypeDescriptor> =
-    dtds.flatMap { collectNestedDataTypeDescriptors(it) }.associateBy { it.name }
+class DefaultDataTypeDescriptorSet : DataTypeDescriptorSet {
 
-  private val dtdsByKClass: Map<KClass<*>, DataTypeDescriptor> =
-    dtdsByName.values.associateBy { it.cls }
+  private val dtds: Set<DataTypeDescriptor>
+  private val dtdsByName: Map<String, DataTypeDescriptor>
+  private val dtdsByKClass: Map<KClass<*>, DataTypeDescriptor>
+
+  constructor(dtds: Set<DataTypeDescriptor>) {
+    val dtdsByName: MutableMap<String, DataTypeDescriptor> = mutableMapOf()
+
+    dtds
+      .flatMap { collectNestedDataTypeDescriptors(it) }
+      .map {
+        // Ensure that DTDs of the same name are not overwriting each other.
+        // For `equal` DTDs, duplicate names are allowed, since no information will be changed and
+        // this is needed for nested DTDs.
+        require(!dtdsByName.containsKey(it.name) || dtdsByName[it.name]?.equals(it) == true) {
+          "DataTypeDescriptor ${it.name} must be unique."
+        }
+        dtdsByName[it.name] = it
+      }
+
+    this.dtds = dtds
+    this.dtdsByName = dtdsByName
+    this.dtdsByKClass = dtdsByName.values.associateBy { it.cls }
+  }
 
   private fun collectNestedDataTypeDescriptors(dtd: DataTypeDescriptor): List<DataTypeDescriptor> {
     return dtd.innerTypes.fold(listOf(dtd)) { acc, t -> acc + collectNestedDataTypeDescriptors(t) }

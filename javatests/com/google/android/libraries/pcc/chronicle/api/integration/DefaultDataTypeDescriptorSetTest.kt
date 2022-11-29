@@ -30,6 +30,21 @@ import org.junit.runners.JUnit4
 @RunWith(JUnit4::class)
 class DefaultDataTypeDescriptorSetTest {
   @Test
+  fun init_throwsForDuplicateDtdNames() {
+    val e: IllegalArgumentException = assertFailsWith {
+      DefaultDataTypeDescriptorSet(setOf(INNER_DTD, INNER_DTD.copy(cls = NestedDtdClass::class)))
+    }
+    assertThat(e).hasMessageThat().contains("DataTypeDescriptor ${INNER_DTD.name} must be unique.")
+  }
+
+  @Test
+  fun init_succeedsForDuplicateInNestedDtd() {
+    val set = DefaultDataTypeDescriptorSet(setOf(INNER_DTD, NESTED_DTD))
+
+    assertThat(set.toSet().size).isEqualTo(2)
+  }
+
+  @Test
   fun getOrNull_returnsDtdWhenFound() {
     val set = DefaultDataTypeDescriptorSet(setOf(NESTED_DTD, UNNESTED_DTD))
     assertThat(set.getOrNull(NESTED_DTD.name)).isEqualTo(NESTED_DTD)
@@ -256,7 +271,7 @@ class DefaultDataTypeDescriptorSetTest {
 
   @Test
   fun toSet_returnsSetOfDtds() {
-    val expected = setOf(INNER_DTD, DOUBLY_NESTED_DTD, NESTED_DTD, UNNESTED_DTD)
+    val expected = setOf(DOUBLY_NESTED_DTD, UNNESTED_DTD)
     val dtdSet = DefaultDataTypeDescriptorSet(expected)
 
     assertThat(dtdSet.toSet()).containsExactlyElementsIn(expected)
