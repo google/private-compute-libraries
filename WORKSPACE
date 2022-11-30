@@ -68,7 +68,8 @@ maven_install(
         "androidx.room:room-compiler:2.4.3",
         "androidx.room:room-ktx:2.4.3",
         "androidx.sqlite:sqlite:2.2.0",
-        "androidx.test:core:1.3.0",
+        "androidx.test:core:1.5.0",
+        "androidx.test:monitor:1.6.0",
         "androidx.test.ext:junit:1.1.3",
         "com.github.ajalt.clikt:clikt:3.5.0",
         "com.google.auto.service:auto-service:1.0.1",
@@ -191,3 +192,17 @@ load(
 rules_proto_grpc_toolchains()
 
 rules_proto_grpc_repos()
+
+########################
+# Java Runtimes
+########################
+load("@bazel_tools//tools/jdk:local_java_repository.bzl", "local_java_repository")
+
+# To use this, add --java_runtime_version=local-openjdk11 to any build command,
+# or to your own .bazelrc file.
+# Note: you must have the OpenJDK installed:
+# sudo apt-get install default-jdk
+local_java_repository(
+    name = "local-openjdk11",
+    java_home = "/usr/lib/jvm/java-11-openjdk-amd64/",
+)
