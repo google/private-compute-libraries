@@ -7,6 +7,5 @@ kt_android_local_test(
     deps = [
         "//java/com/google/android/libraries/pcc/chronicle/storage",
         "@maven//:com_google_truth_truth",
-        "@maven//:junit_junit",
     ],
 )

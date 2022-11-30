@@ -35,6 +35,5 @@ kt_android_local_test(
         "@maven//:com_google_dagger_hilt_android",
         "@maven//:com_google_dagger_hilt_android_testing",
         "@maven//:com_google_truth_truth",
-        "@maven//:junit_junit",
     ],
 )

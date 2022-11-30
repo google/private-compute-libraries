@@ -136,6 +136,5 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/util:typed_map",
         "//javatests/com/google/android/libraries/pcc/chronicle/analysis/impl/testdata",
         "@maven//:com_google_truth_truth",
-        "@maven//:junit_junit",
     ],
 )

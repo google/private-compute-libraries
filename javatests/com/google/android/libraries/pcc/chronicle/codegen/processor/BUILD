@@ -59,7 +59,6 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/storage/datacache",
         "@maven//:com_google_truth_truth",
         "@maven//:com_nhaarman_mockitokotlin2_mockito_kotlin",
-        "@maven//:junit_junit",
     ],
 )
 

@@ -26,7 +26,6 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api/policy/contextrules",
         "//java/com/google/android/libraries/pcc/chronicle/util:typed_map",
         "@maven//:com_google_truth_truth",
-        "@maven//:junit_junit",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
     ],
 )
@@ -43,7 +42,6 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api/policy/contextrules",
         "//java/com/google/android/libraries/pcc/chronicle/util:typed_map",
         "@maven//:com_google_truth_truth",
-        "@maven//:junit_junit",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
     ],
 )
@@ -60,7 +58,6 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api/policy/contextrules",
         "//java/com/google/android/libraries/pcc/chronicle/util:typed_map",
         "@maven//:com_google_truth_truth",
-        "@maven//:junit_junit",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
     ],
 )
@@ -77,7 +74,6 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api/policy/contextrules",
         "//java/com/google/android/libraries/pcc/chronicle/util:typed_map",
         "@maven//:com_google_truth_truth",
-        "@maven//:junit_junit",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
     ],
 )
