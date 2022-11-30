@@ -36,7 +36,7 @@ class DataCacheStoragePackageDeletionListenerTest {
   private val dataCacheStorage = mock<DataCacheStorage>()
 
   val testInstance =
-    DataCacheStoragePackageDeletionListener(ChronicleAnalyticsClient.PECAN, dataCacheStorage)
+    DataCacheStoragePackageDeletionListener(ChronicleAnalyticsClient.BLOBSTORE, dataCacheStorage)
 
   @Test
   fun deleteFor_triggersPurgeAllEntitiesForPackage_returnsCount() =
@@ -47,7 +47,7 @@ class DataCacheStoragePackageDeletionListenerTest {
 
       val result = testInstance.deleteFor(PackageInstallInfo(testPackage, 123))
 
-      val expectedResult = PackageDeletionInfo(ChronicleAnalyticsClient.PECAN, expectedCount)
+      val expectedResult = PackageDeletionInfo(ChronicleAnalyticsClient.BLOBSTORE, expectedCount)
       assertThat(result).isEqualTo(expectedResult)
       verify(dataCacheStorage).purgeAllEntitiesForPackage(testPackage)
       verifyNoMoreInteractions(dataCacheStorage)
@@ -64,7 +64,7 @@ class DataCacheStoragePackageDeletionListenerTest {
 
       val result = testInstance.reconcile(existingPackageInfos)
 
-      val expectedResult = PackageDeletionInfo(ChronicleAnalyticsClient.PECAN, expectedCount)
+      val expectedResult = PackageDeletionInfo(ChronicleAnalyticsClient.BLOBSTORE, expectedCount)
       assertThat(result).isEqualTo(expectedResult)
       verify(dataCacheStorage).purgeAllEntitiesNotInPackages(existingPackages)
       verifyNoMoreInteractions(dataCacheStorage)

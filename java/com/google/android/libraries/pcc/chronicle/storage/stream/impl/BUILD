@@ -14,7 +14,7 @@ kt_android_library(
     deps = [
         "//java/com/google/android/libraries/pcc/chronicle/api/storage",
         "//java/com/google/android/libraries/pcc/chronicle/storage/stream",
-        "@maven//:javax_annotation_javax_annotation_api",
+        "@maven//:com_google_code_findbugs_annotations",
         "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
     ],
 )

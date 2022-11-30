@@ -22,6 +22,7 @@ import com.google.android.libraries.pcc.chronicle.api.optics.Lens
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.HiltTestApplication
 import javax.inject.Inject
 import org.junit.Before
 import org.junit.Rule
@@ -31,7 +32,7 @@ import org.robolectric.annotation.Config
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
-@Config(application = ProtoDataTest_Application::class)
+@Config(application = HiltTestApplication::class)
 class ProtoDataTest {
   @get:Rule val hiltRule = HiltAndroidRule(this)
 

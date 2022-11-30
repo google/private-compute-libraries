@@ -14,6 +14,7 @@ kt_android_local_test(
 kt_android_local_test(
     name = "ConnectionRequestTest",
     srcs = ["ConnectionRequestTest.kt"],
+    manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
     deps = [
         "//java/com/google/android/libraries/pcc/chronicle/api",
         "@maven//:com_google_truth_truth",

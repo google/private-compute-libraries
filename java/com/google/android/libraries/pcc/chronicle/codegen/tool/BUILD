@@ -15,7 +15,7 @@ kt_jvm_library(
         "//java/com/google/android/libraries/pcc/chronicle/codegen/backend/api",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/backend/lens",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/frontend",
-        "@maven//:com_github_ajalt_clikt_clikt",
+        "@maven//:com_github_ajalt_clikt_clikt_jvm",
         "@maven//:com_google_guava_guava",
         "@maven//:com_google_protobuf_protobuf_java",
         "@maven//:com_squareup_javapoet",

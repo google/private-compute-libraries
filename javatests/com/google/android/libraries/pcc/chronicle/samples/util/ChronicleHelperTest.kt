@@ -141,7 +141,7 @@ class ChronicleHelperTest {
     runBlocking {
       // Act:
       // Call binder.serve, and suspend the coroutine until the callback's onComplete is triggered.
-      suspendCancellableCoroutine { cont ->
+      suspendCancellableCoroutine<Unit> { cont ->
         val callback =
           object : IResponseCallback.Stub() {
             override fun onData(data: RemoteResponse?) = Unit

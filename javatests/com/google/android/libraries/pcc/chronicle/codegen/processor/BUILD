@@ -19,6 +19,7 @@ java_library(
 
 kt_android_library(
     name = "android_deps",
+    testonly = True,
     srcs = ["DataCacheModule.kt"],
     exports = [
         "//java/com/google/android/libraries/pcc/chronicle/api",
