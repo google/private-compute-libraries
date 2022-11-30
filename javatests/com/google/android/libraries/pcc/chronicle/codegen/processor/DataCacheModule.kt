@@ -14,24 +14,21 @@
  * limitations under the License.
  */
 
-package com.google.android.libraries.pcc.chronicle.storage.datacache.impl
+package com.google.android.libraries.pcc.chronicle.codegen.processor
 
-import android.view.contentcapture.DataRemovalRequest
-import com.google.android.libraries.pcc.chronicle.api.DataRemovalRequestListener
+import com.google.android.libraries.pcc.chronicle.storage.datacache.DataCacheStorage
+import com.google.android.libraries.pcc.chronicle.storage.datacache.impl.DataCacheStorageImpl
+import com.google.android.libraries.pcc.chronicle.util.TimeSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-/** For projects/labs that use a [NoOpChronicle], this companion class exists. */
 @Module
 @InstallIn(SingletonComponent::class)
-internal object NoOpModule {
+internal object DataCacheModule {
   @Provides
   @Singleton
-  fun provideDataRemovalRequestListener(): DataRemovalRequestListener =
-    object : DataRemovalRequestListener {
-      override fun onDataRemovalRequest(request: DataRemovalRequest) {}
-    }
+  fun provideDataCacheStorage(): DataCacheStorage = DataCacheStorageImpl(TimeSource.system())
 }

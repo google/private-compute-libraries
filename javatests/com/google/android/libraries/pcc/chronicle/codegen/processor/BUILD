@@ -1,5 +1,4 @@
 load("//tools/build_defs/kotlin:rules.bzl", "kt_android_local_test")
-load("@bazel_rules_android//android:rules.bzl", "android_library")
 load(
     "//tools/build_defs/kotlin:rules.bzl",
     "kt_android_library",
@@ -18,16 +17,23 @@ java_library(
     ],
 )
 
-android_library(
+kt_android_library(
     name = "android_deps",
-    srcs = [],
+    srcs = ["DataCacheModule.kt"],
     exports = [
         "//java/com/google/android/libraries/pcc/chronicle/api",
         "//java/com/google/android/libraries/pcc/chronicle/storage/datacache",
-        "//java/com/google/android/libraries/pcc/chronicle/storage/datacache/impl",
         "@maven//:com_google_dagger_hilt_android_testing",
         "@maven//:com_google_truth_truth",
         "@maven//:junit_junit",
+    ],
+    deps = [
+        "//java/com/google/android/libraries/pcc/chronicle/storage/datacache",
+        "//java/com/google/android/libraries/pcc/chronicle/storage/datacache/impl",
+        "//java/com/google/android/libraries/pcc/chronicle/util:timesource",
+        "@maven//:com_google_dagger_dagger",
+        "@maven//:com_google_dagger_hilt_android",
+        "@maven//:javax_inject_javax_inject",
     ],
 )
 
