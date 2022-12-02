@@ -70,34 +70,12 @@ android_library(
 )
 
 # Exports @ChronicleConnection annotation and the processor.  (Used by clients of the annotation.)
-java_library(
-    name = "chronicle_connection",
-    exported_plugins = ["//java/com/google/android/libraries/pcc/chronicle/codegen/processor:chronicle_connection_plugin"],
-    visibility = ["//visibility:public"],
-    exports = [
-        ":chronicle_connection_annotation",
-        "@maven//:com_google_guava_guava",
-    ],
-)
-
-# Exports @ChronicleConnection annotation and the processor.  (Used by clients of the annotation.)
 android_library(
     name = "chronicle_connection_android",
     exported_plugins = ["//java/com/google/android/libraries/pcc/chronicle/codegen/processor:chronicle_connection_plugin"],
     visibility = ["//visibility:public"],
     exports = [
         ":chronicle_connection_annotation_android",
-    ],
-)
-
-# Exports @DataCacheStore annotation and the processor.  (Used by clients of the annotation.)
-java_library(
-    name = "data_cache_store",
-    exported_plugins = ["//java/com/google/android/libraries/pcc/chronicle/codegen/processor:data_cache_store_plugin"],
-    visibility = ["//visibility:public"],
-    exports = [
-        ":data_cache_store_annotation",
-        "@maven//:com_google_guava_guava",
     ],
 )
 
