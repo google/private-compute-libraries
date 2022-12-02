@@ -134,3 +134,17 @@ kt_android_library(
         ":api",
     ],
 )
+
+kt_android_library(
+    name = "default_data_removal_request_listener",
+    srcs = ["DefaultDataRemovalRequestListener.kt"],
+    manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
+    deps = [
+        ":api",
+        "//java/com/google/android/libraries/pcc/chronicle/api/flags",
+        "//java/com/google/android/libraries/pcc/chronicle/util:logcat",
+        "@maven//:androidx_annotation_annotation",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_guava",
+    ],
+)

@@ -18,29 +18,20 @@ package com.google.android.libraries.pcc.chronicle.storage.datacache.impl
 
 import android.view.contentcapture.DataRemovalRequest
 import com.google.android.libraries.pcc.chronicle.api.DataRemovalDownstreamListener
-import com.google.android.libraries.pcc.chronicle.api.DataRemovalRequestListener
-import com.google.android.libraries.pcc.chronicle.api.flags.FlagsReader
 import com.google.android.libraries.pcc.chronicle.storage.datacache.DataCacheStorage
 import com.google.android.libraries.pcc.chronicle.util.Logcat
 
-/**
- * This class's method will be invoked when Android framework reacts to a request to
- * [ContentCaptureManager::removeData].
- */
-class DataCacheStorageDataRemovalRequestListener(
-  private val dataStorageCache: DataCacheStorage,
-  private val downstreamListeners: Set<DataRemovalDownstreamListener>,
-  private val flags: FlagsReader,
-) : DataRemovalRequestListener {
-  private val logger = Logcat.default
-  override fun onDataRemovalRequest(request: DataRemovalRequest) {
-    if (flags.config.value.disableChronicleDataRemovalRequestListener) return
+class DataCacheStorageDataRemovalDownstreamListener(
+  private val dataCacheStorage: DataCacheStorage
+) : DataRemovalDownstreamListener {
 
+  override fun onDataRemoval(request: DataRemovalRequest) {
     // TODO(b/232848132): Don't just delete everything.
-    logger.d("Handling data removal request.")
-    val countRemoved = dataStorageCache.purgeAllEntities()
-    logger.d("Number of items removed: %d.", countRemoved)
+    val countRemoved = dataCacheStorage.purgeAllEntities()
+    logger.d("Number of items removed from DataCacheStorage: %d.", countRemoved)
+  }
 
-    downstreamListeners.forEach { it.onDataRemoval(request) }
+  companion object {
+    private val logger = Logcat.default
   }
 }

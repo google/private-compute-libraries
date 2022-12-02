@@ -7,21 +7,19 @@ package(
 kt_android_library(
     name = "impl",
     srcs = [
-        "DataCacheStorageDataRemovalRequestListener.kt",
+        "DataCacheStorageDataRemovalDownstreamListener.kt",
         "DataCacheStorageImpl.kt",
         "DataCacheStoragePackageDeletionListener.kt",
     ],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
     deps = [
         "//java/com/google/android/libraries/pcc/chronicle/api",
-        "//java/com/google/android/libraries/pcc/chronicle/api/flags",
         "//java/com/google/android/libraries/pcc/chronicle/api/storage",
         "//java/com/google/android/libraries/pcc/chronicle/storage/datacache",
         "//java/com/google/android/libraries/pcc/chronicle/util:logcat",
         "//java/com/google/android/libraries/pcc/chronicle/util:timesource",
         "@maven//:androidx_annotation_annotation",
         "@maven//:org_jetbrains_kotlinx_atomicfu",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
         "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_guava",
     ],
 )

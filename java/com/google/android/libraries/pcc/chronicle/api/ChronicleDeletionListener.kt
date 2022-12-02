@@ -46,7 +46,7 @@ interface UserConsentListener : ChronicleDeletionListener<UserConsentListener.Co
 }
 
 /** A [ChronicleDeletionListener] for Android's Locus ID deletions. */
-interface DataRemovalRequestListener {
+fun interface DataRemovalRequestListener {
   // TODO(b/232813455): Investigate modifying the return value of
   // ChronicleDeletionListener::deleteFor and ::reconcile so as to be able to extend
   // ChronicleDeletionListener here.
