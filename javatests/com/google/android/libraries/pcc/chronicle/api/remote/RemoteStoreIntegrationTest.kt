@@ -65,23 +65,30 @@ import com.google.android.libraries.pcc.chronicle.remote.impl.RemotePolicyChecke
 import com.google.android.libraries.pcc.chronicle.storage.datacache.ManagedDataCache
 import com.google.android.libraries.pcc.chronicle.storage.datacache.impl.DataCacheStorageImpl
 import com.google.android.libraries.pcc.chronicle.storage.stream.EntityStream
+import com.google.android.libraries.pcc.chronicle.storage.stream.EntityStreamProvider
 import com.google.android.libraries.pcc.chronicle.storage.stream.ManagedEntityStreamServer
 import com.google.android.libraries.pcc.chronicle.storage.stream.impl.EntityStreamProviderImpl
 import com.google.android.libraries.pcc.chronicle.util.TimeSource
 import com.google.common.truth.Truth.assertThat
 import java.time.Duration
 import java.time.Instant
+import java.util.concurrent.Executors
+import kotlin.reflect.KClass
 import kotlin.test.assertFailsWith
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -290,7 +297,10 @@ class RemoteStoreIntegrationTest {
         serverReadConnection.subscribe().take(2).collect { messagesReceivedByServer.add(it) }
       }
 
-    withContext(Dispatchers.Default) {
+    withContext(Executors.newSingleThreadExecutor().asCoroutineDispatcher()) {
+      // Suspend until both subscriptions have actually been received by the server.
+      server.subscriptions.first { it == 2 }
+
       // Write from the server and the client.
       clientWriteConnection.publish(messageA)
       serverWriteConnection.publish(messageB)
@@ -488,6 +498,7 @@ class RemoteStoreIntegrationTest {
     private val timeSource = TimeSource { fakeTime }
     private val dataCache = DataCacheStorageImpl(timeSource)
     private val configReader = FakeFlagsReader(Flags())
+    val subscriptions = MutableStateFlow(0)
 
     /** Actual store containing [SimpleProtoMessage] objects. */
     private val managedDataCache =
@@ -559,7 +570,26 @@ class RemoteStoreIntegrationTest {
           ids.forEach { managedDataCache.remove(it) }
       }
 
-    private val entityStreamProvider = EntityStreamProviderImpl()
+    // We create a wrapper EntityStreamProvider which lets us count the number of subscriptions so
+    // that we can wait to continue in test cases until the subscription count reaches the number we
+    // expect before we start publishing.
+    private val entityStreamProviderDelegate = EntityStreamProviderImpl()
+    private val entityStreamProvider =
+      object : EntityStreamProvider {
+        override fun <T : Any> getStream(cls: KClass<out T>): EntityStream<T> {
+          val delegate = entityStreamProviderDelegate.getStream(cls)
+          return object : EntityStream<T> {
+            override suspend fun publishGroup(group: List<WrappedEntity<T>>) {
+              delegate.publishGroup(group)
+            }
+
+            override fun subscribeGroups(): Flow<List<WrappedEntity<T>>> {
+              subscriptions.update { it + 1 }
+              return delegate.subscribeGroups()
+            }
+          }
+        }
+      }
 
     /**
      * [RemoteStreamServer] instance to expose the [entityStreamProvider] to the client "process".

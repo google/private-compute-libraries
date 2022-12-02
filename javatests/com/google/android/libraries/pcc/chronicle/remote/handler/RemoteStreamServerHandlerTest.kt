@@ -17,6 +17,7 @@
 package com.google.android.libraries.pcc.chronicle.remote.handler
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.android.libraries.pcc.chronicle.api.policy.Policy
 import com.google.android.libraries.pcc.chronicle.api.policy.builder.policy
 import com.google.android.libraries.pcc.chronicle.api.remote.IResponseCallback
 import com.google.android.libraries.pcc.chronicle.api.remote.RemoteEntity
@@ -35,12 +36,15 @@ import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.whenever
 import kotlin.test.assertFailsWith
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -107,6 +111,40 @@ class RemoteStreamServerHandlerTest {
     verify(serializer, times(3)).deserialize<Foo>(any())
     verify(callback).onComplete()
     verifyNoMoreInteractions(callback)
+  }
+
+  @Test
+  fun handle_publish_doesNotCompleteUntilAfterDelegationCompletes() = runBlocking {
+    val req =
+      StreamRequest.newBuilder()
+        .setDataTypeName("Foo")
+        .setOperation(StreamRequest.Operation.PUBLISH)
+        .build()
+    val publishShouldFinish = CompletableDeferred<Unit>()
+    val wrappedServer =
+      object : RemoteStreamServer<Foo> by server {
+        override suspend fun publish(policy: Policy?, entities: List<WrappedEntity<Foo>>) {
+          server.publish(policy, entities)
+          publishShouldFinish.await()
+        }
+      }
+    val handler = RemoteStreamServerHandler(req, wrappedServer)
+    val callback = mock<IResponseCallback>()
+
+    val handleJob = launch {
+      handler.handle(POLICY, listOf(Foo.asRemoteEntity("sundar")), callback)
+    }
+    // At this point the onComplete callback method shouldn't have been called yet, because the
+    // publish method won't have been finished.
+    verify(callback, never()).onComplete()
+
+    // Complete the deferred so that the wrapped server can finish and allow the handler to call
+    // `onComplete` on the callback.
+    publishShouldFinish.complete(Unit)
+    handleJob.join()
+
+    // Verify that the callback has been called.
+    verify(callback).onComplete()
   }
 
   @Test

@@ -61,6 +61,7 @@ kt_android_local_test(
     srcs = ["RemoteStreamServerHandlerTest.kt"],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
     deps = [
+        "//java/com/google/android/libraries/pcc/chronicle/api/policy",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy/builder",
         "//java/com/google/android/libraries/pcc/chronicle/api/remote",
         "//java/com/google/android/libraries/pcc/chronicle/api/remote/serialization",

@@ -44,7 +44,8 @@ class RemoteStreamServerHandler<T : Any>(
     when (request.operation) {
       StreamRequest.Operation.PUBLISH -> publish(policy, input, callback)
       StreamRequest.Operation.SUBSCRIBE -> subscribe(policy, callback)
-      StreamRequest.Operation.UNSPECIFIED, StreamRequest.Operation.UNRECOGNIZED -> {
+      StreamRequest.Operation.UNSPECIFIED,
+      StreamRequest.Operation.UNRECOGNIZED -> {
         throw RemoteError(
           RemoteErrorMetadata.newBuilder()
             .setErrorType(RemoteErrorMetadata.Type.UNSUPPORTED)
@@ -60,9 +61,12 @@ class RemoteStreamServerHandler<T : Any>(
     entities: List<RemoteEntity>,
     callback: IResponseCallback,
   ) {
-    callback.onComplete()
-    if (entities.isEmpty()) return
+    if (entities.isEmpty()) {
+      callback.onComplete()
+      return
+    }
     server.publish(policy, entities.map(server.serializer::deserialize))
+    callback.onComplete()
   }
 
   private suspend fun subscribe(policy: Policy?, callback: IResponseCallback) {
