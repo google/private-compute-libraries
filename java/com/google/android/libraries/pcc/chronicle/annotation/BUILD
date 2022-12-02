@@ -60,17 +60,6 @@ kt_jvm_library(
 )
 
 # Exports @ChronicleData annotation and the processor.  (Used by clients of the annotation.)
-java_library(
-    name = "chronicle_data",
-    exported_plugins = ["//java/com/google/android/libraries/pcc/chronicle/codegen/processor:chronicle_data_plugin"],
-    visibility = ["//visibility:public"],
-    exports = [
-        ":chronicle_data_annotation",
-        "@maven//:com_google_guava_guava",
-    ],
-)
-
-# Exports @ChronicleData annotation and the processor.  (Used by clients of the annotation.)
 android_library(
     name = "chronicle_data_android",
     exported_plugins = ["//java/com/google/android/libraries/pcc/chronicle/codegen/processor:chronicle_data_plugin"],
