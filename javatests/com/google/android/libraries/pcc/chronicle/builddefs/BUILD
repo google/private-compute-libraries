@@ -32,8 +32,8 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api",
         "//java/com/google/android/libraries/pcc/chronicle/api/optics",
         "@maven//:com_google_dagger_dagger",
-        "@maven//:com_google_dagger_dagger/hilt:install_in",
-        "@maven//:com_google_dagger_dagger/hilt/testing",
+        "@maven//:com_google_dagger_hilt_android",
+        "@maven//:com_google_dagger_hilt_android_testing",
         "@maven//:com_google_truth_truth",
     ],
 )

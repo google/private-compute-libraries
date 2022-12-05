@@ -89,7 +89,7 @@ def chronicle_data_proto_library(
             "//java/com/google/android/libraries/pcc/chronicle/api",
             "//java/com/google/android/libraries/pcc/chronicle/api/optics",
             "@maven//:com_google_dagger_dagger",
-            "@maven//:com_google_dagger_dagger/hilt:install_in",
+            "@maven//:com_google_dagger_hilt_android",
             "@maven//:javax_inject_javax_inject",
         ] + deps.values(),
     )
@@ -143,7 +143,7 @@ def chronicle_data_library(
             "//java/com/google/android/libraries/pcc/chronicle/storage/datacache",
             "//java/com/google/android/libraries/pcc/chronicle/util:timesource",
             "@maven//:com_google_dagger_dagger",
-            "@maven//:com_google_dagger_dagger/hilt:install_in",
+            "@maven//:com_google_dagger_hilt_android",
         ],
         visibility = visibility + [
             "//java/com/google/android/libraries/pcc/chronicle:api_visibility",
