@@ -53,6 +53,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class AidlTransportTest {
+  private val request = RemoteRequest(RemoteRequestMetadata.getDefaultInstance())
   private val connectionState = MutableSharedFlow<State>(replay = 1)
   private val connector =
     object : ChronicleServiceConnector {
@@ -61,17 +62,16 @@ class AidlTransportTest {
     }
 
   private var serveCall = MutableStateFlow<Pair<RemoteRequest, IResponseCallback>?>(null)
-  private val stub =
-    IRemoteStub { request, callback ->
-      if (request != null && callback != null) serveCall.value = request to callback
-    }
+  private val stub = IRemoteStub { request, callback ->
+    if (request != null && callback != null) serveCall.value = request to callback
+  }
 
   @Test
   @Suppress("DeferredIsResult", "DeferredReturnValueIgnored")
   fun serve_flowSuspendsUntilConnected(): Unit = runBlocking {
     val transport = AidlTransport(connector)
 
-    val resultFlow = transport.serve(REQUEST)
+    val resultFlow = transport.serve(request)
 
     // Request shouldn't be issued until the flow is collected.
     assertThat(serveCall.value).isNull()
@@ -106,7 +106,7 @@ class AidlTransportTest {
   fun serve_flowEmitsMultipleResponses(): Unit = runBlocking {
     val transport = AidlTransport(connector)
     connectionState.emit(State.Connected(stub))
-    val results = async { transport.serve(REQUEST).toList() }
+    val results = async { transport.serve(request).toList() }
 
     // Await the call.
     serveCall.first { it != null }
@@ -152,7 +152,7 @@ class AidlTransportTest {
 
     // Start a request, asynchronously.
     val results = async {
-      val caught = assertFailsWith<RemoteError> { transport.serve(REQUEST).toList() }
+      val caught = assertFailsWith<RemoteError> { transport.serve(request).toList() }
       assertThat(caught).isEqualTo(error)
     }
 
@@ -171,7 +171,7 @@ class AidlTransportTest {
   fun serve_cancellingFlowCollection_causesCancellationSignalToBeCalled(): Unit = runBlocking {
     val transport = AidlTransport(connector)
     connectionState.emit(State.Connected(stub))
-    val job = launch { transport.serve(REQUEST).toList() }
+    val job = launch { transport.serve(request).toList() }
 
     // Await the call.
     serveCall.first { it != null }
@@ -194,7 +194,7 @@ class AidlTransportTest {
     val iRemote = IRemoteStub { _, _ -> throw DeadObjectException() }
     connectionState.emit(State.Connected(iRemote))
 
-    val e = assertFailsWith<RemoteError> { transport.serve(REQUEST).toList() }
+    val e = assertFailsWith<RemoteError> { transport.serve(request).toList() }
     assertThat(e.metadata.errorType).isEqualTo(RemoteErrorMetadata.Type.UNKNOWN)
     assertThat(e.extras["ORIGINAL_TYPE"]).isEqualTo(DeadObjectException::class.java.name)
     assertThat(e.extras["ORIGINAL_MESSAGE"]).isNull()
@@ -227,9 +227,8 @@ class AidlTransportTest {
     return result
   }
 
-  private open class IRemoteStub(
-    val serveImpl: (RemoteRequest?, IResponseCallback?) -> Unit
-  ) : IRemote.Stub() {
+  private open class IRemoteStub(val serveImpl: (RemoteRequest?, IResponseCallback?) -> Unit) :
+    IRemote.Stub() {
     private val spyBinder by lazy<IBinder> { spy(super.asBinder()) }
 
     override fun serve(request: RemoteRequest?, callback: IResponseCallback?) {
@@ -243,9 +242,5 @@ class AidlTransportTest {
       verify(spyBinder).linkToDeath(deathCaptor.capture(), eq(0))
       verify(spyBinder).unlinkToDeath(eq(deathCaptor.firstValue), eq(0))
     }
-  }
-
-  companion object {
-    private val REQUEST = RemoteRequest(RemoteRequestMetadata.getDefaultInstance())
   }
 }

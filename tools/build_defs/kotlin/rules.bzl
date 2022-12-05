@@ -16,7 +16,11 @@ load(
 kt_android_library = _kt_android_library
 
 def kt_android_local_test(**kwargs):
-    kwargs["deps"] = kwargs["deps"] + ["@maven//:org_robolectric_robolectric", "@robolectric//bazel:android-all"]
+    kwargs["deps"] = kwargs["deps"] + [
+        "@maven//:org_robolectric_robolectric",
+        "@maven//:org_robolectric_shadows_framework",
+        "@robolectric//bazel:android-all",
+    ]
     if ("@maven//:androidx_test_ext_junit" not in kwargs["deps"]):
         kwargs["deps"] = kwargs["deps"] + ["@maven//:androidx_test_ext_junit"]
     _kt_android_local_test(**kwargs)
