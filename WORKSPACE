@@ -65,6 +65,7 @@ maven_install(
     artifacts = [
         "androidx.annotation:annotation:1.4.0",
         "androidx.multidex:multidex:2.0.1",
+        "androidx.appcompat:appcompat:1.3.1",
         "androidx.room:room-compiler:2.4.3",
         "androidx.room:room-ktx:2.4.3",
         "androidx.room:room-migration:2.4.3",
@@ -107,6 +108,7 @@ maven_install(
         "org.robolectric:shadowapi:%s" % ROBOLECTRIC_VERSION,
         "org.robolectric:shadows-framework:%s" % ROBOLECTRIC_VERSION,
         "org.mockito:mockito-core:2.23.0",
+        "org.checkerframework:checker-qual:3.27.0",
     ],
     fetch_sources = True,
     repositories = [
