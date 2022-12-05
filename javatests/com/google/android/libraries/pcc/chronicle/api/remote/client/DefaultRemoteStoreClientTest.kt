@@ -155,7 +155,7 @@ class DefaultRemoteStoreClientTest {
     val request = requestCaptor.firstValue
     assertThat(request.metadata.usageType).isEmpty()
     assertThat(request.metadata.store.dataTypeName).isEqualTo("Foo")
-    assertThat(request.metadata.store.hasDeleteAll())
+    assertThat(request.metadata.store.hasDeleteAll()).isTrue()
   }
 
   @Test
