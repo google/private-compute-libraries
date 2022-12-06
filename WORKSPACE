@@ -61,8 +61,29 @@ rules_jvm_external_setup()
 
 load("@rules_jvm_external//:defs.bzl", "maven_install")
 
+#############################
+# Load Bazel-Common repository
+#############################
+
+http_archive(
+    name = "google_bazel_common",
+    sha256 = "60a9aebe25f476646f61c041d1679a9b21076deffbd51526838c7f24d6468ac0",
+    strip_prefix = "bazel-common-227a23a508a2fab0fa67ffe2d9332ae536a40edc",
+    urls = ["https://github.com/google/bazel-common/archive/227a23a508a2fab0fa67ffe2d9332ae536a40edc.zip"],
+)
+
+# Dagger
+http_archive(
+    name = "com_google_dagger",
+    sha256 = "cbff42063bfce78a08871d5a329476eb38c96af9cf20d21f8b412fee76296181",
+    strip_prefix = "dagger-dagger-2.44.2",
+    urls = ["https://github.com/google/dagger/archive/dagger-2.44.2.zip"],
+)
+
+load("@com_google_dagger//:workspace_defs.bzl", "HILT_ANDROID_ARTIFACTS", "HILT_ANDROID_REPOSITORIES")
+
 maven_install(
-    artifacts = [
+    artifacts = HILT_ANDROID_ARTIFACTS + [
         "androidx.annotation:annotation:1.4.0",
         "androidx.multidex:multidex:2.0.1",
         "androidx.appcompat:appcompat:1.3.1",
@@ -81,10 +102,6 @@ maven_install(
         "com.google.auto.value:auto-value-annotations:1.9",
         "com.google.code.findbugs:annotations:3.0.1u2",
         "com.google.code.gson:gson:2.9.1",
-        "com.google.dagger:dagger:2.43.2",
-        "com.google.dagger:hilt-android:2.43.2",
-        "com.google.dagger:hilt-android-testing:2.43.2",
-        "com.google.dagger:hilt-compiler:2.43.2",
         "com.google.errorprone:error_prone_annotations:2.16",
         "com.google.flogger:flogger:0.7.4",
         "com.google.guava:guava:31.1-android",
@@ -111,7 +128,7 @@ maven_install(
         "org.checkerframework:checker-qual:3.27.0",
     ],
     fetch_sources = True,
-    repositories = [
+    repositories = HILT_ANDROID_REPOSITORIES + [
         "https://jcenter.bintray.com/",
         "https://maven.google.com",
         "https://repo1.maven.org/maven2",

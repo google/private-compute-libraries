@@ -18,6 +18,8 @@ package com.google.android.libraries.pcc.chronicle.codegen.tool
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
+import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.path
 import com.google.android.libraries.pcc.chronicle.codegen.TypeSet
 import com.google.android.libraries.pcc.chronicle.codegen.backend.DataTypeDescriptorDaggerProvider
@@ -101,26 +103,35 @@ class ProtoChronicleDataGenerator(private val protoClass: Class<*>) {
           |
           |Note: in order for this to be able to work correctly, the proto's generated java class
           |must be available on the classpath.
-          |""".trimMargin(),
+          |"""
+                .trimMargin(),
           ) {
-          val kotlinOutputFilePath by argument().path()
-          val moduleOutputFilePath by argument().path()
+          val moduleForConstantsFile by option("--module_for").default("")
+          val outputFilepath by argument().path()
           val descriptorFile by argument().path(mustBeReadable = true)
 
           override fun run() {
+            val generatingModule = moduleForConstantsFile.isNotEmpty()
             val fileDescriptorSet = descriptorFile.readFileDescriptorSet()
             val fileDescriptorProto = fileDescriptorSet.fileList.first()
             val descriptor = FileDescriptor.buildFrom(fileDescriptorProto, emptyArray(), true)
 
-            val kotlinOutputFile = kotlinOutputFilePath.toFile()
-            val moduleOutputFile = moduleOutputFilePath.toFile()
+            val outputFile = outputFilepath.toFile()
             val kotlinFileName =
-              requireNotNull(kotlinOutputFile.name.takeIf { it.endsWith(".kt") }?.dropLast(3)) {
-                "Kotlin output file must end in .kt"
+              if (!generatingModule) {
+                requireNotNull(outputFile.name.takeIf { it.endsWith(".kt") }?.dropLast(3)) {
+                  "Kotlin output file must end in .kt"
+                }
+              } else {
+                moduleForConstantsFile
               }
             val moduleFileName =
-              requireNotNull(moduleOutputFile.name.takeIf { it.endsWith(".java") }?.dropLast(5)) {
-                "Module output file must end in .java"
+              if (generatingModule) {
+                requireNotNull(outputFile.name.takeIf { it.endsWith(".java") }?.dropLast(5)) {
+                  "Module output file must end in .java"
+                }
+              } else {
+                ""
               }
 
             val randomSuffix = Random.Default.nextUInt()
@@ -137,20 +148,22 @@ class ProtoChronicleDataGenerator(private val protoClass: Class<*>) {
               daggerProviders += generator.buildDaggerProviders("${kotlinFileName}Kt")
             }
 
-            // Flush the kotlin file to disk.
-            BufferedWriter(FileWriter(kotlinOutputFile)).use {
-              kotlinFileBuilder.build().writeTo(it)
-              it.flush()
-            }
-
-            // Construct the dagger module and flush it to disk.
-            val daggerModule =
-              DaggerModuleProvider(name = moduleFileName, contents = daggerProviders)
-            BufferedWriter(FileWriter(moduleOutputFile)).use {
-              JavaFile.builder(descriptor.options.javaPackage, daggerModule.provideModule())
-                .build()
-                .writeTo(it)
-              it.flush()
+            if (!generatingModule) {
+              // Flush the kotlin file to disk.
+              BufferedWriter(FileWriter(outputFile)).use {
+                kotlinFileBuilder.build().writeTo(it)
+                it.flush()
+              }
+            } else {
+              // Construct the dagger module and flush it to disk.
+              val daggerModule =
+                DaggerModuleProvider(name = moduleFileName, contents = daggerProviders)
+              BufferedWriter(FileWriter(outputFile)).use {
+                JavaFile.builder(descriptor.options.javaPackage, daggerModule.provideModule())
+                  .build()
+                  .writeTo(it)
+                it.flush()
+              }
             }
           }
         }
