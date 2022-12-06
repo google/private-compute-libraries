@@ -22,6 +22,7 @@ kt_jvm_library(
 [
     java_test(
         name = file_name[:-3],
+        resources = glob(["goldens/**"]),
         test_class = "com.google.android.libraries.pcc.chronicle.codegen.backend.lens.%s" % file_name[:-3],
         runtime_deps = [":lib"],
     )
