@@ -123,6 +123,7 @@ kt_jvm_library(
 
 java_test(
     name = "chronicle_data_annotation_processor_compile_test",
+    resources = ["//javatests/com/google/android/libraries/pcc/chronicle/codegen/processor/testdata/annotatedtypes"],
     test_class = "com.google.android.libraries.pcc.chronicle.codegen.processor.ChronicleDataAnnotationProcessorCompileTest",
     runtime_deps = [
         ":ChronicleDataAnnotationProcessorCompileTest_LIB",
