@@ -42,7 +42,6 @@ import com.google.android.libraries.pcc.chronicle.api.optics.testdata.TestCity
 import com.google.android.libraries.pcc.chronicle.api.optics.testdata.TestLocation
 import com.google.android.libraries.pcc.chronicle.api.optics.testdata.TestPerson
 import com.google.android.libraries.pcc.chronicle.api.optics.testdata.TestPet
-import com.google.android.libraries.pcc.chronicle.api.policy.Policy
 import com.google.android.libraries.pcc.chronicle.api.policy.StorageMedium
 import com.google.android.libraries.pcc.chronicle.api.policy.UsageType
 import com.google.android.libraries.pcc.chronicle.api.policy.builder.policy
@@ -56,7 +55,6 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.ElementsIntoSet
-import dagger.multibindings.IntoSet
 import java.time.Duration
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -254,6 +252,26 @@ class CantripFactoryImplIntegrationTest {
       }
 
     @Provides
+    @Singleton
+    fun provideCantripFactory(
+      optics: OpticsManifest,
+      operations: OperationLibrary,
+      dtds: DataTypeDescriptorSet,
+    ): CantripFactory = CantripFactoryImpl(optics, operations, dtds)
+
+    @Provides
+    @Singleton
+    fun provideOpticsManifest(
+      lenses: Set<@JvmSuppressWildcards Lens<*, *, *, *>>,
+      dtds: DataTypeDescriptorSet,
+    ): OpticsManifest = DefaultOpticsManifest(lenses, dtds)
+
+    @Provides
+    @Singleton
+    fun provideOperationLibrary(ops: Set<@JvmSuppressWildcards Operation<*, *>>): OperationLibrary =
+      DefaultOperationLibrary(ops + TestOps.provideOperations() + Empties.provideOperations())
+
+    @Provides
     @ElementsIntoSet
     fun provideOtherOperations(): Set<@JvmSuppressWildcards Operation<*, *>> {
       return setOf(
@@ -271,31 +289,5 @@ class CantripFactoryImplIntegrationTest {
         Operation.create<Float>(name = "Rounded") { Action.Update(it.roundToInt().toFloat()) }
       )
     }
-
-    @Provides @ElementsIntoSet fun providePolicies(): Set<Policy> = setOf(POLICY_ONE)
-
-    @Provides
-    @IntoSet
-    fun provideCityConnectionProvider(): ConnectionProvider = CITY_CONNECTION_PROVIDER
-
-    @Provides
-    @Singleton
-    fun provideCantripFactory(
-      optics: OpticsManifest,
-      operations: OperationLibrary,
-      dtds: DataTypeDescriptorSet,
-    ): CantripFactory = CantripFactoryImpl(optics, operations, dtds)
-
-    @Provides
-    @Singleton
-    fun provideOperationLibrary(ops: Set<@JvmSuppressWildcards Operation<*, *>>): OperationLibrary =
-      DefaultOperationLibrary(ops + TestOps.provideOperations() + Empties.provideOperations())
-
-    @Provides
-    @Singleton
-    fun provideOpticsManifest(
-      lenses: Set<@JvmSuppressWildcards Lens<*, *, *, *>>,
-      dtds: DataTypeDescriptorSet,
-    ): OpticsManifest = DefaultOpticsManifest(lenses, dtds)
   }
 }
