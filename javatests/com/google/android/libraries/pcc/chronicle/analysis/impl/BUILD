@@ -3,6 +3,10 @@ load("//tools/build_defs/kotlin:rules.bzl", "kt_android_local_test")
 kt_android_local_test(
     name = "AnnotationTest",
     srcs = ["AnnotationTest.kt"],
+    associates = [
+        # '_kt' suffix references the actual kotlin dependency from bazel_kotlin to access 'internal' members
+        "//java/com/google/android/libraries/pcc/chronicle/analysis/impl:impl_kt",
+    ],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
     deps = [
         "//java/com/google/android/libraries/pcc/chronicle/analysis",
@@ -105,6 +109,10 @@ kt_android_local_test(
 kt_android_local_test(
     name = "ManagementStrategyValidationTest",
     srcs = ["ManagementStrategyValidationTest.kt"],
+    associates = [
+        # '_kt' suffix references the actual kotlin dependency from bazel_kotlin to access 'internal' members
+        "//java/com/google/android/libraries/pcc/chronicle/analysis/impl:impl_kt",
+    ],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
     deps = [
         "//java/com/google/android/libraries/pcc/chronicle/analysis",
@@ -127,6 +135,10 @@ kt_android_local_test(
 kt_android_local_test(
     name = "PolicyContextVerificationTest",
     srcs = ["PolicyContextVerificationTest.kt"],
+    associates = [
+        # '_kt' suffix references the actual kotlin dependency from bazel_kotlin to access 'internal' members
+        "//java/com/google/android/libraries/pcc/chronicle/analysis/impl:impl_kt",
+    ],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
     deps = [
         "//java/com/google/android/libraries/pcc/chronicle/analysis/impl",

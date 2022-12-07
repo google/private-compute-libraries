@@ -46,6 +46,10 @@ kt_android_library(
     srcs = [
         "BlobStoreCore.kt",
     ],
+    associates = [
+        # '_kt' suffix references the actual kotlin dependency from bazel_kotlin to access 'internal' members
+        ":manager_kt",
+    ],
     deps = [
         ":blobstore",
         ":management_info",
