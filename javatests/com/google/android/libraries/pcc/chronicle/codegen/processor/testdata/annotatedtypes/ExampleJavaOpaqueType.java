@@ -16,7 +16,6 @@
 
 package com.google.android.libraries.pcc.chronicle.codegen.processor.testdata.annotatedtypes;
 
-import android.app.assist.ActivityId;
 import android.os.IBinder;
 import com.google.android.libraries.pcc.chronicle.annotation.ChronicleData;
 
@@ -24,12 +23,10 @@ import com.google.android.libraries.pcc.chronicle.annotation.ChronicleData;
 public class ExampleJavaOpaqueType {
   private final String name;
   private final IBinder iBinder;
-  private final ActivityId activityId;
 
-  public ExampleJavaOpaqueType(String name, IBinder iBinder, ActivityId activityId) {
+  public ExampleJavaOpaqueType(String name, IBinder iBinder) {
     this.name = name;
     this.iBinder = iBinder;
-    this.activityId = activityId;
   }
 
   public String getName() {
@@ -38,9 +35,5 @@ public class ExampleJavaOpaqueType {
 
   public IBinder getIBinder() {
     return iBinder;
-  }
-
-  public ActivityId getActivityId() {
-    return activityId;
   }
 }

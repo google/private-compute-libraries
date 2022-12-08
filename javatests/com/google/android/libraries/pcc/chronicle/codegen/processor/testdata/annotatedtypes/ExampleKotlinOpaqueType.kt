@@ -16,7 +16,6 @@
 
 package com.google.android.libraries.pcc.chronicle.codegen.processor.testdata.annotatedtypes
 
-import android.app.assist.ActivityId
 import android.os.IBinder
 import com.google.android.libraries.pcc.chronicle.annotation.ChronicleData
 
@@ -24,5 +23,4 @@ import com.google.android.libraries.pcc.chronicle.annotation.ChronicleData
 data class ExampleKotlinOpaqueType(
   val name: String,
   val iBinder: IBinder,
-  val activityId: ActivityId,
 )

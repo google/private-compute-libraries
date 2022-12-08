@@ -98,7 +98,6 @@ val EXPECTED_EXAMPLE_JAVA_OPAQUE_TYPE_GENERATED_DTD =
   ) {
     "name" to FieldType.String
     "iBinder" to FieldType.Opaque("android.os.IBinder")
-    "activityId" to FieldType.Opaque("android.app.assist.ActivityId")
   }
 
 @JvmField

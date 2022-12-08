@@ -79,7 +79,7 @@ class DataCacheStoreAnnotationProcessor : AnnotationProcessor() {
         .build()
         .writeTo(processingEnv.filer)
     }
-    return false
+    return true
   }
 
   private fun Element.storage(): CodeBlock {
