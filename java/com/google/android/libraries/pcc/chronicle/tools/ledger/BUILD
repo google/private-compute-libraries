@@ -26,6 +26,7 @@ kt_android_library(
     deps = [
         "//java/com/google/android/libraries/pcc/chronicle/analysis",
         "//java/com/google/android/libraries/pcc/chronicle/api",
+        "//java/com/google/android/libraries/pcc/chronicle/api:data_type_descriptor",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy/annotation",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy/contextrules",

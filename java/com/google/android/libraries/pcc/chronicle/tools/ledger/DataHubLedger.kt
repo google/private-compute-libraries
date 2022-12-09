@@ -67,9 +67,13 @@ object DataHubLedger {
   /** Merges all [LedgerMap] files in the [directoryPath] into a single instance and returns it. */
   @JvmStatic
   fun mergeLedgers(directoryPath: String, isAbsolute: Boolean = false): LedgerMap {
-    val file =
-      if (!isAbsolute) File(currentWorkingDir, "user.dir"), directoryPath)
-      else File(directoryPath)
+
+    val dir =
+      if (!isAbsolute) {
+        File(currentWorkingDir, directoryPath)
+      } else {
+        File(directoryPath)
+      }
 
     var result = LedgerMap()
     requireNotNull(dir.listFiles()) { "$directoryPath is not a directory" }
