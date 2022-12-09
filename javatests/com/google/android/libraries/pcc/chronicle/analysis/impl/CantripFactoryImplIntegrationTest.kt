@@ -39,9 +39,13 @@ import com.google.android.libraries.pcc.chronicle.api.optics.Lens
 import com.google.android.libraries.pcc.chronicle.api.optics.OpticsManifest
 import com.google.android.libraries.pcc.chronicle.api.optics.testdata.TEST_CITY_GENERATED_DTD
 import com.google.android.libraries.pcc.chronicle.api.optics.testdata.TestCity
+import com.google.android.libraries.pcc.chronicle.api.optics.testdata.TestCity_Lenses
 import com.google.android.libraries.pcc.chronicle.api.optics.testdata.TestLocation
+import com.google.android.libraries.pcc.chronicle.api.optics.testdata.TestLocation_Lenses
 import com.google.android.libraries.pcc.chronicle.api.optics.testdata.TestPerson
+import com.google.android.libraries.pcc.chronicle.api.optics.testdata.TestPerson_Lenses
 import com.google.android.libraries.pcc.chronicle.api.optics.testdata.TestPet
+import com.google.android.libraries.pcc.chronicle.api.optics.testdata.TestPet_Lenses
 import com.google.android.libraries.pcc.chronicle.api.policy.StorageMedium
 import com.google.android.libraries.pcc.chronicle.api.policy.UsageType
 import com.google.android.libraries.pcc.chronicle.api.policy.builder.policy
@@ -55,6 +59,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.ElementsIntoSet
+import dagger.multibindings.IntoSet
 import java.time.Duration
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -265,6 +270,14 @@ class CantripFactoryImplIntegrationTest {
       lenses: Set<@JvmSuppressWildcards Lens<*, *, *, *>>,
       dtds: DataTypeDescriptorSet,
     ): OpticsManifest = DefaultOpticsManifest(lenses, dtds)
+
+    @Provides
+    @Singleton
+    @ElementsIntoSet
+    fun provideLenses(): Set<@JvmSuppressWildcards Lens<*, *, *, *>> =
+      TestCity_Lenses + TestPerson_Lenses + TestLocation_Lenses + TestPet_Lenses
+
+    @Provides @Singleton @IntoSet fun provideDataTypeDescriptor() = TEST_CITY_GENERATED_DTD
 
     @Provides
     @Singleton

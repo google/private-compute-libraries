@@ -28,7 +28,6 @@ import java.time.Duration
 /** A [TypedDataCache<T>] that is managed with Chronicle. */
 open class ManagedDataCache<T>
 constructor(
-  // LINT.IfChange
   private val entityClass: Class<T>,
   private val cache: DataCacheStorage,
   private val maxSize: Int,
@@ -36,7 +35,6 @@ constructor(
   override val dataTypeDescriptor: DataTypeDescriptor,
 ) : TypedDataCache<T>, TypedManagedStore<T> {
   override val managementStrategy: ManagementStrategy
-  // LINT.ThenChange(//depot/google3/javatests/com/google/android/libraries/pcc/chronicle/codegen/processor/TestUtils.kt)
 
   init {
     cache.registerDataType(entityClass, maxSize = maxSize, ttl = ttl)

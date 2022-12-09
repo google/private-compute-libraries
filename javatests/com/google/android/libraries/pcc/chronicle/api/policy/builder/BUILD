@@ -1,16 +1,15 @@
-load("//tools/build_defs/kotlin:rules.bzl", "kt_android_local_test")
-load(
-    "//java/com/google/android/libraries/pcc/chronicle/build_defs:chronicle_codegen.bzl",
-    "chronicle_data_library",
-)
+load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library", "kt_android_local_test")
 
-chronicle_data_library(
+kt_android_library(
     name = "base",
     testonly = True,
     srcs = [
         "PolicyBuilderTestBase.kt",
     ],
-    deps = [],
+    deps = [
+        "//java/com/google/android/libraries/pcc/chronicle/annotation:chronicle_data_android",
+        "//java/com/google/android/libraries/pcc/chronicle/api",
+    ],
 )
 
 kt_android_local_test(

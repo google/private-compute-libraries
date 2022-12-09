@@ -1,9 +1,5 @@
 load("//tools/build_defs/kotlin:rules.bzl", "kt_android_local_test")
-load(
-    "//tools/build_defs/kotlin:rules.bzl",
-    "kt_android_library",
-    "kt_jvm_library",
-)
+load("//tools/build_defs/kotlin:rules.bzl", "kt_jvm_library")
 
 ## Libraries
 
@@ -17,87 +13,29 @@ java_library(
     ],
 )
 
-kt_android_library(
-    name = "android_deps",
-    testonly = True,
-    srcs = ["DataCacheModule.kt"],
-    exports = [
-        "//java/com/google/android/libraries/pcc/chronicle/api",
-        "//java/com/google/android/libraries/pcc/chronicle/storage/datacache",
-        "//third_party/java/dagger/hilt/testing",
-        "@maven//:com_google_truth_truth",
-        "@maven//:junit_junit",
-    ],
-    deps = [
-        "//java/com/google/android/libraries/pcc/chronicle/storage/datacache",
-        "//java/com/google/android/libraries/pcc/chronicle/storage/datacache/impl",
-        "//java/com/google/android/libraries/pcc/chronicle/util:timesource",
-        "//third_party/java/dagger",
-        "//third_party/java/dagger/hilt:install_in",
-        "@maven//:javax_inject_javax_inject",
-    ],
-)
-
-kt_android_library(
-    name = "test_utils",
-    testonly = True,
-    srcs = ["TestUtils.kt"],
-    deps = [
-        "//java/com/google/android/libraries/pcc/chronicle/api",
-        "//java/com/google/android/libraries/pcc/chronicle/api:data_type_descriptor",
-        "//java/com/google/android/libraries/pcc/chronicle/storage/datacache",
-    ],
-)
-
-kt_android_local_test(
-    name = "TestUtilsTest",
-    srcs = ["TestUtilsTest.kt"],
-    manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
-    visibility = ["//visibility:private"],
-    deps = [
-        ":test_utils",
-        "//java/com/google/android/libraries/pcc/chronicle/api:data_type_descriptor",
-        "//java/com/google/android/libraries/pcc/chronicle/storage/datacache",
-        "@maven//:com_google_truth_truth",
-        "@maven//:com_nhaarman_mockitokotlin2_mockito_kotlin",
-    ],
-)
-
-# Kotlin Test
-
 kt_android_local_test(
     name = "ChronicleDataAnnotationProcessorKotlinTest",
     srcs = ["ChronicleDataAnnotationProcessorKotlinTest.kt"],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
     deps = [
-        ":android_deps",
-        ":test_utils",
         "//java/com/google/android/libraries/pcc/chronicle/api:data_type_descriptor",
         "//java/com/google/android/libraries/pcc/chronicle/storage/datacache",
         "//javatests/com/google/android/libraries/pcc/chronicle/codegen/processor/testdata/annotatedtypes:chronicle_data_kt",
         "//javatests/com/google/android/libraries/pcc/chronicle/codegen/processor/testdata/expectedgeneratedtypes:expected_generated_kotlin_types",
-        "//third_party/java/dagger/hilt/testing",
         "@maven//:com_google_truth_truth",
-        "@maven//:javax_inject_javax_inject",
     ],
 )
-
-# Java Test
 
 kt_android_local_test(
     name = "ChronicleDataAnnotationProcessorJavaTest",
     srcs = ["ChronicleDataAnnotationProcessorJavaTest.java"],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
     deps = [
-        ":android_deps",
-        ":test_utils",
         "//java/com/google/android/libraries/pcc/chronicle/api:data_type_descriptor",
         "//java/com/google/android/libraries/pcc/chronicle/storage/datacache",
         "//javatests/com/google/android/libraries/pcc/chronicle/codegen/processor/testdata/annotatedtypes:chronicle_data_java",
         "//javatests/com/google/android/libraries/pcc/chronicle/codegen/processor/testdata/expectedgeneratedtypes:expected_generated_java_types",
-        "//third_party/java/dagger/hilt/testing",
         "@maven//:com_google_truth_truth",
-        "@maven//:javax_inject_javax_inject",
     ],
 )
 

@@ -24,8 +24,10 @@ package_group(
     name = "internal_visibility",
     packages = [
         "//java/com/google/android/libraries/pcc/chronicle/...",
+        "//java/com/google/android/libraries/pcc/datahub/...",
         "//java/com/google/android/libraries/pcc/plugin/samples/...",
         "//javatests/com/google/android/libraries/pcc/chronicle/...",
+        "//javatests/com/google/android/libraries/pcc/datahub/...",
         "//javatests/com/google/android/libraries/pcc/plugin/samples/...",
     ],
 )

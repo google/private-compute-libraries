@@ -8,7 +8,9 @@ kt_android_library(
     srcs = [
         "ChronicleData.kt",
     ],
-    visibility = ["//visibility:private"],
+    visibility = [
+        "//visibility:private",
+    ],
 )
 
 kt_jvm_library(
@@ -44,7 +46,9 @@ kt_android_library(
     srcs = [
         "DataCacheStore.kt",
     ],
-    visibility = ["//visibility:private"],
+    visibility = [
+        "//visibility:private",
+    ],
     deps = ["//java/com/google/android/libraries/pcc/chronicle/api"],
 )
 

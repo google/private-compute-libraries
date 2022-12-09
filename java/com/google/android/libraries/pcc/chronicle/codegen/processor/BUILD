@@ -5,7 +5,9 @@ package(default_visibility = ["//java/com/google/android/libraries/pcc/chronicle
 kt_jvm_library(
     name = "annotation_processor",
     srcs = ["AnnotationProcessor.kt"],
-    visibility = ["//visibility:private"],
+    visibility = [
+        "//visibility:private",
+    ],
 )
 
 kt_jvm_library(
@@ -18,7 +20,6 @@ kt_jvm_library(
         "//java/com/google/android/libraries/pcc/chronicle/codegen/backend/api",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/frontend/element",
         "//third_party/java/auto:auto_service",
-        "@maven//:com_squareup_javapoet",
         "@maven//:com_squareup_kotlinpoet",
     ],
 )
@@ -45,10 +46,7 @@ kt_jvm_library(
         ":annotation_processor",
         "//java/com/google/android/libraries/pcc/chronicle/annotation:data_cache_store_annotation",
         "//java/com/google/android/libraries/pcc/chronicle/api:api_jvm",
-        "//java/com/google/android/libraries/pcc/chronicle/codegen/backend:datahub",
-        "//java/com/google/android/libraries/pcc/chronicle/codegen/backend/api",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/util",
-        "@maven//:com_squareup_javapoet",
         "@maven//:com_squareup_kotlinpoet",
     ],
 )

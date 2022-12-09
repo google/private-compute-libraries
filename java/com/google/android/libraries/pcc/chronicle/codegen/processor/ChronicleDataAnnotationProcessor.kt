@@ -17,20 +17,14 @@
 package com.google.android.libraries.pcc.chronicle.codegen.processor
 
 import com.google.android.libraries.pcc.chronicle.annotation.ChronicleData
-import com.google.android.libraries.pcc.chronicle.codegen.backend.DataTypeDescriptorDaggerProvider
 import com.google.android.libraries.pcc.chronicle.codegen.backend.DataTypeDescriptorPropertyProvider
-import com.google.android.libraries.pcc.chronicle.codegen.backend.api.DaggerModuleContentsProvider
-import com.google.android.libraries.pcc.chronicle.codegen.backend.api.DaggerModuleProvider
 import com.google.android.libraries.pcc.chronicle.codegen.backend.api.FileSpecContentsProvider
 import com.google.android.libraries.pcc.chronicle.codegen.frontend.element.ElementToTypeConverter
 import com.google.auto.service.AutoService
-import com.squareup.javapoet.JavaFile
 import com.squareup.kotlinpoet.FileSpec
 import javax.annotation.processing.RoundEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
-import kotlin.random.Random
-import kotlin.random.nextUInt
 
 /**
  * This annotation processor will operate on any type annotated with the [ChronicleData] annotation.
@@ -42,34 +36,13 @@ class ChronicleDataAnnotationProcessor : AnnotationProcessor() {
   override fun getSupportedAnnotationTypes() = setOf(ChronicleData::class.java.canonicalName!!)
 
   override fun process(elements: MutableSet<out TypeElement>, env: RoundEnvironment): Boolean {
-    val dtdDaggerContentsByPackage =
-      mutableMapOf<String, MutableList<DaggerModuleContentsProvider>>()
-
     env.getElementsAnnotatedWith(ChronicleData::class.java).forEach { element ->
       val converter = ElementToTypeConverter(processingEnv)
       val types = converter.convertElement(element)
       printNote(element, "Generating DTD for $element")
       val dtd = DataTypeDescriptorPropertyProvider(element.simpleName, types)
 
-      val daggerProviders = dtdDaggerContentsByPackage[element.packageName] ?: mutableListOf()
-      daggerProviders.add(DataTypeDescriptorDaggerProvider(element.simpleName))
-      dtdDaggerContentsByPackage[element.packageName] = daggerProviders
-
       element.generateFile(dtd).writeTo(processingEnv.filer)
-    }
-
-    // For each package seen with ChronicleData-annotated classes, generate a dagger module which
-    // provides their DTDs.
-    dtdDaggerContentsByPackage.forEach { (packageName, contents) ->
-      // Randomize the generated module to avoid conflicts with multiple targets in same pkg.
-      val randomSuffix = Random.Default.nextUInt()
-      val module =
-        DaggerModuleProvider(
-            "DataTypeDescriptors_${randomSuffix}_GeneratedModule",
-            contents = contents
-          )
-          .provideModule()
-      JavaFile.builder(packageName, module).build().writeTo(processingEnv.filer)
     }
 
     return true

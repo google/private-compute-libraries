@@ -21,11 +21,7 @@ import com.google.android.libraries.pcc.chronicle.api.DeletionTrigger
 import com.google.android.libraries.pcc.chronicle.api.ManagementStrategy
 import com.google.android.libraries.pcc.chronicle.api.StorageMedia
 import com.google.android.libraries.pcc.chronicle.api.Trigger
-import com.google.android.libraries.pcc.chronicle.codegen.backend.ManagedDataCacheStorageDaggerProvider
-import com.google.android.libraries.pcc.chronicle.codegen.backend.api.DaggerModuleProvider
 import com.google.android.libraries.pcc.chronicle.codegen.util.upperSnake
-import com.squareup.javapoet.JavaFile
-import com.squareup.javapoet.TypeName
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.MemberName
@@ -55,29 +51,6 @@ class DataCacheStoreAnnotationProcessor : AnnotationProcessor() {
           return false
         }
       element.generateFile(name, storage).writeTo(processingEnv.filer)
-
-      val daggerModuleProvider =
-        try {
-          DaggerModuleProvider(
-            name = "${name}GeneratedStorageProviderModule",
-            contents =
-              listOf(
-                ManagedDataCacheStorageDaggerProvider(
-                  elementName = name,
-                  chronicleDataType = TypeName.get(element.asType()),
-                  maxItems = element.getAnnotation(DataCacheStore::class.java).maxItems,
-                  ttlDuration = ttlDuration(element.ttlString())
-                )
-              )
-          )
-        } catch (e: IllegalArgumentException) {
-          printError(element, e.message ?: "unknown")
-          return false
-        }
-
-      JavaFile.builder(element.packageName, daggerModuleProvider.provideModule())
-        .build()
-        .writeTo(processingEnv.filer)
     }
     return true
   }
