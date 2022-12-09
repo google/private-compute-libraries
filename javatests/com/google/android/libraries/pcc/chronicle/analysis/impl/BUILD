@@ -53,35 +53,6 @@ kt_android_local_test(
 )
 
 kt_android_local_test(
-    name = "CantripFactoryImplIntegrationTest",
-    srcs = [
-        "CantripFactoryImplIntegrationTest.kt",
-    ],
-    manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
-    deps = [
-        "//java/com/google/android/libraries/pcc/chronicle/analysis",
-        "//java/com/google/android/libraries/pcc/chronicle/analysis/impl",
-        "//java/com/google/android/libraries/pcc/chronicle/api",
-        "//java/com/google/android/libraries/pcc/chronicle/api/cantrip",
-        "//java/com/google/android/libraries/pcc/chronicle/api/error",
-        "//java/com/google/android/libraries/pcc/chronicle/api/operation",
-        "//java/com/google/android/libraries/pcc/chronicle/api/optics",
-        "//java/com/google/android/libraries/pcc/chronicle/api/optics/testdata",
-        "//java/com/google/android/libraries/pcc/chronicle/api/policy",
-        "//java/com/google/android/libraries/pcc/chronicle/api/policy/builder",
-        "//java/com/google/android/libraries/pcc/chronicle/operation:empties",
-        "//java/com/google/android/libraries/pcc/chronicle/operation:test_ops",
-        "//java/com/google/android/libraries/pcc/chronicle/testutil:chronicle_module",
-        "//third_party/java/dagger",
-        "//third_party/java/dagger/hilt:install_in",
-        "//third_party/java/dagger/hilt/testing",
-        "@maven//:com_google_truth_truth",
-        "@maven//:javax_inject_javax_inject",
-        "@maven//:org_jetbrains_kotlin_kotlin_test",
-    ],
-)
-
-kt_android_local_test(
     name = "ChroniclePolicyEngineTest",
     srcs = ["ChroniclePolicyEngineTest.kt"],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
