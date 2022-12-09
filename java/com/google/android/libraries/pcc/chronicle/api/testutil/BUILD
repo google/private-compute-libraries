@@ -2,12 +2,11 @@ load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library")
 
 package(default_visibility = ["//java/com/google/android/libraries/pcc/chronicle:api_visibility"])
 
-# TODO(b/228849721): Rename to fake_chronicle
 kt_android_library(
-    name = "chronicle_for_testing",
+    name = "fake_chronicle",
     testonly = True,
     srcs = [
-        "ChronicleForTesting.kt",
+        "FakeChronicle.kt",
     ],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
     deps = [

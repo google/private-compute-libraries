@@ -34,14 +34,12 @@ import com.google.android.libraries.pcc.chronicle.api.policy.PolicyConformanceCh
  * Allows for the construction of [DefaultChronicle] using kotlin-style builder patterns. Uses a
  * static set of flags, so not suitable for production use.
  */
-// TODO(b/228849721): Rename to fakeChronicle
-fun chronicleForTesting(builder: ChronicleForTestBuilder.() -> Unit): Chronicle {
-  return ChronicleForTestBuilder().apply(builder).build()
+fun fakeChronicle(builder: FakeChronicleBuilder.() -> Unit): Chronicle {
+  return FakeChronicleBuilder().apply(builder).build()
 }
 
 /** Builder of [DefaultChronicle] objects for testing. */
-// TODO(b/228849721): Rename to FakeChronicleBuilder
-class ChronicleForTestBuilder {
+class FakeChronicleBuilder {
   private val flags = FakeFlagsReader(Flags())
   private val connectionProviders = mutableSetOf<ConnectionProvider>()
   private val policies = mutableSetOf<Policy>()
@@ -63,7 +61,7 @@ class ChronicleForTestBuilder {
    * Specifies that the implementation of [PolicyEngine] used by the built [Chronicle] will be the
    * default.
    */
-  fun useDefaultPolicyEngine(): ChronicleForTestBuilder = apply {
+  fun useDefaultPolicyEngine(): FakeChronicleBuilder = apply {
     policyEngine = ChroniclePolicyEngine()
   }
 
@@ -82,12 +80,12 @@ class ChronicleForTestBuilder {
     }
 
   /** Registers a [ConnectionProvider] for the built [DefaultChronicle]'s clients. */
-  fun register(connectionProvider: ConnectionProvider): ChronicleForTestBuilder = apply {
+  fun register(connectionProvider: ConnectionProvider): FakeChronicleBuilder = apply {
     connectionProviders.add(connectionProvider)
   }
 
   /** Registers a [Policy] for enforcement during [DefaultChronicle.getConnection]. */
-  fun register(policy: Policy): ChronicleForTestBuilder = apply { policies.add(policy) }
+  fun register(policy: Policy): FakeChronicleBuilder = apply { policies.add(policy) }
 
   /** Builds a [DefaultChronicle] object. */
   fun build(): Chronicle {
