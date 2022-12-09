@@ -15,6 +15,10 @@ kt_android_library(
 kt_android_local_test(
     name = "PolicyBuilderTest",
     srcs = ["PolicyBuilderTest.kt"],
+    associates = [
+        # '_kt' suffix references the actual kotlin dependency from bazel_kotlin to access 'internal' members
+        "//java/com/google/android/libraries/pcc/chronicle/api/policy/builder:builder_kt",
+    ],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
     deps = [
         ":base",
