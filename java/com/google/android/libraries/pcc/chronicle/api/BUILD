@@ -38,7 +38,7 @@ kt_android_library(
         ":connection",
         ":data_type_descriptor",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy",
-        "//third_party/java/dagger",
+        "@maven//:com_google_dagger_dagger",
     ],
 )
 

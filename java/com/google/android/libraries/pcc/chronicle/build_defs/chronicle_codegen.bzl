@@ -1,7 +1,6 @@
 """Rules to helper with Chronicle code generation"""
 
-load(":proto.bzl", "chronicle_data_proto_library_helper", "chronicle_data_proto_module_helper")
-load("@bazel_rules_android//android:rules.bzl", "android_library")
+load(":proto.bzl", "chronicle_data_proto_library_helper")
 load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library")
 
 def chronicle_data_proto_library(
@@ -69,56 +68,28 @@ def chronicle_data_proto_library(
         visibility = ["//visibility:private"],
     )
 
-    # Use the binary to generate DTD/Lens sources from the proto file
+    # Use the binary to generate DTD sources from the proto file
     chronicle_data_proto_library_helper(
-        name = "%s_constants_srcs" % name,
+        name = "%s_srcs" % name,
         generator = ":%s" % generator_name,
         proto_deps = [":%s" % proto_library_name],
     )
 
-    # Use the binary to generate a dagger module to provide the DTDs/Lenses
-    # generated from the proto file.
-    chronicle_data_proto_module_helper(
-        name = "%s_module_srcs" % name,
-        library_name = "%s_constants_srcs" % name,
-        generator = ":%s" % generator_name,
-        proto_deps = [":%s" % proto_library_name],
-    )
-
-    # Put together a library based around the generated DTD/Lens sources.
+    # Put together a final library for use.
     kt_android_library(
-        name = "%s_constants" % name,
-        srcs = [":%s_constants_srcs" % name],
-        testonly = testonly,
-        exports = [
-            ":%s" % java_proto_lite_library_name,
-        ],
-        manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
-        deps = [
-            ":%s" % java_proto_lite_library_name,
-            "//java/com/google/android/libraries/pcc/chronicle/api",
-            "//java/com/google/android/libraries/pcc/chronicle/api/optics",
-        ] + deps.values(),
-    )
-
-    # Put together a final library for use which includes the generated module
-    # sources and exports the generated library.
-    android_library(
         name = name,
-        srcs = [":%s_module_srcs" % name],
+        srcs = [":%s_srcs" % name],
         testonly = testonly,
         exports = [
             ":%s" % java_proto_lite_library_name,
-            ":%s_constants" % name,
         ],
         manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
         deps = [
             ":%s" % java_proto_lite_library_name,
-            ":%s_constants" % name,
             "//java/com/google/android/libraries/pcc/chronicle/api",
             "//java/com/google/android/libraries/pcc/chronicle/api/optics",
-            "//third_party/java/dagger",
-            "//third_party/java/dagger/hilt:install_in",
+            "@maven//:com_google_dagger_dagger",
+            "@maven//:com_google_dagger_hilt_android",
             "@maven//:javax_inject_javax_inject",
         ] + deps.values(),
     )
@@ -171,8 +142,8 @@ def chronicle_data_library(
             "//java/com/google/android/libraries/pcc/chronicle/api",
             "//java/com/google/android/libraries/pcc/chronicle/storage/datacache",
             "//java/com/google/android/libraries/pcc/chronicle/util:timesource",
-            "//third_party/java/dagger",
-            "//third_party/java/dagger/hilt:install_in",
+            "@maven//:com_google_dagger_dagger",
+            "@maven//:com_google_dagger_hilt_android",
         ],
         visibility = visibility + [
             "//java/com/google/android/libraries/pcc/chronicle:api_visibility",

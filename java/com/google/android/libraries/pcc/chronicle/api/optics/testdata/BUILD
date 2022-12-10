@@ -10,8 +10,8 @@ kt_android_library(
         "//java/com/google/android/libraries/pcc/chronicle/annotation:chronicle_data_android",
         "//java/com/google/android/libraries/pcc/chronicle/api:data_type_descriptor",
         "//java/com/google/android/libraries/pcc/chronicle/api/optics",
-        "//third_party/java/dagger",
-        "//third_party/java/dagger/hilt:install_in",
+        "@maven//:com_google_dagger_dagger",
+        "@maven//:com_google_dagger_hilt_android",
         "@maven//:javax_inject_javax_inject",
     ],
 )

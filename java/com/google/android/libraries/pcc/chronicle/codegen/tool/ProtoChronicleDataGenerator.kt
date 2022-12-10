@@ -18,8 +18,6 @@ package com.google.android.libraries.pcc.chronicle.codegen.tool
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
-import com.github.ajalt.clikt.parameters.options.default
-import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.path
 import com.google.android.libraries.pcc.chronicle.codegen.TypeSet
 import com.google.android.libraries.pcc.chronicle.codegen.backend.DataTypeDescriptorDaggerProvider
@@ -106,32 +104,24 @@ class ProtoChronicleDataGenerator(private val protoClass: Class<*>) {
           |"""
                 .trimMargin(),
           ) {
-          val moduleForConstantsFile by option("--module_for").default("")
-          val outputFilepath by argument().path()
+          val kotlinOutputFilePath by argument().path()
+          val moduleOutputFilePath by argument().path()
           val descriptorFile by argument().path(mustBeReadable = true)
 
           override fun run() {
-            val generatingModule = moduleForConstantsFile.isNotEmpty()
             val fileDescriptorSet = descriptorFile.readFileDescriptorSet()
             val fileDescriptorProto = fileDescriptorSet.fileList.first()
             val descriptor = FileDescriptor.buildFrom(fileDescriptorProto, emptyArray(), true)
 
-            val outputFile = outputFilepath.toFile()
+            val kotlinOutputFile = kotlinOutputFilePath.toFile()
+            val moduleOutputFile = moduleOutputFilePath.toFile()
             val kotlinFileName =
-              if (!generatingModule) {
-                requireNotNull(outputFile.name.takeIf { it.endsWith(".kt") }?.dropLast(3)) {
-                  "Kotlin output file must end in .kt"
-                }
-              } else {
-                moduleForConstantsFile
+              requireNotNull(kotlinOutputFile.name.takeIf { it.endsWith(".kt") }?.dropLast(3)) {
+                "Kotlin output file must end in .kt"
               }
             val moduleFileName =
-              if (generatingModule) {
-                requireNotNull(outputFile.name.takeIf { it.endsWith(".java") }?.dropLast(5)) {
-                  "Module output file must end in .java"
-                }
-              } else {
-                ""
+              requireNotNull(moduleOutputFile.name.takeIf { it.endsWith(".java") }?.dropLast(5)) {
+                "Module output file must end in .java"
               }
 
             val randomSuffix = Random.Default.nextUInt()
@@ -148,22 +138,20 @@ class ProtoChronicleDataGenerator(private val protoClass: Class<*>) {
               daggerProviders += generator.buildDaggerProviders("${kotlinFileName}Kt")
             }
 
-            if (!generatingModule) {
-              // Flush the kotlin file to disk.
-              BufferedWriter(FileWriter(outputFile)).use {
-                kotlinFileBuilder.build().writeTo(it)
-                it.flush()
-              }
-            } else {
-              // Construct the dagger module and flush it to disk.
-              val daggerModule =
-                DaggerModuleProvider(name = moduleFileName, contents = daggerProviders)
-              BufferedWriter(FileWriter(outputFile)).use {
-                JavaFile.builder(descriptor.options.javaPackage, daggerModule.provideModule())
-                  .build()
-                  .writeTo(it)
-                it.flush()
-              }
+            // Flush the kotlin file to disk.
+            BufferedWriter(FileWriter(kotlinOutputFile)).use {
+              kotlinFileBuilder.build().writeTo(it)
+              it.flush()
+            }
+
+            // Construct the dagger module and flush it to disk.
+            val daggerModule =
+              DaggerModuleProvider(name = moduleFileName, contents = daggerProviders)
+            BufferedWriter(FileWriter(moduleOutputFile)).use {
+              JavaFile.builder(descriptor.options.javaPackage, daggerModule.provideModule())
+                .build()
+                .writeTo(it)
+              it.flush()
             }
           }
         }
