@@ -40,6 +40,7 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api:chronicle",
         "//java/com/google/android/libraries/pcc/chronicle/api:sandbox_processor_node",
         "//java/com/google/android/libraries/pcc/chronicle/api/error",
+        "//java/com/google/android/libraries/pcc/chronicle/api/policy",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy/builder",
         "//java/com/google/android/libraries/pcc/chronicle/api/remote",
         "//java/com/google/android/libraries/pcc/chronicle/api/remote/server",

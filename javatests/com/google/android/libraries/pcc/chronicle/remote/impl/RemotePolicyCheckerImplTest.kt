@@ -19,11 +19,15 @@ package com.google.android.libraries.pcc.chronicle.remote.impl
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.libraries.pcc.chronicle.analysis.PolicySet
 import com.google.android.libraries.pcc.chronicle.api.Chronicle
+import com.google.android.libraries.pcc.chronicle.api.Connection
+import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
+import com.google.android.libraries.pcc.chronicle.api.ConnectionResult
 import com.google.android.libraries.pcc.chronicle.api.ProcessorNode
 import com.google.android.libraries.pcc.chronicle.api.ReadConnection
 import com.google.android.libraries.pcc.chronicle.api.SandboxProcessorNode
 import com.google.android.libraries.pcc.chronicle.api.WriteConnection
 import com.google.android.libraries.pcc.chronicle.api.error.PolicyViolation
+import com.google.android.libraries.pcc.chronicle.api.policy.Policy
 import com.google.android.libraries.pcc.chronicle.api.policy.builder.policy
 import com.google.android.libraries.pcc.chronicle.api.remote.RemoteError
 import com.google.android.libraries.pcc.chronicle.api.remote.RemoteErrorMetadata
@@ -35,19 +39,21 @@ import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doCallRealMethod
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.notNull
-import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.whenever
+import kotlin.reflect.KClass
 import kotlin.test.assertFailsWith
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class RemotePolicyCheckerImplTest {
-  private val chronicle = mock<Chronicle>()
+  private val chronicle = spy(FakeChronicle { Result.success(Unit) })
   private val policySet =
     mock<PolicySet> {
       on { findByName(eq("WillNotBeFound")) } doReturn null
@@ -60,14 +66,14 @@ class RemotePolicyCheckerImplTest {
   fun checkAndGetPolicyOrThrow_defaultClientDetails_doesNotUseSandboxProcessorNode() {
     val dataTypeNameCaptor = argumentCaptor<String>()
     val processorNodeCaptor = argumentCaptor<ProcessorNode>()
-    whenever(
-      chronicle.checkPolicy(
-        dataTypeNameCaptor.capture(),
-        notNull(),
-        eq(true),
-        processorNodeCaptor.capture()
+    doCallRealMethod()
+      .whenever(chronicle)
+      .checkPolicy(
+        dataTypeName = dataTypeNameCaptor.capture(),
+        policy = notNull(),
+        isForReading = eq(true),
+        requester = processorNodeCaptor.capture()
       )
-    ) doReturn Result.success(Unit)
 
     checker.checkAndGetPolicyOrThrow(FOUND_POLICY_READ_REQUEST_METADATA, server, DEFAULT_DETAILS)
 
@@ -79,14 +85,14 @@ class RemotePolicyCheckerImplTest {
   fun checkAndGetPolicyOrThrow_isolatedClientDetails_usesSandboxProcessorNode() {
     val dataTypeNameCaptor = argumentCaptor<String>()
     val processorNodeCaptor = argumentCaptor<ProcessorNode>()
-    whenever(
-      chronicle.checkPolicy(
-        dataTypeNameCaptor.capture(),
-        notNull(),
-        eq(true),
-        processorNodeCaptor.capture()
+    doCallRealMethod()
+      .whenever(chronicle)
+      .checkPolicy(
+        dataTypeName = dataTypeNameCaptor.capture(),
+        policy = notNull(),
+        isForReading = eq(true),
+        requester = processorNodeCaptor.capture()
       )
-    ) doReturn Result.success(Unit)
 
     checker.checkAndGetPolicyOrThrow(
       FOUND_POLICY_READ_REQUEST_METADATA,
@@ -105,8 +111,9 @@ class RemotePolicyCheckerImplTest {
   @Test
   fun checkAndGetPolicyOrThrow_differentClientDetails_usesDifferentProcessorNodes() {
     val processorNodeCaptor = argumentCaptor<ProcessorNode>()
-    whenever(chronicle.checkPolicy(any(), any(), any(), processorNodeCaptor.capture())) doReturn
-      Result.success(Unit)
+    doCallRealMethod()
+      .whenever(chronicle)
+      .checkPolicy(any(), anyOrNull(), any(), processorNodeCaptor.capture())
 
     checker.checkAndGetPolicyOrThrow(
       FOUND_POLICY_READ_REQUEST_METADATA,
@@ -134,9 +141,9 @@ class RemotePolicyCheckerImplTest {
   @Test
   fun checkAndGetPolicyOrThrow_sameClientDetails_reusesSameProcessorNode() {
     val processorNodeCaptor = argumentCaptor<ProcessorNode>()
-    whenever(
-      chronicle.checkPolicy(any(), anyOrNull(), any(), processorNodeCaptor.capture())
-    ) doReturn Result.success(Unit)
+    doCallRealMethod()
+      .whenever(chronicle)
+      .checkPolicy(any(), anyOrNull(), any(), processorNodeCaptor.capture())
 
     checker.checkAndGetPolicyOrThrow(FOUND_POLICY_READ_REQUEST_METADATA, server, DEFAULT_DETAILS)
     checker.checkAndGetPolicyOrThrow(FOUND_POLICY_WRITE_REQUEST_METADATA, server, DEFAULT_DETAILS)
@@ -158,7 +165,7 @@ class RemotePolicyCheckerImplTest {
   @Test
   fun checkAndGetPolicyOrThrow_chronicleThrows_throws() {
     val exception = PolicyViolation("Boo")
-    whenever(chronicle.checkPolicy(any(), any(), any(), any())) doReturn Result.failure(exception)
+    chronicle.onCheckPolicy = { Result.failure(exception) }
 
     val e =
       assertFailsWith<PolicyViolation> {
@@ -175,6 +182,23 @@ class RemotePolicyCheckerImplTest {
   data class Foo(val name: String)
   object FooReader : ReadConnection
   object FooWriter : WriteConnection
+
+  open class FakeChronicle(var onCheckPolicy: () -> Result<Unit>) : Chronicle {
+    override fun checkPolicy(
+      dataTypeName: String,
+      policy: Policy?,
+      isForReading: Boolean,
+      requester: ProcessorNode
+    ): Result<Unit> = onCheckPolicy()
+
+    override fun getAvailableConnectionTypes(dataTypeClass: KClass<*>): Chronicle.ConnectionTypes =
+      throw NotImplementedError("Not implemented for RemotePolicyCheckerImplTest")
+
+    override fun <T : Connection> getConnection(
+      request: ConnectionRequest<T>
+    ): ConnectionResult<T> =
+      throw NotImplementedError("Not implemented for RemotePolicyCheckerImplTest")
+  }
 
   companion object {
     private const val DTD_TYPE_NAME = "Foo"
