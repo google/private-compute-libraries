@@ -3,7 +3,6 @@ package(default_visibility = ["//visibility:public"])
 java_plugin(
     name = "androidx_room_room_compiler_plugin",
     generates_api = True,
-    neverlink = True,
     processor_class = "androidx.room.RoomProcessor",
     deps = ["@maven//:androidx_room_room_compiler"],
 )
