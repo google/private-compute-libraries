@@ -66,6 +66,7 @@ maven_install(
         "androidx.annotation:annotation:1.4.0",
         "androidx.multidex:multidex:2.0.1",
         "androidx.appcompat:appcompat:1.3.1",
+        "androidx.lifecycle:lifecycle-livedata:2.5.0",
         "androidx.room:room-compiler:2.4.3",
         "androidx.room:room-ktx:2.4.3",
         "androidx.room:room-migration:2.4.3",
