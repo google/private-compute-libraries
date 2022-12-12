@@ -37,6 +37,9 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 @Config(minSdk = Build.VERSION_CODES.R)
 class DataCacheStorageDataRemovalDownstreamListenerTest {
+  private val defaultDataRemovalRequest =
+    DataRemovalRequest.Builder().addLocusId(LocusId("unused"), /* flags = */ 0).build()
+
   private lateinit var dataCacheStorage: DataCacheStorage
 
   @Before
@@ -53,14 +56,11 @@ class DataCacheStorageDataRemovalDownstreamListenerTest {
   fun onDataRemoval_dataIsRemoved() {
     // TODO(b/232848132): Don't just delete everything.
     DataCacheStorageDataRemovalDownstreamListener(dataCacheStorage)
-      .onDataRemoval(DEFAULT_DATA_REMOVAL_REQUEST)
+      .onDataRemoval(defaultDataRemovalRequest)
     assertThat(dataCacheStorage.all(Data::class.java)).isEmpty()
   }
 
   companion object {
-    private val DEFAULT_DATA_REMOVAL_REQUEST =
-      DataRemovalRequest.Builder().addLocusId(LocusId("unused"), /* flags = */ 0).build()
-
     class Data
 
     private fun metadataWithCreatedAtNow() =

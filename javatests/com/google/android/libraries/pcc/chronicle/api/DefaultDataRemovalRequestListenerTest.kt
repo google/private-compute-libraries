@@ -31,6 +31,9 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 @Config(minSdk = Build.VERSION_CODES.R)
 class DefaultDataRemovalRequestListenerTest {
+  private val defaultDataRemovalRequest =
+    DataRemovalRequest.Builder().addLocusId(LocusId("unused"), /* flags = */ 0).build()
+
   private var listener0CallCount = 0
   private var listener1CallCount = 0
   private val deletionListener =
@@ -52,7 +55,7 @@ class DefaultDataRemovalRequestListenerTest {
   fun disablingListener_downstreamListenersAreNotTriggered() {
     flags.config.value = Flags(disableChronicleDataRemovalRequestListener = true)
 
-    deletionListener.onDataRemovalRequest(DEFAULT_DATA_REMOVAL_REQUEST)
+    deletionListener.onDataRemovalRequest(defaultDataRemovalRequest)
 
     assertThat(listener0CallCount).isEqualTo(0)
     assertThat(listener1CallCount).isEqualTo(0)
@@ -60,7 +63,7 @@ class DefaultDataRemovalRequestListenerTest {
 
   @Test
   fun onDataRemovalRequest_downstreamListenersAreTriggered() {
-    deletionListener.onDataRemovalRequest(DEFAULT_DATA_REMOVAL_REQUEST)
+    deletionListener.onDataRemovalRequest(defaultDataRemovalRequest)
 
     assertThat(listener0CallCount).isEqualTo(1)
     assertThat(listener1CallCount).isEqualTo(1)
@@ -68,8 +71,5 @@ class DefaultDataRemovalRequestListenerTest {
 
   companion object {
     private val flags = FakeFlagsReader(Flags())
-
-    private val DEFAULT_DATA_REMOVAL_REQUEST =
-      DataRemovalRequest.Builder().addLocusId(LocusId("unused"), /* flags = */ 0).build()
   }
 }
