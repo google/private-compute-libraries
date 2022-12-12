@@ -70,6 +70,9 @@ class RemoteRouterTest {
         ClientDetails(1337, ClientDetails.IsolationType.DEFAULT_PROCESS)
     }
 
+  private val entities = listOf(RemoteEntity(), RemoteEntity(), RemoteEntity())
+  private val request = RemoteRequest(RemoteRequestMetadata.getDefaultInstance(), entities)
+
   @Before
   fun setUp() {
     scope = CoroutineScope(SupervisorJob())
@@ -110,7 +113,7 @@ class RemoteRouterTest {
     val errorDeferred = CompletableDeferred<RemoteError>()
     val callback = spy(OnErrorCallback(errorDeferred::complete))
 
-    router.serve(REQUEST, callback)
+    router.serve(request, callback)
 
     // Death recipient should've been linked.
     callback.linkedToDeath.await()
@@ -119,7 +122,7 @@ class RemoteRouterTest {
     assertThat(e.metadata.errorType).isEqualTo(Type.UNSUPPORTED)
     assertThat(e)
       .hasMessageThat()
-      .contains("Server not found for request with metadata: ${REQUEST.metadata}")
+      .contains("Server not found for request with metadata: ${request.metadata}")
 
     // Death recipient should've been unlinked.
     callback.unlinkedToDeath.await()
@@ -140,7 +143,7 @@ class RemoteRouterTest {
     val errorDeferred = CompletableDeferred<RemoteError>()
     val callback = spy(OnErrorCallback(errorDeferred::complete))
 
-    router.serve(REQUEST, callback)
+    router.serve(request, callback)
 
     // Death recipient should've been linked.
     callback.linkedToDeath.await()
@@ -169,7 +172,7 @@ class RemoteRouterTest {
     val errorDeferred = CompletableDeferred<RemoteError>()
     val callback = spy(OnErrorCallback(errorDeferred::complete))
 
-    router.serve(REQUEST, callback)
+    router.serve(request, callback)
 
     // Death recipient should've been linked.
     callback.linkedToDeath.await()
@@ -200,7 +203,7 @@ class RemoteRouterTest {
           callback: IResponseCallback,
         ) {
           assertThat(policy).isEqualTo(POLICY)
-          assertThat(input).isEqualTo(ENTITIES)
+          assertThat(input).isEqualTo(entities)
           assertThat(callback).isSameInstanceAs(callback)
           handlerCalled.complete(Unit)
           handlerShouldProceed.await()
@@ -210,7 +213,7 @@ class RemoteRouterTest {
     whenever(policyChecker.checkAndGetPolicyOrThrow(any(), any(), any())).thenReturn(POLICY)
     whenever(handlerFactory.buildServerHandler(any(), any())).thenReturn(handler)
 
-    router.serve(REQUEST, callback)
+    router.serve(request, callback)
 
     // Death recipient should've been linked.
     callback.linkedToDeath.await()
@@ -243,7 +246,7 @@ class RemoteRouterTest {
     whenever(policyChecker.checkAndGetPolicyOrThrow(any(), any(), any())).thenReturn(POLICY)
     whenever(handlerFactory.buildServerHandler(any(), any())).thenReturn(handler)
 
-    router.serve(REQUEST, callback)
+    router.serve(request, callback)
 
     // Death recipient should've been linked.
     callback.linkedToDeath.await()
@@ -283,7 +286,7 @@ class RemoteRouterTest {
     whenever(policyChecker.checkAndGetPolicyOrThrow(any(), any(), any())).thenReturn(POLICY)
     whenever(handlerFactory.buildServerHandler(any(), any())).thenReturn(handler)
 
-    router.serve(REQUEST, callback)
+    router.serve(request, callback)
 
     // Death recipient should've been linked.
     callback.linkedToDeath.await()
@@ -332,7 +335,7 @@ class RemoteRouterTest {
 
     val callback = OnCompleteCallback {}
 
-    router.serve(REQUEST, callback)
+    router.serve(request, callback)
     val deathRecipient = callback.linkedToDeath.await()
     handlerCalled.await()
 
@@ -385,7 +388,5 @@ class RemoteRouterTest {
 
   companion object {
     private val POLICY = policy("MyPolicy", "Testing")
-    private val ENTITIES = listOf(RemoteEntity(), RemoteEntity(), RemoteEntity())
-    private val REQUEST = RemoteRequest(RemoteRequestMetadata.getDefaultInstance(), ENTITIES)
   }
 }
