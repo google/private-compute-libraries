@@ -1,5 +1,4 @@
-load("//tools/build_defs/kotlin:rules.bzl", "kt_android_local_test")
-load("//tools/build_defs/kotlin:rules.bzl", "kt_jvm_library")
+load("//tools/build_defs/kotlin:rules.bzl", "kt_android_local_test", "kt_jvm_library")
 
 ## Libraries
 
