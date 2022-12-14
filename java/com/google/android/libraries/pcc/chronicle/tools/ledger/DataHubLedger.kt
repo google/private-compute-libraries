@@ -116,8 +116,7 @@ object DataHubLedger {
     val dataTypeInfos =
       dtdToPolicies.keys.union(dtdToConnections.keys).map { dtd ->
         val connections =
-          dtdToConnections[dtd]?.mapNotNull { it.simpleName.takeIf { name -> name.isNotEmpty() } }
-            ?: emptyList()
+          dtdToConnections[dtd]?.mapNotNull { it.name.takeIf(String::isNotEmpty) } ?: emptyList()
         val policies = dtdToPolicies[dtd]?.map { it.name } ?: emptyList()
         LedgerDataType(dtd.name, connections, dtdToServers[dtd] ?: emptyList(), policies)
       }
