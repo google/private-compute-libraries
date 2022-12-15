@@ -32,7 +32,7 @@ import org.robolectric.annotation.Config
 @Config(minSdk = Build.VERSION_CODES.R)
 class DefaultDataRemovalRequestListenerTest {
   private val defaultDataRemovalRequest =
-    DataRemovalRequest.Builder().addLocusId(LocusId("unused"), /* flags = */ 0).build()
+    DataRemovalRequest.Builder().addLocusId(LocusId("unused"), /* flags= */ 0).build()
 
   private var listener0CallCount = 0
   private var listener1CallCount = 0
@@ -63,6 +63,8 @@ class DefaultDataRemovalRequestListenerTest {
 
   @Test
   fun onDataRemovalRequest_downstreamListenersAreTriggered() {
+    flags.config.value = Flags(disableChronicleDataRemovalRequestListener = false)
+
     deletionListener.onDataRemovalRequest(defaultDataRemovalRequest)
 
     assertThat(listener0CallCount).isEqualTo(1)
