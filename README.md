@@ -60,3 +60,4 @@ bazel test //...
 
 **Note:** If your machine has a nonstandard default JDK, you may need to add a
 flag to the above commands: `--java_runtime_version=local-openjdk11`
+test
