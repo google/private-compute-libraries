@@ -18,7 +18,7 @@ kt_android_local_test(
         "@maven//:androidx_test_ext_junit",
         "@maven//:com_google_truth_truth",
         "@maven//:com_nhaarman_mockitokotlin2_mockito_kotlin",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
         "@maven//:org_mockito_mockito_core",
     ],
 )
@@ -41,7 +41,7 @@ kt_android_local_test(
         "@maven//:androidx_test_ext_junit",
         "@maven//:com_google_truth_truth",
         "@maven//:com_nhaarman_mockitokotlin2_mockito_kotlin",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
         "@maven//:org_mockito_mockito_core",
     ],
 )

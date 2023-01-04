@@ -24,6 +24,6 @@ kt_android_library(
         "//java/com/google/android/libraries/pcc/chronicle/util:logcat",
         "@maven//:com_google_flogger_flogger",
         "@maven//:org_jetbrains_kotlinx_atomicfu",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
     ],
 )

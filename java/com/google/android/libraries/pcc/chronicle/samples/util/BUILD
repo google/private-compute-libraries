@@ -20,6 +20,6 @@ kt_android_library(
         "//java/com/google/android/libraries/pcc/chronicle/remote/handler",
         "//java/com/google/android/libraries/pcc/chronicle/remote/impl",
         "//java/com/google/android/libraries/pcc/chronicle/util:typed_map",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
     ],
 )

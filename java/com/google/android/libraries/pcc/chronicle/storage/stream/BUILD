@@ -18,6 +18,6 @@ kt_android_library(
         "//java/com/google/android/libraries/pcc/chronicle/api/remote/server",
         "//java/com/google/android/libraries/pcc/chronicle/api/storage",
         "@maven//:com_google_code_findbugs_annotations",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
     ],
 )

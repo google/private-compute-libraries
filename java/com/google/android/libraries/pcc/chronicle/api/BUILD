@@ -144,7 +144,7 @@ kt_android_library(
         "//java/com/google/android/libraries/pcc/chronicle/api/flags",
         "//java/com/google/android/libraries/pcc/chronicle/util:logcat",
         "@maven//:androidx_annotation_annotation",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
         "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_guava",
     ],
 )

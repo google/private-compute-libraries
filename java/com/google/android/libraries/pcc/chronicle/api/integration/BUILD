@@ -26,6 +26,6 @@ kt_android_library(
         "//java/com/google/android/libraries/pcc/chronicle/util:typed_map",
         "@maven//:com_google_guava_guava",
         "@maven//:org_jetbrains_kotlinx_atomicfu",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
     ],
 )

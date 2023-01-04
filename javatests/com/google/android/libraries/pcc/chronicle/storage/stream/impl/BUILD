@@ -10,7 +10,7 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/storage/stream",
         "//java/com/google/android/libraries/pcc/chronicle/storage/stream/impl",
         "@maven//:com_google_truth_truth",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
     ],
 )
 
@@ -22,6 +22,6 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/storage/stream",
         "//java/com/google/android/libraries/pcc/chronicle/storage/stream/impl",
         "@maven//:com_google_truth_truth",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
     ],
 )

@@ -19,6 +19,6 @@ kt_android_library(
         "@maven//:com_google_dagger_hilt_android",
         "@maven//:com_google_flogger_flogger",
         "@maven//:javax_inject_javax_inject",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
     ],
 )

@@ -65,7 +65,7 @@ kt_android_library(
         ":remote_deps",
         ":remote_java",
         "//java/com/google/android/libraries/pcc/chronicle/api/error",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
     ],
 )
 

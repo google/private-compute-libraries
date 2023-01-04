@@ -6,8 +6,8 @@ kt_jvm_library(
     name = "proto_chronicle_data_generator_lib",
     srcs = ["ProtoChronicleDataGenerator.kt"],
     visibility = [
-        "//java/com/google/android/libraries/pcc/chronicle:__subpackages__",
-        "//javatests/com/google/android/libraries/pcc/chronicle:__subpackages__",
+        "//java/com/google/android/libraries/pcc:__subpackages__",
+        "//javatests/com/google/android/libraries/pcc:__subpackages__",
     ],
     deps = [
         "//java/com/google/android/libraries/pcc/chronicle/codegen",

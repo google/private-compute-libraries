@@ -33,6 +33,6 @@ kt_android_library(
         "//third_party/java/proto:empty_java_proto_lite",
         "@maven//:com_google_flogger_flogger",
         "@maven//:org_jetbrains_kotlinx_atomicfu",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
     ],
 )

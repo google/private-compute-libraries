@@ -25,7 +25,7 @@ kt_android_local_test(
         "@maven//:androidx_test_ext_junit",
         "@maven//:com_google_truth_truth",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
     ],
 )
 

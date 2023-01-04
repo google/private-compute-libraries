@@ -9,7 +9,7 @@ kt_android_library(
         "FlagsReader.kt",
     ],
     deps = [
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
     ],
 )
 
@@ -21,6 +21,6 @@ kt_android_library(
     ],
     deps = [
         ":flags",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
     ],
 )
