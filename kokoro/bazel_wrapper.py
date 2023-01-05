@@ -28,7 +28,8 @@ def GetFoundryFlags():
                     os.environ.get('KOKORO_FOUNDRY_BACKEND_ADDRESS'))
   if os.environ.get('KOKORO_FOUNDRY_PROJECT_ID'):
     result.append('--remote_instance_name=' +
-                  os.environ.get('KOKORO_FOUNDRY_PROJECT_ID'))
+                  os.environ.get('KOKORO_FOUNDRY_PROJECT_ID') +
+                  '/instances/default_instance')
 
   if result:
     result.append('--spawn_strategy=remote')
