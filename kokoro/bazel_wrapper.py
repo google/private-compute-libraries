@@ -70,7 +70,6 @@ def GetAuthFlags():
                   os.environ.get('KOKORO_BAZEL_AUTH_CREDENTIAL'))
     result.append('--auth_scope='
                   'https://www.googleapis.com/auth/cloud-source-tools')
-    result.append('--tls_enabled=true')
   return result
 
 
