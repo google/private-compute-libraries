@@ -1,7 +1,5 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 
-exports_files(["module.kt.template"])
-
 bzl_library(
     name = "chronicle_codegen_bzl",
     srcs = ["chronicle_codegen.bzl"],
