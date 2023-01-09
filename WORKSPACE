@@ -1,8 +1,8 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-RULES_KOTLIN_VERSION = "1.6.0"
+RULES_KOTLIN_VERSION = "1.7.1"
 
-RULES_KOTLIN_SHA = "a57591404423a52bd6b18ebba7979e8cd2243534736c5c94d35c89718ea38f94"
+RULES_KOTLIN_SHA = "fd92a98bd8a8f0e1cdcb490b93f5acef1f1727ed992571232d33de42395ca9b3"
 
 RULES_JVM_EXTERNAL_TAG = "4.2"
 
