@@ -41,3 +41,6 @@ timeout: 3600s # 60 mins, just in case.
 substitutions:
   _DOCKER_IMAGE: us-central1-docker.pkg.dev/private-compute-libraries-ci/docker-images/pcl-image:latest
 
+options:
+  machineType: 'e2_standard_8'
+
