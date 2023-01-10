@@ -42,5 +42,5 @@ substitutions:
   _DOCKER_IMAGE: us-central1-docker.pkg.dev/private-compute-libraries-ci/docker-images/pcl-image:latest
 
 options:
-  machineType: 'E2_HIGHCPU_8'
+  machineType: 'E2-HIGHMEM_8'
 
