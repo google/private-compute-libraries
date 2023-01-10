@@ -1,12 +1,12 @@
 load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library", "kt_jvm_library")
 
-package(default_visibility = ["//java/com/google/android/libraries/pcc/chronicle:internal_visibility"])
+package(default_visibility = ["//visibility:public"])
 
 kt_android_library(
     name = "chronicle",
     srcs = ["Chronicle.kt"],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
-    visibility = ["//java/com/google/android/libraries/pcc/chronicle:api_visibility"],
+    visibility = ["//visibility:public"],
     deps = [
         ":api",
         "//java/com/google/android/libraries/pcc/chronicle/api/error:chronicle_error",
@@ -29,7 +29,7 @@ kt_android_library(
         "ProcessorNode.kt",
     ],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
-    visibility = ["//java/com/google/android/libraries/pcc/chronicle:api_visibility"],
+    visibility = ["//visibility:public"],
     exports = [
         ":connection",
         ":data_type_descriptor",
@@ -53,7 +53,7 @@ kt_jvm_library(
         "ManagementStrategy.kt",
         "ProcessorNode.kt",
     ],
-    visibility = ["//java/com/google/android/libraries/pcc/chronicle:api_visibility"],
+    visibility = ["//visibility:public"],
     exports = [
         ":connection_jvm",
         ":data_type_descriptor_jvm",

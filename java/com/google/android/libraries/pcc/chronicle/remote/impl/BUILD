@@ -1,6 +1,6 @@
 load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library")
 
-package(default_visibility = ["//java/com/google/android/libraries/pcc/chronicle:api_visibility"])
+package(default_visibility = ["//visibility:public"])
 
 kt_android_library(
     name = "remote_policy_checker",
@@ -8,7 +8,7 @@ kt_android_library(
         "RemotePolicyCheckerImpl.kt",
     ],
     visibility = [
-        "//java/com/google/android/libraries/pcc/chronicle:integration_visibility",
+        "//visibility:public",
     ],
     deps = [
         "//java/com/google/android/libraries/pcc/chronicle/analysis",

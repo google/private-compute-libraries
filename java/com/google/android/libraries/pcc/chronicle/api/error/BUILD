@@ -1,6 +1,6 @@
 load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library", "kt_jvm_library")
 
-package(default_visibility = ["//java/com/google/android/libraries/pcc/chronicle:api_visibility"])
+package(default_visibility = ["//visibility:public"])
 
 CHRONICLE_ERROR_SRCS = ["ChronicleError.kt"]
 
@@ -9,7 +9,7 @@ kt_android_library(
     name = "chronicle_error",
     srcs = CHRONICLE_ERROR_SRCS,
     # Non-internal components should use :error.
-    visibility = ["//java/com/google/android/libraries/pcc/chronicle:internal_visibility"],
+    visibility = ["//visibility:public"],
 )
 
 kt_jvm_library(
@@ -17,7 +17,7 @@ kt_jvm_library(
     name = "chronicle_error_jvm",
     srcs = CHRONICLE_ERROR_SRCS,
     # Non-internal components should use :error.
-    visibility = ["//java/com/google/android/libraries/pcc/chronicle:internal_visibility"],
+    visibility = ["//visibility:public"],
 )
 
 kt_android_library(

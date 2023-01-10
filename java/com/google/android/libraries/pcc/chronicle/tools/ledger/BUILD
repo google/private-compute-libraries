@@ -1,7 +1,7 @@
 load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 
-package(default_visibility = ["//java/com/google/android/libraries/pcc/chronicle:api_visibility"])
+package(default_visibility = ["//visibility:public"])
 
 bzl_library(
     name = "build_defs_bzl",

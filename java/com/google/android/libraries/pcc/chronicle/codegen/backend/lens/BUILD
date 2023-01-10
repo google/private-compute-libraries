@@ -1,6 +1,6 @@
 load("//tools/build_defs/kotlin:rules.bzl", "kt_jvm_library")
 
-package(default_visibility = ["//java/com/google/android/libraries/pcc/chronicle:internal_visibility"])
+package(default_visibility = ["//visibility:public"])
 
 kt_jvm_library(
     name = "lens",

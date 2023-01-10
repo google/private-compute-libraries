@@ -146,7 +146,7 @@ def chronicle_data_library(
             "@maven//:com_google_dagger_hilt_android",
         ],
         visibility = visibility + [
-            "//java/com/google/android/libraries/pcc/chronicle:api_visibility",
+            "//visibility:public",
         ],
         **kwargs
     )

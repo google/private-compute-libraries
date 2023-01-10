@@ -1,4 +1,4 @@
-package(default_visibility = ["//java/com/google/android/libraries/pcc/chronicle:internal_visibility"])
+package(default_visibility = ["//visibility:public"])
 
 proto_library(
     name = "testdata_proto",

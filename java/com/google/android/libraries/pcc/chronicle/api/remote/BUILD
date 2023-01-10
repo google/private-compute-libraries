@@ -2,7 +2,7 @@ load("@bazel_rules_android//android:rules.bzl", "android_library")
 load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library")
 
 package(default_visibility = [
-    "//java/com/google/android/libraries/pcc/chronicle:integration_visibility",
+    "//visibility:public",
 ])
 
 # This target and remote_java below are a workaround to a bug in the Bazel
