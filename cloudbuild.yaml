@@ -6,32 +6,42 @@ steps:
   waitFor: ['-']
 
 # Build the new Docker image (caching from the pre-built one)
-#- id: 'build-image'
-#  waitFor: ['pull-image']
-#  name: 'gcr.io/cloud-builders/docker'
-#  args: [
-#    'build',
-#    '--network=cloudbuild',
-#    '--cache-from=${_DOCKER_IMAGE}',
-#    '--tag=${_DOCKER_IMAGE}',
-#    '.',
-#  ]
+- id: 'build-image'
+  waitFor: ['pull-image']
+  name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'build',
+    '--network=cloudbuild',
+    '--cache-from=${_DOCKER_IMAGE}',
+    '--tag=${_DOCKER_IMAGE}',
+    '.',
+  ]
 
 # Push updated Docker image to Container Registry.
-#- id: 'push-image'
-#  waitFor: ['build-image']
-#  name: 'gcr.io/cloud-builders/docker'
-#  args: [
-#    'push',
-#    '${_DOCKER_IMAGE}',
-#  ]
+- id: 'push-image'
+  waitFor: ['build-image']
+  name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'push',
+    '${_DOCKER_IMAGE}',
+  ]
 
 # Run presubmit tests.
-- id: 'presubmit'
-  waitFor: ['pull-image'] #['build-image']
+- id: 'build-pcl'
+  waitFor: ['build-image']
   name: '${_DOCKER_IMAGE}'
   entrypoint: 'bash'
-  args: ['./kokoro/build.sh']
+  args: ['bazel build ...']
+  env:
+    - 'REPO_NAME=${REPO_NAME}'
+    - 'COMMIT_SHA=${COMMIT_SHA}'
+
+# Run presubmit tests.
+- id: 'testi-pcl'
+  waitFor: ['build-pcl']
+  name: '${_DOCKER_IMAGE}'
+  entrypoint: 'bash'
+  args: ['bazel build ...']
   env:
     - 'REPO_NAME=${REPO_NAME}'
     - 'COMMIT_SHA=${COMMIT_SHA}'
