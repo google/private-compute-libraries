@@ -16,8 +16,6 @@
 
 # Private Compute Libraries
 
-[![Build Status](https://dl.circleci.com/status-badge/img/gh/google/private-compute-libraries/tree/main.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/google/private-compute-libraries/tree/main)
-
 This repository contains source code for the following libraries, which work
 together under the name "Private Compute Libraries":
 
