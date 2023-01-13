@@ -6,21 +6,11 @@ steps:
   waitFor: ['-']
 
 # Run presubmit tests.
-- id: 'build-pcl'
+- id: 'build-and-test'
   waitFor: ['pull-image']
   name: '${_DOCKER_IMAGE}'
   entrypoint: 'bash'
-  args: ['bazel build ...']
-  env:
-    - 'REPO_NAME=${REPO_NAME}'
-    - 'COMMIT_SHA=${COMMIT_SHA}'
-
-# Run presubmit tests.
-- id: 'test-pcl'
-  waitFor: ['build-pcl']
-  name: '${_DOCKER_IMAGE}'
-  entrypoint: 'bash'
-  args: ['bazel build ...']
+  args: ['./kokoro/build.sh']
   env:
     - 'REPO_NAME=${REPO_NAME}'
     - 'COMMIT_SHA=${COMMIT_SHA}'
