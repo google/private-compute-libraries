@@ -87,16 +87,18 @@ class DescriptorToTypeConverter(private val config: Configuration = Configuratio
     val oneOfs = descriptor.oneofs.toTypeOneOfs()
     val nested = mutableSetOf<Descriptor>()
     val fields =
-      descriptor.fields.filter { !it.isIgnored() }.flatMap {
-        // If the field is part of a oneOf, make it nullable (if nullable support is on)
-        val isNullable =
-          it.name.toChronicleFieldName() in oneOfs.oneOfForField && config.enableNullableSupport
+      descriptor.fields
+        .filter { !it.isIgnored() }
+        .flatMap {
+          // If the field is part of a oneOf, make it nullable (if nullable support is on)
+          val isNullable =
+            it.name.toChronicleFieldName() in oneOfs.oneOfForField && config.enableNullableSupport
 
-        val (fieldEntries, nestedTypes) = it.toFieldEntries(isNullable = isNullable)
+          val (fieldEntries, nestedTypes) = it.toFieldEntries(isNullable = isNullable)
 
-        nested += nestedTypes
-        fieldEntries
-      }
+          nested += nestedTypes
+          fieldEntries
+        }
 
     val result =
       Type(
@@ -218,7 +220,8 @@ class DescriptorToTypeConverter(private val config: Configuration = Configuratio
             jvmLocation = enumType.typeLocation(useJavaPackage = true),
             possibleValues = enumType.values.map { it.name }
           ) to emptySet()
-        FieldDescriptor.Type.MESSAGE, FieldDescriptor.Type.GROUP -> {
+        FieldDescriptor.Type.MESSAGE,
+        FieldDescriptor.Type.GROUP -> {
           FieldCategory.NestedTypeValue(
             location = messageType.typeLocation(config.useJavaPackageInTypeLocations),
             jvmLocation = messageType.typeLocation(useJavaPackage = true)
@@ -236,9 +239,9 @@ class DescriptorToTypeConverter(private val config: Configuration = Configuratio
    */
   private fun FieldDescriptor.mapFieldToFieldCategory(): ConvertedFieldCategory {
     val (keyFieldCategory, keyDescriptors) =
-      this.messageType.findFieldByName("key").toFieldCategory()
+      this.messageType.findFieldByName("key")!!.toFieldCategory()
     val (valueFieldCategory, valueDescriptors) =
-      this.messageType.findFieldByName("value").toFieldCategory()
+      this.messageType.findFieldByName("value")!!.toFieldCategory()
     return ConvertedFieldCategory(
       category = MapValue(MAP_TYPE_LOCATION, keyFieldCategory, valueFieldCategory),
       nestedTypes = keyDescriptors + valueDescriptors
