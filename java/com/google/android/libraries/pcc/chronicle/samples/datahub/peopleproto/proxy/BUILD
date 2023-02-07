@@ -1,7 +1,5 @@
 load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library")
 
-package(default_visibility = ["//java/com/google/android/libraries/pcc/chronicle/samples:sample_visibility"])
-
 kt_android_library(
     name = "proxy",
     srcs = ["PeopleProxy.kt"],
