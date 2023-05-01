@@ -29,15 +29,15 @@ import com.google.android.libraries.pcc.chronicle.api.remote.serialization.Seria
 import com.google.android.libraries.pcc.chronicle.api.storage.EntityMetadata
 import com.google.android.libraries.pcc.chronicle.api.storage.WrappedEntity
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 @RunWith(AndroidJUnit4::class)
 class BaseRemoteClientTest {

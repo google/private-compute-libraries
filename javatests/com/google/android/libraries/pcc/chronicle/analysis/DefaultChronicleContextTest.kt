@@ -30,11 +30,11 @@ import com.google.android.libraries.pcc.chronicle.api.error.ConnectionTypeAmbigu
 import com.google.android.libraries.pcc.chronicle.util.Key
 import com.google.android.libraries.pcc.chronicle.util.MutableTypedMap
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.mock
 import kotlin.test.assertFailsWith
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import org.mockito.kotlin.mock
 
 @RunWith(JUnit4::class)
 class DefaultChronicleContextTest {

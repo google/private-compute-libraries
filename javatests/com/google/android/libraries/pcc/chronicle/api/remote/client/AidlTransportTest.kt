@@ -32,10 +32,6 @@ import com.google.android.libraries.pcc.chronicle.api.remote.RemoteResponseMetad
 import com.google.android.libraries.pcc.chronicle.api.remote.client.ChronicleServiceConnector.State
 import com.google.android.libraries.pcc.chronicle.api.storage.EntityMetadata
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.verify
 import kotlin.test.assertFailsWith
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineStart
@@ -50,6 +46,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.spy
+import org.mockito.kotlin.verify
 
 @RunWith(AndroidJUnit4::class)
 class AidlTransportTest {

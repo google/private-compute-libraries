@@ -55,10 +55,10 @@ import com.google.android.libraries.pcc.chronicle.util.Key
 import com.google.android.libraries.pcc.chronicle.util.MutableTypedMap
 import com.google.android.libraries.pcc.chronicle.util.TypedMap
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.mock
 import java.time.Duration
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
 
 @RunWith(AndroidJUnit4::class)
 class ChroniclePolicyEngineTest {

@@ -46,9 +46,6 @@ import com.google.android.libraries.pcc.chronicle.samples.datahub.peopleproto.Pe
 import com.google.android.libraries.pcc.chronicle.samples.datahub.peopleproto.Person
 import com.google.android.libraries.pcc.chronicle.samples.policy.peopleproto.PEOPLE_PROTO_POLICY
 import com.google.protobuf.Empty
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.verify
 import java.time.Duration
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -61,6 +58,9 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.spy
+import org.mockito.kotlin.verify
 
 @RunWith(AndroidJUnit4::class)
 class ChronicleHelperTest {

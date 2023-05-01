@@ -22,14 +22,14 @@ import com.google.android.libraries.pcc.chronicle.api.ChronicleDeletionListener.
 import com.google.android.libraries.pcc.chronicle.api.PackageDeletionListener.PackageInstallInfo
 import com.google.android.libraries.pcc.chronicle.storage.datacache.DataCacheStorage
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
+import org.mockito.kotlin.whenever
 
 @RunWith(AndroidJUnit4::class)
 class DataCacheStoragePackageDeletionListenerTest {

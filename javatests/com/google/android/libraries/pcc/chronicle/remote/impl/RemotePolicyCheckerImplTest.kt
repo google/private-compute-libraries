@@ -36,20 +36,20 @@ import com.google.android.libraries.pcc.chronicle.api.remote.StreamRequest
 import com.google.android.libraries.pcc.chronicle.api.remote.server.RemoteServer
 import com.google.android.libraries.pcc.chronicle.remote.ClientDetails
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.anyOrNull
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.doCallRealMethod
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.notNull
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.whenever
 import kotlin.reflect.KClass
 import kotlin.test.assertFailsWith
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doCallRealMethod
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.notNull
+import org.mockito.kotlin.spy
+import org.mockito.kotlin.whenever
 
 @RunWith(AndroidJUnit4::class)
 class RemotePolicyCheckerImplTest {

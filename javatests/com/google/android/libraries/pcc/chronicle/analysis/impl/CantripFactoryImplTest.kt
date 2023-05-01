@@ -39,17 +39,17 @@ import com.google.android.libraries.pcc.chronicle.api.policy.StorageMedium
 import com.google.android.libraries.pcc.chronicle.api.policy.UsageType
 import com.google.android.libraries.pcc.chronicle.api.policy.builder.policy
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
 import java.time.Duration
 import kotlin.math.roundToInt
 import kotlin.test.assertFailsWith
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 @RunWith(JUnit4::class)
 class CantripFactoryImplTest {

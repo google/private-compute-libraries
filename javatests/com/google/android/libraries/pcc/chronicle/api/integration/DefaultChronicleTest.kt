@@ -48,16 +48,16 @@ import com.google.android.libraries.pcc.chronicle.api.policy.builder.PolicyCheck
 import com.google.android.libraries.pcc.chronicle.api.policy.builder.PolicyCheckResult
 import com.google.android.libraries.pcc.chronicle.api.policy.builder.policy
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import kotlin.test.assertFailsWith
 import kotlinx.coroutines.flow.update
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.robolectric.shadows.ShadowLog
 
 @RunWith(AndroidJUnit4::class)

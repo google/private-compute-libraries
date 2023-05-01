@@ -26,37 +26,38 @@ import com.google.android.libraries.pcc.chronicle.api.remote.serialization.Seria
 import com.google.android.libraries.pcc.chronicle.api.storage.EntityMetadata
 import com.google.android.libraries.pcc.chronicle.api.storage.WrappedEntity
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.doAnswer
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 @RunWith(AndroidJUnit4::class)
 class DefaultRemoteComputeClientTest {
-  private val transport = mock<Transport> {
-    on { serve(any()) } doReturn emptyFlow()
-  }
-  private val serializer = mock<Serializer<Foo>> {
-    on { deserialize<Foo>(any()) } doAnswer {
-      val arg = it.arguments[0] as RemoteEntity
-      WrappedEntity(EntityMetadata.getDefaultInstance(), Foo(arg.metadata.id))
+  private val transport = mock<Transport> { on { serve(any()) } doReturn emptyFlow() }
+  private val serializer =
+    mock<Serializer<Foo>> {
+      on { deserialize<Foo>(any()) } doAnswer
+        {
+          val arg = it.arguments[0] as RemoteEntity
+          WrappedEntity(EntityMetadata.getDefaultInstance(), Foo(arg.metadata.id))
+        }
     }
-  }
-  private val parameterSerializer = mock<Serializer<Parameter>> {
-    on { serialize<Parameter>(any()) } doAnswer {
-      @Suppress("UNCHECKED_CAST")
-      val arg = it.arguments[0] as WrappedEntity<Parameter>
-      RemoteEntity(EntityMetadata.newBuilder().setId(arg.entity.name).build())
+  private val parameterSerializer =
+    mock<Serializer<Parameter>> {
+      on { serialize<Parameter>(any()) } doAnswer
+        {
+          @Suppress("UNCHECKED_CAST") val arg = it.arguments[0] as WrappedEntity<Parameter>
+          RemoteEntity(EntityMetadata.newBuilder().setId(arg.entity.name).build())
+        }
     }
-  }
 
   @Test
   fun run_buildsRemoteRequest(): Unit = runBlocking {
@@ -64,18 +65,22 @@ class DefaultRemoteComputeClientTest {
     val captor = argumentCaptor<RemoteRequest>()
     whenever(transport.serve(captor.capture())) doReturn emptyFlow()
 
-    client.run(
-      policy = null,
-      methodId = ComputeRequest.MethodId.MOIRAI_CLASSIFY,
-      parameters = RemoteComputeClient.Parameters(
-        dataTypeName = "Parameter",
-        serializer = parameterSerializer,
-        arguments = listOf(
-          WrappedEntity(EntityMetadata.getDefaultInstance(), Parameter("one")),
-          WrappedEntity(EntityMetadata.getDefaultInstance(), Parameter("two")),
-        )
+    client
+      .run(
+        policy = null,
+        methodId = ComputeRequest.MethodId.MOIRAI_CLASSIFY,
+        parameters =
+          RemoteComputeClient.Parameters(
+            dataTypeName = "Parameter",
+            serializer = parameterSerializer,
+            arguments =
+              listOf(
+                WrappedEntity(EntityMetadata.getDefaultInstance(), Parameter("one")),
+                WrappedEntity(EntityMetadata.getDefaultInstance(), Parameter("two")),
+              )
+          )
       )
-    ).toList()
+      .toList()
 
     val request = captor.firstValue
 
@@ -91,32 +96,39 @@ class DefaultRemoteComputeClientTest {
   @Test
   fun run_deserializesAndUnPaginatesResults(): Unit = runBlocking {
     val client = DefaultRemoteComputeClient("Foo", serializer, transport)
-    val remoteResponses = listOf(
-      RemoteResponse(
-        RemoteResponseMetadata.getDefaultInstance(),
-        entities = listOf(
-          RemoteEntity(EntityMetadata.newBuilder().setId("one").build()),
-          RemoteEntity(EntityMetadata.newBuilder().setId("two").build()),
-        )
-      ),
-      RemoteResponse(
-        RemoteResponseMetadata.getDefaultInstance(),
-        entities = listOf(
-          RemoteEntity(EntityMetadata.newBuilder().setId("three").build()),
+    val remoteResponses =
+      listOf(
+        RemoteResponse(
+          RemoteResponseMetadata.getDefaultInstance(),
+          entities =
+            listOf(
+              RemoteEntity(EntityMetadata.newBuilder().setId("one").build()),
+              RemoteEntity(EntityMetadata.newBuilder().setId("two").build()),
+            )
+        ),
+        RemoteResponse(
+          RemoteResponseMetadata.getDefaultInstance(),
+          entities =
+            listOf(
+              RemoteEntity(EntityMetadata.newBuilder().setId("three").build()),
+            )
         )
       )
-    )
     whenever(transport.serve(any())) doReturn remoteResponses.asFlow()
 
-    val result = client.run(
-      policy = null,
-      methodId = ComputeRequest.MethodId.MOIRAI_CLASSIFY,
-      parameters = RemoteComputeClient.Parameters(
-        dataTypeName = "Parameter",
-        serializer = parameterSerializer,
-        arguments = emptyList()
-      )
-    ).toList()
+    val result =
+      client
+        .run(
+          policy = null,
+          methodId = ComputeRequest.MethodId.MOIRAI_CLASSIFY,
+          parameters =
+            RemoteComputeClient.Parameters(
+              dataTypeName = "Parameter",
+              serializer = parameterSerializer,
+              arguments = emptyList()
+            )
+        )
+        .toList()
 
     assertThat(result)
       .containsExactly(
