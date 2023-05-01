@@ -21,11 +21,11 @@ import com.google.android.libraries.pcc.chronicle.api.storage.EntityMetadata
 import com.google.android.libraries.pcc.chronicle.api.storage.WrappedEntity
 import com.google.android.libraries.pcc.chronicle.api.storage.toInstant
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
 import java.time.Instant
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 @RunWith(AndroidJUnit4::class)
 class DataCacheReaderTest {

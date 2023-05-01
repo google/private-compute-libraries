@@ -20,13 +20,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.libraries.pcc.chronicle.api.storage.EntityMetadata
 import com.google.android.libraries.pcc.chronicle.api.storage.WrappedEntity
 import com.google.android.libraries.pcc.chronicle.util.TimeSource
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import java.time.Instant
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 @RunWith(AndroidJUnit4::class)
 class DataCacheWriterTest {

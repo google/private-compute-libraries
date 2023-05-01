@@ -24,26 +24,23 @@ import com.google.android.libraries.pcc.chronicle.api.remote.serialization.Seria
 import com.google.android.libraries.pcc.chronicle.api.storage.EntityMetadata
 import com.google.android.libraries.pcc.chronicle.api.storage.WrappedEntity
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.doAnswer
-import com.nhaarman.mockitokotlin2.mock
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.mock
 
 @RunWith(AndroidJUnit4::class)
 class ExtensionsTest {
   @Test
   fun sendEachPage_callsCallbackOnData_forEachPage() = runBlocking {
     val captor = argumentCaptor<RemoteResponse>()
-    val callback = mock<IResponseCallback.Stub> { on { onData(captor.capture()) } doAnswer { } }
+    val callback = mock<IResponseCallback.Stub> { on { onData(captor.capture()) } doAnswer {} }
     val pages =
-      listOf(
-        listOf(Foo("sundar").wrap()),
-        listOf(Foo("larry").wrap(), Foo("sergey").wrap())
-      )
+      listOf(listOf(Foo("sundar").wrap()), listOf(Foo("larry").wrap(), Foo("sergey").wrap()))
     val pageFlow = pages.asFlow()
 
     pageFlow.sendEachPage(callback, FooSerializer).collect()

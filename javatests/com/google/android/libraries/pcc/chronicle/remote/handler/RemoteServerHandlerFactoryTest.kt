@@ -29,10 +29,10 @@ import com.google.android.libraries.pcc.chronicle.api.remote.server.RemoteServer
 import com.google.android.libraries.pcc.chronicle.api.remote.server.RemoteStoreServer
 import com.google.android.libraries.pcc.chronicle.api.remote.server.RemoteStreamServer
 import com.google.common.truth.Truth.assertThat
-import com.nhaarman.mockitokotlin2.mock
 import kotlin.test.assertFailsWith
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
 
 @RunWith(AndroidJUnit4::class)
 class RemoteServerHandlerFactoryTest {
@@ -41,9 +41,8 @@ class RemoteServerHandlerFactoryTest {
   @Test
   fun buildServerHandler_store() {
     val server = mock<RemoteStoreServer<*>>()
-    val metadata = RemoteRequestMetadata.newBuilder()
-      .setStore(StoreRequest.getDefaultInstance())
-      .build()
+    val metadata =
+      RemoteRequestMetadata.newBuilder().setStore(StoreRequest.getDefaultInstance()).build()
 
     val result = impl.buildServerHandler(metadata, server)
 
@@ -53,9 +52,8 @@ class RemoteServerHandlerFactoryTest {
   @Test
   fun buildServerHandler_stream() {
     val server = mock<RemoteStreamServer<*>>()
-    val metadata = RemoteRequestMetadata.newBuilder()
-      .setStream(StreamRequest.getDefaultInstance())
-      .build()
+    val metadata =
+      RemoteRequestMetadata.newBuilder().setStream(StreamRequest.getDefaultInstance()).build()
 
     val result = impl.buildServerHandler(metadata, server)
 
@@ -65,9 +63,8 @@ class RemoteServerHandlerFactoryTest {
   @Test
   fun buildServerHandler_compute() {
     val server = mock<RemoteComputeServer<*, *>>()
-    val metadata = RemoteRequestMetadata.newBuilder()
-      .setCompute(ComputeRequest.getDefaultInstance())
-      .build()
+    val metadata =
+      RemoteRequestMetadata.newBuilder().setCompute(ComputeRequest.getDefaultInstance()).build()
 
     val result = impl.buildServerHandler(metadata, server)
 
@@ -77,9 +74,8 @@ class RemoteServerHandlerFactoryTest {
   @Test
   fun buildServerHandler_computeButServerTypeIsNot_throws() {
     val server = mock<RemoteStreamServer<*>>()
-    val metadata = RemoteRequestMetadata.newBuilder()
-      .setCompute(ComputeRequest.getDefaultInstance())
-      .build()
+    val metadata =
+      RemoteRequestMetadata.newBuilder().setCompute(ComputeRequest.getDefaultInstance()).build()
 
     val e = assertFailsWith<RemoteError> { impl.buildServerHandler(metadata, server) }
 
