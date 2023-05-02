@@ -93,7 +93,7 @@ maven_install(
         "com.google.protobuf:protobuf-javalite:3.21.7",
         "com.google.testing.compile:compile-testing:0.19",
         "com.google.truth:truth:1.0",
-        "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0",
+        "org.mockito.kotlin:mockito-kotlin:4.1.0",
         "com.squareup:javapoet:1.13.0",
         "com.squareup:kotlinpoet:1.12.0",
         "javax.inject:javax.inject:1",
