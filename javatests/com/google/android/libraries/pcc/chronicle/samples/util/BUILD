@@ -19,8 +19,8 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/util:typed_map",
         "//third_party/java/proto:empty_java_proto_lite",
         "@maven//:androidx_test_monitor",
-        "@maven//:com_nhaarman_mockitokotlin2_mockito_kotlin",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
         "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
+        "@maven//:org_mockito_kotlin_mockito_kotlin",
     ],
 )

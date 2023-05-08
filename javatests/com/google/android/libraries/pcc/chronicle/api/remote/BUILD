@@ -115,8 +115,8 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/util:timesource",
         "//javatests/com/google/android/libraries/pcc/chronicle/api/remote/testutil",
         "@maven//:com_google_truth_truth",
-        "@maven//:com_nhaarman_mockitokotlin2_mockito_kotlin",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
         "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
+        "@maven//:org_mockito_kotlin_mockito_kotlin",
     ],
 )

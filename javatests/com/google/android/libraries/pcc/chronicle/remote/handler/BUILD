@@ -10,9 +10,9 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api/storage",
         "//java/com/google/android/libraries/pcc/chronicle/remote/handler",
         "@maven//:com_google_truth_truth",
-        "@maven//:com_nhaarman_mockitokotlin2_mockito_kotlin",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
         "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
+        "@maven//:org_mockito_kotlin_mockito_kotlin",
         "@maven//:org_mockito_mockito_core",
     ],
 )
@@ -29,9 +29,9 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api/storage",
         "//java/com/google/android/libraries/pcc/chronicle/remote/handler",
         "@maven//:com_google_truth_truth",
-        "@maven//:com_nhaarman_mockitokotlin2_mockito_kotlin",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
         "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
+        "@maven//:org_mockito_kotlin_mockito_kotlin",
         "@maven//:org_mockito_mockito_core",
     ],
 )
@@ -49,9 +49,9 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/remote/handler",
         "//third_party/java/proto:empty_java_proto_lite",
         "@maven//:com_google_truth_truth",
-        "@maven//:com_nhaarman_mockitokotlin2_mockito_kotlin",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
         "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
+        "@maven//:org_mockito_kotlin_mockito_kotlin",
         "@maven//:org_mockito_mockito_core",
     ],
 )
@@ -69,9 +69,9 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api/storage",
         "//java/com/google/android/libraries/pcc/chronicle/remote/handler",
         "@maven//:com_google_truth_truth",
-        "@maven//:com_nhaarman_mockitokotlin2_mockito_kotlin",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
         "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
+        "@maven//:org_mockito_kotlin_mockito_kotlin",
         "@maven//:org_mockito_mockito_core",
     ],
 )
@@ -85,8 +85,8 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api/remote/server",
         "//java/com/google/android/libraries/pcc/chronicle/remote/handler",
         "@maven//:com_google_truth_truth",
-        "@maven//:com_nhaarman_mockitokotlin2_mockito_kotlin",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
+        "@maven//:org_mockito_kotlin_mockito_kotlin",
         "@maven//:org_mockito_mockito_core",
     ],
 )

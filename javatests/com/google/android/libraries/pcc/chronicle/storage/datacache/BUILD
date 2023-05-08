@@ -16,7 +16,7 @@ SRCS_FOR_ROBOLECTRIC_KT_TEST = glob(
         "//java/com/google/android/libraries/pcc/chronicle/storage/datacache",
         "//java/com/google/android/libraries/pcc/chronicle/util:timesource",
         "@maven//:com_google_truth_truth",
-        "@maven//:com_nhaarman_mockitokotlin2_mockito_kotlin",
+        "@maven//:org_mockito_kotlin_mockito_kotlin",
         "@maven//:org_mockito_mockito_core",
     ],
 ) for src_for_robolectric_kt_test in SRCS_FOR_ROBOLECTRIC_KT_TEST]

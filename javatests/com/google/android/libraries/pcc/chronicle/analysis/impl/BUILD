@@ -20,8 +20,8 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api/policy/builder",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy/capabilities",
         "@maven//:com_google_truth_truth",
-        "@maven//:com_nhaarman_mockitokotlin2_mockito_kotlin",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
+        "@maven//:org_mockito_kotlin_mockito_kotlin",
         "@maven//:org_mockito_mockito_core",
     ],
 )
@@ -46,8 +46,8 @@ kt_android_local_test(
         "@maven//:com_google_dagger_dagger",
         "@maven//:com_google_dagger_hilt_android",
         "@maven//:com_google_truth_truth",
-        "@maven//:com_nhaarman_mockitokotlin2_mockito_kotlin",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
+        "@maven//:org_mockito_kotlin_mockito_kotlin",
         "@maven//:org_mockito_mockito_core",
     ],
 )
@@ -71,8 +71,8 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/util:typed_map",
         "//javatests/com/google/android/libraries/pcc/chronicle/analysis/impl/testdata",
         "@maven//:com_google_truth_truth",
-        "@maven//:com_nhaarman_mockitokotlin2_mockito_kotlin",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
+        "@maven//:org_mockito_kotlin_mockito_kotlin",
         "@maven//:org_mockito_mockito_core",
     ],
 )
@@ -97,8 +97,8 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api/policy/builder",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy/capabilities",
         "@maven//:com_google_truth_truth",
-        "@maven//:com_nhaarman_mockitokotlin2_mockito_kotlin",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
+        "@maven//:org_mockito_kotlin_mockito_kotlin",
         "@maven//:org_mockito_mockito_core",
     ],
 )

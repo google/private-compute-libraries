@@ -62,10 +62,10 @@ kt_android_local_test(
         "@maven//:androidx_test_ext_junit",
         "@maven//:com_google_guava_guava",
         "@maven//:com_google_truth_truth",
-        "@maven//:com_nhaarman_mockitokotlin2_mockito_kotlin",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
         "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
         "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_test",
+        "@maven//:org_mockito_kotlin_mockito_kotlin",
         "@maven//:org_mockito_mockito_core",
     ],
 )
