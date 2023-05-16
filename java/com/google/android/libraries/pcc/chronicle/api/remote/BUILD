@@ -1,5 +1,4 @@
 load("@bazel_rules_android//android:rules.bzl", "android_library")
-load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library")
 
 package(default_visibility = [
     "//visibility:public",
@@ -11,7 +10,7 @@ package(default_visibility = [
 # https://github.com/bazelbuild/rules_kotlin/issues/228
 # If that bug is ever resolved within bazel's kt_android_library, we can merge
 # :remote_deps and :remote_java into :remote.
-kt_android_library(
+android_library(
     name = "remote_deps",
     srcs = [
         "RemoteError.kt",
@@ -48,7 +47,7 @@ android_library(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "remote",
     srcs = [
         "IResponseCallbackExt.kt",
@@ -69,7 +68,7 @@ kt_android_library(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "remote_entity",
     srcs = ["RemoteEntity.kt"],
     deps = [

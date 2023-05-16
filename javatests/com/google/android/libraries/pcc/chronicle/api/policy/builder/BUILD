@@ -1,6 +1,7 @@
-load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library", "kt_android_local_test")
+load("@bazel_rules_android//android:rules.bzl", "android_library")
+load("//tools/build_defs/kotlin:rules.bzl", "kt_android_local_test")
 
-kt_android_library(
+android_library(
     name = "base",
     testonly = True,
     srcs = [

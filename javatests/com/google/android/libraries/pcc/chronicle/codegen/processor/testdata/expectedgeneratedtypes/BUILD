@@ -1,9 +1,6 @@
-load(
-    "//tools/build_defs/kotlin:rules.bzl",
-    "kt_android_library",
-)
+load("@bazel_rules_android//android:rules.bzl", "android_library")
 
-kt_android_library(
+android_library(
     name = "expected_generated_java_types",
     testonly = True,
     srcs = glob(["*Java*.kt"]),
@@ -16,7 +13,7 @@ kt_android_library(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "expected_generated_kotlin_types",
     testonly = True,
     srcs = glob(["*Kotlin*.kt"]),

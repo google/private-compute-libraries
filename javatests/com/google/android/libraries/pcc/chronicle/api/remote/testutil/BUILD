@@ -1,4 +1,4 @@
-load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library")
+load("@bazel_rules_android//android:rules.bzl", "android_library")
 
 package(default_visibility = ["//javatests/com/google/android/libraries/pcc/chronicle/api/remote:__pkg__"])
 
@@ -16,7 +16,7 @@ java_lite_proto_library(
     deps = [":testutil_proto"],
 )
 
-kt_android_library(
+android_library(
     name = "testutil",
     testonly = True,
     srcs = glob(["*.kt"]),

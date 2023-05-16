@@ -1,4 +1,4 @@
-load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library")
+load("@bazel_rules_android//android:rules.bzl", "android_library")
 
 package(
     default_visibility = [
@@ -6,7 +6,7 @@ package(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "testdata",
     testonly = True,
     srcs = glob(["*.kt"]),

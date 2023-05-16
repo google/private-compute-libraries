@@ -1,4 +1,4 @@
-load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library")
+load("@bazel_rules_android//android:rules.bzl", "android_library")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 
 package(default_visibility = ["//visibility:public"])
@@ -10,7 +10,7 @@ bzl_library(
     deps = ["//tools/build_defs/kotlin:rules_bzl"],
 )
 
-kt_android_library(
+android_library(
     name = "ledger",
     testonly = True,
     srcs = glob(["*.kt"]),

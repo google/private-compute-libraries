@@ -1,6 +1,6 @@
+load("@bazel_rules_android//android:rules.bzl", "android_library")
 load(
     "//tools/build_defs/kotlin:rules.bzl",
-    "kt_android_library",
     "kt_jvm_library",
 )
 
@@ -14,7 +14,7 @@ kt_jvm_library(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "source_classes_android",
     testonly = True,
     srcs = ["SourceClasses.kt"],
@@ -31,7 +31,7 @@ kt_jvm_library(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "combo_classes_android",
     testonly = True,
     srcs = ["ComboClasses.kt"],
