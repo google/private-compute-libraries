@@ -1,10 +1,11 @@
-load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library", "kt_jvm_library")
+load("@bazel_rules_android//android:rules.bzl", "android_library")
+load("//tools/build_defs/kotlin:rules.bzl", "kt_jvm_library")
 
 package(default_visibility = ["//visibility:public"])
 
 CHRONICLE_ERROR_SRCS = ["ChronicleError.kt"]
 
-kt_android_library(
+android_library(
     # split out to avoid circular imports.
     name = "chronicle_error",
     srcs = CHRONICLE_ERROR_SRCS,
@@ -20,7 +21,7 @@ kt_jvm_library(
     visibility = ["//visibility:public"],
 )
 
-kt_android_library(
+android_library(
     name = "error",
     srcs = glob(
         ["*.kt"],

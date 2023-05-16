@@ -1,4 +1,5 @@
-load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library", "kt_jvm_library")
+load("@bazel_rules_android//android:rules.bzl", "android_library")
+load("//tools/build_defs/kotlin:rules.bzl", "kt_jvm_library")
 
 package(default_visibility = [
     "//visibility:public",
@@ -17,7 +18,7 @@ kt_jvm_library(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "default_policy_conformance_check",
     srcs = ["DefaultPolicyConformanceCheck.kt"],
     deps = [

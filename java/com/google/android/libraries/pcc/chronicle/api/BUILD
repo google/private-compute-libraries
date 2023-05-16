@@ -1,8 +1,9 @@
-load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library", "kt_jvm_library")
+load("@bazel_rules_android//android:rules.bzl", "android_library")
+load("//tools/build_defs/kotlin:rules.bzl", "kt_jvm_library")
 
 package(default_visibility = ["//visibility:public"])
 
-kt_android_library(
+android_library(
     name = "chronicle",
     srcs = ["Chronicle.kt"],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
@@ -15,7 +16,7 @@ kt_android_library(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "api",
     srcs = [
         "ChronicleAnalyticsClient.kt",
@@ -65,7 +66,7 @@ kt_jvm_library(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "connection",
     srcs = [
         "Connection.kt",
@@ -89,7 +90,7 @@ kt_jvm_library(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "data_type_descriptor",
     srcs = [
         "DataTypeDescriptor.kt",
@@ -111,7 +112,7 @@ kt_jvm_library(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "chronicle_dsl_annotation",
     srcs = ["ChronicleDsl.kt"],
 )
@@ -121,7 +122,7 @@ kt_jvm_library(
     srcs = ["ChronicleDsl.kt"],
 )
 
-kt_android_library(
+android_library(
     name = "sandbox_processor_node",
     srcs = ["SandboxProcessorNode.kt"],
     visibility = [
@@ -135,7 +136,7 @@ kt_android_library(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "default_data_removal_request_listener",
     srcs = ["DefaultDataRemovalRequestListener.kt"],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",

@@ -1,9 +1,9 @@
-load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library", "kt_jvm_library")
+load("//tools/build_defs/kotlin:rules.bzl", "kt_jvm_library")
 load("@bazel_rules_android//android:rules.bzl", "android_library")
 
 package(default_visibility = ["//visibility:public"])
 
-kt_android_library(
+android_library(
     name = "chronicle_data_annotation_android",
     srcs = [
         "ChronicleData.kt",
@@ -23,7 +23,7 @@ kt_jvm_library(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "chronicle_connection_annotation_android",
     srcs = [
         "ChronicleConnection.kt",
@@ -41,7 +41,7 @@ kt_jvm_library(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "data_cache_store_annotation_android",
     srcs = [
         "DataCacheStore.kt",
