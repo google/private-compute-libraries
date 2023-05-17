@@ -1,10 +1,10 @@
-load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library")
+load("@bazel_rules_android//android:rules.bzl", "android_library")
 
 package(default_visibility = [
     "//visibility:public",
 ])
 
-kt_android_library(
+android_library(
     name = "management_info",
     srcs = [
         "ManagementInfo.kt",
@@ -14,7 +14,7 @@ kt_android_library(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "blobstore",
     srcs = [
         "BlobStore.kt",
@@ -26,7 +26,7 @@ kt_android_library(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "manager",
     srcs = [
         "BlobStoreManager.kt",
@@ -41,7 +41,7 @@ kt_android_library(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "core",
     srcs = [
         "BlobStoreCore.kt",
@@ -63,7 +63,7 @@ kt_android_library(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "provider",
     srcs = [
         "BlobStoreProvider.kt",

@@ -1,6 +1,6 @@
-load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library")
+load("@bazel_rules_android//android:rules.bzl", "android_library")
 
-kt_android_library(
+android_library(
     name = "proxy",
     srcs = ["PeopleProxy.kt"],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",

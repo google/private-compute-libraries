@@ -1,8 +1,8 @@
-load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library")
+load("@bazel_rules_android//android:rules.bzl", "android_library")
 
 package(default_visibility = ["//java/com/google/android/libraries/pcc/chronicle/samples:sample_visibility"])
 
-kt_android_library(
+android_library(
     name = "peopleproto",
     srcs = [
         "PeopleProtoPolicy.kt",

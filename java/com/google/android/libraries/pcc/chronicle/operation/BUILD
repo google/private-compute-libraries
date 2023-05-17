@@ -1,8 +1,8 @@
-load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library")
+load("@bazel_rules_android//android:rules.bzl", "android_library")
 
 package(default_visibility = ["//visibility:public"])
 
-kt_android_library(
+android_library(
     name = "empties",
     srcs = ["Empties.kt"],
     deps = [
@@ -10,7 +10,7 @@ kt_android_library(
     ],
 )
 
-kt_android_library(
+android_library(
     name = "test_ops",
     testonly = True,
     srcs = ["TestOps.kt"],
