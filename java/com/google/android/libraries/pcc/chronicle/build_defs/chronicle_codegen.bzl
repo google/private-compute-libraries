@@ -1,7 +1,7 @@
 """Rules to helper with Chronicle code generation"""
 
 load(":proto.bzl", "chronicle_data_proto_library_helper")
-load("//tools/build_defs/kotlin:rules.bzl", "kt_android_library")
+load("@bazel_rules_android//android:rules.bzl", "android_library")
 
 def chronicle_data_proto_library(
         name,
@@ -76,7 +76,7 @@ def chronicle_data_proto_library(
     )
 
     # Put together a final library for use.
-    kt_android_library(
+    android_library(
         name = name,
         srcs = [":%s_srcs" % name],
         testonly = testonly,
@@ -101,7 +101,7 @@ def chronicle_data_library(
         visibility = [],
         **kwargs):
     """
-    Generates kt_android_library from classes annotated with @ChronicleData or @ChronicleConnection.
+    Generates android_library from classes annotated with @ChronicleData or @ChronicleConnection.
 
     Args:
         name: The name of the rule that will be generated.
@@ -132,7 +132,7 @@ def chronicle_data_library(
     if "manifest" not in kwargs:
         kwargs["manifest"] = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml"
 
-    kt_android_library(
+    android_library(
         name = name,
         srcs = all_srcs,
         deps = deps + [
