@@ -40,7 +40,7 @@ internal fun JsonReader.readObject(fieldVisitor: JsonReader.(name: String) -> Un
   endObject()
 }
 
-internal inline fun <reified T> JsonReader.readObject(gson: Gson): T {
+internal inline fun <reified T : Any> JsonReader.readObject(gson: Gson): T? {
   return gson.getAdapter(T::class.java).read(this)
 }
 
@@ -53,7 +53,7 @@ internal fun JsonReader.readList(itemVisitor: JsonReader.() -> Unit) {
   endArray()
 }
 
-internal inline fun <reified T> JsonReader.readList(gson: Gson): List<T> {
+internal inline fun <reified T : Any> JsonReader.readList(gson: Gson): List<T> {
   val result = mutableListOf<T>()
   readList { result += gson.getAdapter(T::class.java).read(this) }
   return result
@@ -65,7 +65,7 @@ internal fun JsonReader.readStringList(): List<String> {
   return result
 }
 
-internal inline fun <reified T> JsonReader.readSet(gson: Gson): Set<T> {
+internal inline fun <reified T : Any> JsonReader.readSet(gson: Gson): Set<T> {
   val result = mutableSetOf<T>()
   beginArray()
   while (true) {
@@ -85,5 +85,5 @@ internal fun <T> JsonReader.readMap(valueAdapter: TypeAdapter<T>): Map<String, T
   return result
 }
 
-internal inline fun <reified T> JsonReader.readMap(gson: Gson): Map<String, T> =
+internal inline fun <reified T : Any> JsonReader.readMap(gson: Gson): Map<String, T> =
   readMap(gson.getAdapter(T::class.java))

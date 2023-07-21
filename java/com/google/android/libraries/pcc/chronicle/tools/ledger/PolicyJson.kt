@@ -73,7 +73,8 @@ internal object PolicyJson {
           "targets" -> targets = reader.readList(DataHubLedger.gson)
           "configs" -> configs = reader.readMap(DataHubLedger.gson)
           "annotations" -> annotations = reader.readList(DataHubLedger.gson)
-          "allowedContext" -> allowedContext = reader.readObject(DataHubLedger.gson)
+          // TODO: go/nullness-caller-updates-lsc - Avoid dereferencing possibly null value?
+          "allowedContext" -> allowedContext = reader.readObject(DataHubLedger.gson)!!
         }
       }
       return Policy(name, egressType, description, targets, configs, annotations, allowedContext)
