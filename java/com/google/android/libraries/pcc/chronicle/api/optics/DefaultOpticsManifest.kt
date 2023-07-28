@@ -35,10 +35,10 @@ class DefaultOpticsManifest(
   @Suppress("UNCHECKED_CAST") // Because we do actually check.
   override fun <S, T, A, B> composeTraversal(
     accessPath: OpticalAccessPath,
-    sourceEntityType: Class<out S>,
-    targetEntityType: Class<out T>,
-    sourceFieldType: Class<out A>,
-    targetFieldType: Class<out B>
+    sourceEntityType: Class<out S & Any>,
+    targetEntityType: Class<out T & Any>,
+    sourceFieldType: Class<out A & Any>,
+    targetFieldType: Class<out B & Any>
   ): Traversal<S, T, A, B> {
     val result = composeTraversalInner(accessPath, isTail = true) as Traversal<S, T, A, B>
 

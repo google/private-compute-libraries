@@ -30,10 +30,10 @@ typealias ListMapping<A, B> = Traversal<List<A>, List<B>, A, B>
 abstract class Traversal<S, T, A, B>(
   val sourceAccessPath: OpticalAccessPath,
   val targetAccessPath: OpticalAccessPath,
-  val sourceEntityType: Class<out S>,
-  val targetEntityType: Class<out T>,
-  val sourceFieldType: Class<out A>,
-  val targetFieldType: Class<out B>
+  val sourceEntityType: Class<out S & Any>,
+  val targetEntityType: Class<out T & Any>,
+  val sourceFieldType: Class<out A & Any>,
+  val targetFieldType: Class<out B & Any>
 ) {
   /** Whether or not the [Traversal] is actually monomorphic. */
   val isMonomorphic: Boolean =
