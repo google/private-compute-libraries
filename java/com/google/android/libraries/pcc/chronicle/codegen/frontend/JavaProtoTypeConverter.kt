@@ -51,7 +51,8 @@ class JavaProtoTypeConverter(
     return try {
       val builderMethod = getDeclaredMethod("newBuilder")
       val builder = builderMethod.invoke(null)
-      val descriptorMethod = builder.javaClass.getDeclaredMethod("getDescriptorForType")
+      // TODO: go/nullness-caller-updates-lsc - Avoid dereferencing possibly null value?
+      val descriptorMethod = builder!!.javaClass.getDeclaredMethod("getDescriptorForType")
 
       // Return the descriptor on the new instance.
       descriptorMethod.invoke(builder) as Descriptors.Descriptor

@@ -34,11 +34,10 @@ import java.time.Instant
  * further conversion into arcs manifests
  *
  * There are two variants of a type here: a [Type] and a [FieldCategory].
- *
  * * A [Type] is something that will need to be reflected as a `schema` in an Arcs manifest.
  * * A [FieldCategory] represents the Arcs type of a particular field in a schema. It may be a
- * nested [Type], but it might also be a type that has a representation in the Arcs type
- * (primitives, Lists, etc).
+ *   nested [Type], but it might also be a type that has a representation in the Arcs type
+ *   (primitives, Lists, etc).
  */
 class ClassToTypeConverter(
   val config: Configuration = Configuration(),
@@ -92,7 +91,8 @@ class ClassToTypeConverter(
     TypeLocation(
       simpleName,
       enclosingNames(),
-      `package`.name,
+      // TODO: go/nullness-caller-updates-lsc - Avoid dereferencing possibly null value?
+      `package`!!.name,
     )
 
   /**
@@ -137,35 +137,49 @@ class ClassToTypeConverter(
    */
   private fun JavaType.mapToFieldCategory(): FieldCategory {
     return when (val rawType = getRawType()) {
-      String::class.java, String::class.javaObjectType -> FieldCategory.StringValue
-      Byte::class.java, Byte::class.javaObjectType, Byte::class.javaPrimitiveType ->
-        FieldCategory.ByteValue
-      Short::class.java, Short::class.javaObjectType, Short::class.javaPrimitiveType ->
-        FieldCategory.ShortValue
-      Char::class.java, Char::class.javaObjectType, Char::class.javaPrimitiveType ->
-        FieldCategory.CharValue
-      Integer::class.java, Integer::class.javaObjectType, Integer::class.javaPrimitiveType ->
-        FieldCategory.IntValue
-      Long::class.java, Long::class.javaObjectType, Long::class.javaPrimitiveType ->
-        FieldCategory.LongValue
-      Float::class.java, Float::class.javaObjectType, Float::class.javaPrimitiveType ->
-        FieldCategory.FloatValue
-      Double::class.java, Double::class.javaObjectType, Double::class.javaPrimitiveType ->
-        FieldCategory.DoubleValue
-      Boolean::class.java, Boolean::class.javaObjectType, Boolean::class.javaPrimitiveType ->
-        FieldCategory.BooleanValue
-      List::class.java, List::class.javaObjectType ->
+      String::class.java,
+      String::class.javaObjectType -> FieldCategory.StringValue
+      Byte::class.java,
+      Byte::class.javaObjectType,
+      Byte::class.javaPrimitiveType -> FieldCategory.ByteValue
+      Short::class.java,
+      Short::class.javaObjectType,
+      Short::class.javaPrimitiveType -> FieldCategory.ShortValue
+      Char::class.java,
+      Char::class.javaObjectType,
+      Char::class.javaPrimitiveType -> FieldCategory.CharValue
+      Integer::class.java,
+      Integer::class.javaObjectType,
+      Integer::class.javaPrimitiveType -> FieldCategory.IntValue
+      Long::class.java,
+      Long::class.javaObjectType,
+      Long::class.javaPrimitiveType -> FieldCategory.LongValue
+      Float::class.java,
+      Float::class.javaObjectType,
+      Float::class.javaPrimitiveType -> FieldCategory.FloatValue
+      Double::class.java,
+      Double::class.javaObjectType,
+      Double::class.javaPrimitiveType -> FieldCategory.DoubleValue
+      Boolean::class.java,
+      Boolean::class.javaObjectType,
+      Boolean::class.javaPrimitiveType -> FieldCategory.BooleanValue
+      List::class.java,
+      List::class.javaObjectType ->
         FieldCategory.ListValue(LIST_TYPE_LOCATION, getParameterFieldCategory(0))
-      Set::class.java, Set::class.javaObjectType ->
+      Set::class.java,
+      Set::class.javaObjectType ->
         FieldCategory.SetValue(SET_TYPE_LOCATION, getParameterFieldCategory(0))
-      Map::class.java, Map::class.javaObjectType ->
+      Map::class.java,
+      Map::class.javaObjectType ->
         FieldCategory.MapValue(
           location = MAP_TYPE_LOCATION,
           keyType = getParameterFieldCategory(0),
           valueType = getParameterFieldCategory(1)
         )
-      Instant::class.java, Instant::class.javaObjectType -> FieldCategory.InstantValue
-      Duration::class.java, Duration::class.javaObjectType -> FieldCategory.DurationValue
+      Instant::class.java,
+      Instant::class.javaObjectType -> FieldCategory.InstantValue
+      Duration::class.java,
+      Duration::class.javaObjectType -> FieldCategory.DurationValue
       ByteArray::class.java -> FieldCategory.ByteArrayValue
       is Class<*> -> {
         if (rawType.isEnum) {
