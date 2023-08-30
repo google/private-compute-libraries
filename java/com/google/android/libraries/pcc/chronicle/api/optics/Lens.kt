@@ -28,7 +28,6 @@ import com.google.android.libraries.pcc.chronicle.api.operation.Action
  *
  * The names of these type parameters follow from conventions set-out in other functional
  * programming libraries and literature.
- *
  * * [S]
  * - the source type, or: what is being examined.
  * * [T]
@@ -49,10 +48,10 @@ import com.google.android.libraries.pcc.chronicle.api.operation.Action
 abstract class Lens<S, T, A, B>(
   val sourceAccessPath: OpticalAccessPath,
   val targetAccessPath: OpticalAccessPath,
-  val sourceEntityType: Class<out S>,
-  val targetEntityType: Class<out T>,
-  val sourceFieldType: Class<out A>,
-  val targetFieldType: Class<out B>
+  val sourceEntityType: Class<out S & Any>,
+  val targetEntityType: Class<out T & Any>,
+  val sourceFieldType: Class<out A & Any>,
+  val targetFieldType: Class<out B & Any>
 ) {
   /** Whether or not the [Lens] is actually monomorphic. */
   val isMonomorphic: Boolean =
@@ -96,7 +95,6 @@ abstract class Lens<S, T, A, B>(
    * In functional parliance: "lift a function from [A] to [B] to the context of [S] and [T]"
    *
    * For example:
-   *
    * ```
    * data class Foo(val x: Int)
    * data class Bar(val y: Boolean)
@@ -116,7 +114,6 @@ abstract class Lens<S, T, A, B>(
    * entity [T].
    *
    * For example:
-   *
    * ```
    * data class Foo(val x: Int)
    * data class Bar(val y: Boolean)
@@ -146,7 +143,6 @@ abstract class Lens<S, T, A, B>(
    * [targetEntityType] with [lift] or [lift].
    *
    * For example:
-   *
    * ```kotlin
    * // A lens which lets us get or set a person's pet.
    * val personPetLens: Lens<Person, Person, Pet, Pet>
@@ -175,6 +171,7 @@ abstract class Lens<S, T, A, B>(
         targetFieldType = other.targetFieldType
       ) {
       override fun get(entity: S): NewA = other.get(this@Lens.get(entity) as AIn)
+
       override fun set(entity: S, newValue: NewB): T =
         this@Lens.set(
           entity = entity,
@@ -214,12 +211,14 @@ abstract class Lens<S, T, A, B>(
         Lens<Entity, Entity, Focus, Focus>(
           sourceAccessPath = focusAccessPath,
           targetAccessPath = focusAccessPath,
-          sourceEntityType = Entity::class.java,
-          targetEntityType = Entity::class.java,
-          sourceFieldType = Focus::class.java,
-          targetFieldType = Focus::class.java
+          // TODO: go/jetbrains-issue/KT-51188 - Remove casts once there is a better way.
+          sourceEntityType = Entity::class.java as Class<Entity & Any>,
+          targetEntityType = Entity::class.java as Class<Entity & Any>,
+          sourceFieldType = Focus::class.java as Class<Focus & Any>,
+          targetFieldType = Focus::class.java as Class<Focus & Any>
         ) {
         override fun get(entity: Entity): Focus = getter(entity)
+
         override fun set(entity: Entity, newValue: Focus): Entity = setter(entity, newValue)
       }
     }
@@ -235,12 +234,14 @@ abstract class Lens<S, T, A, B>(
         Lens<S, T, A, B>(
           sourceAccessPath = sourceAccessPath,
           targetAccessPath = targetAccessPath,
-          sourceEntityType = S::class.java,
-          targetEntityType = T::class.java,
-          sourceFieldType = A::class.java,
-          targetFieldType = B::class.java
+          // TODO: go/jetbrains-issue/KT-51188 - Remove casts once there is a better way.
+          sourceEntityType = S::class.java as Class<S & Any>,
+          targetEntityType = T::class.java as Class<T & Any>,
+          sourceFieldType = A::class.java as Class<A & Any>,
+          targetFieldType = B::class.java as Class<B & Any>
         ) {
         override fun get(entity: S): A = getter(entity)
+
         override fun set(entity: S, newValue: B): T = setter(entity, newValue)
       }
     }

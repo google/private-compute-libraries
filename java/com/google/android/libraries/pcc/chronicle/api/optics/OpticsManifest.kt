@@ -28,7 +28,8 @@ interface OpticsManifest {
    * sufficient optics to compose a satisfactory result - an exception will be thrown).
    *
    * TODO(b/204939436): Consider making an API like this (or something nicer) - possibly as
-   * extension funs.
+   *   extension funs.
+   *
    * ```
    * optics[AppOps::class]["appOps"]["lastAccessTimeMs"]
    * optics[AppOps::class]["appOps.lastAccessTimeMs"]
@@ -36,10 +37,10 @@ interface OpticsManifest {
    */
   fun <S, T, A, B> composeTraversal(
     accessPath: OpticalAccessPath,
-    sourceEntityType: Class<out S>,
-    targetEntityType: Class<out T>,
-    sourceFieldType: Class<out A>,
-    targetFieldType: Class<out B>,
+    sourceEntityType: Class<out S & Any>,
+    targetEntityType: Class<out T & Any>,
+    sourceFieldType: Class<out A & Any>,
+    targetFieldType: Class<out B & Any>,
   ): Traversal<S, T, A, B>
 }
 
@@ -52,7 +53,14 @@ interface OpticsManifest {
 inline fun <reified S, reified T, reified A, reified B> OpticsManifest.composePoly(
   accessPath: OpticalAccessPath
 ): Traversal<S, T, A, B> {
-  return composeTraversal(accessPath, S::class.java, T::class.java, A::class.java, B::class.java)
+  return composeTraversal(
+    accessPath,
+    // TODO: go/jetbrains-issue/KT-51188 - Remove casts once there is a better way.
+    S::class.java as Class<S & Any>,
+    T::class.java as Class<T & Any>,
+    A::class.java as Class<A & Any>,
+    B::class.java as Class<B & Any>
+  )
 }
 
 /**
@@ -64,5 +72,12 @@ inline fun <reified S, reified T, reified A, reified B> OpticsManifest.composePo
 inline fun <reified S, reified A> OpticsManifest.composeMono(
   accessPath: OpticalAccessPath
 ): Traversal<S, S, A, A> {
-  return composeTraversal(accessPath, S::class.java, S::class.java, A::class.java, A::class.java)
+  return composeTraversal(
+    accessPath,
+    // TODO: go/jetbrains-issue/KT-51188 - Remove casts once there is a better way.
+    S::class.java as Class<S & Any>,
+    S::class.java as Class<S & Any>,
+    A::class.java as Class<A & Any>,
+    A::class.java as Class<A & Any>
+  )
 }
