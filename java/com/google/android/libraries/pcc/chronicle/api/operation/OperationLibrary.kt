@@ -26,8 +26,8 @@ interface OperationLibrary {
    */
   fun <Input, Output> findOperation(
     name: String,
-    inputType: Class<in Input>,
-    outputType: Class<out Output>,
+    inputType: Class<in Input & Any>,
+    outputType: Class<out Output & Any>,
   ): Operation<in Input, out Output>?
 }
 
@@ -36,4 +36,5 @@ interface OperationLibrary {
  * is found.
  */
 inline fun <reified T> OperationLibrary.findOperation(name: String): Operation<in T, out T>? =
-  findOperation(name, T::class.java, T::class.java)
+  // TODO: KT-51188 - Remove cast once there is a better way.
+  findOperation(name, T::class.java, T::class.java as Class<T & Any>)

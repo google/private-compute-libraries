@@ -79,8 +79,9 @@ class CantripFactoryImplTest {
 
   private val operations =
     mock<OperationLibrary> {
-      on { findOperation(eq("round"), eq(Float::class.java), eq(Float::class.java)) } doReturn
-        (Operation.create("round") { Action.Update(it.roundToInt().toFloat()) })
+      on {
+        findOperation<Float, Float>(eq("round"), eq(Float::class.java), eq(Float::class.java))
+      } doReturn (Operation.create("round") { Action.Update(it.roundToInt().toFloat()) })
       on {
         findOperation(eq("notGonnaFindMe"), eq(Float::class.java), eq(Float::class.java))
       } doReturn (null)

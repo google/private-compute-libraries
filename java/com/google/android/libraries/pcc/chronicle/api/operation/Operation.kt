@@ -28,8 +28,8 @@ package com.google.android.libraries.pcc.chronicle.api.operation
  */
 abstract class Operation<A, B>(
   val name: String,
-  val inputType: Class<out A>,
-  val outputType: Class<out B>,
+  val inputType: Class<out A & Any>,
+  val outputType: Class<out B & Any>,
 ) : (A) -> Action<out B> {
   /**
    * Calculates an [Action] of type [B] from the input [value]. This is the body of the operation.
@@ -66,7 +66,9 @@ abstract class Operation<A, B>(
       name: String,
       crossinline block: (value: A) -> Action<Nothing>?,
     ): Operation<A, Nothing> {
-      return object : Operation<A, Nothing>(name, A::class.java, Nothing::class.java) {
+      return object :
+        // TODO: KT-51188 - Remove cast once there is a better way.
+        Operation<A, Nothing>(name, A::class.java as Class<A & Any>, Nothing::class.java) {
         override fun invoke(value: A): Action<out Nothing> {
           @Suppress("UNCHECKED_CAST") // It's a no-op when the cast occurs, so nothing is awry.
           return block(value) ?: Action.Update(value) as Action<out Nothing>
@@ -79,7 +81,9 @@ abstract class Operation<A, B>(
       name: String,
       crossinline block: (value: A) -> Action<out A>,
     ): Operation<A, A> {
-      return object : Operation<A, A>(name, A::class.java, A::class.java) {
+      return object :
+        // TODO: KT-51188 - Remove cast once there is a better way.
+        Operation<A, A>(name, A::class.java as Class<A & Any>, A::class.java as Class<A & Any>) {
         override fun invoke(value: A): Action<out A> = block(value)
       }
     }
@@ -95,7 +99,9 @@ abstract class Operation<A, B>(
       name: String,
       crossinline block: (value: A) -> Action<out B>,
     ): Operation<A, B> {
-      return object : Operation<A, B>(name, A::class.java, B::class.java) {
+      return object :
+        // TODO: KT-51188 - Remove cast once there is a better way.
+        Operation<A, B>(name, A::class.java as Class<A & Any>, B::class.java as Class<B & Any>) {
         override fun invoke(value: A): Action<out B> = block(value)
       }
     }

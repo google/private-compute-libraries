@@ -30,8 +30,8 @@ class DefaultOperationLibrary(operations: Set<Operation<*, *>>) : OperationLibra
   @Suppress("UNCHECKED_CAST") // It is checked, using inClass/outClass.
   override fun <Input, Output> findOperation(
     name: String,
-    inputType: Class<in Input>,
-    outputType: Class<out Output>,
+    inputType: Class<in Input & Any>,
+    outputType: Class<out Output & Any>,
   ): Operation<in Input, out Output>? {
     val byName = operationsByName[name] ?: return null
 

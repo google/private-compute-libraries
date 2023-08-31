@@ -33,7 +33,12 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
   override val registeredDataTypes: Set<Class<*>>
     get() = entityStore.value.keys
 
-  override fun <T> registerDataType(cls: Class<T>, maxSize: Int, onDisk: Boolean, ttl: Duration) {
+  override fun <T> registerDataType(
+    cls: Class<T & Any>,
+    maxSize: Int,
+    onDisk: Boolean,
+    ttl: Duration
+  ) {
     entityStore.update { currentMap ->
       val currentCache = storeForClass(cls)
       currentCache?.resize(maxSize)
@@ -47,16 +52,16 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
     logger.d("[%s] registerDataType : %s", className, cls.name)
   }
 
-  override fun <T> unregisterDataType(cls: Class<T>) {
+  override fun <T> unregisterDataType(cls: Class<T & Any>) {
     removeAll(cls)
     entityStore.update { it - cls }
     logger.d("[%s] unregisterDataType : %s", className, cls.name)
   }
 
-  override fun <T> size(cls: Class<T>): Int = all(cls).size
+  override fun <T> size(cls: Class<T & Any>): Int = all(cls).size
 
-  override fun <T> get(cls: Class<T>, id: String): WrappedEntity<T>? {
-    val dataCacheWrapper = dataCacheWrapperForClass(cls) ?: return null
+  override fun <T> get(cls: Class<T & Any>, id: String): WrappedEntity<T>? {
+    val dataCacheWrapper = dataCacheWrapperForClass<T>(cls) ?: return null
     val lookupEntityWrapper = dataCacheWrapper.cache.get(id) ?: return null
     val ttl = dataCacheWrapper.config.ttl
     if (lookupEntityWrapper.isExpired(ttl)) {
@@ -65,28 +70,28 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
     return lookupEntityWrapper
   }
 
-  override fun <T> put(cls: Class<out T>, entity: WrappedEntity<T>): Boolean {
-    val entityCache = storeForClass(cls) ?: return false
+  override fun <T> put(cls: Class<out T & Any>, entity: WrappedEntity<T>): Boolean {
+    val entityCache = storeForClass<T>(cls) ?: return false
     entityCache.put(entity.metadata.id, entity)
     return true
   }
 
-  override fun <T> remove(cls: Class<T>, id: String): WrappedEntity<T>? =
-    storeForClass(cls)?.remove(id)
+  override fun <T> remove(cls: Class<out T & Any>, id: String): WrappedEntity<T>? =
+    storeForClass<T>(cls)?.remove(id)
 
-  override fun <T> all(cls: Class<T>): List<WrappedEntity<T>> {
-    val dataCacheWrapper = dataCacheWrapperForClass(cls) ?: return emptyList()
+  override fun <T> all(cls: Class<T & Any>): List<WrappedEntity<T>> {
+    val dataCacheWrapper = dataCacheWrapperForClass<T>(cls) ?: return emptyList()
     val ttl = dataCacheWrapper.config.ttl
     return dataCacheWrapper.cache.snapshot().values.filterNot { it.isExpired(ttl) }
   }
 
-  override fun <T> allAsMap(cls: Class<T>): Map<String, WrappedEntity<T>> {
-    val dataCacheWrapper = dataCacheWrapperForClass(cls) ?: return emptyMap()
+  override fun <T> allAsMap(cls: Class<T & Any>): Map<String, WrappedEntity<T>> {
+    val dataCacheWrapper = dataCacheWrapperForClass<T>(cls) ?: return emptyMap()
     val ttl = dataCacheWrapper.config.ttl
     return dataCacheWrapper.cache.snapshot().filterNot { it.value.isExpired(ttl) }
   }
 
-  override fun <T> removeAll(cls: Class<T>) {
+  override fun <T> removeAll(cls: Class<T & Any>) {
     storeForClass(cls)?.evictAll()
   }
 
@@ -109,7 +114,7 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
       .sum()
   }
 
-  override fun <T> purgeEntitiesForPackage(cls: Class<T>, packageName: String): Int {
+  override fun <T> purgeEntitiesForPackage(cls: Class<T & Any>, packageName: String): Int {
     logger.d("[%s]: purging %s entities for package removal.", className, cls.name)
     return dataCacheWrapperForClass(cls)?.purgeEntitiesWhere {
       packageName in it.metadata.associatedPackageNamesList
@@ -128,8 +133,8 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
       .sum()
   }
 
-  override fun <T> purgeEntitiesWhere(
-    cls: Class<T>,
+  override fun purgeEntitiesWhere(
+    cls: Class<out Any>,
     predicate: (WrappedEntity<*>) -> Boolean
   ): Int = dataCacheWrapperForClass(cls)?.purgeEntitiesWhere(predicate) ?: 0
 
@@ -154,11 +159,11 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
   }
 
   @Suppress("UNCHECKED_CAST")
-  private fun <T> storeForClass(cls: Class<out T>): LruCache<String, WrappedEntity<T>>? =
-    dataCacheWrapperForClass(cls)?.cache as? LruCache<String, WrappedEntity<T>>
+  private fun <T> storeForClass(cls: Class<out T & Any>): LruCache<String, WrappedEntity<T>>? =
+    dataCacheWrapperForClass<T>(cls)?.cache as? LruCache<String, WrappedEntity<T>>
 
   @Suppress("UNCHECKED_CAST")
-  private fun <T> dataCacheWrapperForClass(cls: Class<T>): DataCacheWrapper<T>? {
+  private fun <T> dataCacheWrapperForClass(cls: Class<out T & Any>): DataCacheWrapper<T>? {
     val result = entityStore.value[cls] as? DataCacheWrapper<T>
     if (result == null) {
       logger.d("[%s] no store registered for %s.", className, cls)
