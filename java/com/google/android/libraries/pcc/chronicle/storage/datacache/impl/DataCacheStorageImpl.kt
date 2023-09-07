@@ -33,12 +33,7 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
   override val registeredDataTypes: Set<Class<*>>
     get() = entityStore.value.keys
 
-  override fun <T> registerDataType(
-    cls: Class<T & Any>,
-    maxSize: Int,
-    onDisk: Boolean,
-    ttl: Duration
-  ) {
+  override fun registerDataType(cls: Class<*>, maxSize: Int, onDisk: Boolean, ttl: Duration) {
     entityStore.update { currentMap ->
       val currentCache = storeForClass(cls)
       currentCache?.resize(maxSize)
@@ -52,7 +47,7 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
     logger.d("[%s] registerDataType : %s", className, cls.name)
   }
 
-  override fun <T> unregisterDataType(cls: Class<T & Any>) {
+  override fun unregisterDataType(cls: Class<*>) {
     removeAll(cls)
     entityStore.update { it - cls }
     logger.d("[%s] unregisterDataType : %s", className, cls.name)
@@ -91,7 +86,7 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
     return dataCacheWrapper.cache.snapshot().filterNot { it.value.isExpired(ttl) }
   }
 
-  override fun <T> removeAll(cls: Class<T & Any>) {
+  override fun removeAll(cls: Class<*>) {
     storeForClass(cls)?.evictAll()
   }
 
@@ -114,7 +109,7 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
       .sum()
   }
 
-  override fun <T> purgeEntitiesForPackage(cls: Class<T & Any>, packageName: String): Int {
+  override fun purgeEntitiesForPackage(cls: Class<*>, packageName: String): Int {
     logger.d("[%s]: purging %s entities for package removal.", className, cls.name)
     return dataCacheWrapperForClass(cls)?.purgeEntitiesWhere {
       packageName in it.metadata.associatedPackageNamesList

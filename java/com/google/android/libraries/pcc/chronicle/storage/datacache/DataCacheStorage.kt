@@ -33,15 +33,10 @@ interface DataCacheStorage {
    * Registers a data type with the storage with storage configuration parameters. The data store
    * will only respond queries to the registered data types.
    */
-  fun <T> registerDataType(
-    cls: Class<T & Any>,
-    maxSize: Int,
-    onDisk: Boolean = false,
-    ttl: Duration
-  )
+  fun registerDataType(cls: Class<*>, maxSize: Int, onDisk: Boolean = false, ttl: Duration)
 
   /** Unregister a data type and remove all stored instances form the storage. */
-  fun <T> unregisterDataType(cls: Class<T & Any>)
+  fun unregisterDataType(cls: Class<*>)
 
   /** Returns the number of instances with type [T] in the storage. */
   fun <T> size(cls: Class<T & Any>): Int
@@ -74,7 +69,7 @@ interface DataCacheStorage {
   fun <T> allAsMap(cls: Class<T & Any>): Map<String, WrappedEntity<T>>
 
   /** Removes all stored instances for a specific data type [T]. */
-  fun <T> removeAll(cls: Class<T & Any>)
+  fun removeAll(cls: Class<*>)
 
   /** Purges all expired instances for each data type [T]. */
   fun purgeExpiredEntities()
@@ -91,7 +86,7 @@ interface DataCacheStorage {
    *
    * @return The number of entities deleted
    */
-  fun <T> purgeEntitiesForPackage(cls: Class<T & Any>, packageName: String): Int
+  fun purgeEntitiesForPackage(cls: Class<*>, packageName: String): Int
 
   /**
    * Remove all stored entities whose package name is not part of the provided set.
