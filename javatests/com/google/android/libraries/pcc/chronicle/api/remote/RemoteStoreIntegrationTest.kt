@@ -77,7 +77,6 @@ import kotlin.reflect.KClass
 import kotlin.test.assertFailsWith
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -242,7 +241,7 @@ class RemoteStoreIntegrationTest {
     assertThat(serverReadConnection.getMessages()).containsExactly(messageA, messageB)
   }
 
-  @OptIn(ExperimentalCoroutinesApi::class) // for CoroutineStart.ATOMIC
+  // for CoroutineStart.ATOMIC
   @Test
   fun clientAndServerBothPublishAndSubscribe(): Unit = runBlocking {
     // Initialize our "processes".
@@ -485,9 +484,9 @@ class RemoteStoreIntegrationTest {
    *
    * @param policies set of [Policies][Policy] to support in the [chronicle] instance.
    * @param enableStoreServer use the internal [simpleProtoMessageStoreServer] when serving
-   * connections.
+   *   connections.
    * @param enableStreamServer use the internal [simpleProtoMessageStreamServer] when serving
-   * connections.
+   *   connections.
    */
   class ServerProcess(
     private val policies: Set<Policy>,
