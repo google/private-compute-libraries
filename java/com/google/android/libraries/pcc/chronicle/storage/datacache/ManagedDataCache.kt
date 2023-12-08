@@ -34,18 +34,16 @@ constructor(
   private val ttl: Duration,
   override val dataTypeDescriptor: DataTypeDescriptor,
 ) : TypedDataCache<T>, TypedManagedStore<T> {
-  override val managementStrategy: ManagementStrategy
+  override val managementStrategy: ManagementStrategy =
+    ManagementStrategy.Stored(
+      encrypted = false,
+      media = StorageMedia.MEMORY,
+      ttl = ttl,
+      deletionTriggers = setOf(DeletionTrigger(Trigger.PACKAGE_UNINSTALLED, "packageName"))
+    )
 
   init {
     cache.registerDataType(entityClass, maxSize = maxSize, ttl = ttl)
-    @Suppress("LeakingThis")
-    managementStrategy =
-      ManagementStrategy.Stored(
-        encrypted = false,
-        media = StorageMedia.MEMORY,
-        ttl = ttl,
-        deletionTriggers = setOf(DeletionTrigger(Trigger.PACKAGE_UNINSTALLED, "packageName"))
-      )
   }
 
   override fun size(): Int = cache.size(entityClass)
