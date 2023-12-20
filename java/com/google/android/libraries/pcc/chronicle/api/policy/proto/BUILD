@@ -1,4 +1,3 @@
-load("//third_party/bazel_rules/rules_python/python:proto.bzl", "py_proto_library")
 load("//tools/build_defs/kotlin:rules.bzl", "kt_jvm_library")
 
 package(default_visibility = ["//visibility:public"])
