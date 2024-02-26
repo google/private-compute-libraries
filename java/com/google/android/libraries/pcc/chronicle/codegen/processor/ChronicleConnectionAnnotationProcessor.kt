@@ -26,6 +26,7 @@ import com.google.errorprone.annotations.CheckReturnValue
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.asTypeName
+import javax.annotation.processing.Processor
 import javax.annotation.processing.RoundEnvironment
 import javax.lang.model.element.AnnotationMirror
 import javax.lang.model.element.AnnotationValue
@@ -45,7 +46,7 @@ import javax.lang.model.type.TypeMirror
  * containing implementations for each Connection class annotated with [ChronicleConnection], and a
  * `TypeNameConnectionProvider` class.
  */
-@AutoService(ChronicleConnectionAnnotationProcessor::class)
+@AutoService(Processor::class)
 class ChronicleConnectionAnnotationProcessor : AnnotationProcessor() {
   private val connectionTypeMirror: TypeMirror by lazy {
     processingEnv.elementUtils.getTypeElement(CONNECTION_CLASS_PATH).asType()
@@ -93,6 +94,7 @@ class ChronicleConnectionAnnotationProcessor : AnnotationProcessor() {
     init {
       element.validateConnection()
     }
+
     val dataClass = element.validateAndExtractDataClass()
     val generateConnectionProviderCode: Boolean =
       element.getAnnotation(ChronicleConnection::class.java).generateConnectionProvider
@@ -116,7 +118,7 @@ class ChronicleConnectionAnnotationProcessor : AnnotationProcessor() {
           Triple(
             entry.key,
             readers.map { it.element.asType() },
-            writers.map { it.element.asType() }
+            writers.map { it.element.asType() },
           )
         }
   }
@@ -203,7 +205,7 @@ class ChronicleConnectionAnnotationProcessor : AnnotationProcessor() {
         ConnectionProviderTypeProvider(
           dataClass.asType().asTypeName(),
           readers.map { it.asTypeName() },
-          writers.map { it.asTypeName() }
+          writers.map { it.asTypeName() },
         )
       dataClass.generateConnectionProviderFile(connectionProvider).writeTo(processingEnv.filer)
     }
