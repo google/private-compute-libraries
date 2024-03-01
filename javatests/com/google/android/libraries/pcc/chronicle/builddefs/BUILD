@@ -1,8 +1,8 @@
-load("//tools/build_defs/kotlin:rules.bzl", "kt_android_local_test")
 load(
     "//java/com/google/android/libraries/pcc/chronicle/build_defs:chronicle_codegen.bzl",
     "chronicle_data_proto_library",
 )
+load("//tools/build_defs/kotlin:rules.bzl", "kt_android_local_test")
 
 chronicle_data_proto_library(
     name = "proto_data",
