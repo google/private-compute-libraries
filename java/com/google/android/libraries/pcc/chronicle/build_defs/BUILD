@@ -6,6 +6,8 @@ bzl_library(
     visibility = ["//visibility:private"],
     deps = [
         ":proto_bzl",
+        "//third_party/bazel_rules/rules_java/java:core_rules",
+        "//tools/build_defs/android:bzl",
         "//tools/build_defs/kotlin:rules_bzl",
     ],
 )

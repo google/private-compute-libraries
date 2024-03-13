@@ -1,5 +1,6 @@
 """Rules to helper with Chronicle code generation"""
 
+load("//third_party/bazel_rules/rules_java/java:java_binary.bzl", "java_binary")
 load("@bazel_rules_android//android:rules.bzl", "android_library")
 load(":proto.bzl", "chronicle_data_proto_library_helper")
 
@@ -58,7 +59,7 @@ def chronicle_data_proto_library(
     # generation binary. Provide the full java proto library as a runtime
     # dependency to the binary so that it can use Class.forName(..) to fetch
     # the generated proto class for inspection.
-    native.java_binary(
+    java_binary(
         name = generator_name,
         main_class = "com.google.android.libraries.pcc.chronicle.codegen.tool.ProtoChronicleDataGenerator",
         runtime_deps = [
