@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-syntax = "proto3";
+edition = "2023";
 
 package arcs;
 
 import "third_party/java/arcs/annotation.proto";
 import "third_party/java/arcs/policy.proto";
 
+option features.field_presence = IMPLICIT;
 option java_package = "arcs.core.data.proto";
 option java_multiple_files = true;
 
@@ -57,6 +58,7 @@ message HandleProto {
   repeated string tags = 4;
   TypeProto type = 5;
   string storage_key = 7;
+
   // Only present for fate = JOIN handles.
   repeated string associated_handles = 8;
   repeated AnnotationProto annotations = 9;
@@ -73,8 +75,10 @@ message ParticleProto {
 message HandleConnectionProto {
   // Refers to envelope.particle_specs.connections.name
   string name = 1;
+
   // Refers to envelope.recipe.handles.name
   string handle = 2;
+
   // The type of the handle connection instance.
   TypeProto type = 3;
 }
@@ -85,10 +89,13 @@ message ParticleSpecProto {
   // Identifies a particle spec in an envelope.
   string name = 1;
   repeated HandleConnectionSpecProto connections = 2;
+
   // Location of the implementation.
   string location = 3;
+
   // Conjunction of all claims.
   repeated ClaimProto claims = 4;
+
   // Conjunction of all checks.
   repeated CheckProto checks = 5;
   repeated AnnotationProto annotations = 7;
@@ -108,6 +115,7 @@ message HandleConnectionSpecProto {
     WRITES_QUERY = 6;
     READS_WRITES_QUERY = 7;
   }
+
   // Identifies a connection in a particle spec.
   string name = 1;
   Direction direction = 2;
@@ -129,8 +137,10 @@ message TypeProto {
     ListTypeProto list = 9;
     NullableTypeProto nullable = 13;
   }
+
   RefinementExpressionProto refinement = 11;
   repeated AnnotationProto annotations = 12;
+
   reserved 10;
 }
 
@@ -232,17 +242,23 @@ message RefinementExpressionProto {
   oneof expression {
     // E.g. "age > 18"
     BinaryExpressionProto binary = 1;
+
     // E.g. "-duration"
     UnaryExpressionProto unary = 2;
+
     // Name of a schema field.
     string field = 3;
+
     // Value to be substituted at query time.
     // String value identifies a query argument in a refinement.
     string query_argument = 4;
+
     // E.g. 18
     double number = 5;
+
     // E.g. true
     bool boolean = 6;
+
     // E.g. "Sydney"
     string text = 7;
   }
@@ -268,6 +284,7 @@ message AccessPathProto {
     string particle_spec = 1;
     string handle_connection = 2;
   }
+
   oneof root {
     HandleRoot handle = 4;
     string store_id = 5;
@@ -278,6 +295,7 @@ message AccessPathProto {
       string field = 1;
     }
   }
+
   repeated Selector selectors = 3;
 
   reserved 1, 2;
@@ -289,17 +307,21 @@ message InformationFlowLabelProto {
       Predicate conjunct0 = 1;
       Predicate conjunct1 = 2;
     }
+
     message Or {
       Predicate disjunct0 = 1;
       Predicate disjunct1 = 2;
     }
+
     message Not {
       Predicate predicate = 1;
     }
+
     message Implies {
       Predicate antecedent = 1;
       Predicate consequent = 2;
     }
+
     oneof predicate {
       InformationFlowLabelProto label = 1;
       And and = 2;
@@ -338,7 +360,6 @@ message CheckProto {
 
 message PolicyConstraintsProto {
   PolicyProto policy = 1;
-
   InformationFlowLabelProto.Predicate egress_check = 2;
 
   message SelectorClaim {
@@ -353,6 +374,7 @@ message PolicyConstraintsProto {
     // Selector claims (Assume claims without an AccessPath root).
     repeated SelectorClaim selector_claims = 2;
   }
+
   repeated SchemaClaims schema_claims = 4;
 
   reserved 3;

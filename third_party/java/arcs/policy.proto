@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-syntax = "proto3";
+edition = "2023";
 
 package arcs;
 
 import "third_party/java/arcs/annotation.proto";
 
+option features.field_presence = IMPLICIT;
 option java_package = "arcs.core.data.proto";
 option java_multiple_files = true;
 
@@ -68,10 +69,13 @@ message PolicyFieldProto {
 
   enum UsageType {
     USAGE_TYPE_UNSPECIFIED = 0;
+
     // Can be used for anything.
     ANY = 1;
+
     // Can be egressed.
     EGRESS = 2;
+
     // Can be used in joins, but not read.
     JOIN = 3;
   }
@@ -103,6 +107,7 @@ message PolicyRetentionProto {
     RAM = 1;
     DISK = 2;
   }
+
   // Allowed retention medium.
   Medium medium = 1;
 
