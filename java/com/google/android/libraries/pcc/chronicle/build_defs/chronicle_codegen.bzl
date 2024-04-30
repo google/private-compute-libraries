@@ -1,7 +1,7 @@
 """Rules to helper with Chronicle code generation"""
 
-load("//third_party/bazel_rules/rules_java/java:java_binary.bzl", "java_binary")
 load("@bazel_rules_android//android:rules.bzl", "android_library")
+load("//third_party/bazel_rules/rules_java/java:java_binary.bzl", "java_binary")
 load(":proto.bzl", "chronicle_data_proto_library_helper")
 
 def chronicle_data_proto_library(

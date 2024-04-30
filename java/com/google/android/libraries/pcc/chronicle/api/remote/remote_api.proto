@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-syntax = "proto3";
+edition = "2023";
 
 package pcc.chronicle.api.remote;
 
 import "google/protobuf/empty.proto";
 
+option features.field_presence = IMPLICIT;
 option java_multiple_files = true;
 option java_package = "com.google.android.libraries.pcc.chronicle.api.remote";
 
@@ -33,9 +34,7 @@ message RemoteRequestMetadata {
   // The type of request.
   oneof request_type {
     StoreRequest store = 101;
-
     StreamRequest stream = 102;
-
     ComputeRequest compute = 103;
   }
 }
@@ -108,9 +107,7 @@ message StreamRequest {
 // Defines requests to perform general computation on the request payload,
 // receiving computation results in response.
 message ComputeRequest {
-  /**
-   * Data type name for the entities that are the results of computation.
-   */
+  /** Data type name for the entities that are the results of computation. */
   string result_data_type_name = 1;
 
   /**
@@ -119,11 +116,11 @@ message ComputeRequest {
    */
   repeated string parameter_data_type_names = 2;
 
-  /** Specifies which method to run on the server. */
-  MethodId method_id = 3;
+  /** Specifies which method to run on the server. */ MethodId method_id = 3;
 
   enum MethodId {
     UNKNOWN = 0;
+
     // Runs the MoiraiApiInterface classify method.
     MOIRAI_CLASSIFY = 1;
   }
@@ -139,7 +136,8 @@ message RemoteResponseMetadata {
 // client.
 message RemoteErrorMetadata {
   Type error_type = 1;  // Type of error.
-  string message = 2;   // Human-readable message about the error.
+
+  string message = 2;  // Human-readable message about the error.
 
   enum Type {
     // Catch-all for as-yet-unknown issues. This value is used when an

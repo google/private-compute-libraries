@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-syntax = "proto3";
+edition = "2023";
 
 package pcc.chronicle.api.storage;
 
 import "google/protobuf/timestamp.proto";
 
+option features.field_presence = IMPLICIT;
 option java_multiple_files = true;
 option java_package = "com.google.android.libraries.pcc.chronicle.api.storage";
 
@@ -26,9 +27,7 @@ option java_package = "com.google.android.libraries.pcc.chronicle.api.storage";
  * enforcement or deletion propagation purposes.
  */
 message EntityMetadata {
-  /**
-   * Unique Identifier for the entity associated with this metadata.
-   */
+  /** Unique Identifier for the entity associated with this metadata. */
   string id = 1;
 
   /**
