@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-syntax = "proto3";
+edition = "2023";
 
 package chronicle.codegen;
 
@@ -20,11 +20,11 @@ option java_package = "com.google.android.libraries.pcc.chronicle.codegen";
 option java_multiple_files = true;
 
 message SimpleTestProto1 {
-  optional string field1 = 1;
-  optional uint32 field2 = 2;
+  string field1 = 1;
+  uint32 field2 = 2;
 }
 
 message SimpleTestProto2 {
-  optional string field3 = 1;
-  optional string field4 = 2;
+  string field3 = 1;
+  string field4 = 2;
 }
