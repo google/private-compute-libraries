@@ -2,6 +2,7 @@
 
 load("@bazel_rules_android//android:rules.bzl", "android_library")
 load("//third_party/bazel_rules/rules_java/java:java_binary.bzl", "java_binary")
+load("//third_party/protobuf/build_defs:kt_jvm_proto_library.bzl", "kt_jvm_lite_proto_library")
 load(":proto.bzl", "chronicle_data_proto_library_helper")
 
 def chronicle_data_proto_library(
@@ -29,6 +30,7 @@ def chronicle_data_proto_library(
     proto_library_name = "%s_DO_NOT_DEPEND_proto" % name
     java_proto_library_name = "%s_DO_NOT_DEPEND_java_proto" % name
     java_proto_lite_library_name = "%s_java_proto_lite" % name
+    kt_jvm_proto_lite_library_name = "%s_kt_jvm_proto_lite" % name
     generator_name = "%s_DO_NOT_DEPEND_generator" % name
 
     # Generate the base proto library.
@@ -45,6 +47,13 @@ def chronicle_data_proto_library(
         name = java_proto_library_name,
         deps = [":%s" % proto_library_name],
         visibility = ["//visibility:private"],
+    )
+
+    # Create a full kt_jvm_lite_proto_library from the proto. This is for
+    # those using Kotlin can use DSL to build the proto.
+    kt_jvm_lite_proto_library(
+        name = kt_jvm_proto_lite_library_name,
+        deps = [":%s" % proto_library_name],
     )
 
     # Create a java-lite proto library from the proto. This is what will be

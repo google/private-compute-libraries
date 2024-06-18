@@ -7,8 +7,8 @@ bzl_library(
     deps = [
         ":proto_bzl",
         "//third_party/bazel_rules/rules_java/java:core_rules",
+        "//third_party/protobuf/build_defs:kt_jvm_proto_library",
         "//tools/build_defs/android:bzl",
-        "//tools/build_defs/kotlin:rules_bzl",
     ],
 )
 
