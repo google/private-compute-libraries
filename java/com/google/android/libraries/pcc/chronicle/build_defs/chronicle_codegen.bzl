@@ -2,6 +2,9 @@
 
 load("@bazel_rules_android//android:rules.bzl", "android_library")
 load("//third_party/bazel_rules/rules_java/java:java_binary.bzl", "java_binary")
+load("//third_party/protobuf/bazel:java_lite_proto_library.bzl", "java_lite_proto_library")
+load("//third_party/protobuf/bazel:java_proto_library.bzl", "java_proto_library")
+load("//third_party/protobuf/bazel:proto_library.bzl", "proto_library")
 load("//third_party/protobuf/build_defs:kt_jvm_proto_library.bzl", "kt_jvm_lite_proto_library")
 load(":proto.bzl", "chronicle_data_proto_library_helper")
 
@@ -34,7 +37,7 @@ def chronicle_data_proto_library(
     generator_name = "%s_DO_NOT_DEPEND_generator" % name
 
     # Generate the base proto library.
-    native.proto_library(
+    proto_library(
         name = proto_library_name,
         srcs = [src],
         deps = deps.keys(),
@@ -43,7 +46,7 @@ def chronicle_data_proto_library(
 
     # Create a full java-proto-library from the proto. This will be used by
     # the code generator to inspect the generated classes' proto Descriptors.
-    native.java_proto_library(
+    java_proto_library(
         name = java_proto_library_name,
         deps = [":%s" % proto_library_name],
         visibility = ["//visibility:private"],
@@ -59,7 +62,7 @@ def chronicle_data_proto_library(
     # Create a java-lite proto library from the proto. This is what will be
     # provided as an "export" from the generated library and what will be usable
     # by chronicle data stewards and feature devs.
-    native.java_lite_proto_library(
+    java_lite_proto_library(
         name = java_proto_lite_library_name,
         deps = [":%s" % proto_library_name],
     )

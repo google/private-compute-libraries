@@ -1,5 +1,7 @@
 """Custom rule to generate ChronicleData from Protos"""
 
+load("//third_party/protobuf/bazel/common:proto_info.bzl", "ProtoInfo")
+
 def _chronicle_data_proto_library_helper(ctx):
     direct_descriptor_set = depset(
         [dep[ProtoInfo].direct_descriptor_set for dep in ctx.attr.proto_deps],
