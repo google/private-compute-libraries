@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-syntax = "proto2";
+edition = "2023";
 
 package chronicle.data.sample;
 
+option features.utf8_validation = NONE;
 option java_package = "com.google.android.libraries.pcc.chronicle.builddefs";
 option java_multiple_files = true;
 
 message ForeignNested {
-  optional string first_field = 1;
+  string first_field = 1;
 }
