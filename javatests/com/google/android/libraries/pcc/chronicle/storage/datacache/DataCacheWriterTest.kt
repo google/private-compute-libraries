@@ -34,7 +34,7 @@ class DataCacheWriterTest {
   data class DummyTestLabel(val value: Int, val version: Long = 0)
 
   private val mockDataStorage = mock<ManagedDataCache<DummyTestLabel>>()
-  private val mockTimeSource = mock<TimeSource>()
+  @Suppress("DoNotMock") private val mockTimeSource = mock<TimeSource>()
 
   @Test
   fun write_invokesDataCacheWrite() {
@@ -54,9 +54,9 @@ class DataCacheWriterTest {
               id = "1",
               associatedPackageName = "package_1",
               created = Instant.ofEpochSecond(10000),
-              updated = Instant.ofEpochSecond(11000)
+              updated = Instant.ofEpochSecond(11000),
             ),
-          entity = DummyTestLabel(value = 1)
+          entity = DummyTestLabel(value = 1),
         )
       )
     verify(mockDataStorage, times(1))
@@ -67,9 +67,9 @@ class DataCacheWriterTest {
               id = "2",
               associatedPackageName = "package_2",
               created = Instant.ofEpochSecond(20000),
-              updated = Instant.ofEpochSecond(12000)
+              updated = Instant.ofEpochSecond(12000),
             ),
-          entity = DummyTestLabel(value = 2)
+          entity = DummyTestLabel(value = 2),
         )
       )
   }
