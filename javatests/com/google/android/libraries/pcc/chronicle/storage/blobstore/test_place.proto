@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-syntax = "proto3";
+edition = "2023";
 
 package com.google.android.libraries.pcc.chronicle.storage.blobstore;
 
+option features.field_presence = IMPLICIT;
 option java_multiple_files = true;
 option java_package = "com.google.android.libraries.pcc.chronicle.storage.blobstore";
 
