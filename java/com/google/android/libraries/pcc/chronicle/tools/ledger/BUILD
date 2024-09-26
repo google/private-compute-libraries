@@ -1,5 +1,6 @@
 load("@bazel_rules_android//android:rules.bzl", "android_library")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("//third_party/bazel_rules/rules_java/java:java_binary.bzl", "java_binary")
 
 package(default_visibility = ["//visibility:public"])
 

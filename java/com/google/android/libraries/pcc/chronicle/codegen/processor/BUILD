@@ -1,3 +1,4 @@
+load("//third_party/bazel_rules/rules_java/java:java_plugin.bzl", "java_plugin")
 load("//tools/build_defs/kotlin:rules.bzl", "kt_jvm_library")
 
 package(default_visibility = ["//visibility:public"])
