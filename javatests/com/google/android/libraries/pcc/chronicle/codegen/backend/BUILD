@@ -1,3 +1,4 @@
+load("//third_party/bazel_rules/rules_java/java:java_test.bzl", "java_test")
 load(
     "//tools/build_defs/kotlin:rules.bzl",
     "kt_jvm_library",

@@ -1,3 +1,5 @@
+load("//third_party/bazel_rules/rules_java/java:java_library.bzl", "java_library")
+load("//third_party/bazel_rules/rules_java/java:java_test.bzl", "java_test")
 load("//tools/build_defs/kotlin:rules.bzl", "kt_android_local_test", "kt_jvm_library")
 
 ## Libraries
