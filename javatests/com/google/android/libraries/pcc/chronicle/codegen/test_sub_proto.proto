@@ -15,7 +15,7 @@
 // LINT: ALLOW_GROUPS
 // Groups are deprecated, but lets make sure we support them.
 
-syntax = "proto2";
+edition = "2023";
 
 package javatest.com.google.android.libraries.pcc.chronicle.codegen;
 
@@ -23,5 +23,5 @@ option java_package = "com.google.android.libraries.pcc.chronicle.codegen";
 option java_outer_classname = "CodegenTestSubProto";
 
 message SimpleThing {
-  optional string field1 = 1;
+  string field1 = 1;
 }

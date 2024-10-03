@@ -15,82 +15,93 @@
 // LINT: ALLOW_GROUPS
 // Groups are deprecated, but lets make sure we support them.
 
-syntax = "proto2";
+edition = "2023";
 
 package javatest.com.google.android.libraries.pcc.chronicle.codegen;
 
 import "google/protobuf/timestamp.proto";
 import "javatests/com/google/android/libraries/pcc/chronicle/codegen/test_sub_proto.proto";
 
+option features.utf8_validation = NONE;
+
 option java_package = "com.google.android.libraries.pcc.chronicle.codegen";
 option java_outer_classname = "CodegenTestProto";
 
 enum ThingEnum {
+  option features.enum_type = CLOSED;
+
   UNKNOWN = 0;
   FIRST = 1;
   SECOND = 2;
 }
 
 message Thing {
-  optional string field1 = 1;
-  optional bytes field2 = 2;
-  optional int32 field3 = 3;
-  optional int64 field4 = 4;
-  optional float field5 = 5;
-  optional double field6 = 6;
-  optional bool field7 = 7;
-  optional ThingEnum field8 = 8;
+  string field1 = 1;
+  bytes field2 = 2;
+  int32 field3 = 3;
+  int64 field4 = 4;
+  float field5 = 5;
+  double field6 = 6;
+  bool field7 = 7;
+  ThingEnum field8 = 8;
   repeated string field9 = 9;
   map<string, bool> field10 = 10;
-  optional .google.protobuf.Timestamp field11 = 11;
+  .google.protobuf.Timestamp field11 = 11;
 }
 
 // Below are the protos for the nested tests, both nested and non-nested message
 // definitions are used to confirm they both work with the codegen.
 message NestedThing {
   repeated string field1 = 1;
-  optional SimpleThing field2 = 2;
+  SimpleThing field2 = 2;
 }
 
 message NestedType {
   message InnerType {
-    optional string field1 = 1;
+    string field1 = 1;
+
     message InnerInnerType {
-      optional string field1 = 1;
+      string field1 = 1;
     }
-    optional InnerInnerType field2 = 2;
+
+    InnerInnerType field2 = 2;
   }
-  optional InnerType field1 = 1;
+
+  InnerType field1 = 1;
 }
 
 message Thing1 {
-  optional Thing2 field1 = 1;
+  Thing2 field1 = 1;
 }
 
 message Thing2 {
-  optional Thing3 field1 = 1;
+  Thing3 field1 = 1;
 }
 
 message Thing3 {
-  optional string field1 = 1;
+  string field1 = 1;
 }
 
 message OneOfThing {
   message StringThing {
-    optional string field1 = 1;
+    string field1 = 1;
   }
+
   message IntThing {
-    optional int32 field1 = 1;
+    int32 field1 = 1;
   }
+
   message OtherThing {
-    optional ThingEnum field1 = 1;
-    optional string field2 = 2;
+    ThingEnum field1 = 1;
+    string field2 = 2;
   }
+
   oneof field1 {
     StringThing string_thing = 1;
     IntThing int_thing = 2;
     OtherThing other_thing = 3;
   }
+
   oneof field2 {
     StringThing string_thing_2 = 4;
     IntThing int_thing_2 = 5;
@@ -107,11 +118,11 @@ message MapOfEntity {
 }
 
 message RecursiveRefA {
-  optional RecursiveRefB other = 1;
+  RecursiveRefB other = 1;
 }
 
 message RecursiveRefB {
-  optional RecursiveRefA other = 1;
+  RecursiveRefA other = 1;
 }
 
 message RecursiveListRefA {
@@ -131,8 +142,10 @@ message RecursiveMapRefB {
 }
 
 message RepeatedGroup {
-  repeated group Inner = 1 {
-    optional string field1 = 1;
-    optional NestedThing field2 = 2;
+  message Inner {
+    string field1 = 1;
+    NestedThing field2 = 2;
   }
+
+  repeated Inner inner = 1 [features.message_encoding = DELIMITED];
 }
