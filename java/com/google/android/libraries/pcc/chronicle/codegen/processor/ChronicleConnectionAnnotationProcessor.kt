@@ -137,15 +137,16 @@ class ChronicleConnectionAnnotationProcessor : AnnotationProcessor() {
     }
   }
 
-  private fun isReadConnection(typeMirror: TypeMirror?): Boolean =
+  private fun isReadConnection(typeMirror: TypeMirror): Boolean =
     processingEnv.typeUtils.isAssignable(typeMirror, readConnectionTypeMirror)
 
-  private fun isWriteConnection(typeMirror: TypeMirror?): Boolean =
+  private fun isWriteConnection(typeMirror: TypeMirror): Boolean =
     processingEnv.typeUtils.isAssignable(typeMirror, writeConnectionTypeMirror)
 
   // @CheckReturnValue
   private fun Element.validateAndExtractDataClass(): Element =
-    getDataClassArgument().asTypeElement().apply {
+    // TODO: go/nullness-caller-updates-lsc - Avoid dereferencing possibly null value?
+    getDataClassArgument().asTypeElement()!!.apply {
       requireNotNull(getAnnotation(ChronicleData::class.java)) {
         "data class $this is not annotated with @ChronicleData"
       }

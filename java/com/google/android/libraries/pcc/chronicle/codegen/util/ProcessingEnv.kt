@@ -27,14 +27,15 @@ import javax.lang.model.type.TypeMirror
 
 interface ProcessingEnvHelpers {
   val processingEnv: ProcessingEnvironment
+
   /**
    * Returns a list of strings where each string represents the name of the enum constants in an
    * enum. This helper doesn't check that the provided type is actually an enum.
    */
   fun Element.enumValues(): List<String> =
-    enclosedElements.filter { it.kind == ElementKind.ENUM_CONSTANT }.map {
-      it.simpleName.toString()
-    }
+    enclosedElements
+      .filter { it.kind == ElementKind.ENUM_CONSTANT }
+      .map { it.simpleName.toString() }
 
   /**
    * Returns the provided [TypeMirror] wrapped in a [ComparableType] comparison helper class to make
@@ -53,7 +54,8 @@ interface ProcessingEnvHelpers {
     processingEnv.elementUtils.getTypeElement(this)?.asType()?.rawType()
 
   /** Returns the [Element] that represents the type of the receiving [Element]. */
-  fun Element.asTypeElement(): Element = processingEnv.typeUtils.asElement(this.asType())
+  // TODO: go/nullness-caller-updates-lsc - Avoid dereferencing possibly null value?
+  fun Element.asTypeElement(): Element = processingEnv.typeUtils.asElement(this.asType())!!
 
   /** Returns the [idx]th type parameter for the [TypeMirror]. Does not do any validity checks. */
   fun TypeMirror.typeParameter(idx: Int): TypeMirror = (this as DeclaredType).typeArguments[idx]
@@ -82,12 +84,13 @@ interface ProcessingEnvHelpers {
     TypeLocation(
       asTypeElement().simpleName.toString(),
       asTypeElement().enclosingTypeNames(),
-      asTypeElement().packageName().toString()
+      asTypeElement().packageName().toString(),
     )
 
   /** Converts the receiving [TypeMirror] into a [TypeLocation]. */
   fun TypeMirror.asTypeLocation(): TypeLocation =
-    processingEnv.typeUtils.asElement(this).asTypeLocation()
+    // TODO: go/nullness-caller-updates-lsc - Avoid dereferencing possibly null value?
+    processingEnv.typeUtils.asElement(this)!!.asTypeLocation()
 
   /**
    * Returns true if one of the [AnnotationMirror] items on this element has the same
@@ -107,6 +110,7 @@ interface ProcessingEnvHelpers {
 class ComparableType(val type: TypeMirror, val processingEnv: ProcessingEnvironment) :
   TypeMirror by type {
   override fun hashCode() = type.hashCode()
+
   override fun equals(other: Any?) =
     when (other) {
       is ComparableType -> processingEnv.typeUtils.isSameType(this.type, other.type)
@@ -116,7 +120,7 @@ class ComparableType(val type: TypeMirror, val processingEnv: ProcessingEnvironm
 }
 
 /**
- * Create a new instance of the [ProcessingEnvHelpers interface for the provided
+ * Create a new instance of the [ProcessingEnvHelpers] interface for the provided
  * [ProcessingEnvironment].
  *
  * To make these helpers available directly in a class that's being constructed with a
