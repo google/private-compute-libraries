@@ -2,6 +2,8 @@ load(
     "//java/com/google/android/libraries/pcc/chronicle/build_defs:chronicle_codegen.bzl",
     "chronicle_data_proto_library",
 )
+load("//third_party/protobuf/bazel:java_lite_proto_library.bzl", "java_lite_proto_library")
+load("//third_party/protobuf/bazel:proto_library.bzl", "proto_library")
 load("//tools/build_defs/kotlin:rules.bzl", "kt_android_local_test")
 
 chronicle_data_proto_library(

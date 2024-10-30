@@ -1,6 +1,9 @@
 load("@bazel_rules_android//android:rules.bzl", "android_library")
 load("//third_party/bazel_rules/rules_java/java:java_library.bzl", "java_library")
 load("//third_party/bazel_rules/rules_java/java:java_test.bzl", "java_test")
+load("//third_party/protobuf/bazel:java_lite_proto_library.bzl", "java_lite_proto_library")
+load("//third_party/protobuf/bazel:java_proto_library.bzl", "java_proto_library")
+load("//third_party/protobuf/bazel:proto_library.bzl", "proto_library")
 load(
     "//tools/build_defs/kotlin:rules.bzl",
     "kt_jvm_library",
