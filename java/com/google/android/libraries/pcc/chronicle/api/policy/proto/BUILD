@@ -1,3 +1,5 @@
+load("//third_party/protobuf/bazel:java_lite_proto_library.bzl", "java_lite_proto_library")
+load("//third_party/protobuf/bazel:java_proto_library.bzl", "java_proto_library")
 load("//tools/build_defs/kotlin:rules.bzl", "kt_jvm_library")
 
 package(default_visibility = ["//visibility:public"])
