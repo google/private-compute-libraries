@@ -28,7 +28,7 @@ data class LedgerInfo(
   val name: String,
   val dataTypes: List<LedgerDataType>,
   val dataTypeDescriptors: Set<DataTypeDescriptor>,
-  val policies: Set<Policy>
+  val policies: Set<Policy>,
 ) {
   /** Transforms this [LedgerInfo] instance to a JSON string. */
   fun toJsonString(): String = DataHubLedger.gson.toJson(this)

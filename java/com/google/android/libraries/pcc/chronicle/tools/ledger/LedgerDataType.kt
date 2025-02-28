@@ -30,7 +30,7 @@ internal constructor(
   val name: String,
   val connections: List<String>,
   val servers: List<RemoteServerInfo>,
-  val policies: List<String>
+  val policies: List<String>,
 ) {
   internal object TypeAdapterImpl : TypeAdapter<LedgerDataType>() {
     private const val NAME_FIELD = "name"

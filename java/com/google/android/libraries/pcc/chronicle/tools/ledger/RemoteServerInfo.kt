@@ -31,7 +31,7 @@ data class RemoteServerInfo(
   val dtdName: String,
   val isStore: Boolean,
   val isStream: Boolean,
-  val isCompute: Boolean
+  val isCompute: Boolean,
 ) {
   constructor(
     server: RemoteServer<*>
@@ -40,7 +40,7 @@ data class RemoteServerInfo(
     dtdName = server.dataTypeDescriptor.name,
     isStore = server is RemoteStoreServer<*>,
     isStream = server is RemoteStreamServer<*>,
-    isCompute = server is RemoteComputeServer<*, *>
+    isCompute = server is RemoteComputeServer<*, *>,
   )
 
   internal object TypeAdapterImpl : TypeAdapter<RemoteServerInfo>() {

@@ -75,7 +75,7 @@ internal inline fun <reified T, R : Comparable<R>> JsonWriter.writeArray(
 internal fun JsonWriter.writeStringArray(
   @Suppress("UNUSED_PARAMETER") gson: Gson,
   collection: Collection<String>,
-  sorted: Boolean = false
+  sorted: Boolean = false,
 ): JsonWriter {
   val stringWriter = StringWriter()
   val jsonWriter = JsonWriter(stringWriter)
@@ -123,7 +123,7 @@ internal inline fun <reified T> JsonWriter.writeMap(gson: Gson, map: Map<String,
 internal fun <T> JsonWriter.writeNamedMap(
   adapter: TypeAdapter<T>,
   mapName: String,
-  map: Map<String, T>
+  map: Map<String, T>,
 ): JsonWriter {
   if (map.isEmpty()) return this
   name(mapName)
@@ -133,7 +133,7 @@ internal fun <T> JsonWriter.writeNamedMap(
 internal inline fun <reified T> JsonWriter.writeNamedMap(
   gson: Gson,
   mapName: String,
-  map: Map<String, T>
+  map: Map<String, T>,
 ): JsonWriter {
   if (map.isEmpty()) return this
   name(mapName)

@@ -31,7 +31,7 @@ import com.google.gson.stream.JsonWriter
 data class ProcessEntry(
   val name: String,
   val dataTypes: List<LedgerDataType>,
-  val policies: Set<String>
+  val policies: Set<String>,
 ) {
   /** Transforms this [LedgerInfo] instance to a JSON string. */
   fun toJsonString(): String = DataHubLedger.gson.toJson(this)
@@ -42,7 +42,7 @@ data class ProcessEntry(
       name = name,
       dataTypes = dataTypes,
       dataTypeDescriptors = dataTypes.map { dt -> dtds.find { it.name == dt.name }!! }.toSet(),
-      policies = policies.map { policyLookup[it]!! }.toSet()
+      policies = policies.map { policyLookup[it]!! }.toSet(),
     )
 
   internal object TypeAdapterImpl : TypeAdapter<ProcessEntry>() {

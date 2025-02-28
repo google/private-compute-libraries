@@ -53,7 +53,7 @@ object DataHubLedger {
       .registerTypeAdapter(RemoteServerInfo::class.java, RemoteServerInfo.TypeAdapterImpl)
       .registerTypeAdapter(
         PolicyContextRule::class.java,
-        PolicyContextRuleJson.PolicyContextRuleTypeAdapter
+        PolicyContextRuleJson.PolicyContextRuleTypeAdapter,
       )
       .create()
 
@@ -131,9 +131,8 @@ object DataHubLedger {
           ?.dataTypeDescriptorSet
           ?.toSet()
           ?.filter { it.name in dataTypeInfoNames }
-          ?.toSet()
-          ?: emptySet(),
-      policies = chronicleContext?.policySet?.toSet() ?: emptySet()
+          ?.toSet() ?: emptySet(),
+      policies = chronicleContext?.policySet?.toSet() ?: emptySet(),
     )
   }
 }

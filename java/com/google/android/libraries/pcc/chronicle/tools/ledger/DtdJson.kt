@@ -102,7 +102,7 @@ object DtdJson {
         INTEGER to FieldType.Integer,
         LONG to FieldType.Long,
         SHORT to FieldType.Short,
-        STRING to FieldType.String
+        STRING to FieldType.String,
       )
 
     override fun write(out: JsonWriter, value: FieldType) {

@@ -73,7 +73,7 @@ internal object PolicyContextRuleJson {
    */
   class ContextRule(
     override val name: String = "",
-    override val operands: List<PolicyContextRule> = emptyList()
+    override val operands: List<PolicyContextRule> = emptyList(),
   ) : PolicyContextRule {
     override fun invoke(context: TypedMap): Boolean = true
   }
