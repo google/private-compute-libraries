@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.first
 class DefaultRemoteStoreClient<T : Any>(
   private val dataTypeName: String,
   serializer: Serializer<T>,
-  private val transport: Transport
+  private val transport: Transport,
 ) : BaseRemoteClient<T>(serializer), RemoteStoreClient<T> {
   override suspend fun count(policy: Policy?): Int {
     logcat.v("Store: count()")
@@ -81,7 +81,7 @@ class DefaultRemoteStoreClient<T : Any>(
     val request =
       RemoteRequest(
         metadata = buildStoreRequestMetadata(policy) { create = Empty.getDefaultInstance() },
-        entities = entities.map(serializer::serialize)
+        entities = entities.map(serializer::serialize),
       )
     transport.serve(request).collect()
   }
@@ -91,7 +91,7 @@ class DefaultRemoteStoreClient<T : Any>(
     val request =
       RemoteRequest(
         metadata = buildStoreRequestMetadata(policy) { update = Empty.getDefaultInstance() },
-        entities = entities.map(serializer::serialize)
+        entities = entities.map(serializer::serialize),
       )
     transport.serve(request).collect()
   }

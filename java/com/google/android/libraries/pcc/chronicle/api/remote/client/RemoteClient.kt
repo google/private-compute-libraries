@@ -17,7 +17,7 @@
 package com.google.android.libraries.pcc.chronicle.api.remote.client
 
 /**
- * A [RemoteClient] is the client-side integration point which is used by Chronicle Data Stewards
- * to handle remote connection calls.
+ * A [RemoteClient] is the client-side integration point which is used by Chronicle Data Stewards to
+ * handle remote connection calls.
  */
 interface RemoteClient<T : Any>

@@ -49,7 +49,6 @@ import kotlinx.coroutines.withTimeout
  * the ChronicleService using [Context.bindService].
  *
  * The reconnection/retry flow works as follows:
- *
  * ```
  * 1. While we haven't seen [maximumFailures] failures in a row:
  *    1. emit([State.Disconnected])
@@ -72,18 +71,18 @@ import kotlinx.coroutines.withTimeout
  * ```
  *
  * @param connectionScope A coroutine scope to which the lifecycle of the service binding should be
- * scoped. When this scope is canceled, [Context.unbindService] will be used to release a bind to
- * the ChronicleService.
+ *   scoped. When this scope is canceled, [Context.unbindService] will be used to release a bind to
+ *   the ChronicleService.
  * @param serviceComponentName The [ComponentName] where the ChronicleService can be found.
  * @param timeout Maximum amount of time to spend trying to bind to the ChronicleService before
- * trying again after a backoff.
+ *   trying again after a backoff.
  */
 class DefaultChronicleServiceConnector(
   private val context: Context,
   connectionScope: CoroutineScope,
   private val serviceComponentName: ComponentName,
   private val timeout: Duration,
-  private val maximumFailures: Int = 10
+  private val maximumFailures: Int = 10,
 ) : ChronicleServiceConnector {
   private val serviceConnection = atomic<ServiceConnection?>(null)
 
@@ -163,7 +162,7 @@ class DefaultChronicleServiceConnector(
             logcat.w(
               e,
               "Default CSC: illegal state exception - [repeatedFailures = %d]",
-              repeatedFailures
+              repeatedFailures,
             )
             repeatedFailures++
             retryDelayMillis = retryDelayMillis * repeatedFailures + RETRY_DELAY_INCREMENT_MS
@@ -192,7 +191,7 @@ class DefaultChronicleServiceConnector(
         // Use lazily-started mode, so we don't try to connect immediately - but only when needed.
         started = SharingStarted.Lazily,
         // Replay the last-seen Connection State to any new subscribers.
-        replay = 1
+        replay = 1,
       )
 
   companion object {

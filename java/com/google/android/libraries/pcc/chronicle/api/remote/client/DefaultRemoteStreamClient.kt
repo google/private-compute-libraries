@@ -29,14 +29,14 @@ import kotlinx.coroutines.flow.collect
 class DefaultRemoteStreamClient<T : Any>(
   private val dataTypeName: String,
   serializer: Serializer<T>,
-  private val transport: Transport
+  private val transport: Transport,
 ) : BaseRemoteClient<T>(serializer), RemoteStreamClient<T> {
   override suspend fun publish(policy: Policy?, entities: List<WrappedEntity<T>>) {
     logcat.v("Stream: publish(#entities: %d)", entities.size)
     val request =
       RemoteRequest(
         metadata = buildStreamRequestMetadata(policy, StreamRequest.Operation.PUBLISH),
-        entities = entities.map(serializer::serialize)
+        entities = entities.map(serializer::serialize),
       )
     // Important note: we use the no-argument version of `collect` here so that we don't have to
     // incur an allocation of the lambda every time `publish` is called.

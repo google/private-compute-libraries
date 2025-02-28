@@ -28,12 +28,12 @@ import kotlinx.coroutines.flow.Flow
 class DefaultRemoteComputeClient<T : Any>(
   private val dataTypeName: String,
   resultSerializer: Serializer<T>,
-  private val transport: Transport
+  private val transport: Transport,
 ) : BaseRemoteClient<T>(resultSerializer), RemoteComputeClient<T> {
   override fun <Arg : Any> run(
     policy: Policy?,
     methodId: ComputeRequest.MethodId,
-    parameters: Parameters<Arg>
+    parameters: Parameters<Arg>,
   ): Flow<WrappedEntity<T>> {
     logcat.v("Compute: run(%s, %s)", methodId, parameters)
     val request =
@@ -47,7 +47,7 @@ class DefaultRemoteComputeClient<T : Any>(
                 .addParameterDataTypeNames(parameters.dataTypeName)
                 .build()
           },
-        entities = parameters.arguments.map(parameters.serializer::serialize)
+        entities = parameters.arguments.map(parameters.serializer::serialize),
       )
     return transport.serveAsWrappedEntityFlow(request)
   }

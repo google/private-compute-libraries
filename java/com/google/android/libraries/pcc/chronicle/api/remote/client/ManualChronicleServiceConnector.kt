@@ -21,8 +21,8 @@ import com.google.android.libraries.pcc.chronicle.api.remote.client.ChronicleSer
 import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
- * Implementation of [ChronicleServiceConnector] which exposes the ability to manually configure
- * the [IRemote] binder to be used downstream by [AidlTransport].
+ * Implementation of [ChronicleServiceConnector] which exposes the ability to manually configure the
+ * [IRemote] binder to be used downstream by [AidlTransport].
  *
  * This class is an alternative to using [DefaultChronicleServiceConnector], intended primarily for
  * situations where a client is unable to directly bind to the [ChronicleService]. For example:

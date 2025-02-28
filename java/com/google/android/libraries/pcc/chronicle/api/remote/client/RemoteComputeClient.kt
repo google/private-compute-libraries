@@ -28,7 +28,7 @@ interface RemoteComputeClient<T : Any> : RemoteClient<T> {
   fun <Arg : Any> run(
     policy: Policy?,
     methodId: ComputeRequest.MethodId,
-    parameters: Parameters<Arg>
+    parameters: Parameters<Arg>,
   ): Flow<WrappedEntity<T>>
 
   /** Represents parameters passed to a RemoteComputeServer. */
@@ -41,6 +41,6 @@ interface RemoteComputeClient<T : Any> : RemoteClient<T> {
      */
     val serializer: Serializer<Arg>,
     /** The arguments to provide to the RemoteComputeServer when running a method. */
-    val arguments: List<WrappedEntity<Arg>>
+    val arguments: List<WrappedEntity<Arg>>,
   )
 }

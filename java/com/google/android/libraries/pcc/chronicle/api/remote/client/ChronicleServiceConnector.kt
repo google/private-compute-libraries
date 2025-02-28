@@ -53,9 +53,7 @@ interface ChronicleServiceConnector {
      */
     data class Connected(val binder: IRemote) : State()
 
-    /**
-     * The service cannot be connected-to, or the service connector has given up retrying.
-     */
+    /** The service cannot be connected-to, or the service connector has given up retrying. */
     data class Unavailable(val cause: Throwable) : State()
   }
 }
