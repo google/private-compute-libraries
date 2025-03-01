@@ -36,10 +36,8 @@ import kotlinx.coroutines.flow.flow
  * Defines a [RemoteStoreServer] that itself uses a [RemoteStoreClient] (via the provided
  * [Transport]) to proxy data to its own clients from another server.
  */
-class PeopleProxy(
-  transport: Transport,
-  private val pageSize: Int = 10,
-) : RemoteStoreServer<Person> {
+class PeopleProxy(transport: Transport, private val pageSize: Int = 10) :
+  RemoteStoreServer<Person> {
   override val dataType: DataType =
     ManagedDataType(PERSON_GENERATED_DTD, ManagementStrategy.PassThru)
   override val dataTypeDescriptor: DataTypeDescriptor = PERSON_GENERATED_DTD

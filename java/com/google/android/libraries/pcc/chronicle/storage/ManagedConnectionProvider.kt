@@ -25,7 +25,7 @@ import com.google.android.libraries.pcc.chronicle.api.ManagedDataType
 /** An abstract [ConnectionProvider] that maps an underlying [ManagedStore] to Chronicle. */
 abstract class ManagedConnectionProvider(
   underlying: ManagedStore,
-  private val connections: Map<Class<out Connection>, (ConnectionRequest<*>) -> Connection>
+  private val connections: Map<Class<out Connection>, (ConnectionRequest<*>) -> Connection>,
 ) : ConnectionProvider {
   final override val dataType: DataType =
     ManagedDataType(underlying.dataTypeDescriptor, underlying.managementStrategy, connections.keys)

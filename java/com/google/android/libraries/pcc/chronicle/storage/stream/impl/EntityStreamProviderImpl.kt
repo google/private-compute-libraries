@@ -25,13 +25,10 @@ import kotlin.reflect.KClass
 class EntityStreamProviderImpl : EntityStreamProvider {
   private val lock = Any()
 
-  @GuardedBy("lock")
-  private val streams = mutableMapOf<KClass<*>, EntityStream<*>>()
+  @GuardedBy("lock") private val streams = mutableMapOf<KClass<*>, EntityStream<*>>()
 
   override fun <T : Any> getStream(cls: KClass<out T>): EntityStream<T> {
-    val stream = synchronized(lock) {
-      streams.computeIfAbsent(cls) { EntityStreamImpl<T>() }
-    }
+    val stream = synchronized(lock) { streams.computeIfAbsent(cls) { EntityStreamImpl<T>() } }
     @Suppress("UNCHECKED_CAST") // Checked by virtue of the map.
     return stream as EntityStream<T>
   }

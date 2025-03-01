@@ -23,7 +23,7 @@ data class ClientDetails(
   /** Whether or not the client of the ChronicleService is an isolated process. */
   val isolationType: IsolationType = IsolationType.UNKNOWN,
   /** Any associated packages for APKs under the ownership of the user with [userId]. */
-  val associatedPackages: List<String> = emptyList()
+  val associatedPackages: List<String> = emptyList(),
 ) {
   /** Type of isolation the client is under. */
   enum class IsolationType {

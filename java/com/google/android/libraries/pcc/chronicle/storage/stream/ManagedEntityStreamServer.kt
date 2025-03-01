@@ -48,11 +48,11 @@ private typealias LocalConnectionBuilders<T> = Map<Class<out Connection>, LocalC
  *
  * @param dataTypeDescriptor The [DataTypeDescriptor] for [T].
  * @param serializer A [Serializer] capable of serializing/deserializing [T] instances for remote
- * transmission.
+ *   transmission.
  * @param entityStreamProvider Manager of the underlying [EntityStream] implementation to use for
- * publish/subscribe.
+ *   publish/subscribe.
  * @param localConnectionBuilders Map of [Connection] class to builder method, used in
- * [getConnection], to construct new connection implementations for local access.
+ *   [getConnection], to construct new connection implementations for local access.
  */
 class ManagedEntityStreamServer<T : Any>(
   override val dataTypeDescriptor: DataTypeDescriptor,
@@ -64,7 +64,7 @@ class ManagedEntityStreamServer<T : Any>(
     ManagedDataType(
       descriptor = dataTypeDescriptor,
       managementStrategy = ManagementStrategy.PassThru,
-      connectionTypes = localConnectionBuilders.keys
+      connectionTypes = localConnectionBuilders.keys,
     )
 
   @Suppress("UNCHECKED_CAST") // Checked by privacy review and policy.

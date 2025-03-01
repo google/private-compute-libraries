@@ -23,16 +23,14 @@ import com.google.android.libraries.pcc.chronicle.storage.blobstore.TrimOrder
 import com.google.android.libraries.pcc.chronicle.storage.blobstore.db.BlobDao
 
 /** Implementation of [BlobStoreManagement] for persisted storage using the [BlobDao]. */
-class PersistedBlobStoreManagement(
-  private val dao: BlobDao,
-) : BlobStoreManagement {
+class PersistedBlobStoreManagement(private val dao: BlobDao) : BlobStoreManagement {
   override suspend fun clearAll(): Int {
     return dao.removeAllBlobEntities()
   }
 
   override suspend fun deleteExpiredEntities(
     currentTimeMillis: Long,
-    managementInfos: Set<ManagementInfo>
+    managementInfos: Set<ManagementInfo>,
   ) {
     managementInfos.forEach { info ->
       if (info is PersistedManagementInfo<*>) {

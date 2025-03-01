@@ -45,6 +45,7 @@ interface EntityStream<T : Any> {
   fun subscribeGroups(): Flow<List<WrappedEntity<T>>>
 
   /** Returns a [Flow] of individual [WrappedEntities][WrappedEntity]. */
-  fun subscribe(): Flow<WrappedEntity<T>> =
-    flow { subscribeGroups().collect { list -> list.forEach { emit(it) } } }
+  fun subscribe(): Flow<WrappedEntity<T>> = flow {
+    subscribeGroups().collect { list -> list.forEach { emit(it) } }
+  }
 }

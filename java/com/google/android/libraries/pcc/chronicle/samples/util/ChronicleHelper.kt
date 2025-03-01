@@ -56,7 +56,6 @@ import kotlinx.coroutines.flow.StateFlow
  *
  * This class will typically be instantiated either by a dependency injection framework like Dagger
  * or directly, within the host application's [android.app.Application] class. For example:
- *
  * ```
  * class MyApplication : Application() {
  *   lateinit var chronicleHelper: ChronicleHelper
@@ -82,7 +81,7 @@ class ChronicleHelper(
   remoteServers: Set<RemoteServer<*>> = emptySet(),
   initialConnectionContext: TypedMap = TypedMap(),
   initialFlags: Flags = Flags(),
-  initialProcessorNodes: Set<ProcessorNode> = emptySet()
+  initialProcessorNodes: Set<ProcessorNode> = emptySet(),
 ) {
   private val policySet: PolicySet = DefaultPolicySet(policies)
   private val dataTypeDescriptors: DataTypeDescriptorSet =
@@ -94,7 +93,7 @@ class ChronicleHelper(
       initialProcessorNodes,
       policySet,
       dataTypeDescriptors,
-      initialConnectionContext
+      initialConnectionContext,
     )
   private val defaultChronicle: DefaultChronicle by lazy {
     DefaultChronicle(
@@ -103,7 +102,7 @@ class ChronicleHelper(
       DefaultChronicle.Config(PolicyMode.STRICT, DefaultPolicyConformanceCheck()),
       object : FlagsReader {
         override val config: StateFlow<Flags> = flagsFlow
-      }
+      },
     )
   }
   private val remoteContext: RemoteContext = RemoteContextImpl(remoteServers)
@@ -179,9 +178,9 @@ class ChronicleHelper(
    * ```
    *
    * @param context Reference to the Android component which will own the returned [IRemote] binder
-   * (an [android.app.Service], typically).
+   *   (an [android.app.Service], typically).
    * @param scope A [CoroutineScope] tied to the lifecycle of the Android component which will own
-   * the returned [IRemote] binder (an [android.app.Service], typically).
+   *   the returned [IRemote] binder (an [android.app.Service], typically).
    */
   fun createRemoteConnectionBinder(context: Context, scope: CoroutineScope): IRemote {
     return RemoteRouter(
@@ -189,7 +188,7 @@ class ChronicleHelper(
       remoteContext,
       remotePolicyChecker,
       RemoteServerHandlerFactory(),
-      ClientDetailsProviderImpl(context)
+      ClientDetailsProviderImpl(context),
     )
   }
 

@@ -27,7 +27,6 @@ import com.google.android.libraries.pcc.chronicle.api.operation.Operation
  * unnecessary to the user of the data.
  *
  * The following are the empty values supported:
- *
  * * `Any?` -> `null`
  * * `String` -> `""`
  * * `Int` -> `0`

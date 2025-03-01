@@ -23,7 +23,7 @@ import com.google.android.libraries.pcc.chronicle.storage.datacache.DataCacheSto
 
 class DataCacheStoragePackageDeletionListener(
   private val client: ChronicleAnalyticsClient,
-  private val dataStorageCache: DataCacheStorage
+  private val dataStorageCache: DataCacheStorage,
 ) : PackageDeletionListener {
   override suspend fun deleteFor(
     value: PackageDeletionListener.PackageInstallInfo

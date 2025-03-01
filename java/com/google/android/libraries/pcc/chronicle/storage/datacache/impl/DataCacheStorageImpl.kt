@@ -113,8 +113,7 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
     logger.d("[%s]: purging %s entities for package removal.", className, cls.name)
     return dataCacheWrapperForClass(cls)?.purgeEntitiesWhere {
       packageName in it.metadata.associatedPackageNamesList
-    }
-      ?: 0
+    } ?: 0
   }
 
   override fun purgeAllEntitiesNotInPackages(packages: Set<String>): Int {
@@ -130,7 +129,7 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
 
   override fun purgeEntitiesWhere(
     cls: Class<out Any>,
-    predicate: (WrappedEntity<*>) -> Boolean
+    predicate: (WrappedEntity<*>) -> Boolean,
   ): Int = dataCacheWrapperForClass(cls)?.purgeEntitiesWhere(predicate) ?: 0
 
   override fun purgeAllEntities(): Int {
@@ -174,7 +173,7 @@ class DataCacheStorageImpl(private val timeSource: TimeSource) : DataCacheStorag
 
 data class DataCacheWrapper<T>(
   val cache: LruCache<String, WrappedEntity<T>>,
-  val config: CacheConfig
+  val config: CacheConfig,
 )
 
 data class CacheConfig(val ttl: Duration)

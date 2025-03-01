@@ -36,23 +36,21 @@ import com.google.android.libraries.pcc.chronicle.remote.ClientDetails.Isolation
 import com.google.android.libraries.pcc.chronicle.remote.RemotePolicyChecker
 
 /** Implementation of [RemotePolicyChecker]. */
-class RemotePolicyCheckerImpl(
-  private val chronicle: Chronicle,
-  private val policySet: PolicySet,
-) : RemotePolicyChecker {
+class RemotePolicyCheckerImpl(private val chronicle: Chronicle, private val policySet: PolicySet) :
+  RemotePolicyChecker {
   private val processorNodes = mutableMapOf<ClientDetails, RemoteProcessorNode>()
 
   override fun checkAndGetPolicyOrThrow(
     metadata: RemoteRequestMetadata,
     server: RemoteServer<*>,
-    clientDetails: ClientDetails
+    clientDetails: ClientDetails,
   ): Policy? {
     // TODO(b/210998515): Use usage type to find policy instead of id.
     val policy = policySet.findByName(metadata.usageType)
     if (metadata.usageType.isNotBlank() && policy == null) {
       throw RemoteError(
         type = RemoteErrorMetadata.Type.POLICY_NOT_FOUND,
-        message = "No policy found with id/usageType [${metadata.usageType}]"
+        message = "No policy found with id/usageType [${metadata.usageType}]",
       )
     }
 
@@ -74,7 +72,7 @@ class RemotePolicyCheckerImpl(
         metadata.isReadRequest,
         processorNode.let {
           if (clientDetails.isolationType == ISOLATED_PROCESS) SandboxProcessorNode(it) else it
-        }
+        },
       )
       .getOrThrow()
 

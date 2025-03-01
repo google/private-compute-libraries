@@ -48,7 +48,6 @@ class PeopleStore(private val ttl: Duration, private val pageSize: Int = 10) {
     }
   }
 
-
   /** Removes all [Person] data from storage with the provided [names]. */
   suspend fun removePeople(names: List<String>) {
     mutex.withLock { names.forEach(people::remove) }
@@ -64,11 +63,12 @@ class PeopleStore(private val ttl: Duration, private val pageSize: Int = 10) {
    * identified by the given [names] as a [Flow].
    *
    * @param ttlOverride duration used to shorten the effective time-to-live. This is useful if
-   * storage is allowed to retain [Person] data longer than a client is allowed access to the data.
+   *   storage is allowed to retain [Person] data longer than a client is allowed access to the
+   *   data.
    */
   fun fetchByName(
     names: List<String>,
-    ttlOverride: Duration? = null
+    ttlOverride: Duration? = null,
   ): Flow<List<WrappedEntity<Person>>> {
     return flow {
       val filtered =

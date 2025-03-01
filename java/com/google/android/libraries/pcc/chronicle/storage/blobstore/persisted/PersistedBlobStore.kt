@@ -36,14 +36,14 @@ import java.time.Instant
 class PersistedBlobStore<T : MessageLite>(
   private val dao: BlobDao,
   private val managementInfo: PersistedManagementInfo<T>,
-  private val timeSource: TimeSource
+  private val timeSource: TimeSource,
 ) : BlobStore<T> {
 
   override suspend fun putEntity(wrappedEntity: WrappedEntity<T>) {
     dao.insertOrUpdateBlobWithPackages(
       wrappedEntityToPersistedEntity(wrappedEntity, timeSource.now().toEpochMilli()),
       wrappedEntity.metadata.associatedPackageNamesList,
-      timeSource.now().toEpochMilli() - managementInfo.ttlMillis
+      timeSource.now().toEpochMilli() - managementInfo.ttlMillis,
     )
   }
 
@@ -57,7 +57,7 @@ class PersistedBlobStore<T : MessageLite>(
       map,
       managementInfo.dtdName,
       managementInfo.quotaInfo,
-      timeSource.now().toEpochMilli() - managementInfo.ttlMillis
+      timeSource.now().toEpochMilli() - managementInfo.ttlMillis,
     )
   }
 
@@ -66,9 +66,8 @@ class PersistedBlobStore<T : MessageLite>(
       dao.blobEntityWithPackagesByKeyAndDtdName(
         key,
         managementInfo.dtdName,
-        timeSource.now().toEpochMilli() - managementInfo.ttlMillis
-      )
-        ?: return null
+        timeSource.now().toEpochMilli() - managementInfo.ttlMillis,
+      ) ?: return null
     return persistedEntityToWrappedEntity(persisted)
   }
 
@@ -76,7 +75,7 @@ class PersistedBlobStore<T : MessageLite>(
     return dao
       .blobEntitiesWithPackagesByDtdName(
         managementInfo.dtdName,
-        timeSource.now().toEpochMilli() - managementInfo.ttlMillis
+        timeSource.now().toEpochMilli() - managementInfo.ttlMillis,
       )
       .map { persistedEntityToWrappedEntity(it) }
   }
@@ -95,15 +94,15 @@ class PersistedBlobStore<T : MessageLite>(
         id = persisted.blobEntity.key,
         associatedPackageNames = persisted.packages.map { it.packageName },
         created = Instant.ofEpochMilli(persisted.blobEntity.createdTimestampMillis),
-        updated = Instant.ofEpochMilli(persisted.blobEntity.updateTimestampMillis)
+        updated = Instant.ofEpochMilli(persisted.blobEntity.updateTimestampMillis),
       ),
-      managementInfo.deserializer(persisted.blobEntity.blob)
+      managementInfo.deserializer(persisted.blobEntity.blob),
     )
   }
 
   private fun wrappedEntityToPersistedEntity(
     wrapped: WrappedEntity<T>,
-    timestampMillis: Long
+    timestampMillis: Long,
   ): BlobEntity {
     return BlobEntity(
       key = wrapped.metadata.id,
@@ -112,7 +111,7 @@ class PersistedBlobStore<T : MessageLite>(
       createdTimestampMillis = timestampMillis,
       updateTimestampMillis = timestampMillis,
       dtdName = managementInfo.dtdName,
-      blob = wrapped.entity.toByteArray()
+      blob = wrapped.entity.toByteArray(),
     )
   }
 }

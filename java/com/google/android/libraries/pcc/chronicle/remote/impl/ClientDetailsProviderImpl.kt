@@ -27,6 +27,7 @@ import com.google.android.libraries.pcc.chronicle.remote.ClientDetailsProvider
  * thread handling a binder transaction from [IRemote].
  *
  * Because it uses [Binder.getCallingUid], this class should only ever be used from a BinderThread.
+ *
  * TODO(b/224999352): Create an instrumentation test to verify this behavior.
  */
 class ClientDetailsProviderImpl(private val context: Context) : ClientDetailsProvider {
@@ -37,7 +38,7 @@ class ClientDetailsProviderImpl(private val context: Context) : ClientDetailsPro
     return ClientDetails(
       userId = userId,
       isolationType = isolationTypeForUid(userId),
-      associatedPackages = associatedPackages
+      associatedPackages = associatedPackages,
     )
   }
 

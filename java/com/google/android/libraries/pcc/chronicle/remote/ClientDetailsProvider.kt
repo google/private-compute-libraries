@@ -17,9 +17,9 @@
 package com.google.android.libraries.pcc.chronicle.remote
 
 /**
- * Defines an object capable of determining [ClientDetails] from the current thread,
- * implementations will typically use [Binder.getCallingUid] and system services to flesh out the
- * contents of [ClientDetails] returned from [getClientDetails].
+ * Defines an object capable of determining [ClientDetails] from the current thread, implementations
+ * will typically use [Binder.getCallingUid] and system services to flesh out the contents of
+ * [ClientDetails] returned from [getClientDetails].
  */
 interface ClientDetailsProvider {
   /**

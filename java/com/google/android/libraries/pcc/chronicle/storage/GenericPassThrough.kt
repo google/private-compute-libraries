@@ -26,8 +26,8 @@ typealias Listener<T> = (T) -> Unit
 typealias Cancel = () -> Unit
 
 /**
- * This is simple thread-safe implementation that can be used to implement the functionality
- * of a pass-through-only [ManagedDataType].
+ * This is simple thread-safe implementation that can be used to implement the functionality of a
+ * pass-through-only [ManagedDataType].
  */
 class GenericPassThrough<T> {
   private val listeners = atomic(emptySet<Listener<T>>())
@@ -51,13 +51,7 @@ class GenericPassThrough<T> {
    * @return an instance of [Cancel] that can be called to unregister the listener.
    */
   fun listen(listener: Listener<T>): Cancel {
-    listeners.update {
-      it + listener
-    }
-    return {
-      listeners.update {
-        it - listener
-      }
-    }
+    listeners.update { it + listener }
+    return { listeners.update { it - listener } }
   }
 }

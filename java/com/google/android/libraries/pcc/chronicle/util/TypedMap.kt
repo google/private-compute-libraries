@@ -23,7 +23,6 @@ package com.google.android.libraries.pcc.chronicle.util
  * specify the class type of a corresponding value to be stored in the map.
  *
  * Example:
- *
  * ```kotlin
  * object NameKey : Key<String>
  * object IdKey : Key<Int>
@@ -42,7 +41,8 @@ class MutableTypedMap(val map: MutableMap<Key<Any>, Any> = mutableMapOf()) {
 
   /** Get object of type T or null if not present */
   operator fun <T> get(key: Key<T>): T? {
-    @Suppress("UNCHECKED_CAST") return map[key as Key<Any>] as T
+    @Suppress("UNCHECKED_CAST")
+    return map[key as Key<Any>] as T
   }
 
   /** Get immutable version of this [MutableTypedMap] */

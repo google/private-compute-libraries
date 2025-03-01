@@ -50,6 +50,7 @@ class TaggedLogger(val tag: String) {
 
   /**
    * Send a [VERBOSE] log message.
+   *
    * @param msg The message you would like logged.
    */
   fun v(msg: String, vararg args: Any) {
@@ -60,6 +61,7 @@ class TaggedLogger(val tag: String) {
 
   /**
    * Send a [VERBOSE] log message and log the exception.
+   *
    * @param tr An exception to log
    * @param msg The message you would like logged.
    */
@@ -71,6 +73,7 @@ class TaggedLogger(val tag: String) {
 
   /**
    * Send a [DEBUG] log message.
+   *
    * @param msg The message you would like logged.
    */
   fun d(msg: String, vararg args: Any) {
@@ -81,6 +84,7 @@ class TaggedLogger(val tag: String) {
 
   /**
    * Send a [DEBUG] log message and log the exception.
+   *
    * @param tr An exception to log
    * @param msg The message you would like logged.
    */
@@ -92,6 +96,7 @@ class TaggedLogger(val tag: String) {
 
   /**
    * Send an [INFO] log message.
+   *
    * @param msg The message you would like logged.
    */
   fun i(msg: String, vararg args: Any) {
@@ -102,6 +107,7 @@ class TaggedLogger(val tag: String) {
 
   /**
    * Send a [INFO] log message and log the exception.
+   *
    * @param tr An exception to log
    * @param msg The message you would like logged.
    */
@@ -113,6 +119,7 @@ class TaggedLogger(val tag: String) {
 
   /**
    * Send a [WARN] log message.
+   *
    * @param msg The message you would like logged.
    */
   fun w(msg: String, vararg args: Any) {
@@ -123,6 +130,7 @@ class TaggedLogger(val tag: String) {
 
   /**
    * Send a [WARN] log message and log the exception.
+   *
    * @param tr An exception to log
    * @param msg The message you would like logged.
    */
@@ -134,6 +142,7 @@ class TaggedLogger(val tag: String) {
 
   /**
    * Send a [WARN] log message and log the exception.
+   *
    * @param tr An exception to log
    */
   fun w(tr: Throwable) {
@@ -144,6 +153,7 @@ class TaggedLogger(val tag: String) {
 
   /**
    * Send an [ERROR] log message.
+   *
    * @param msg The message you would like logged.
    */
   fun e(msg: String, vararg args: Any) {
@@ -154,6 +164,7 @@ class TaggedLogger(val tag: String) {
 
   /**
    * Send a [ERROR] log message and log the exception.
+   *
    * @param tr An exception to log
    * @param msg The message you would like logged.
    */
@@ -165,6 +176,7 @@ class TaggedLogger(val tag: String) {
 
   /**
    * Handy function to get a loggable stack trace from a Throwable
+   *
    * @param tr An exception to log
    */
   fun getStackTraceString(tr: Throwable): String {
@@ -173,6 +185,7 @@ class TaggedLogger(val tag: String) {
 
   /**
    * Low-level logging call.
+   *
    * @param priority The priority/type of this log message
    * @param msg The message you would like logged.
    * @return The number of bytes written.

@@ -65,7 +65,7 @@ abstract class ChronicleModule {
     fun bindChronicleContextImpl(
       providers: Set<@JvmSuppressWildcards ConnectionProvider>,
       policySet: PolicySet,
-      dtdSet: DataTypeDescriptorSet
+      dtdSet: DataTypeDescriptorSet,
     ): ChronicleContext = DefaultChronicleContext(providers, emptySet(), policySet, dtdSet)
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -102,9 +102,9 @@ abstract class ChronicleModule {
         engine,
         DefaultChronicle.Config(
           policyMode = DefaultChronicle.Config.PolicyMode.STRICT,
-          policyConformanceCheck = DefaultPolicyConformanceCheck()
+          policyConformanceCheck = DefaultPolicyConformanceCheck(),
         ),
-        flags
+        flags,
       )
     }
   }

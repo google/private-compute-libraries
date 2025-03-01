@@ -53,7 +53,7 @@ class RemoteRouter(
   private val context: RemoteContext,
   private val policyChecker: RemotePolicyChecker,
   private val handlerFactory: RemoteServerHandlerFactory,
-  private val clientDetailsProvider: ClientDetailsProvider
+  private val clientDetailsProvider: ClientDetailsProvider,
 ) : IRemote.Stub() {
   private val nextRequestNumber = atomic(1)
 
@@ -75,7 +75,7 @@ class RemoteRouter(
           "RemoteRouter[%d] checking policy\n\t%s\n\t%s]",
           requestNumber,
           clientDetails,
-          metadata
+          metadata,
         )
 
         // Find the server, check the policy, and fetch a handler. If no server can be found, a
@@ -84,7 +84,7 @@ class RemoteRouter(
           context.findServer(metadata)
             ?: throw RemoteError(
               type = Type.UNSUPPORTED,
-              message = "Server not found for request with metadata: $metadata"
+              message = "Server not found for request with metadata: $metadata",
             )
 
         // Check the policy and get it (if there is one). If the policy check fails, or the policy
@@ -137,7 +137,7 @@ class RemoteRouter(
   private class CancellationSignal(
     private val requestNumber: Int,
     private val job: WeakReference<Job>,
-    private val callback: WeakReference<IResponseCallback>
+    private val callback: WeakReference<IResponseCallback>,
   ) : ICancellationSignal.Stub() {
     override fun cancel() {
       logcat.v("RemoteRouter[%d] cancellation signal triggered", requestNumber)
