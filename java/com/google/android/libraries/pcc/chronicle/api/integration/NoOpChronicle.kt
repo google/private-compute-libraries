@@ -39,7 +39,7 @@ class NoOpChronicle(
     dataTypeName: String,
     policy: Policy?,
     isForReading: Boolean,
-    requester: ProcessorNode
+    requester: ProcessorNode,
   ): Result<Unit> = Result.failure(ChronicleError("Chronicle is set to no-op."))
 
   override fun getAvailableConnectionTypes(dataTypeClass: KClass<*>): Chronicle.ConnectionTypes =

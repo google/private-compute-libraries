@@ -24,8 +24,8 @@ import kotlinx.coroutines.flow.StateFlow
  *
  * Each application integrating Chronicle will need to supply a [FlagsReader] to the dagger graph.
  * Most applications will populate the [Flags] for their [FlagsReader] using DeviceConfig. For
- * simplicity, it's required that [Flags] instances be identical for an entire application - even
- * if the application has multiple processes.
+ * simplicity, it's required that [Flags] instances be identical for an entire application - even if
+ * the application has multiple processes.
  */
 interface FlagsReader {
   /** The current value of the [Flags] for Chronicle. */

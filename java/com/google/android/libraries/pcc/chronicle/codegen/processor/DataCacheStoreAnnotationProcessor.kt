@@ -62,7 +62,7 @@ class DataCacheStoreAnnotationProcessor : AnnotationProcessor() {
       .add(
         "media = %T.%L, ",
         StorageMedia::class,
-        getAnnotation(DataCacheStore::class.java).storageMedia
+        getAnnotation(DataCacheStore::class.java).storageMedia,
       )
       .add(ttlKotlin())
       .add(
@@ -70,7 +70,7 @@ class DataCacheStoreAnnotationProcessor : AnnotationProcessor() {
         DeletionTrigger::class,
         Trigger::class,
         Trigger.PACKAGE_UNINSTALLED,
-        "packageName"
+        "packageName",
       )
       .add(")")
       .build()
@@ -86,7 +86,7 @@ class DataCacheStoreAnnotationProcessor : AnnotationProcessor() {
     return getAnnotation(DataCacheStore::class.java).ttl.ifEmpty {
       printWarning(
         this,
-        "Empty TTL string, using default $DEFAULT_TTL_STRING for generated storage"
+        "Empty TTL string, using default $DEFAULT_TTL_STRING for generated storage",
       )
       DEFAULT_TTL_STRING
     }
@@ -125,7 +125,7 @@ class DataCacheStoreAnnotationProcessor : AnnotationProcessor() {
    */
   private fun Element.managementStrategyPropertySpec(
     name: String,
-    storage: CodeBlock
+    storage: CodeBlock,
   ): PropertySpec {
     val genManagementStrategyName =
       "${name.upperSnake()}_GENERATED_DATA_CACHE_STORE_MANAGEMENT_STRATEGY"

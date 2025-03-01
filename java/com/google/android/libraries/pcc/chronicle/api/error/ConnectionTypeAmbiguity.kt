@@ -30,12 +30,12 @@ import com.google.android.libraries.pcc.chronicle.api.ConnectionProvider
  */
 class ConnectionTypeAmbiguity(
   connectionAsString: String,
-  connectionProviders: Set<ConnectionProvider>
+  connectionProviders: Set<ConnectionProvider>,
 ) : ChronicleError(constructMessage(connectionAsString, connectionProviders)) {
   companion object {
     private fun constructMessage(
       connectionAsString: String,
-      connectionProviders: Set<ConnectionProvider>
+      connectionProviders: Set<ConnectionProvider>,
     ): String {
       return "Connection name/type $connectionAsString supported more than once by " +
         "connectionProviders(s): $connectionProviders"

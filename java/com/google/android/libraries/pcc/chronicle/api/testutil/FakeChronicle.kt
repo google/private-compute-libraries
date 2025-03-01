@@ -46,7 +46,7 @@ class FakeChronicleBuilder {
   private var config: DefaultChronicle.Config =
     DefaultChronicle.Config(
       policyMode = DefaultChronicle.Config.PolicyMode.STRICT,
-      policyConformanceCheck = DefaultPolicyConformanceCheck()
+      policyConformanceCheck = DefaultPolicyConformanceCheck(),
     )
 
   /**
@@ -95,11 +95,11 @@ class FakeChronicleBuilder {
         connectionProviders,
         emptySet(),
         DefaultPolicySet(policies),
-        DefaultDataTypeDescriptorSet(dtds)
+        DefaultDataTypeDescriptorSet(dtds),
       ),
       policyEngine,
       config,
-      flags
+      flags,
     )
   }
 }

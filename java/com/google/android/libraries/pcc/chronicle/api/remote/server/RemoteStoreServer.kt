@@ -40,6 +40,7 @@ interface RemoteStoreServer<T : Any> : RemoteServer<T> {
    * entities wrapped with metadata.
    */
   fun fetchAll(policy: Policy?): Flow<List<WrappedEntity<T>>>
+
   // endregion
 
   // region: write methods

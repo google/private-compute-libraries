@@ -39,6 +39,7 @@ interface PolicyContextRule {
 object All : PolicyContextRule {
   override val name = "All"
   override val operands: List<PolicyContextRule> = emptyList()
+
   override fun invoke(context: TypedMap): Boolean = true
 }
 
@@ -50,6 +51,7 @@ class And(private val lhs: PolicyContextRule, private val rhs: PolicyContextRule
   PolicyContextRule {
   override val name = "And"
   override val operands: List<PolicyContextRule> = listOf(lhs, rhs)
+
   override fun invoke(context: TypedMap): Boolean = lhs(context) && rhs(context)
 }
 
@@ -61,6 +63,7 @@ class Or(private val lhs: PolicyContextRule, private val rhs: PolicyContextRule)
   PolicyContextRule {
   override val name = "Or"
   override val operands: List<PolicyContextRule> = listOf(lhs, rhs)
+
   override fun invoke(context: TypedMap): Boolean = lhs(context) || rhs(context)
 }
 
@@ -71,5 +74,6 @@ fun not(rule: PolicyContextRule): PolicyContextRule = Not(rule)
 class Not(private val inner: PolicyContextRule) : PolicyContextRule {
   override val name = "Not"
   override val operands: List<PolicyContextRule> = listOf(inner)
+
   override fun invoke(context: TypedMap): Boolean = !inner(context)
 }

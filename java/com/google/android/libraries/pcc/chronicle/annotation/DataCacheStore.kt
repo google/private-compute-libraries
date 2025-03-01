@@ -30,5 +30,5 @@ import com.google.android.libraries.pcc.chronicle.api.StorageMedia
 annotation class DataCacheStore(
   val ttl: String,
   val maxItems: Int,
-  val storageMedia: StorageMedia = StorageMedia.MEMORY
+  val storageMedia: StorageMedia = StorageMedia.MEMORY,
 )

@@ -55,16 +55,14 @@ fun FieldCategory.kotlinType(): TypeName {
     is FieldCategory.TupleValue ->
       when (types.size) {
         2 ->
-          Pair::class
-            .asTypeName()
+          Pair::class.asTypeName()
             .parameterizedBy(types.get(0).kotlinType(), types.get(1).kotlinType())
         3 ->
-          Triple::class
-            .asTypeName()
+          Triple::class.asTypeName()
             .parameterizedBy(
               types.get(0).kotlinType(),
               types.get(1).kotlinType(),
-              types.get(2).kotlinType()
+              types.get(2).kotlinType(),
             )
         else ->
           throw IllegalArgumentException(

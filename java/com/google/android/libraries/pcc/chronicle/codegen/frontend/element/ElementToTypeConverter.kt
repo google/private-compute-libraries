@@ -38,7 +38,7 @@ import javax.lang.model.type.TypeMirror
 class ElementToTypeConverter(
   override val processingEnv: ProcessingEnvironment,
   val fieldEnumerators: List<FieldEnumerator> =
-    listOf(AutoValueFieldEnumerator(processingEnv), DataClassFieldEnumerator(processingEnv))
+    listOf(AutoValueFieldEnumerator(processingEnv), DataClassFieldEnumerator(processingEnv)),
 ) : ProcessingEnvHelpers by processingEnvHelpers(processingEnv) {
   fun convertElement(initialElement: Element): TypeSet {
     var primary: Type? = null
@@ -65,7 +65,7 @@ class ElementToTypeConverter(
 
     return TypeSet(
       primary = requireNotNull(primary) { "No type found" },
-      additional = types - primary
+      additional = types - primary,
     )
   }
 
@@ -115,7 +115,7 @@ class ElementToTypeConverter(
 
   private data class FieldCategoryResult(
     val category: FieldCategory,
-    val nestedElementTypes: Set<Element>
+    val nestedElementTypes: Set<Element>,
   )
 
   private fun FieldCategory.toResult(nestedTypes: Set<Element> = emptySet()): FieldCategoryResult =
@@ -173,17 +173,20 @@ class ElementToTypeConverter(
       stringType -> FieldCategory.StringValue.toResult()
       instantType -> FieldCategory.InstantValue.toResult()
       durationType -> FieldCategory.DurationValue.toResult()
-      immutableListType, listType -> {
+      immutableListType,
+      listType -> {
         val (nestedTypeCategory, nestedTypeNestedTypes) = typeParameter(0).toFieldCategory()
         FieldCategory.ListValue(rawType.asTypeLocation(), nestedTypeCategory)
           .toResult(nestedTypeNestedTypes)
       }
-      immutableSetType, setType -> {
+      immutableSetType,
+      setType -> {
         val (nestedTypeCategory, nestedTypeNestedTypes) = typeParameter(0).toFieldCategory()
         FieldCategory.SetValue(rawType.asTypeLocation(), nestedTypeCategory)
           .toResult(nestedTypeNestedTypes)
       }
-      immutableMapType, mapType -> {
+      immutableMapType,
+      mapType -> {
         val (keyCategory, keyNestedTypes) = typeParameter(0).toFieldCategory()
         val (valueCategory, valueNestedTypes) = typeParameter(1).toFieldCategory()
         FieldCategory.MapValue(rawType.asTypeLocation(), keyCategory, valueCategory)

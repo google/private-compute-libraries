@@ -34,5 +34,5 @@ import kotlin.reflect.KClass
 @Target(AnnotationTarget.CLASS)
 annotation class ChronicleConnection(
   val dataClass: KClass<*>,
-  val generateConnectionProvider: Boolean = false
+  val generateConnectionProvider: Boolean = false,
 )

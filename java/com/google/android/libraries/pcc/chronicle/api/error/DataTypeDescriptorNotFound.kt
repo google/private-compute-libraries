@@ -22,8 +22,7 @@ import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
  * Implies that no [DataTypeDescriptor] was found which could fulfill the [dataTypeNode] or
  * [request].
  */
-class DataTypeDescriptorNotFound(
-  dataTypeName: String,
-) : ChronicleError("No DataTypeDescriptor found for $dataTypeName") {
+class DataTypeDescriptorNotFound(dataTypeName: String) :
+  ChronicleError("No DataTypeDescriptor found for $dataTypeName") {
   constructor(request: ConnectionRequest<*>) : this(request.toString())
 }

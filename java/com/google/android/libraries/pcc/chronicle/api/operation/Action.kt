@@ -23,7 +23,7 @@ sealed class Action<B> {
    * the input to the [Operation].
    *
    * TODO(b/205183415): Consider using an object pool to help reduce the number of allocations
-   * incurred when Update results are used.
+   *   incurred when Update results are used.
    */
   data class Update<B>(val newValue: B) : Action<B>()
 

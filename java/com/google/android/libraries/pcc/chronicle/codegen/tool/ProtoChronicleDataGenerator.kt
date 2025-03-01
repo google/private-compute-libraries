@@ -53,7 +53,7 @@ class ProtoChronicleDataGenerator(private val protoClass: Class<*>) {
       DescriptorToTypeConverter.Configuration(
         useJavaPackageInTypeLocations = false,
         enableNullableSupport = true,
-        convertBytesFieldsToStrings = false
+        convertBytesFieldsToStrings = false,
       )
     )
 
@@ -102,7 +102,7 @@ class ProtoChronicleDataGenerator(private val protoClass: Class<*>) {
           |Note: in order for this to be able to work correctly, the proto's generated java class
           |must be available on the classpath.
           |"""
-                .trimMargin(),
+                .trimMargin()
           ) {
           val kotlinOutputFilePath by argument().path()
           val moduleOutputFilePath by argument().path()

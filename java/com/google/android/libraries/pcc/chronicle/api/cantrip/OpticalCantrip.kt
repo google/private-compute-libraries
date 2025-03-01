@@ -29,11 +29,12 @@ import com.google.android.libraries.pcc.chronicle.api.optics.Traversal
  */
 class OpticalCantrip<Data, Field>(
   private val optic: Traversal<Data, Data, Field, Field>,
-  private val operation: Operation<Field, Field>
+  private val operation: Operation<Field, Field>,
 ) : Cantrip<Data> {
   override fun invoke(datum: Data): Data? {
     return when (val result = optic.modifyWithAction(datum, operation)) {
-      Action.OmitFromParent, Action.OmitFromRoot -> null
+      Action.OmitFromParent,
+      Action.OmitFromRoot -> null
       is Action.Throw -> throw result.exception
       is Action.Update -> result.newValue
     }

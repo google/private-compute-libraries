@@ -46,18 +46,22 @@ fun Descriptors.EnumDescriptor.enclosingNames(): List<String> =
 fun Descriptors.Descriptor.typeLocation(useJavaPackage: Boolean): TypeLocation =
   TypeLocation(
     name = name,
-    enclosingNames = enclosingNames() +
-      if (!file.options.javaMultipleFiles) listOf(file.options.javaOuterClassname) else emptyList(),
-    pkg = if (useJavaPackage) file.options.javaPackage else file.`package`
+    enclosingNames =
+      enclosingNames() +
+        if (!file.options.javaMultipleFiles) listOf(file.options.javaOuterClassname)
+        else emptyList(),
+    pkg = if (useJavaPackage) file.options.javaPackage else file.`package`,
   )
 
 /** Generate the [TypeLocation] for the Java enum class that will be generated for this proto. */
 fun Descriptors.EnumDescriptor.typeLocation(useJavaPackage: Boolean): TypeLocation =
   TypeLocation(
     name = name,
-    enclosingNames = enclosingNames() +
-      if (!file.options.javaMultipleFiles) listOf(file.options.javaOuterClassname) else emptyList(),
-    pkg = if (useJavaPackage) file.options.javaPackage else file.`package`
+    enclosingNames =
+      enclosingNames() +
+        if (!file.options.javaMultipleFiles) listOf(file.options.javaOuterClassname)
+        else emptyList(),
+    pkg = if (useJavaPackage) file.options.javaPackage else file.`package`,
   )
 
 /** Return the field name to use when accessing it from generated code. */
@@ -85,7 +89,7 @@ fun List<Descriptors.OneofDescriptor>.toTypeOneOfs(): OneOfs {
   val fieldsForOneOf =
     associateBy(
       keySelector = { it.name.toChronicleFieldName() },
-      valueTransform = { it.fields.map { field -> field.name.toChronicleFieldName() } }
+      valueTransform = { it.fields.map { field -> field.name.toChronicleFieldName() } },
     )
 
   // Map a map of all of the oneof contained fields to their containing oneof name.

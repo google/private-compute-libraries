@@ -77,7 +77,7 @@ class DefaultChronicle(
     dataTypeName: String,
     policy: Policy?,
     isForReading: Boolean,
-    requester: ProcessorNode
+    requester: ProcessorNode,
   ): Result<Unit> {
     val dataTypeDescriptor =
       context.value.dataTypeDescriptorSet.getOrNull(dataTypeName)
@@ -89,7 +89,7 @@ class DefaultChronicle(
     policy: Policy?,
     isForReading: Boolean,
     requester: ProcessorNode,
-    dataTypeDescriptor: DataTypeDescriptor
+    dataTypeDescriptor: DataTypeDescriptor,
   ): Result<Unit> {
     if (policy != null && policy !in context.value.policySet) {
       handlePolicyCheckException(PolicyNotFound(policy))?.let {
@@ -151,7 +151,7 @@ class DefaultChronicle(
 
         Chronicle.ConnectionTypes(
           readConnections = acc.readConnections + readConnections,
-          writeConnections = acc.writeConnections + writeConnections
+          writeConnections = acc.writeConnections + writeConnections,
         )
       }
   }
@@ -169,7 +169,7 @@ class DefaultChronicle(
     if (!request.requester.requiredConnectionNames.contains(request.connectionName)) {
       logger.d(
         "Connection is not declared as required in `ProcessorNode` of a request: %s",
-        request
+        request,
       )
       return ConnectionResult.Failure(ConnectionNotDeclared(request))
     }
@@ -180,13 +180,13 @@ class DefaultChronicle(
     val connectionProvider =
       currentContext.findConnectionProvider(request.connectionType)
         ?: currentContext.findConnectionProvider(request.connectionName)
-          ?: return ConnectionResult.Failure(ConnectionProviderNotFound(request))
+        ?: return ConnectionResult.Failure(ConnectionProviderNotFound(request))
 
     // TODO(b/251295492) the first part of this Elvis can disappear.
     val dataTypeDescriptor =
       currentContext.findDataType(request.connectionType)
         ?: currentContext.findDataType(request.connectionName)
-          ?: return ConnectionResult.Failure(DataTypeDescriptorNotFound(request))
+        ?: return ConnectionResult.Failure(DataTypeDescriptorNotFound(request))
 
     val checkPolicyResult =
       checkPolicy(request.policy, request.isReadConnection(), request.requester, dataTypeDescriptor)
@@ -228,14 +228,14 @@ class DefaultChronicle(
      * Set of rules to apply to guarantee that all [Policies][Policy] provided to Chronicle meet a
      * standard of quality.
      */
-    val policyConformanceCheck: PolicyConformanceCheck
+    val policyConformanceCheck: PolicyConformanceCheck,
   ) {
     enum class PolicyMode {
       /** Policy failure will be logged, but the connection request will succeed. */
       LOG,
 
       /** Policy failure will result in failure result being returned. */
-      STRICT
+      STRICT,
     }
   }
 
