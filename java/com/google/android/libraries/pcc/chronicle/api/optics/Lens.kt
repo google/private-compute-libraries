@@ -51,7 +51,7 @@ abstract class Lens<S, T, A, B>(
   val sourceEntityType: Class<out S & Any>,
   val targetEntityType: Class<out T & Any>,
   val sourceFieldType: Class<out A & Any>,
-  val targetFieldType: Class<out B & Any>
+  val targetFieldType: Class<out B & Any>,
 ) {
   /** Whether or not the [Lens] is actually monomorphic. */
   val isMonomorphic: Boolean =
@@ -66,7 +66,7 @@ abstract class Lens<S, T, A, B>(
         sourceEntityType = sourceEntityType,
         targetEntityType = targetEntityType,
         sourceFieldType = sourceFieldType,
-        targetFieldType = targetFieldType
+        targetFieldType = targetFieldType,
       ) {
       override fun every(entity: S): Sequence<A> =
         if (entity != null) sequenceOf(get(entity)) else emptySequence()
@@ -75,7 +75,7 @@ abstract class Lens<S, T, A, B>(
 
       override fun modifyWithAction(
         entity: S,
-        modifier: (value: A) -> Action<out B>
+        modifier: (value: A) -> Action<out B>,
       ): Action<out T> = this@Lens.modifyWithAction(entity, modifier)
 
       override fun toString(): String = this@Lens.toString()
@@ -168,14 +168,14 @@ abstract class Lens<S, T, A, B>(
         sourceEntityType = this@Lens.sourceEntityType,
         targetEntityType = this@Lens.targetEntityType,
         sourceFieldType = other.sourceFieldType,
-        targetFieldType = other.targetFieldType
+        targetFieldType = other.targetFieldType,
       ) {
       override fun get(entity: S): NewA = other.get(this@Lens.get(entity) as AIn)
 
       override fun set(entity: S, newValue: NewB): T =
         this@Lens.set(
           entity = entity,
-          newValue = other.set(entity = this@Lens.get(entity) as AIn, newValue = newValue)
+          newValue = other.set(entity = this@Lens.get(entity) as AIn, newValue = newValue),
         )
     }
   }
@@ -205,7 +205,7 @@ abstract class Lens<S, T, A, B>(
     inline fun <reified Entity, reified Focus> create(
       focusAccessPath: OpticalAccessPath,
       crossinline getter: (Entity) -> Focus,
-      crossinline setter: (Entity, Focus) -> Entity
+      crossinline setter: (Entity, Focus) -> Entity,
     ): Lens<Entity, Entity, Focus, Focus> {
       return object :
         Lens<Entity, Entity, Focus, Focus>(
@@ -215,7 +215,7 @@ abstract class Lens<S, T, A, B>(
           sourceEntityType = Entity::class.java as Class<Entity & Any>,
           targetEntityType = Entity::class.java as Class<Entity & Any>,
           sourceFieldType = Focus::class.java as Class<Focus & Any>,
-          targetFieldType = Focus::class.java as Class<Focus & Any>
+          targetFieldType = Focus::class.java as Class<Focus & Any>,
         ) {
         override fun get(entity: Entity): Focus = getter(entity)
 
@@ -228,7 +228,7 @@ abstract class Lens<S, T, A, B>(
       sourceAccessPath: OpticalAccessPath,
       targetAccessPath: OpticalAccessPath,
       crossinline getter: (S) -> A,
-      crossinline setter: (S, B) -> T
+      crossinline setter: (S, B) -> T,
     ): Lens<S, T, A, B> {
       return object :
         Lens<S, T, A, B>(
@@ -238,7 +238,7 @@ abstract class Lens<S, T, A, B>(
           sourceEntityType = S::class.java as Class<S & Any>,
           targetEntityType = T::class.java as Class<T & Any>,
           sourceFieldType = A::class.java as Class<A & Any>,
-          targetFieldType = B::class.java as Class<B & Any>
+          targetFieldType = B::class.java as Class<B & Any>,
         ) {
         override fun get(entity: S): A = getter(entity)
 

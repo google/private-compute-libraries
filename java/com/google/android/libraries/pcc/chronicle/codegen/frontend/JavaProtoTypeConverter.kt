@@ -35,9 +35,7 @@ class JavaProtoTypeConverter(
   private val descriptorConfig: DescriptorToTypeConverter.Configuration =
     DescriptorToTypeConverter.Configuration()
 ) : TypeConverter<java.lang.reflect.Type> {
-  override fun convertToTypes(
-    initialElement: java.lang.reflect.Type,
-  ): TypeSet? {
+  override fun convertToTypes(initialElement: java.lang.reflect.Type): TypeSet? {
     val descriptor = initialElement.getProtobufDescriptor() ?: return null
 
     return DescriptorToTypeConverter(descriptorConfig).convertToTypes(descriptor)

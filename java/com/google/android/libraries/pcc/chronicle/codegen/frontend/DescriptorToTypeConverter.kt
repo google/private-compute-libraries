@@ -60,7 +60,7 @@ class DescriptorToTypeConverter(private val config: Configuration = Configuratio
 
     return TypeSet(
       primary = requireNotNull(primaryType) { "Type not found" },
-      additional = typesByDescriptor.values.toSet() - primaryType
+      additional = typesByDescriptor.values.toSet() - primaryType,
     )
   }
 
@@ -68,12 +68,12 @@ class DescriptorToTypeConverter(private val config: Configuration = Configuratio
 
   private data class ConvertedFieldDescriptor(
     val fields: List<FieldEntry>,
-    val nestedTypes: Set<Descriptor>
+    val nestedTypes: Set<Descriptor>,
   )
 
   private data class ConvertedFieldCategory(
     val category: FieldCategory,
-    val nestedTypes: Set<Descriptor>
+    val nestedTypes: Set<Descriptor>,
   )
 
   /**
@@ -106,7 +106,7 @@ class DescriptorToTypeConverter(private val config: Configuration = Configuratio
         jvmLocation = descriptor.typeLocation(useJavaPackage = true),
         fields = fields,
         oneOfs = oneOfs,
-        tooling = Type.Tooling.PROTO
+        tooling = Type.Tooling.PROTO,
       )
     return ConvertedDescriptor(result, nested)
   }
@@ -139,7 +139,7 @@ class DescriptorToTypeConverter(private val config: Configuration = Configuratio
           foreignReferenceName.toChronicleFieldName(),
           FieldCategory.ForeignReference(it.schemaName, it.hard),
           name.toChronicleFieldName(),
-          presenceConditional()
+          presenceConditional(),
         )
       }
 
@@ -161,10 +161,10 @@ class DescriptorToTypeConverter(private val config: Configuration = Configuratio
           name = name.toChronicleFieldName(),
           category = if (isNullable) FieldCategory.NullableValue(category) else category,
           sourceName = toProtoFieldName(config.convertBytesFieldsToStrings),
-          presenceCondition = presenceConditional()
+          presenceCondition = presenceConditional(),
         )
       ),
-      nested
+      nested,
     )
   }
 
@@ -218,13 +218,13 @@ class DescriptorToTypeConverter(private val config: Configuration = Configuratio
           FieldCategory.EnumValue(
             location = enumType.typeLocation(config.useJavaPackageInTypeLocations),
             jvmLocation = enumType.typeLocation(useJavaPackage = true),
-            possibleValues = enumType.values.map { it.name }
+            possibleValues = enumType.values.map { it.name },
           ) to emptySet()
         FieldDescriptor.Type.MESSAGE,
         FieldDescriptor.Type.GROUP -> {
           FieldCategory.NestedTypeValue(
             location = messageType.typeLocation(config.useJavaPackageInTypeLocations),
-            jvmLocation = messageType.typeLocation(useJavaPackage = true)
+            jvmLocation = messageType.typeLocation(useJavaPackage = true),
           ) to setOf(messageType)
         }
         else -> throw DescriptorConversionException("Unable to handle FieldDescriptor type $type")
@@ -244,7 +244,7 @@ class DescriptorToTypeConverter(private val config: Configuration = Configuratio
       this.messageType.findFieldByName("value")!!.toFieldCategory()
     return ConvertedFieldCategory(
       category = MapValue(MAP_TYPE_LOCATION, keyFieldCategory, valueFieldCategory),
-      nestedTypes = keyDescriptors + valueDescriptors
+      nestedTypes = keyDescriptors + valueDescriptors,
     )
   }
 

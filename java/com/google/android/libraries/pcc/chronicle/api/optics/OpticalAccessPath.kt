@@ -32,11 +32,11 @@ data class OpticalAccessPath(
    */
   val dataTypeName: String,
   /** List of field names walked by the composition of optics. */
-  val selectors: List<String>
+  val selectors: List<String>,
 ) {
   constructor(
     rootTypeName: String,
-    vararg selectors: String
+    vararg selectors: String,
   ) : this(rootTypeName, selectors.asList())
 
   constructor(dtd: DataTypeDescriptor, vararg selectors: String) : this(dtd, selectors.asList())
@@ -50,7 +50,6 @@ data class OpticalAccessPath(
    * concatenation of the [other]'s [selectors] onto the receiver/LHS's.
    *
    * Example:
-   *
    * ```kotlin
    * val cityMayor = OpticalAccessPath("City", "mayor")
    * val personPetName = OpticalAccessPath("Person", "pet", "name")

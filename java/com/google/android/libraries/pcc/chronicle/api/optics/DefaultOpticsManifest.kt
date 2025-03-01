@@ -26,7 +26,7 @@ import com.google.android.libraries.pcc.chronicle.api.FieldType
  */
 class DefaultOpticsManifest(
   lenses: Set<Lens<*, *, *, *>>,
-  private val dtds: DataTypeDescriptorSet
+  private val dtds: DataTypeDescriptorSet,
 ) : OpticsManifest {
   private var traversalsByPath: MutableMap<OpticalAccessPath, Traversal<*, *, *, *>> =
     lenses.associateTo(mutableMapOf()) { it.sourceAccessPath to it.asTraversal() }
@@ -38,7 +38,7 @@ class DefaultOpticsManifest(
     sourceEntityType: Class<out S & Any>,
     targetEntityType: Class<out T & Any>,
     sourceFieldType: Class<out A & Any>,
-    targetFieldType: Class<out B & Any>
+    targetFieldType: Class<out B & Any>,
   ): Traversal<S, T, A, B> {
     val result = composeTraversalInner(accessPath, isTail = true) as Traversal<S, T, A, B>
 

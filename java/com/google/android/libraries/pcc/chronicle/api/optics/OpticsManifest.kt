@@ -59,7 +59,7 @@ inline fun <reified S, reified T, reified A, reified B> OpticsManifest.composePo
     S::class.java as Class<S & Any>,
     T::class.java as Class<T & Any>,
     A::class.java as Class<A & Any>,
-    B::class.java as Class<B & Any>
+    B::class.java as Class<B & Any>,
   )
 }
 
@@ -78,6 +78,6 @@ inline fun <reified S, reified A> OpticsManifest.composeMono(
     S::class.java as Class<S & Any>,
     S::class.java as Class<S & Any>,
     A::class.java as Class<A & Any>,
-    A::class.java as Class<A & Any>
+    A::class.java as Class<A & Any>,
   )
 }

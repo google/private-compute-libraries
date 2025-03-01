@@ -41,7 +41,7 @@ import java.time.Instant
  */
 class ClassToTypeConverter(
   val config: Configuration = Configuration(),
-  private val alternateConverters: List<TypeConverter<JavaType>> = emptyList()
+  private val alternateConverters: List<TypeConverter<JavaType>> = emptyList(),
 ) : TypeConverter<JavaType> {
   /** Internal memo of already-converted [Type]s. */
   private lateinit var primary: Type
@@ -117,12 +117,7 @@ class ClassToTypeConverter(
     val result =
       try {
         alternateConverters.map { it.convertToTypes(rawType) }.firstOrNull { it != null }
-          ?: TypeSet(
-            Type(
-              rawType.asTypeLocation(),
-              rawType.convertTypeFields(),
-            )
-          )
+          ?: TypeSet(Type(rawType.asTypeLocation(), rawType.convertTypeFields()))
       } catch (e: Exception) {
         throw Exception("failed to convert ${inType.typeName}", e)
       }
@@ -174,7 +169,7 @@ class ClassToTypeConverter(
         FieldCategory.MapValue(
           location = MAP_TYPE_LOCATION,
           keyType = getParameterFieldCategory(0),
-          valueType = getParameterFieldCategory(1)
+          valueType = getParameterFieldCategory(1),
         )
       Instant::class.java,
       Instant::class.javaObjectType -> FieldCategory.InstantValue
@@ -185,7 +180,7 @@ class ClassToTypeConverter(
         if (rawType.isEnum) {
           FieldCategory.EnumValue(
             rawType.asTypeLocation(),
-            rawType.enumConstants?.map { it.toString() }.orEmpty()
+            rawType.enumConstants?.map { it.toString() }.orEmpty(),
           )
         } else {
           convertToTypeInternal(this)
@@ -222,7 +217,7 @@ class ClassToTypeConverter(
         FieldEntry(
           if (it.additionalNamedField.isEmpty()) name else it.additionalNamedField,
           FieldCategory.ForeignReference(foreignReference.schemaName, foreignReference.hard),
-          name
+          name,
         )
       }
 
@@ -259,7 +254,7 @@ class ClassToTypeConverter(
     val enableNullableSupport: Boolean = false,
 
     /** Indicates that a field should be represented using a foreign reference. */
-    val foreignReferences: Set<ForeignReference> = emptySet()
+    val foreignReferences: Set<ForeignReference> = emptySet(),
   )
 
   companion object {

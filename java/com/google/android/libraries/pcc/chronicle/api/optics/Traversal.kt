@@ -33,7 +33,7 @@ abstract class Traversal<S, T, A, B>(
   val sourceEntityType: Class<out S & Any>,
   val targetEntityType: Class<out T & Any>,
   val sourceFieldType: Class<out A & Any>,
-  val targetFieldType: Class<out B & Any>
+  val targetFieldType: Class<out B & Any>,
 ) {
   /** Whether or not the [Traversal] is actually monomorphic. */
   val isMonomorphic: Boolean =
@@ -74,7 +74,7 @@ abstract class Traversal<S, T, A, B>(
         sourceEntityType = sourceEntityType,
         targetEntityType = targetEntityType,
         sourceFieldType = other.sourceFieldType,
-        targetFieldType = other.targetFieldType
+        targetFieldType = other.targetFieldType,
       ) {
       override fun every(entity: S): Sequence<NewA> =
         this@Traversal.every(entity).flatMap { other.every(it as AIn) }
@@ -95,7 +95,7 @@ abstract class Traversal<S, T, A, B>(
       // The [B] type variable must be nullable, but alas: type-erasure.
       override fun modifyWithAction(
         entity: S,
-        modifier: (value: NewA) -> Action<out NewB>
+        modifier: (value: NewA) -> Action<out NewB>,
       ): Action<out T> {
         return this@Traversal.modifyWithAction(entity) {
           if (it != null) {
@@ -141,7 +141,7 @@ abstract class Traversal<S, T, A, B>(
           sourceEntityType = dummyEntity::class.java,
           targetEntityType = dummyEntity::class.java,
           sourceFieldType = A::class.java,
-          targetFieldType = A::class.java
+          targetFieldType = A::class.java,
         ) {
         override fun every(entity: List<A>): Sequence<A> = entity.asSequence()
 
@@ -149,7 +149,7 @@ abstract class Traversal<S, T, A, B>(
 
         override fun modifyWithAction(
           entity: List<A>,
-          modifier: (value: A) -> Action<out A>
+          modifier: (value: A) -> Action<out A>,
         ): Action<out List<A>> {
           return Action.Update(
             entity.mapNotNull {
@@ -184,7 +184,7 @@ abstract class Traversal<S, T, A, B>(
           sourceEntityType = dummySource::class.java,
           targetEntityType = dummyTarget::class.java,
           sourceFieldType = A::class.java,
-          targetFieldType = B::class.java
+          targetFieldType = B::class.java,
         ) {
         override fun every(entity: List<A>): Sequence<A> = entity.asSequence()
 
@@ -192,7 +192,7 @@ abstract class Traversal<S, T, A, B>(
 
         override fun modifyWithAction(
           entity: List<A>,
-          modifier: (value: A) -> Action<out B>
+          modifier: (value: A) -> Action<out B>,
         ): Action<out List<B>> {
           return Action.Update(
             entity.mapNotNull {

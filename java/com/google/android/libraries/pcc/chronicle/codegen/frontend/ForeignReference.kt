@@ -21,15 +21,15 @@ package com.google.android.libraries.pcc.chronicle.codegen.frontend
  *
  * @property fieldName the field name to be treated as a reference.
  * @property schemaName if non-empty, this is the schema name for a foreign reference. This schema
- * must be already defined somewhere else.
+ *   must be already defined somewhere else.
  * @property hard if [true], the field will be treated as a hard reference.
  * @property additionalNamedField if empty, the existing field will be replaced with a foreign
- * reference. If non-empty, a new field will be added for the foreign reference using the provided
- * name, leaving the original field as-is.
+ *   reference. If non-empty, a new field will be added for the foreign reference using the provided
+ *   name, leaving the original field as-is.
  */
 data class ForeignReference(
   val fieldName: String,
   val schemaName: String,
   val hard: Boolean,
-  val additionalNamedField: String = ""
+  val additionalNamedField: String = "",
 )
