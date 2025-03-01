@@ -26,7 +26,7 @@ fun Type.withForeignReference(
   foreignRef: String,
   schemaName: String,
   hard: Boolean,
-  additionalName: String? = null
+  additionalName: String? = null,
 ) =
   copy(
     fields =
@@ -38,7 +38,7 @@ fun Type.withForeignReference(
               it.copy(
                 name = additionalName,
                 sourceName = it.name,
-                category = FieldCategory.ForeignReference(schemaName, hard)
+                category = FieldCategory.ForeignReference(schemaName, hard),
               ),
             )
           } else {

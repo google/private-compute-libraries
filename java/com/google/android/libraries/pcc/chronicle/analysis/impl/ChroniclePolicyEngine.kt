@@ -37,11 +37,10 @@ import com.google.android.libraries.pcc.chronicle.api.policy.canEgress
  * Uses the policy engine from Arcs to check policy adherence.
  *
  * When [checkPolicy] is called, this implementation will perform the following:
- *
  * 1. Verify all the fields requested by the connection is marked as allowed for egress.
  * * Return [PolicyCheckResult.Pass] if the [ManagementStrategies] for the [ConnectionProviders]
- * being used by the `connectionRequester` are valid for the [Policy], and all of the checks
- * performed by data flow analysis pass.
+ *   being used by the `connectionRequester` are valid for the [Policy], and all of the checks
+ *   performed by data flow analysis pass.
  * * Return [PolicyCheckResult.Fail] otherwise.
  */
 class ChroniclePolicyEngine : PolicyEngine {
@@ -49,7 +48,7 @@ class ChroniclePolicyEngine : PolicyEngine {
     policy: Policy,
     context: ChronicleContext,
     dataTypeDescriptor: DataTypeDescriptor,
-    requester: ProcessorNode
+    requester: ProcessorNode,
   ): PolicyCheckResult {
     // Verify the ManagementStrategies involved against the Policy, and verify the checks using
     // the results of the data-flow analysis.
@@ -70,7 +69,7 @@ class ChroniclePolicyEngine : PolicyEngine {
 
   private fun checkWriteConnectionManagement(
     dataType: DataType,
-    context: ChronicleContext
+    context: ChronicleContext,
   ): List<PolicyCheck> {
     // If the managed data type doesn't declare any write connections, there's nothing to do here.
     if (dataType.connectionTypes.none { it.isWriteConnection }) return emptyList()
@@ -118,11 +117,10 @@ class ChroniclePolicyEngine : PolicyEngine {
               } else {
                 { !it.rawUsages.canEgress() }
               },
-              context
+              context,
             )
           )
-        }
-        ?: violatingFields.add("${dataTypeDescriptor.name}.$fieldName")
+        } ?: violatingFields.add("${dataTypeDescriptor.name}.$fieldName")
     }
 
     return violatingFields.map { PolicyCheck("s:$it is $FIELD_CANNOT_BE_EGRESSED_PREDICATE") }
@@ -132,7 +130,7 @@ class ChroniclePolicyEngine : PolicyEngine {
     prefix: String,
     policyField: PolicyField,
     hasPolicyViolation: (PolicyField) -> Boolean,
-    context: ChronicleContext
+    context: ChronicleContext,
   ): List<String> {
     return when (this) {
       FieldType.Boolean,
@@ -160,7 +158,7 @@ class ChroniclePolicyEngine : PolicyEngine {
           prefix,
           policyField,
           hasPolicyViolation,
-          context
+          context,
         )
       }
       is FieldType.Reference ->
@@ -174,7 +172,7 @@ class ChroniclePolicyEngine : PolicyEngine {
     prefix: String,
     policyField: PolicyField,
     hasPolicyViolation: (PolicyField) -> Boolean,
-    context: ChronicleContext
+    context: ChronicleContext,
   ): List<String> {
     val violatingFields = mutableListOf<String>()
     this.fields.forEach { (fieldName, type) ->
@@ -184,8 +182,7 @@ class ChroniclePolicyEngine : PolicyEngine {
           violatingFields.addAll(
             type.findPolicyViolations("$prefix.$fieldName", it, hasPolicyViolation, context)
           )
-        }
-        ?: violatingFields.add("$prefix.$fieldName")
+        } ?: violatingFields.add("$prefix.$fieldName")
     }
     return violatingFields.toList()
   }

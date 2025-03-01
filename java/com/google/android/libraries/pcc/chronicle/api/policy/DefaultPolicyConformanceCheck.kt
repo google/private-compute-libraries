@@ -20,7 +20,6 @@ import com.google.android.libraries.pcc.chronicle.api.error.MalformedPolicySet
 
 /**
  * Applies the following conformance rules to the set of [Policies][Policy] passed to it:
- *
  * 1. All [Policies][Policy] must have non-empty [Policy.description] values.
  * 1. All [PolicyTargets][PolicyTarget] must contain at least one [PolicyRetention] value.
  */

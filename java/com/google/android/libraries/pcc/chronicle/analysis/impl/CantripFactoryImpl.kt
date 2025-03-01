@@ -43,7 +43,7 @@ import com.google.android.libraries.pcc.chronicle.api.policy.builder.UsageType
 class CantripFactoryImpl(
   private val optics: OpticsManifest,
   private val operations: OperationLibrary,
-  private val dtds: DataTypeDescriptorSet
+  private val dtds: DataTypeDescriptorSet,
 ) : CantripFactory {
 
   @Suppress("UNCHECKED_CAST") // Types are checked via alternate mechanisms.
@@ -51,7 +51,7 @@ class CantripFactoryImpl(
     dtd: DataTypeDescriptor,
     requester: ProcessorNode,
     policy: Policy?,
-    usageType: UsageType
+    usageType: UsageType,
   ): Cantrip<Data> {
     val noOp = MultiCantrip<Data>()
     val policyTarget = policy?.targets?.find { it.schemaName == dtd.name } ?: return noOp
@@ -81,7 +81,7 @@ class CantripFactoryImpl(
   private fun collectConditionalUsages(
     baseDtd: DataTypeDescriptor,
     field: PolicyField,
-    usageType: UsageType
+    usageType: UsageType,
   ): List<ConditionalUsage> {
     val innerUsages = field.subfields.flatMap { collectConditionalUsages(baseDtd, it, usageType) }
 
@@ -93,7 +93,7 @@ class CantripFactoryImpl(
           ConditionalUsage(
             accessPath = pathToField,
             tag = it.key,
-            fieldType = dtds.findFieldTypeAsClass(baseDtd, field.fieldPath)
+            fieldType = dtds.findFieldTypeAsClass(baseDtd, field.fieldPath),
           )
         }
 

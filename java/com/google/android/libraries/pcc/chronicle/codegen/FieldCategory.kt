@@ -19,34 +19,53 @@ package com.google.android.libraries.pcc.chronicle.codegen
 /** This class represents the set of values that fields can take inside a Type object. */
 sealed class FieldCategory {
   object StringValue : FieldCategory()
+
   object ByteValue : FieldCategory()
+
   object ByteArrayValue : FieldCategory()
+
   object ShortValue : FieldCategory()
+
   object CharValue : FieldCategory()
+
   object IntValue : FieldCategory()
+
   object LongValue : FieldCategory()
+
   object FloatValue : FieldCategory()
+
   object DoubleValue : FieldCategory()
+
   object BooleanValue : FieldCategory()
+
   object InstantValue : FieldCategory()
+
   object DurationValue : FieldCategory()
 
   data class EnumValue(
     val location: TypeLocation,
     val possibleValues: List<String>,
-    val jvmLocation: TypeLocation = location
+    val jvmLocation: TypeLocation = location,
   ) : FieldCategory()
+
   data class ListValue(val location: TypeLocation, val listType: FieldCategory) : FieldCategory()
+
   data class SetValue(val location: TypeLocation, val setType: FieldCategory) : FieldCategory()
+
   data class MapValue(
     val location: TypeLocation,
     val keyType: FieldCategory,
-    val valueType: FieldCategory
+    val valueType: FieldCategory,
   ) : FieldCategory()
+
   data class NullableValue(val innerType: FieldCategory) : FieldCategory()
+
   data class NestedTypeValue(val location: TypeLocation, val jvmLocation: TypeLocation = location) :
     FieldCategory()
+
   data class ForeignReference(val schemaName: String, val hard: Boolean) : FieldCategory()
+
   data class OpaqueTypeValue(val location: TypeLocation) : FieldCategory()
+
   data class TupleValue(val types: List<FieldCategory>) : FieldCategory()
 }

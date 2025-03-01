@@ -33,7 +33,7 @@ import com.google.android.libraries.pcc.chronicle.api.policy.builder.deletionTri
  * [ConnectionProvider] are valid given policy-requirements for the receiving [Policy] object.
  *
  * @return a list of [Checks][PolicyCheck]. If empty, the implication is that policy adherence is
- * satisfied. If non-empty, the values will describe how policy is not being met.
+ *   satisfied. If non-empty, the values will describe how policy is not being met.
  */
 internal fun Policy.verifyManagementStrategies(
   connectionProviders: Collection<ConnectionProvider>

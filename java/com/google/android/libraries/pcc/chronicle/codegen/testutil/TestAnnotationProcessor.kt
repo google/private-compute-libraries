@@ -39,7 +39,6 @@ annotation class TestAnnotation
  *
  * In your annotation test, instantiate the processor, and provide the instance to a
  * [Compiler.compile] call:
- *
  * ```
  *   val processor = TestAnnotationProcessor { processingEnv, element ->
  *     return element.simpleName
@@ -50,18 +49,15 @@ annotation class TestAnnotation
  *   // resultingName should now contain the string "SomeType"
  * ```
  */
-class TestAnnotationProcessor<T>(
-  private val processor: (ProcessingEnvironment, Element) -> T
-) : AbstractProcessor() {
+class TestAnnotationProcessor<T>(private val processor: (ProcessingEnvironment, Element) -> T) :
+  AbstractProcessor() {
   override fun getSupportedAnnotationTypes() = setOf(TestAnnotation::class.java.canonicalName)
+
   override fun getSupportedSourceVersion(): SourceVersion = SourceVersion.latestSupported()
 
   private val results = mutableMapOf<Element, T>()
 
-  override fun process(
-    annotations: MutableSet<out TypeElement>,
-    env: RoundEnvironment
-  ): Boolean {
+  override fun process(annotations: MutableSet<out TypeElement>, env: RoundEnvironment): Boolean {
     try {
       env.getElementsAnnotatedWith(TestAnnotation::class.java).forEach {
         results[it] = processor(processingEnv, it)
@@ -74,29 +70,27 @@ class TestAnnotationProcessor<T>(
   }
 
   /**
-   * Creates and compiles a test snippet of code that includes a field of the
-   * provided type with a @TestAnnotation.
+   * Creates and compiles a test snippet of code that includes a field of the provided type with
+   * a @TestAnnotation.
    *
-   * This triggers the processor to execute an instances of the provided [processorCreate].
-   * The results of the run will be returned from this method.
+   * This triggers the processor to execute an instances of the provided [processorCreate]. The
+   * results of the run will be returned from this method.
    */
   fun runAnnotationTestForType(typeClass: KClass<*>): T {
-    val compilerResult = Compiler.javac()
-      .withProcessors(this)
-      .compile(
-        JavaFileObjects.forSourceString(
-          "Test",
-          codeSnippetForTypeWithTestAnnotation(typeClass)
+    val compilerResult =
+      Compiler.javac()
+        .withProcessors(this)
+        .compile(
+          JavaFileObjects.forSourceString("Test", codeSnippetForTypeWithTestAnnotation(typeClass))
         )
-      )
     require(compilerResult.errors().isEmpty())
     return results.values.first()
   }
 
   companion object {
     /**
-     * This creates a code snippet that can be passed to a compiler call, it will trigger
-     * annotation processing for the provided type as the root element.
+     * This creates a code snippet that can be passed to a compiler call, it will trigger annotation
+     * processing for the provided type as the root element.
      */
     private fun codeSnippetForTypeWithTestAnnotation(type: KClass<*>) =
       """
@@ -106,6 +100,7 @@ class TestAnnotationProcessor<T>(
         @TestAnnotation
         ${type.simpleName} thing;
       }
-      """.trimIndent()
+      """
+        .trimIndent()
   }
 }

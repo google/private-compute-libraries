@@ -26,9 +26,13 @@ data class TypeSet(val primary: Type, val additional: Set<Type> = emptySet()) : 
   constructor(vararg allTypes: Type) : this(allTypes.first(), allTypes.drop(1).toSet())
 
   override val size = additional.size + 1
+
   override fun contains(element: Type) = primary == element || additional.contains(element)
+
   override fun containsAll(elements: Collection<Type>) = elements.all { contains(it) }
+
   override fun isEmpty() = false
+
   override fun iterator(): Iterator<Type> {
     return iterator {
       yield(primary)
@@ -43,14 +47,14 @@ data class TypeSet(val primary: Type, val additional: Set<Type> = emptySet()) : 
  * @param location The [TypeLocation] of the underlying Java/Kotlin type
  * @param fields The fields the type contains
  * @param oneOfs Information about mutually-exclusive field groups (from protos) conversion. The
- * `Set<Type>` returned from a frontend should contain exactly one item with this flag set.
+ *   `Set<Type>` returned from a frontend should contain exactly one item with this flag set.
  */
 data class Type(
   val location: TypeLocation,
   val fields: List<FieldEntry>,
   val oneOfs: OneOfs = OneOfs(),
   val jvmLocation: TypeLocation = location,
-  val tooling: Tooling = Tooling.UNKNOWN
+  val tooling: Tooling = Tooling.UNKNOWN,
 ) {
   val name = location.name
   val enclosingNames = location.enclosingNames
@@ -84,7 +88,7 @@ data class Type(
 data class TypeLocation(
   val name: String,
   val enclosingNames: List<String> = emptyList(),
-  val pkg: String
+  val pkg: String,
 ) {
   override fun toString(): String {
     val fullName = (enclosingNames.reversed().filter { it.isNotEmpty() } + name).joinToString(".")
@@ -104,7 +108,7 @@ data class FieldEntry(
   val name: String,
   val category: FieldCategory,
   val sourceName: String = name,
-  val presenceCondition: String = ""
+  val presenceCondition: String = "",
 )
 
 /**
@@ -115,5 +119,5 @@ data class FieldEntry(
  */
 data class OneOfs(
   val oneOfForField: Map<String, String> = emptyMap(),
-  val fieldsForOneOf: Map<String, List<String>> = emptyMap()
+  val fieldsForOneOf: Map<String, List<String>> = emptyMap(),
 )

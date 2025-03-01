@@ -31,7 +31,11 @@ import com.google.android.libraries.pcc.chronicle.api.policy.annotation.Annotati
 
 /** A base class for all the store capabilities. */
 sealed class Capability(val tag: String) {
-  enum class Comparison { LessStrict, Equivalent, Stricter }
+  enum class Comparison {
+    LessStrict,
+    Equivalent,
+    Stricter,
+  }
 
   open fun isEquivalent(other: Capability): Boolean {
     return when (other) {
@@ -46,9 +50,13 @@ sealed class Capability(val tag: String) {
       else -> isEquivalent(other)
     }
   }
+
   fun isLessStrict(other: Capability) = compare(other) == Comparison.LessStrict
+
   fun isSameOrLessStrict(other: Capability) = compare(other) != Comparison.Stricter
+
   fun isStricter(other: Capability) = compare(other) == Comparison.Stricter
+
   fun isSameOrStricter(other: Capability) = compare(other) != Comparison.LessStrict
 
   fun compare(other: Capability): Comparison {
@@ -59,15 +67,14 @@ sealed class Capability(val tag: String) {
       is Ttl -> compare(other as Ttl)
       is Queryable -> compare(other as Queryable)
       is Shareable -> compare(other as Shareable)
-      is Range -> throw UnsupportedOperationException(
-        "Capability.Range comparison not supported yet."
-      )
+      is Range ->
+        throw UnsupportedOperationException("Capability.Range comparison not supported yet.")
     }
   }
 
   /**
-   * Returns its own tag if this is an individual capability, or the tag of the inner capability,
-   * if this is a range.
+   * Returns its own tag if this is an individual capability, or the tag of the inner capability, if
+   * this is a range.
    */
   fun getRealTag(): String {
     return when (tag) {
@@ -84,7 +91,12 @@ sealed class Capability(val tag: String) {
 
   /** Capability describing persistence requirement for the store. */
   data class Persistence(val kind: Kind) : Capability(TAG) {
-    enum class Kind { None, InMemory, OnDisk, Unrestricted }
+    enum class Kind {
+      None,
+      InMemory,
+      OnDisk,
+      Unrestricted,
+    }
 
     fun compare(other: Persistence): Comparison {
       return when {
@@ -107,7 +119,8 @@ sealed class Capability(val tag: String) {
         val kinds = mutableSetOf<Kind>()
         for (annotation in annotations) {
           when (annotation.name) {
-            "onDisk", "persistent" -> {
+            "onDisk",
+            "persistent" -> {
               if (annotation.params.size > 0) {
                 throw IllegalArgumentException(
                   "Unexpected parameter for $annotation.name capability annotation"
@@ -115,7 +128,9 @@ sealed class Capability(val tag: String) {
               }
               kinds.add(Kind.OnDisk)
             }
-            "inMemory", "tiedToArc", "tiedToRuntime" -> {
+            "inMemory",
+            "tiedToArc",
+            "tiedToRuntime" -> {
               if (annotation.params.size > 0) {
                 throw IllegalArgumentException(
                   "Unexpected parameter for $annotation.name capability annotation"
@@ -128,9 +143,10 @@ sealed class Capability(val tag: String) {
         return when (kinds.size) {
           0 -> null
           1 -> Persistence(kinds.elementAt(0))
-          else -> throw IllegalArgumentException(
-            "Containing multiple persistence capabilities: $annotations"
-          )
+          else ->
+            throw IllegalArgumentException(
+              "Containing multiple persistence capabilities: $annotations"
+            )
         }
       }
     }
@@ -139,12 +155,14 @@ sealed class Capability(val tag: String) {
   /** Capability describing retention policy of the store. */
   sealed class Ttl(count: Int, val isInfinite: Boolean = false) : Capability(TAG) {
     /** Number of minutes for retention, or -1 for infinite. */
-    val minutes: Int = count * when (this) {
-      is Minutes -> 1
-      is Hours -> 60
-      is Days -> 60 * 24
-      is Infinite -> 1 // returns -1 because Infinite `count` is -1.
-    }
+    val minutes: Int =
+      count *
+        when (this) {
+          is Minutes -> 1
+          is Hours -> 60
+          is Days -> 60 * 24
+          is Infinite -> 1 // returns -1 because Infinite `count` is -1.
+        }
 
     /** Number of milliseconds for retention, or -1 for infinite. */
     val millis: Long = if (this is Infinite) -1 else minutes * MILLIS_IN_MIN
@@ -167,8 +185,11 @@ sealed class Capability(val tag: String) {
     }
 
     data class Minutes(val count: Int) : Ttl(count)
+
     data class Hours(val count: Int) : Ttl(count)
+
     data class Days(val count: Int) : Ttl(count)
+
     data class Infinite(val count: Int = TTL_INFINITE) : Ttl(count, true)
 
     companion object {
@@ -179,20 +200,24 @@ sealed class Capability(val tag: String) {
 
       val ANY = Range(Ttl.Infinite(), Ttl.Minutes(1))
 
-      private val TTL_PATTERN =
-        "^([0-9]+)[ ]*(day[s]?|hour[s]?|minute[s]?|[d|h|m])$".toRegex()
+      private val TTL_PATTERN = "^([0-9]+)[ ]*(day[s]?|hour[s]?|minute[s]?|[d|h|m])$".toRegex()
 
       fun fromString(ttlStr: String): Ttl {
-        val ttlMatch = requireNotNull(TTL_PATTERN.matchEntire(ttlStr.trim())) {
-          "Invalid TTL $ttlStr."
-        }
+        val ttlMatch =
+          requireNotNull(TTL_PATTERN.matchEntire(ttlStr.trim())) { "Invalid TTL $ttlStr." }
         val (_, count, units) = ttlMatch.groupValues
         // Note: consider using idiomatic KT types:
         // https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.time/-duration-unit/
         return when (units.trim()) {
-          "m", "minute", "minutes" -> Ttl.Minutes(count.toInt())
-          "h", "hour", "hours" -> Ttl.Hours(count.toInt())
-          "d", "day", "days" -> Ttl.Days(count.toInt())
+          "m",
+          "minute",
+          "minutes" -> Ttl.Minutes(count.toInt())
+          "h",
+          "hour",
+          "hours" -> Ttl.Hours(count.toInt())
+          "d",
+          "day",
+          "days" -> Ttl.Days(count.toInt())
           else -> throw IllegalStateException("Invalid TTL units: $units")
         }
       }
@@ -207,9 +232,8 @@ sealed class Capability(val tag: String) {
             }
             Capability.Ttl.fromString(ttls.elementAt(0).getStringParam("value"))
           }
-          else -> throw IllegalArgumentException(
-            "Containing multiple ttl capabilities: $annotations"
-          )
+          else ->
+            throw IllegalArgumentException("Containing multiple ttl capabilities: $annotations")
         }
       }
     }
@@ -239,9 +263,10 @@ sealed class Capability(val tag: String) {
             }
             Capability.Encryption(true)
           }
-          else -> throw IllegalArgumentException(
-            "Containing multiple encryption capabilities: $annotations"
-          )
+          else ->
+            throw IllegalArgumentException(
+              "Containing multiple encryption capabilities: $annotations"
+            )
         }
       }
     }
@@ -271,9 +296,10 @@ sealed class Capability(val tag: String) {
             }
             Capability.Queryable(true)
           }
-          else -> throw IllegalArgumentException(
-            "Containing multiple queryable capabilities: $annotations"
-          )
+          else ->
+            throw IllegalArgumentException(
+              "Containing multiple queryable capabilities: $annotations"
+            )
         }
       }
     }
@@ -294,9 +320,8 @@ sealed class Capability(val tag: String) {
       val ANY = Range(Shareable(false), Shareable(true))
 
       fun fromAnnotations(annotations: List<Annotation>): Shareable? {
-        val filtered = annotations.filter {
-          arrayOf("shareable", "tiedToRuntime").contains(it.name)
-        }
+        val filtered =
+          annotations.filter { arrayOf("shareable", "tiedToRuntime").contains(it.name) }
         return when (filtered.size) {
           0 -> null
           1 -> {
@@ -305,9 +330,10 @@ sealed class Capability(val tag: String) {
             }
             Capability.Shareable(true)
           }
-          else -> throw IllegalArgumentException(
-            "Containing multiple shareable capabilities: $annotations"
-          )
+          else ->
+            throw IllegalArgumentException(
+              "Containing multiple shareable capabilities: $annotations"
+            )
         }
       }
     }
@@ -329,8 +355,7 @@ sealed class Capability(val tag: String) {
 
     override fun contains(other: Capability): Boolean {
       return when (other) {
-        is Range ->
-          min.isSameOrLessStrict(other.min) && max.isSameOrStricter(other.max)
+        is Range -> min.isSameOrLessStrict(other.min) && max.isSameOrStricter(other.max)
         else -> min.isSameOrLessStrict(other) && max.isSameOrStricter(other)
       }
     }

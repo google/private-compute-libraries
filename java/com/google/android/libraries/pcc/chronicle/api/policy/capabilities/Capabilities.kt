@@ -30,9 +30,9 @@ package com.google.android.libraries.pcc.chronicle.api.policy.capabilities
 import com.google.android.libraries.pcc.chronicle.api.policy.annotation.Annotation
 
 /**
- * Store capabilities containing a combination of individual [Capability]s (e.g. Persistence
- * and/or Ttl and/or Queryable etc).
- * If a certain capability does not appear in the combination, it is not restricted.
+ * Store capabilities containing a combination of individual [Capability]s (e.g. Persistence and/or
+ * Ttl and/or Queryable etc). If a certain capability does not appear in the combination, it is not
+ * restricted.
  */
 class Capabilities(capabilities: List<Capability> = emptyList()) {
   val ranges: List<Capability.Range>
@@ -64,17 +64,15 @@ class Capabilities(capabilities: List<Capability> = emptyList()) {
   val isEmpty = ranges.isEmpty()
 
   /**
-   * Returns true, if the given [Capability] is within the corresponding [Capability.Range]
-   * of same type of this.
-   * For example, [Capabilities] with Ttl range of 1-5 days `contains` a Ttl of 3 days.
+   * Returns true, if the given [Capability] is within the corresponding [Capability.Range] of same
+   * type of this. For example, [Capabilities] with Ttl range of 1-5 days `contains` a Ttl of 3
+   * days.
    */
   fun contains(capability: Capability): Boolean {
     return ranges.find { it.isCompatible(capability) }?.contains(capability) ?: false
   }
 
-  /**
-   * Returns true if all ranges in the given [Capabilities] are contained in this.
-   */
+  /** Returns true if all ranges in the given [Capabilities] are contained in this. */
   fun containsAll(other: Capabilities): Boolean {
     return other.ranges.all { otherRange -> contains(otherRange) }
   }
@@ -90,18 +88,18 @@ class Capabilities(capabilities: List<Capability> = emptyList()) {
   override fun toString(): String = "Capabilities($ranges)"
 
   private inline fun <reified T : Capability> getCapability(): T? {
-    return ranges.find { it.min is T }?.let {
-      require(it.min.isEquivalent(it.max)) { "Cannot get capability for a range" }
-      it.min as T
-    }
+    return ranges
+      .find { it.min is T }
+      ?.let {
+        require(it.min.isEquivalent(it.max)) { "Cannot get capability for a range" }
+        it.min as T
+      }
   }
 
   companion object {
     fun fromAnnotations(annotations: List<Annotation>): Capabilities {
       val ranges = mutableListOf<Capability.Range>()
-      Capability.Persistence.fromAnnotations(annotations)?.let {
-        ranges.add(it.toRange())
-      }
+      Capability.Persistence.fromAnnotations(annotations)?.let { ranges.add(it.toRange()) }
       Capability.Encryption.fromAnnotations(annotations)?.let { ranges.add(it.toRange()) }
       Capability.Ttl.fromAnnotations(annotations)?.let { ranges.add(it.toRange()) }
       Capability.Queryable.fromAnnotations(annotations)?.let { ranges.add(it.toRange()) }
