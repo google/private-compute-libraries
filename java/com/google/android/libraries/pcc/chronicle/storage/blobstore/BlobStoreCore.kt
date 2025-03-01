@@ -42,7 +42,7 @@ class BlobStoreCore(context: Context, private val timeSource: TimeSource) : Blob
     BlobStoreManager(
       timeSource = timeSource,
       managements =
-        setOf(PersistedBlobStoreManagement(dao), InMemoryBlobStoreManagement(inMemoryStorage))
+        setOf(PersistedBlobStoreManagement(dao), InMemoryBlobStoreManagement(inMemoryStorage)),
     )
 
   /** Provides a [BlobStore] based on the given [ManagementInfo]. */

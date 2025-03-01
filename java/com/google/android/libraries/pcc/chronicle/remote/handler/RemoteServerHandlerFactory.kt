@@ -48,7 +48,7 @@ open class RemoteServerHandlerFactory {
         RemoteRequestMetadata.RequestTypeCase.REQUESTTYPE_NOT_SET ->
           throw RemoteError(
             type = RemoteErrorMetadata.Type.UNSUPPORTED,
-            message = "Request type not specified, or unrecognized: $requestMetadata."
+            message = "Request type not specified, or unrecognized: $requestMetadata.",
           )
       }
     } catch (cce: ClassCastException) {
@@ -56,7 +56,7 @@ open class RemoteServerHandlerFactory {
       throw RemoteError(
         type = RemoteErrorMetadata.Type.UNSUPPORTED,
         message =
-          "Server does not handle request type [${requestMetadata.requestTypeCase}]: $server"
+          "Server does not handle request type [${requestMetadata.requestTypeCase}]: $server",
       )
     }
 }

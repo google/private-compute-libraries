@@ -54,7 +54,7 @@ interface BlobDao {
   suspend fun insertOrUpdateBlobWithPackages(
     entity: BlobEntity,
     packages: List<String>,
-    threshold: Long
+    threshold: Long,
   ) {
     var id = insertBlobIfAbsent(entity)
     // An id of -1 here means that the insert was ignored due to uniqueness constraints.
@@ -86,7 +86,7 @@ interface BlobDao {
     blobsWithPackagesMap: Map<BlobEntity, List<String>>,
     dtdName: String,
     quotaInfo: QuotaInfo,
-    threshold: Long
+    threshold: Long,
   ) {
     require(blobsWithPackagesMap.size <= quotaInfo.maxRowCount) {
       "Number of entities to insert exceeds quota limit."
@@ -127,7 +127,7 @@ interface BlobDao {
   suspend fun blobEntityWithPackagesByKeyAndDtdName(
     key: String,
     dtdName: String,
-    threshold: Long
+    threshold: Long,
   ): BlobEntityWithPackages?
 
   /**
@@ -162,7 +162,7 @@ interface BlobDao {
   )
   suspend fun blobEntitiesWithPackagesByDtdName(
     dtdName: String,
-    threshold: Long
+    threshold: Long,
   ): List<BlobEntityWithPackages>
 
   /**
@@ -181,7 +181,7 @@ interface BlobDao {
   suspend fun blobEntitiesWithPackagesByLocusIdAndDtdName(
     locusId: String,
     dtdName: String,
-    threshold: Long
+    threshold: Long,
   ): List<BlobEntityWithPackages>
 
   /**
@@ -201,7 +201,7 @@ interface BlobDao {
   suspend fun blobEntitiesWithPackagesByPackageNameAndDtdName(
     packageName: String,
     dtdName: String,
-    threshold: Long
+    threshold: Long,
   ): Map<PackageEntity, List<BlobEntityWithPackages>>
 
   /** Queries the DB for [PackageEntities][PackageEntity] by packageName. */

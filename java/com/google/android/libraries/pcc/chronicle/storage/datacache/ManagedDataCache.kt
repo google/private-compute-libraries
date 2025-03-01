@@ -39,7 +39,7 @@ constructor(
       encrypted = false,
       media = StorageMedia.MEMORY,
       ttl = ttl,
-      deletionTriggers = setOf(DeletionTrigger(Trigger.PACKAGE_UNINSTALLED, "packageName"))
+      deletionTriggers = setOf(DeletionTrigger(Trigger.PACKAGE_UNINSTALLED, "packageName")),
     )
 
   init {

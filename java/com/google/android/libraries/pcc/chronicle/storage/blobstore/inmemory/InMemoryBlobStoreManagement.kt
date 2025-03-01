@@ -23,16 +23,15 @@ import com.google.android.libraries.pcc.chronicle.storage.blobstore.ManagementIn
 import java.time.Instant
 
 /** Implementation of [BlobStoreManagement] for in memory storage using the [InMemoryStorage]. */
-class InMemoryBlobStoreManagement(
-  private val inMemoryStorage: InMemoryStorage,
-) : BlobStoreManagement {
+class InMemoryBlobStoreManagement(private val inMemoryStorage: InMemoryStorage) :
+  BlobStoreManagement {
   override suspend fun clearAll(): Int {
     return inMemoryStorage.store.value.values.sumOf { it.purgeEntitiesWhere { true } }
   }
 
   override suspend fun deleteEntitiesCreatedBetween(
     startTimeMillis: Long,
-    endTimeMillis: Long
+    endTimeMillis: Long,
   ): Int {
     return inMemoryStorage.store.value.values.sumOf { cache ->
       cache.purgeEntitiesWhere { entity ->
@@ -62,7 +61,7 @@ class InMemoryBlobStoreManagement(
 
   override suspend fun deleteExpiredEntities(
     currentTimeMillis: Long,
-    managementInfos: Set<ManagementInfo>
+    managementInfos: Set<ManagementInfo>,
   ) {
     inMemoryStorage.store.value.values.map { cache ->
       cache.purgeEntitiesWhere { entity ->

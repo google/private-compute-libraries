@@ -52,7 +52,8 @@ class RemoteStoreServerHandler<T : Any>(
       StoreRequest.OperationCase.DELETE_BY_ID -> deleteById(policy, request.deleteById.idsList)
       StoreRequest.OperationCase.CREATE -> create(policy, input)
       StoreRequest.OperationCase.UPDATE -> update(policy, input)
-      StoreRequest.OperationCase.OPERATION_NOT_SET, null ->
+      StoreRequest.OperationCase.OPERATION_NOT_SET,
+      null ->
         throw RemoteError(
           RemoteErrorMetadata.newBuilder()
             .setErrorType(RemoteErrorMetadata.Type.UNSUPPORTED)

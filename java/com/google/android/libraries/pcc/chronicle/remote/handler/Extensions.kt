@@ -31,12 +31,12 @@ import kotlinx.coroutines.flow.onEach
  */
 fun <T : Any> Flow<List<WrappedEntity<T>>>.sendEachPage(
   callback: IResponseCallback,
-  serializer: Serializer<T>
+  serializer: Serializer<T>,
 ): Flow<List<WrappedEntity<T>>> = onEach {
   callback.onData(
     RemoteResponse(
       metadata = RemoteResponseMetadata.newBuilder().build(),
-      entities = it.map(serializer::serialize)
+      entities = it.map(serializer::serialize),
     )
   )
 }

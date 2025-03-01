@@ -20,25 +20,18 @@ import com.google.android.libraries.pcc.chronicle.api.storage.WrappedEntity
 import java.time.Duration
 
 /**
- * A simple helper interface to access [DataCacheStorage.registerDataType] interface with
- * type parameter.
- * Example : DataCacheStorage.registerDataType<T>(maxSize).
+ * A simple helper interface to access [DataCacheStorage.registerDataType] interface with type
+ * parameter. Example : DataCacheStorage.registerDataType<T>(maxSize).
  */
 inline fun <reified T : Any> DataCacheStorage.registerDataType(maxSize: Int, ttl: Duration) =
-  registerDataType(
-    cls = T::class.java,
-    maxSize = maxSize,
-    ttl = ttl
-  )
+  registerDataType(cls = T::class.java, maxSize = maxSize, ttl = ttl)
 
 /**
- * A simple helper interface to access [DataCacheStorage.unregisterDataType] interface with
- * type parameter.
- * Example : DataCacheStorage.unregisterDataType<T>().
+ * A simple helper interface to access [DataCacheStorage.unregisterDataType] interface with type
+ * parameter. Example : DataCacheStorage.unregisterDataType<T>().
  */
-inline fun <reified T : Any> DataCacheStorage.unregisterDataType() = unregisterDataType(
-  T::class.java
-)
+inline fun <reified T : Any> DataCacheStorage.unregisterDataType() =
+  unregisterDataType(T::class.java)
 
 /**
  * A simple helper interface to access [DataCacheStorage.size] interface with type parameter.
@@ -47,14 +40,14 @@ inline fun <reified T : Any> DataCacheStorage.unregisterDataType() = unregisterD
 inline fun <reified T : Any> DataCacheStorage.size() = size(T::class.java)
 
 /**
- * A simple helper interface to access [DataCacheStorage.get] interface with type parameter.
- * Example : DataCacheStorage.get<T>(id).
+ * A simple helper interface to access [DataCacheStorage.get] interface with type parameter. Example
+ * : DataCacheStorage.get<T>(id).
  */
 inline fun <reified T : Any> DataCacheStorage.get(id: String) = get(T::class.java, id)
 
 /**
- * A simple helper interface to access [DataCacheStorage.put] interface with type parameter.
- * Example : DataCacheStorage.put<T>(id, entity).
+ * A simple helper interface to access [DataCacheStorage.put] interface with type parameter. Example
+ * : DataCacheStorage.put<T>(id, entity).
  */
 inline fun <reified T : Any> DataCacheStorage.put(entity: WrappedEntity<T>): Boolean =
   put(T::class.java, entity)
@@ -67,8 +60,8 @@ inline fun <reified T : Any> DataCacheStorage.remove(id: String): WrappedEntity<
   remove(T::class.java, id)
 
 /**
- * A simple helper interface to access [DataCacheStorage.all] interface with type parameter.
- * Example : DataCacheStorage.all<T>().
+ * A simple helper interface to access [DataCacheStorage.all] interface with type parameter. Example
+ * : DataCacheStorage.all<T>().
  */
 inline fun <reified T : Any> DataCacheStorage.all() = all(T::class.java)
 

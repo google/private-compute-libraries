@@ -87,7 +87,7 @@ data class BlobEntityWithPackages(
   /** The blob entity. */
   @Embedded val blobEntity: BlobEntity,
   /** List of packages associated with the blob entity. */
-  @Relation(parentColumn = "id", entityColumn = "blobId") val packages: List<PackageEntity>
+  @Relation(parentColumn = "id", entityColumn = "blobId") val packages: List<PackageEntity>,
 )
 
 /**

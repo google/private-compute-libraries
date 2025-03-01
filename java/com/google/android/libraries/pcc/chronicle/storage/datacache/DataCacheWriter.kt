@@ -32,14 +32,14 @@ interface DataCacheWriter<T> : WriteConnection {
     /** Creates a [DataCacheWriter] connection that reads from a [TypedDataCacheWriter<T>]. */
     fun <T> createDefault(
       cache: TypedDataCacheWriter<T>,
-      timeSource: TimeSource
+      timeSource: TimeSource,
     ): DataCacheWriter<T> {
       return object : DataCacheWriter<T> {
         override fun write(
           entity: T,
           entityId: String,
           ttlTimestamp: Instant,
-          packageName: String
+          packageName: String,
         ) {
           cache.put(
             WrappedEntity(

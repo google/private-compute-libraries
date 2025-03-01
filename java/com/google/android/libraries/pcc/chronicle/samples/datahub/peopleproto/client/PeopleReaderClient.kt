@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.toList
 
 internal class PeopleReaderClient(
   private val client: RemoteStoreClient<Person>,
-  private val policy: Policy
+  private val policy: Policy,
 ) : PeopleReader {
   override suspend fun fetchAll(): List<Person> = client.fetchAll(policy).map { it.entity }.toList()
 }

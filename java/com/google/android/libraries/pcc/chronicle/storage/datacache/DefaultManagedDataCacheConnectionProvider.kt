@@ -26,7 +26,7 @@ import com.google.android.libraries.pcc.chronicle.api.ConnectionRequest
  */
 abstract class DefaultManagedDataCacheConnectionProvider<T>(
   private val cache: ManagedDataCache<T>,
-  private val connections: Map<Class<out Connection>, () -> Connection>
+  private val connections: Map<Class<out Connection>, () -> Connection>,
 ) : ManagedDataCacheConnectionProvider<T>(cache, connections.keys) {
   final override fun getConnection(
     connectionRequest: ConnectionRequest<out Connection>

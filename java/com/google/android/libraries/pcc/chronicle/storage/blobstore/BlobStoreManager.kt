@@ -75,7 +75,7 @@ class BlobStoreManager(val timeSource: TimeSource, val managements: Set<BlobStor
       managements.sumOf { management -> management.deletePackage(value.packageName) }
     return ChronicleDeletionListener.PackageDeletionInfo(
       ChronicleAnalyticsClient.BLOBSTORE,
-      numberOfEntitiesDeleted
+      numberOfEntitiesDeleted,
     )
   }
 
@@ -91,7 +91,7 @@ class BlobStoreManager(val timeSource: TimeSource, val managements: Set<BlobStor
       managements.sumOf { management -> management.reconcilePackages(allowedPackages) }
     return ChronicleDeletionListener.PackageDeletionInfo(
       ChronicleAnalyticsClient.BLOBSTORE,
-      numberOfEntitiesDeleted
+      numberOfEntitiesDeleted,
     )
   }
 

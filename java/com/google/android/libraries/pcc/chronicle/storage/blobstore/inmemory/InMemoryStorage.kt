@@ -46,5 +46,5 @@ class InMemoryStorage {
 
 data class CacheWrapper<T>(
   val cache: LruCache<String, WrappedEntity<T>>,
-  val managementInfo: InMemoryManagementInfo
+  val managementInfo: InMemoryManagementInfo,
 )

@@ -26,11 +26,8 @@ package com.google.android.libraries.pcc.chronicle.storage.datacache
  * The [Deserializer] interface should be implemented by the companion object for the data type
  * class which implemented [StoreSerializable].
  *
- * Example:
- *   data class Foo(val data : String) : StoreSerializable {
- *     override fun fun toSerializedString(): String {
- *        // Do something and return String.
- *     }
+ * Example: data class Foo(val data : String) : StoreSerializable { override fun fun
+ * toSerializedString(): String { // Do something and return String. }
  *
  *     companion objet : Deserializer<Foo>{
  *       fun fromSerializedString(str : String): Foo? {

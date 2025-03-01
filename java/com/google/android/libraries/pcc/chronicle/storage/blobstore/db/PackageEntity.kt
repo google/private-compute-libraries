@@ -33,7 +33,7 @@ import androidx.room.ForeignKey
         parentColumns = ["id"],
         childColumns = ["blobId"],
         onDelete = ForeignKey.CASCADE,
-        onUpdate = ForeignKey.CASCADE
+        onUpdate = ForeignKey.CASCADE,
       )
     ],
   primaryKeys = ["blobId", "packageName"],

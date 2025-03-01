@@ -31,10 +31,7 @@ interface DataCacheWriterAsync<T> : WriteConnection {
   suspend fun remove(id: String)
 
   /** Write entity, completing the future when the store completes the request. */
-  fun writeAsync(
-    scope: CoroutineScope,
-    entity: WrappedEntity<T>,
-  ): ListenableFuture<Unit> {
+  fun writeAsync(scope: CoroutineScope, entity: WrappedEntity<T>): ListenableFuture<Unit> {
     return scope.future { write(entity) }
   }
 

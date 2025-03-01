@@ -38,9 +38,5 @@ interface RemoteServerHandler {
    * Handles a request. This method is a `suspend` method because it's allowed to suspend the
    * current coroutine, switch dispatchers, etc. while it communicates with storage, if necessary.
    */
-  suspend fun handle(
-    policy: Policy?,
-    input: List<RemoteEntity>,
-    callback: IResponseCallback,
-  )
+  suspend fun handle(policy: Policy?, input: List<RemoteEntity>, callback: IResponseCallback)
 }

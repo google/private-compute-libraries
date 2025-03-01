@@ -45,14 +45,10 @@ data class InMemoryManagementInfo(
 ) : ManagementInfo()
 
 /** Represents the quota information for BlobStore to use to trim rows in storage. */
-data class QuotaInfo(
-  val maxRowCount: Int,
-  val minRowsAfterTrim: Int,
-  val trimOrder: TrimOrder,
-)
+data class QuotaInfo(val maxRowCount: Int, val minRowsAfterTrim: Int, val trimOrder: TrimOrder)
 
 /** Enum indicating whether oldest or newest entries in storage should be deleted first. */
 enum class TrimOrder {
   NEWEST,
-  OLDEST
+  OLDEST,
 }

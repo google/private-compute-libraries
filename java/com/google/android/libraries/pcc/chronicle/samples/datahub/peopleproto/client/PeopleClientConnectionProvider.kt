@@ -40,7 +40,7 @@ class PeopleClientConnectionProvider(transport: Transport) : ConnectionProvider 
     DefaultRemoteStoreClient(
       dataTypeName = PERSON_GENERATED_DTD.name,
       serializer = ProtoSerializer.createFrom(Person.getDefaultInstance()),
-      transport = transport
+      transport = transport,
     )
   override val dataType =
     ManagedDataType(
@@ -49,16 +49,15 @@ class PeopleClientConnectionProvider(transport: Transport) : ConnectionProvider 
         ManagementStrategy.Stored(
           encrypted = false,
           media = StorageMedia.LOCAL_DISK,
-          ttl = Duration.ofDays(14)
+          ttl = Duration.ofDays(14),
         ),
       PeopleReader::class,
-      PeopleWriter::class
+      PeopleWriter::class,
     )
 
   override fun getConnection(connectionRequest: ConnectionRequest<out Connection>): Connection {
     return when (connectionRequest.connectionType) {
-      PeopleReader::class.java ->
-        PeopleReaderClient(client, checkNotNull(connectionRequest.policy))
+      PeopleReader::class.java -> PeopleReaderClient(client, checkNotNull(connectionRequest.policy))
       PeopleWriter::class.java -> PeopleWriterClient(client)
       else -> throw NotImplementedError("No support for ${connectionRequest.connectionType}")
     }

@@ -27,7 +27,7 @@ import com.google.android.libraries.pcc.chronicle.api.ManagedDataType
  */
 abstract class ManagedDataCacheConnectionProvider<T>(
   private val cache: ManagedDataCache<T>,
-  private val connectionTypes: Set<Class<out Connection>>
+  private val connectionTypes: Set<Class<out Connection>>,
 ) : ConnectionProvider {
   final override val dataType: DataType =
     ManagedDataType(cache.dataTypeDescriptor, cache.managementStrategy, connectionTypes)

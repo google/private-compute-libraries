@@ -43,9 +43,9 @@ class InMemoryBlobStore<T>(private val store: CacheWrapper<T>, private val timeS
                 id = currentEntity.metadata.id,
                 associatedPackageNames = currentEntity.metadata.associatedPackageNamesList,
                 created = currentEntity.metadata.created.toInstant(),
-                updated = timeSource.now()
+                updated = timeSource.now(),
               ),
-            entity = wrappedEntity.entity
+            entity = wrappedEntity.entity,
           )
         store.cache.put(updatedEntity.metadata.id, updatedEntity)
         return
@@ -60,9 +60,9 @@ class InMemoryBlobStore<T>(private val store: CacheWrapper<T>, private val timeS
             id = wrappedEntity.metadata.id,
             associatedPackageNames = wrappedEntity.metadata.associatedPackageNamesList,
             created = timestamp,
-            updated = timestamp
+            updated = timestamp,
           )
-      )
+      ),
     )
   }
 

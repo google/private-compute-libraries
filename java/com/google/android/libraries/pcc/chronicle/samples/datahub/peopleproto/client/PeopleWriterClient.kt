@@ -23,9 +23,7 @@ import com.google.android.libraries.pcc.chronicle.samples.datahub.peopleproto.Pe
 import com.google.android.libraries.pcc.chronicle.samples.datahub.peopleproto.Person
 import java.time.Instant
 
-internal class PeopleWriterClient(
-  private val client: RemoteStoreClient<Person>
-) : PeopleWriter {
+internal class PeopleWriterClient(private val client: RemoteStoreClient<Person>) : PeopleWriter {
   override suspend fun putPerson(person: Person) {
     client.create(
       policy = null,
@@ -33,9 +31,9 @@ internal class PeopleWriterClient(
         listOf(
           WrappedEntity(
             metadata = EntityMetadata(person.name, emptyList(), Instant.now()),
-            entity = person
+            entity = person,
           )
-        )
+        ),
     )
   }
 
