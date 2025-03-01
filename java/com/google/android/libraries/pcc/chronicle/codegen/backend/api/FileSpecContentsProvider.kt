@@ -22,7 +22,6 @@ import com.squareup.kotlinpoet.FileSpec
 interface FileSpecContentsProvider {
   /**
    * Provide members for the [FileSpec.Builder] by calling methods like:
-   *
    * * [FileSpec.Builder.addProperty]
    * * [FileSpec.Builder.addFunction]
    * * [FileSpec.Builder.addType]

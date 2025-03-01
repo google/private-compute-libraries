@@ -22,9 +22,8 @@ import com.google.android.libraries.pcc.chronicle.api.storage.WrappedEntity
 import com.google.protobuf.MessageLite
 
 /** Implementation of [Serializer] supporting protos of type [T]. */
-class ProtoSerializer<T : MessageLite> private constructor(
-  private val defaultInstance: T
-) : Serializer<T> {
+class ProtoSerializer<T : MessageLite> private constructor(private val defaultInstance: T) :
+  Serializer<T> {
 
   override fun <P : T> serialize(wrappedEntity: WrappedEntity<P>): RemoteEntity =
     RemoteEntity.fromProto(metadata = wrappedEntity.metadata, message = wrappedEntity.entity)
@@ -33,9 +32,8 @@ class ProtoSerializer<T : MessageLite> private constructor(
   override fun <P : T> deserialize(remoteEntity: RemoteEntity): WrappedEntity<P> {
     return WrappedEntity(
       metadata = remoteEntity.metadata,
-      entity = remoteEntity.interpretProtoEntity {
-        defaultInstance.parserForType.parseFrom(it) as P
-      },
+      entity =
+        remoteEntity.interpretProtoEntity { defaultInstance.parserForType.parseFrom(it) as P },
     )
   }
 

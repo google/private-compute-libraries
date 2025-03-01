@@ -28,15 +28,13 @@
 package com.google.android.libraries.pcc.chronicle.api.policy.annotation
 
 /**
- * An Arcs annotations containing additional information on an Arcs manifest element.
- * An Annotation may be attached to a plan, particle, handle, type etc.
+ * An Arcs annotations containing additional information on an Arcs manifest element. An Annotation
+ * may be attached to a plan, particle, handle, type etc.
  */
 data class Annotation(val name: String, val params: Map<String, AnnotationParam> = emptyMap()) {
 
   fun getParam(name: String): AnnotationParam {
-    return requireNotNull(params[name]) {
-      "Annotation '$this.name' missing '$name' parameter"
-    }
+    return requireNotNull(params[name]) { "Annotation '$this.name' missing '$name' parameter" }
   }
 
   fun getStringParam(paramName: String): String {
@@ -54,10 +52,7 @@ data class Annotation(val name: String, val params: Map<String, AnnotationParam>
   companion object {
     fun createArcId(id: String) = Annotation("arcId", mapOf("id" to AnnotationParam.Str(id)))
 
-    fun createTtl(value: String) = Annotation(
-      "ttl",
-      mapOf("value" to AnnotationParam.Str(value))
-    )
+    fun createTtl(value: String) = Annotation("ttl", mapOf("value" to AnnotationParam.Str(value)))
 
     fun createCapability(name: String) = Annotation(name)
 

@@ -34,7 +34,7 @@ interface PolicyEngine {
     policy: Policy,
     context: ChronicleContext,
     dataTypeDescriptor: DataTypeDescriptor,
-    requester: ProcessorNode
+    requester: ProcessorNode,
   ): PolicyCheckResult
 
   /**

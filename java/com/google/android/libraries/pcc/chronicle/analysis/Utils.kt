@@ -35,7 +35,6 @@ fun List<ManagementStrategy>.mostRestrained(): ManagementStrategy {
  * Applies a lexicographic ordering to the components of a [ManagementStrategy], implying that more
  * restrained strategies come before more liberal strategies. From most significant to least
  * significant, the components are:
- *
  * 1. [StorageMedia], as characterized by that media's [danger][StorageMedia.danger] level.
  * 1. Whether or not the storage will be [encrypted].
  * 1. The [time to live][StorageMedia.ttl].
@@ -78,7 +77,7 @@ fun PolicyTarget.retentionsAsManagementStrategies(): List<ManagementStrategy> {
         StorageMedium.RAM -> StorageMedia.MEMORY
         StorageMedium.DISK -> StorageMedia.LOCAL_DISK
       },
-      Duration.ofMillis(maxAgeMs)
+      Duration.ofMillis(maxAgeMs),
     )
   }
 }

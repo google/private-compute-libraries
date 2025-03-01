@@ -25,6 +25,7 @@ import javax.lang.model.element.Modifier
  * Tool to aide in generating dagger modules as abstract java classes.
  *
  * **Example:**
+ *
  * ```kotlin
  * DaggerModuleProvider("MyModule", contents = myListOfContentsProviders)
  *   .provideModule()
@@ -42,12 +43,12 @@ import javax.lang.model.element.Modifier
  * @param name the name of the module class itself.
  * @param installInComponent the hilt component the generated module should be installed into.
  * @param contents list of [DaggerModuleContentsProviders][DaggerModuleContentsProvider],
- * responsible for generating the individual provides/binds methods for the generated module.
+ *   responsible for generating the individual provides/binds methods for the generated module.
  */
 class DaggerModuleProvider(
   private val name: String,
   private val installInComponent: ClassName = SINGLETON_COMPONENT,
-  private val contents: List<DaggerModuleContentsProvider>
+  private val contents: List<DaggerModuleContentsProvider>,
 ) {
   /** Generates a [TypeSpec] of the dagger module to use in creating a [JavaFile]. */
   fun provideModule(): TypeSpec {

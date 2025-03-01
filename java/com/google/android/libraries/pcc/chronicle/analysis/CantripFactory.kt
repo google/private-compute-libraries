@@ -35,6 +35,6 @@ interface CantripFactory {
     dtd: DataTypeDescriptor,
     requester: ProcessorNode,
     policy: Policy?,
-    usageType: UsageType
+    usageType: UsageType,
   ): Cantrip<Data>
 }

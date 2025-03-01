@@ -34,7 +34,7 @@ class DefaultChronicleContext(
   override val processorNodes: Set<ProcessorNode>,
   override val policySet: PolicySet,
   override val dataTypeDescriptorSet: DataTypeDescriptorSet,
-  override val connectionContext: TypedMap = TypedMap()
+  override val connectionContext: TypedMap = TypedMap(),
 ) : ChronicleContext {
   // TODO(b/251295492) these properties can disappear or be renamed.
   private val connectionProviderByType: Map<Class<out Connection>?, ConnectionProvider>
@@ -73,7 +73,7 @@ class DefaultChronicleContext(
   private fun ensureNoConnectionAmbiguity(
     existing: ConnectionProvider?,
     new: ConnectionProvider,
-    connectionTypeAsString: String
+    connectionTypeAsString: String,
   ) {
     if (existing != null) {
       throw ConnectionTypeAmbiguity(connectionTypeAsString, setOf(existing, new))
@@ -101,7 +101,7 @@ class DefaultChronicleContext(
       processorNodes = processorNodes + node,
       policySet = policySet,
       dataTypeDescriptorSet = dataTypeDescriptorSet,
-      connectionContext = connectionContext
+      connectionContext = connectionContext,
     )
 
   override fun withConnectionContext(connectionContext: TypedMap): ChronicleContext =
@@ -110,7 +110,7 @@ class DefaultChronicleContext(
       processorNodes = processorNodes,
       policySet = policySet,
       dataTypeDescriptorSet = dataTypeDescriptorSet,
-      connectionContext = connectionContext
+      connectionContext = connectionContext,
     )
 
   override fun equals(other: Any?): Boolean {

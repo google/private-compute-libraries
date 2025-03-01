@@ -32,13 +32,13 @@ class ParcelableSerializer<T : Parcelable> private constructor() : Serializer<T>
   override fun <P : T> serialize(wrappedEntity: WrappedEntity<P>): RemoteEntity =
     RemoteEntity.fromParcelable(
       metadata = wrappedEntity.metadata,
-      parcelable = wrappedEntity.entity
+      parcelable = wrappedEntity.entity,
     )
 
   override fun <P : T> deserialize(remoteEntity: RemoteEntity): WrappedEntity<P> =
     WrappedEntity(
       metadata = remoteEntity.metadata,
-      entity = remoteEntity.interpretParcelableEntity()
+      entity = remoteEntity.interpretParcelableEntity(),
     )
 
   companion object {

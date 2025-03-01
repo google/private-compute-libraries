@@ -41,7 +41,7 @@ fun Trigger.toAnnotation(field: String): Annotation {
     mapOf(
       DeletionTriggerPolicyAnnotations.TRIGGER_KEY to AnnotationParam.Str(this.name),
       DeletionTriggerPolicyAnnotations.FIELD_KEY to AnnotationParam.Str(field),
-    )
+    ),
   )
 }
 
@@ -50,7 +50,7 @@ private fun Collection<Annotation>.deletionTriggers(): Set<DeletionTrigger> {
     .map {
       DeletionTrigger(
         Trigger.valueOf(it.getStringParam(DeletionTriggerPolicyAnnotations.TRIGGER_KEY)),
-        it.getStringParam(DeletionTriggerPolicyAnnotations.FIELD_KEY)
+        it.getStringParam(DeletionTriggerPolicyAnnotations.FIELD_KEY),
       )
     }
     .toSet()

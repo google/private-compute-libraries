@@ -17,9 +17,8 @@
 package com.google.android.libraries.pcc.chronicle.api.policy.builder
 
 /**
- * Marks classes as participants in
- * com.google.android.libraries.pcc.chronicle.api.policy.builder builder DSLs. This allows
- * Kotlin to better infer receivers and prevent some classes of confusing DSL input.
- * https://kotlinlang.org/docs/type-safe-builders.html explains further.
+ * Marks classes as participants in com.google.android.libraries.pcc.chronicle.api.policy.builder
+ * builder DSLs. This allows Kotlin to better infer receivers and prevent some classes of confusing
+ * DSL input. https://kotlinlang.org/docs/type-safe-builders.html explains further.
  */
 @DslMarker annotation class DataDsl

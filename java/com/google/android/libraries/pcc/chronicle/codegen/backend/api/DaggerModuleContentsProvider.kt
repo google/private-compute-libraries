@@ -37,12 +37,12 @@ sealed interface DaggerModuleContentsProvider {
    *
    * @param name the name of the provides method.
    * @param providedType the [TypeName] of the value provided by the `@Provides` method to the
-   * dagger dependency graph.
+   *   dagger dependency graph.
    * @param isSingleton whether or not the `@Provides` method should also be annotated with
-   * `@Singleton`.
+   *   `@Singleton`.
    * @param isIntoSet whether or not the `@Provides` method should also be annoated with `@IntoSet`.
    * @param qualifierAnnotations list of [ClassNames][ClassName] for additional dependency injection
-   * qualifier annotations to include on the generated method.
+   *   qualifier annotations to include on the generated method.
    */
   abstract class ProvidesMethod(
     val name: String,

@@ -26,6 +26,7 @@ import com.google.android.libraries.pcc.chronicle.api.storage.WrappedEntity
 interface Serializer<T : Any> {
   /** Serializes the [T]-typed [entity] into a [RemoteEntity]. */
   fun <P : T> serialize(wrappedEntity: WrappedEntity<P>): RemoteEntity
+
   /** Deserializes the [remoteEntity] into a [T] instance. */
   fun <P : T> deserialize(remoteEntity: RemoteEntity): WrappedEntity<P>
 }

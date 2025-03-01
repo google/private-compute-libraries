@@ -50,7 +50,6 @@ typealias StorageMedium = StorageMedium
  * Builds a [Policy] with the supplied [name] and [egressType], using a [PolicyBuilder].
  *
  * Example:
- *
  * ```kotlin
  * val myPolicy = policy("MyPolicy", "Analytics") {
  *   description =
@@ -119,10 +118,7 @@ fun target(
 
 /** Builder of [Policy] instances. */
 @DataDsl
-class PolicyBuilder(
-  private val name: String,
-  private val egressType: String,
-) {
+class PolicyBuilder(private val name: String, private val egressType: String) {
   /** Human-readable description of the policy. */
   var description: String = ""
 
@@ -137,9 +133,7 @@ class PolicyBuilder(
   internal val configs = mutableMapOf<String, PolicyConfig>()
 
   /** Clones the PolicyBuilder. */
-  constructor(
-    policyBuilder: PolicyBuilder,
-  ) : this(policyBuilder.name, policyBuilder.egressType) {
+  constructor(policyBuilder: PolicyBuilder) : this(policyBuilder.name, policyBuilder.egressType) {
     this.apply {
       description = policyBuilder.description
       allowedContext = policyBuilder.allowedContext
@@ -173,7 +167,7 @@ class PolicyBuilder(
       description = description,
       targets = targets,
       configs = configs,
-      allowedContext = allowedContext
+      allowedContext = allowedContext,
     )
   }
 }
@@ -209,7 +203,6 @@ internal constructor(
    * dot-delimited access path of the field.
    *
    * Example:
-   *
    * ```kotlin
    * target(personDTD)) {
    *   "name" { rawUsage(UsageType.ANY) }
@@ -233,7 +226,7 @@ internal constructor(
       maxAgeMs = maxAge.toMillis(),
       retentions = retentions.toList(),
       fields = fields.toList(),
-      annotations = annotations.toList()
+      annotations = annotations.toList(),
     )
 }
 
@@ -241,7 +234,7 @@ internal constructor(
 @DataDsl
 class PolicyFieldBuilder(
   private val dataTypeDescriptor: DataTypeDescriptor?,
-  private val fieldPath: List<FieldName>
+  private val fieldPath: List<FieldName>,
 ) {
   private val rawUsages = mutableSetOf<UsageType>()
   private val redactedUsages = mutableMapOf<String, Set<UsageType>>()
@@ -284,7 +277,7 @@ class PolicyFieldBuilder(
       rawUsages = rawUsages,
       redactedUsages = redactedUsages,
       subfields = subFields.toList(),
-      annotations = annotations.toList()
+      annotations = annotations.toList(),
     )
 
   companion object {
@@ -294,7 +287,7 @@ class PolicyFieldBuilder(
      */
     fun validateAndGetDataTypeDescriptor(
       fieldName: String,
-      dataTypeDescriptor: DataTypeDescriptor
+      dataTypeDescriptor: DataTypeDescriptor,
     ): DataTypeDescriptor? {
       // Only validate field if [schema] is not null.
       val fieldType =
