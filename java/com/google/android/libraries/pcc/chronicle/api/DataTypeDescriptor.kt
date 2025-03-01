@@ -22,7 +22,6 @@ import kotlin.reflect.KClass
  * Builds a [DataTypeDescriptor] from the given [name] and using the supplied [block].
  *
  * Example:
- *
  * ```kotlin
  *  val myType = dataTypeDescriptor("Person", Person::class) {
  *   "name" to FieldType.String
@@ -36,7 +35,7 @@ import kotlin.reflect.KClass
 fun dataTypeDescriptor(
   name: String,
   cls: KClass<*>,
-  block: DataTypeDescriptor.Builder.() -> Unit = {}
+  block: DataTypeDescriptor.Builder.() -> Unit = {},
 ): DataTypeDescriptor {
   return DataTypeDescriptor.Builder(name, cls).apply(block).build()
 }
@@ -49,7 +48,7 @@ data class DataTypeDescriptor(
   val name: String,
   val fields: Map<String, FieldType>,
   val innerTypes: Set<DataTypeDescriptor> = emptySet(),
-  val cls: KClass<*>
+  val cls: KClass<*>,
 ) {
   class Builder(val name: String, val cls: KClass<*>) {
     private val fields = mutableMapOf<String, FieldType>()
@@ -124,7 +123,7 @@ sealed class FieldType {
   /** Represents a field value as an [Enum] object. */
   data class Enum(
     val name: kotlin.String,
-    val possibleValues: kotlin.collections.List<kotlin.String>
+    val possibleValues: kotlin.collections.List<kotlin.String>,
   ) : FieldType()
 
   /** Represents a field value as an array of [itemFieldType] -typed objects. */

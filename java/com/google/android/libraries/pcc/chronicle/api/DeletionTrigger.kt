@@ -26,7 +26,7 @@ data class DeletionTrigger(
    * The field containing the triggering values. Use `.` to reference nested fields. For example, a
    * [Trigger.PACKAGE_UNINSTALLED] attached `event.srcPkg`.
    */
-  val targetField: String
+  val targetField: String,
 )
 
 /** Supported root trigger types. */

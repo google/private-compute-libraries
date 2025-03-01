@@ -24,13 +24,14 @@ import kotlin.reflect.KClass
 interface Chronicle {
   /**
    * Checks policy adherence of the [ConnectionRequest.requester] and the data being requested.
+   *
    * @param isForReading true if the policy will be used in conjunction with a [ReadConnection]
    */
   fun checkPolicy(
     dataTypeName: String,
     policy: Policy?,
     isForReading: Boolean,
-    requester: ProcessorNode
+    requester: ProcessorNode,
   ): Result<Unit>
 
   /**
@@ -59,7 +60,7 @@ interface Chronicle {
    */
   fun <T : Connection> getConnectionOrNull(
     request: ConnectionRequest<T>,
-    onError: (ChronicleError) -> Unit = {}
+    onError: (ChronicleError) -> Unit = {},
   ): T? {
     return when (val result = getConnection(request)) {
       is ConnectionResult.Success<T> -> result.connection
@@ -75,9 +76,8 @@ interface Chronicle {
    * [ConnectionResult.Failure] results. If a failure occurs, there will be no information provided
    * about the failure.
    */
-  fun <T : Connection> getConnectionOrNull(
-    request: ConnectionRequest<T>,
-  ): T? = getConnectionOrNull(request) {}
+  fun <T : Connection> getConnectionOrNull(request: ConnectionRequest<T>): T? =
+    getConnectionOrNull(request) {}
 
   /**
    * A convenience method which calls [getConnection], and throws [ChronicleError] for
@@ -92,7 +92,7 @@ interface Chronicle {
 
   data class ConnectionTypes(
     val readConnections: Set<Class<out ReadConnection>>,
-    val writeConnections: Set<Class<out WriteConnection>>
+    val writeConnections: Set<Class<out WriteConnection>>,
   ) {
     companion object {
       val EMPTY = ConnectionTypes(emptySet(), emptySet())
@@ -103,6 +103,7 @@ interface Chronicle {
 /** Result container for [Connection] attempts. */
 sealed class ConnectionResult<T : Connection> {
   class Success<T : Connection>(val connection: T) : ConnectionResult<T>()
+
   class Failure<T : Connection>(val error: ChronicleError) : ConnectionResult<T>()
 }
 
@@ -112,7 +113,7 @@ sealed class ConnectionResult<T : Connection> {
  */
 inline fun <reified T : Connection> Chronicle.getConnection(
   requester: ProcessorNode,
-  policy: Policy? = null
+  policy: Policy? = null,
 ) = getConnection(ConnectionRequest(T::class.java, requester, policy))
 
 /**
@@ -125,7 +126,7 @@ inline fun <reified T : Connection> Chronicle.getConnection(
 inline fun <reified T : Connection> Chronicle.getConnectionOrNull(
   requester: ProcessorNode,
   policy: Policy? = null,
-  noinline onError: (ChronicleError) -> Unit = {}
+  noinline onError: (ChronicleError) -> Unit = {},
 ) = getConnectionOrNull(ConnectionRequest(T::class.java, requester, policy), onError)
 
 /**
@@ -134,5 +135,5 @@ inline fun <reified T : Connection> Chronicle.getConnectionOrNull(
  */
 inline fun <reified T : Connection> Chronicle.getConnectionOrThrow(
   requester: ProcessorNode,
-  policy: Policy? = null
+  policy: Policy? = null,
 ) = getConnectionOrThrow(ConnectionRequest(T::class.java, requester, policy))

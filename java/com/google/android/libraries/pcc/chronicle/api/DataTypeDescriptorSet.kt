@@ -64,7 +64,7 @@ interface DataTypeDescriptorSet {
    *
    * If it's [FieldType.Opaque], its name is used in conjunction with [Class.forName]
    * - which has a possibility of throwing a [ClassNotFoundException] if the name is not present in
-   * the classloader.
+   *   the classloader.
    *
    * If it's [FieldType.Nullable], the value of [findClass] for the non-nullable `itemFieldType`
    * value is returned.

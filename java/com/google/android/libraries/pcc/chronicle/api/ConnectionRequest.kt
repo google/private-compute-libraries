@@ -29,7 +29,7 @@ import com.google.android.libraries.pcc.chronicle.api.policy.Policy
 data class ConnectionRequest<T : Connection>(
   val connectionName: ConnectionName<T>,
   val requester: ProcessorNode,
-  val policy: Policy?
+  val policy: Policy?,
 ) {
   // TODO(b/251295492) mark as deprecated, then remove.
   var connectionType: Class<T>? = null
@@ -45,7 +45,7 @@ data class ConnectionRequest<T : Connection>(
   constructor(
     connectionType: Class<T>,
     requester: ProcessorNode,
-    policy: Policy?
+    policy: Policy?,
   ) : this(Connection.connectionName(connectionType), requester, policy) {
     this.connectionType = connectionType
   }

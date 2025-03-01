@@ -18,6 +18,7 @@ package com.google.android.libraries.pcc.chronicle.api
 
 /**
  * Used to describe a [ConnectionName] using a string. E.g.
+ *
  * ```
  * ConnectionName.Reader(Name(MyReadConnection::class.toString()))
  * ```

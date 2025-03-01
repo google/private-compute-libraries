@@ -25,7 +25,7 @@ import kotlin.reflect.KClass
 data class ManagedDataType(
   override val descriptor: DataTypeDescriptor,
   override val managementStrategy: ManagementStrategy,
-  override val connectionTypes: Set<Class<out Connection>>
+  override val connectionTypes: Set<Class<out Connection>>,
 ) : DataType {
   /**
    * A convenience constructor allowing you to pass [Connection] interface classes as [KClass]
@@ -34,6 +34,6 @@ data class ManagedDataType(
   constructor(
     descriptor: DataTypeDescriptor,
     managementStrategy: ManagementStrategy,
-    vararg connectionTypes: KClass<out Connection>
+    vararg connectionTypes: KClass<out Connection>,
   ) : this(descriptor, managementStrategy, connectionTypes.map { it.java }.toSet())
 }

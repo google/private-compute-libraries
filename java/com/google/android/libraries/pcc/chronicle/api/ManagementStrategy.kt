@@ -59,7 +59,7 @@ enum class StorageMedia(val danger: Int) {
   LOCAL_DISK(1),
 
   /** The data is persisted, but to an external device. */
-  REMOTE_DISK(2)
+  REMOTE_DISK(2),
 }
 
 /**

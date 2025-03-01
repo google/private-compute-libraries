@@ -21,5 +21,6 @@ sealed class ConnectionName<T : Connection> {
   internal abstract val name: Name
 
   data class Reader<T : Connection>(override val name: Name) : ConnectionName<T>()
+
   data class Writer<T : Connection>(override val name: Name) : ConnectionName<T>()
 }

@@ -31,6 +31,7 @@ class DefaultDataRemovalRequestListener(
   private val flags: FlagsReader,
 ) : DataRemovalRequestListener {
   private val logger = Logcat.default
+
   override fun onDataRemovalRequest(request: DataRemovalRequest) {
     if (flags.config.value.disableChronicleDataRemovalRequestListener) return
 

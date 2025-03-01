@@ -24,7 +24,6 @@ import java.time.Duration
  * This is how data stewards specify configuration information for the data that they want to store
  * and manage using Chronicle. Data stewards should define a singleton object that extends the
  * [DataType] interface and may add extra configuration parameters to this singleton if needed:
- *
  * ```
  * object MyPrivateDataType : DataType {
  *      override val descriptor = ...
@@ -49,6 +48,7 @@ interface DataType {
   /** The connections (via [ConnectionName]) supported for accessing this [DataType] */
   val connectionNames: Set<ConnectionName<out Connection>>
     get() = emptySet()
+
   /** Extracts and returns the ttl from [managementStrategy][DataType.managementStrategy]. */
   val ttl: Duration
     get() = managementStrategy.ttl()

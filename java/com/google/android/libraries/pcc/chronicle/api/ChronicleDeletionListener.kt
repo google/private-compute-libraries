@@ -27,7 +27,7 @@ interface PackageDeletionListener : ChronicleDeletionListener<PackageInstallInfo
     /** Name of the newly-deleted package, e.g. "com.google.android.as". */
     val packageName: String,
     /** User ID of the phone's user from which the package was deleted. */
-    val userId: Int
+    val userId: Int,
   )
 }
 
@@ -41,7 +41,7 @@ interface UserConsentListener : ChronicleDeletionListener<UserConsentListener.Co
      * "Usage and Diagnostics" consent, typically the basis for collecting aggregated system
      * diagnostics data.
      */
-    CHECKBOX,
+    CHECKBOX
   }
 }
 
@@ -88,6 +88,6 @@ interface ChronicleDeletionListener<T> {
     /* Used to annotate which [ChronicleAnalyticsClient] is responsible for deletion */
     val client: ChronicleAnalyticsClient,
     /* Indicates number of entities / rows deleted as a result of trigger / reconcile */
-    val numberOfEntitiesDeleted: Int
+    val numberOfEntitiesDeleted: Int,
   )
 }
