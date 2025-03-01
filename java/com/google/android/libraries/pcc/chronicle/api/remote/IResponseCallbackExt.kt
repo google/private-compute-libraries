@@ -25,7 +25,6 @@ import kotlinx.coroutines.CoroutineExceptionHandler
  *
  * This [CoroutineExceptionHandler] can be used in conjunction with a SupervisorJob-based coroutine
  * scope to unlock the following functionality:
- *
  * * Not crashing the server application if an exception is thrown while handling a request.
  * * Reporting that exception back to the client application via [IResponseCallback.onError].
  *

@@ -31,13 +31,13 @@ sealed class TestPet {
   data class Dog(
     override val name: String,
     override val age: Int,
-    override val favoriteToy: String = "Ball"
+    override val favoriteToy: String = "Ball",
   ) : TestPet()
 
   data class Cat(
     override val name: String,
     override val age: Int,
-    override val likesMilk: Boolean = true
+    override val likesMilk: Boolean = true,
   ) : TestPet()
 }
 
@@ -50,7 +50,7 @@ val TestPet_Name =
         is TestPet.Dog -> entity.copy(name = newValue)
         is TestPet.Cat -> entity.copy(name = newValue)
       }
-    }
+    },
   )
 
 val TestPet_Age =
@@ -62,7 +62,7 @@ val TestPet_Age =
         is TestPet.Dog -> entity.copy(age = newValue)
         is TestPet.Cat -> entity.copy(age = newValue)
       }
-    }
+    },
   )
 
 val TestPet_FavoriteToy =
@@ -80,7 +80,7 @@ val TestPet_FavoriteToy =
         is TestPet.Dog -> entity.copy(favoriteToy = newValue)
         is TestPet.Cat -> entity
       }
-    }
+    },
   )
 
 val TestPet_LikesMilk =
@@ -98,7 +98,7 @@ val TestPet_LikesMilk =
         is TestPet.Dog -> entity
         is TestPet.Cat -> entity.copy(likesMilk = newValue ?: false)
       }
-    }
+    },
   )
 
 val TestPet_Lenses = setOf(TestPet_Name, TestPet_Age, TestPet_FavoriteToy, TestPet_LikesMilk)

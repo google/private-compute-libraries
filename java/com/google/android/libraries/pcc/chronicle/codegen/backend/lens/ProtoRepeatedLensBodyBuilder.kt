@@ -36,7 +36,7 @@ object ProtoRepeatedLensBodyBuilder : BaseProtoLensBodyBuilder() {
     type: Type,
     field: FieldEntry,
     entityParamName: String,
-    newValueParamName: String
+    newValueParamName: String,
   ): CodeBlock {
     return CodeBlock.builder()
       .addStatement("clear${field.name.capitalize()}()")

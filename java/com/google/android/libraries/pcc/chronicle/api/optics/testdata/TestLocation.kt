@@ -26,14 +26,14 @@ val TestLocation_Latitude =
   Lens.create<TestLocation, Float>(
     focusAccessPath = OpticalAccessPath(TEST_LOCATION_GENERATED_DTD, "latitude"),
     getter = { it.latitude },
-    setter = { entity, newValue -> entity.copy(latitude = newValue) }
+    setter = { entity, newValue -> entity.copy(latitude = newValue) },
   )
 
 val TestLocation_Longitude =
   Lens.create<TestLocation, Float>(
     focusAccessPath = OpticalAccessPath(TEST_LOCATION_GENERATED_DTD, "longitude"),
     getter = { it.longitude },
-    setter = { entity, newValue -> entity.copy(longitude = newValue) }
+    setter = { entity, newValue -> entity.copy(longitude = newValue) },
   )
 
 val TestLocation_Lenses = setOf(TestLocation_Latitude, TestLocation_Longitude)

@@ -38,14 +38,14 @@ import android.os.Parcelable
 data class RemoteRequest(
   val metadata: RemoteRequestMetadata,
   val entities: List<RemoteEntity> = emptyList(),
-  val extras: Bundle = Bundle.EMPTY
+  val extras: Bundle = Bundle.EMPTY,
 ) : Parcelable {
   constructor(
     parcel: Parcel
   ) : this(
     metadata = RemoteRequestMetadata.parseFrom(requireNotNull(parcel.createByteArray())),
     entities = parcel.createTypedArrayList(RemoteEntity.CREATOR) ?: emptyList(),
-    extras = parcel.readBundle(RemoteRequest::class.java.classLoader) ?: Bundle.EMPTY
+    extras = parcel.readBundle(RemoteRequest::class.java.classLoader) ?: Bundle.EMPTY,
   )
 
   override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -65,6 +65,7 @@ data class RemoteRequest(
     val CREATOR =
       object : Parcelable.Creator<RemoteRequest> {
         override fun createFromParcel(parcel: Parcel): RemoteRequest = RemoteRequest(parcel)
+
         override fun newArray(size: Int): Array<RemoteRequest?> = arrayOfNulls(size)
       }
   }

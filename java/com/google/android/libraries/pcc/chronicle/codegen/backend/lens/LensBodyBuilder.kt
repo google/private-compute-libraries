@@ -41,6 +41,6 @@ interface LensBodyBuilder {
     type: Type,
     field: FieldEntry,
     entityParamName: String,
-    newValueParamName: String
+    newValueParamName: String,
   ): CodeBlock
 }

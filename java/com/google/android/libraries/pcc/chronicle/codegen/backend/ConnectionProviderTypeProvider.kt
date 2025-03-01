@@ -56,7 +56,7 @@ import com.squareup.kotlinpoet.TypeSpec
 class ConnectionProviderTypeProvider(
   val dataClass: TypeName,
   val readerConnections: List<TypeName>,
-  val writerConnections: List<TypeName>
+  val writerConnections: List<TypeName>,
 ) : FileSpecContentsProvider {
   override fun provideContentsInto(builder: FileSpec.Builder) {
     val connectionMappings = mutableListOf<CodeBlock>()
@@ -88,7 +88,7 @@ class ConnectionProviderTypeProvider(
       .addSuperinterface(readerConnection)
       .addSuperinterface(
         DATA_CACHE_READER.parameterizedBy(dataClass),
-        CodeBlock.of("%N.createDefault(cache)", DATA_CACHE_READER.simpleName)
+        CodeBlock.of("%N.createDefault(cache)", DATA_CACHE_READER.simpleName),
       )
       .build()
 
@@ -103,7 +103,7 @@ class ConnectionProviderTypeProvider(
       .addSuperinterface(writerConnection)
       .addSuperinterface(
         DATA_CACHE_WRITER.parameterizedBy(dataClass),
-        CodeBlock.of("%N.createDefault(cache, timeSource)", DATA_CACHE_WRITER.simpleName)
+        CodeBlock.of("%N.createDefault(cache, timeSource)", DATA_CACHE_WRITER.simpleName),
       )
       .build()
 
@@ -125,7 +125,7 @@ class ConnectionProviderTypeProvider(
       .addSuperclassConstructorParameter("cache")
       .addSuperclassConstructorParameter(
         "mapOf(%L)",
-        CodeBlock.of("%L, ".repeat(connectionMappings.size), *connectionMappings.toTypedArray())
+        CodeBlock.of("%L, ".repeat(connectionMappings.size), *connectionMappings.toTypedArray()),
       )
       .build()
 

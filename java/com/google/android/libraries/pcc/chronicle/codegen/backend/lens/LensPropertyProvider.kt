@@ -46,7 +46,7 @@ class LensPropertyProvider(
       ProtoScalarLensBodyBuilder,
       ProtoRepeatedLensBodyBuilder,
       ProtoMapLensBodyBuilder,
-    )
+    ),
 ) : PropertyProvider() {
   private val typeClassName = type.jvmLocation.asClassName()
   private val fieldClassName = field.category.kotlinType()
@@ -57,8 +57,7 @@ class LensPropertyProvider(
         "Lens generation for $field of $type is not currently supported"
       }
     val lensTypeName =
-      Lens::class
-        .asClassName()
+      Lens::class.asClassName()
         .parameterizedBy(typeClassName, typeClassName, fieldClassName, fieldClassName)
     return PropertySpec.builder(propertyName, lensTypeName)
       .addAnnotation(JvmField::class)
@@ -73,13 +72,14 @@ class LensPropertyProvider(
           """
               %T.create<%T, %T>(
                 focusAccessPath = %T(%S, %S),
-            """.trimIndent(),
+            """
+            .trimIndent(),
         Lens::class.asClassName(),
         typeClassName,
         fieldClassName,
         OpticalAccessPath::class,
         type.location.toString(),
-        field.name
+        field.name,
       )
       .add("\n")
       .indent()
@@ -95,7 +95,7 @@ class LensPropertyProvider(
           type,
           field,
           entityParamName = "entity",
-          newValueParamName = "newValue"
+          newValueParamName = "newValue",
         )
       )
       .unindent()

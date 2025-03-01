@@ -27,7 +27,6 @@ import com.squareup.javapoet.TypeName
  * Generates a method for providing a [DataTypeDescriptor] into a multibinds set.
  *
  * Looks like:
- *
  * ```
  * @Provides
  * @Singleton
@@ -42,14 +41,14 @@ import com.squareup.javapoet.TypeName
  */
 class DataTypeDescriptorDaggerProvider(
   private val elementName: CharSequence,
-  private val dtdContainingClassName: String = "${elementName}_GeneratedKt"
+  private val dtdContainingClassName: String = "${elementName}_GeneratedKt",
 ) :
   DaggerModuleContentsProvider.ProvidesMethod(
     name = "provide${elementName}DataTypeDescriptor",
     providedType = TypeName.get(DataTypeDescriptor::class.java),
     isSingleton = true,
     isIntoSet = true,
-    qualifierAnnotations = listOf()
+    qualifierAnnotations = listOf(),
   ) {
   override val parameters: List<ParameterSpec> = emptyList()
 

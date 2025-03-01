@@ -31,7 +31,6 @@ import com.squareup.kotlinpoet.asClassName
  * [Connection] classes.
  *
  * For example:
- *
  * ```
  * val MY_ENTITY_GENERATED_CONNECTIONS = setOf(
  *     MyEntityReadConnection::class.java,
@@ -41,7 +40,7 @@ import com.squareup.kotlinpoet.asClassName
  */
 data class ConnectionsPropertyProvider(
   private val entityClassSimpleName: CharSequence,
-  private val connectionTypeNames: Collection<TypeName>
+  private val connectionTypeNames: Collection<TypeName>,
 ) : PropertyProvider() {
   override fun provideProperty(): PropertySpec {
     return PropertySpec.builder(entityClassSimpleName.toPropertyName(), SET_TYPE_NAME)
@@ -65,11 +64,9 @@ data class ConnectionsPropertyProvider(
 
   companion object {
     private val SET_TYPE_NAME =
-      Set::class
-        .asClassName()
+      Set::class.asClassName()
         .parameterizedBy(
-          Class::class
-            .asClassName()
+          Class::class.asClassName()
             .parameterizedBy(WildcardTypeName.Companion.producerOf(Connection::class.asClassName()))
         )
 

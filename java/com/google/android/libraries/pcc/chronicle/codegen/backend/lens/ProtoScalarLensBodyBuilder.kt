@@ -72,7 +72,7 @@ object ProtoScalarLensBodyBuilder : BaseProtoLensBodyBuilder() {
     type: Type,
     field: FieldEntry,
     entityParamName: String,
-    newValueParamName: String
+    newValueParamName: String,
   ): CodeBlock {
     if (field.category !is FieldCategory.NullableValue) {
       return CodeBlock.builder().addStatement("${field.sourceName} = $newValueParamName").build()
@@ -81,7 +81,7 @@ object ProtoScalarLensBodyBuilder : BaseProtoLensBodyBuilder() {
     return CodeBlock.builder()
       .addStatement(
         "${field.sourceName} = requireNotNull($newValueParamName) { %S }",
-        "Optional proto field: ${field.sourceName} may only take on non-null values."
+        "Optional proto field: ${field.sourceName} may only take on non-null values.",
       )
       .build()
   }

@@ -28,7 +28,7 @@ abstract class BaseProtoLensBodyBuilder : LensBodyBuilder {
     type: Type,
     field: FieldEntry,
     entityParamName: String,
-    newValueParamName: String
+    newValueParamName: String,
   ): CodeBlock {
     return CodeBlock.builder()
       .addStatement("$entityParamName.toBuilder()")
@@ -48,7 +48,6 @@ abstract class BaseProtoLensBodyBuilder : LensBodyBuilder {
    * scoped to the proto builder itself.
    *
    * For example:
-   *
    * ```kotlin
    * myProtoEntity.toBuilder()
    *   .apply {
@@ -61,6 +60,6 @@ abstract class BaseProtoLensBodyBuilder : LensBodyBuilder {
     type: Type,
     field: FieldEntry,
     entityParamName: String,
-    newValueParamName: String
+    newValueParamName: String,
   ): CodeBlock
 }

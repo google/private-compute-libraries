@@ -29,7 +29,6 @@ import java.time.Duration
  * Generates the method for providing a ManagedDataCache.
  *
  * Looks like:
- *
  * ```
  * @Provides
  * @Singleton
@@ -43,19 +42,19 @@ import java.time.Duration
  * @param chronicleDataType the [TypeName] of the class annotated with `@DataCacheStore`.
  * @param maxItems the maximum size of the `ManagedDataCache` being generated.
  * @param ttlDuration the duration of the time-to-live for items in the generated
- * `ManagedDataCache`.
+ *   `ManagedDataCache`.
  */
 class ManagedDataCacheStorageDaggerProvider(
   private val elementName: String,
   private val chronicleDataType: TypeName,
   private val maxItems: Int,
-  private val ttlDuration: Duration
+  private val ttlDuration: Duration,
 ) :
   DaggerModuleContentsProvider.ProvidesMethod(
     name = "provide${elementName}ManagedDataCacheStorage",
     providedType = ParameterizedTypeName.get(MANAGED_DATA_CACHE, chronicleDataType),
     isSingleton = true,
-    qualifierAnnotations = listOf()
+    qualifierAnnotations = listOf(),
   ) {
   override val parameters: List<ParameterSpec> =
     listOf(ParameterSpec.builder(DATA_CACHE_STORAGE, "cache").build())
@@ -81,12 +80,12 @@ class ManagedDataCacheStorageDaggerProvider(
     private val MANAGED_DATA_CACHE =
       ClassName.get(
         "com.google.android.libraries.pcc.chronicle.storage.datacache",
-        "ManagedDataCache"
+        "ManagedDataCache",
       )
     private val DATA_CACHE_STORAGE =
       ClassName.get(
         "com.google.android.libraries.pcc.chronicle.storage.datacache",
-        "DataCacheStorage"
+        "DataCacheStorage",
       )
   }
 }

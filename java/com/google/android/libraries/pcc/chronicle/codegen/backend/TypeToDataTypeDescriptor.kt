@@ -39,7 +39,7 @@ import com.squareup.kotlinpoet.asClassName
  */
 fun TypeSet.dataTypeDescriptor(
   forSubType: TypeLocation? = null,
-  outerTypes: MutableSet<TypeLocation> = mutableSetOf()
+  outerTypes: MutableSet<TypeLocation> = mutableSetOf(),
 ): CodeBlock {
   val typeToGenerate =
     forSubType?.let { subtype -> this.firstOrNull { it.location == subtype } } ?: primary
@@ -60,10 +60,11 @@ fun TypeSet.dataTypeDescriptor(
         """
     %T(name = %S, cls = %T::class) {
     ⇥
-    """.trimIndent(),
+    """
+          .trimIndent(),
         dataTypeConstructorName,
         typeToGenerateLocation.toString(),
-        typeToGenerateJvmLocation.asClassName()
+        typeToGenerateJvmLocation.asClassName(),
       )
 
   outerTypes.add(typeToGenerateLocation)
@@ -78,7 +79,7 @@ fun TypeSet.dataTypeDescriptor(
 private fun TypeSet.mapEntryDtd(
   keyType: FieldCategory,
   valueType: FieldCategory,
-  outerTypes: MutableSet<TypeLocation> = mutableSetOf()
+  outerTypes: MutableSet<TypeLocation> = mutableSetOf(),
 ): CodeBlock {
   // Though simpleName loses some information (e.g. Set<String> has simpleName SetValue), the
   // scoping of the DTD definition prevents collision between between map DTDs with matching
@@ -91,9 +92,10 @@ private fun TypeSet.mapEntryDtd(
         """
         dataTypeDescriptor(name = %S, cls = %T::class) {
         ⇥
-  """.trimIndent(),
+  """
+          .trimIndent(),
         mapDTDName,
-        Map.Entry::class.asClassName()
+        Map.Entry::class.asClassName(),
       )
 
   codeBuilder.add("\"key\" to %L\n", generateCodeForField(keyType, outerTypes))
@@ -105,7 +107,7 @@ private fun TypeSet.mapEntryDtd(
 
 private fun TypeSet.tuple(
   types: List<FieldCategory>,
-  outerTypes: MutableSet<TypeLocation> = mutableSetOf()
+  outerTypes: MutableSet<TypeLocation> = mutableSetOf(),
 ): CodeBlock {
   val codeBuilder = CodeBlock.builder().add("listOf(")
   types.forEach { codeBuilder.add("%L,", generateCodeForField(it, outerTypes)) }
@@ -118,7 +120,7 @@ private fun TypeSet.tuple(
 // dataTypeDescriptor or this method.
 private fun TypeSet.generateCodeForField(
   fieldCategory: FieldCategory,
-  outerTypes: MutableSet<TypeLocation> = mutableSetOf()
+  outerTypes: MutableSet<TypeLocation> = mutableSetOf(),
 ): CodeBlock {
   return when (fieldCategory) {
     // For a list or set or optional, the type of interest is the type parameter and List as the

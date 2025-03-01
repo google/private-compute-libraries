@@ -39,7 +39,7 @@ val CITY_MOUNTAIN_VIEW =
     name = "Mountain View",
     mayor = PERSON_SUNDAR,
     location = TestLocation(37.3861f, -122.0839f),
-    populace = listOf(PERSON_SUNDAR, PERSON_LARRY, PERSON_SERGEY)
+    populace = listOf(PERSON_SUNDAR, PERSON_LARRY, PERSON_SERGEY),
   )
 
 val CITY_CHICAGO =
@@ -47,5 +47,5 @@ val CITY_CHICAGO =
     name = "Chicago",
     mayor = PERSON_MICHELLE,
     location = TestLocation(41.8781f, -87.6298f),
-    populace = listOf(PERSON_BARACK, PERSON_MICHELLE)
+    populace = listOf(PERSON_BARACK, PERSON_MICHELLE),
   )

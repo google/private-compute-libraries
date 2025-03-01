@@ -39,7 +39,7 @@ class RemoteEntity(
   ) : this(
     metadata = EntityMetadata.parseFrom(requireNotNull(parcel.createByteArray())),
     bytes = parcel.createByteArray() ?: EMPTY_BYTES,
-    bundle = parcel.readBundle(RemoteEntity::class.java.classLoader) ?: Bundle.EMPTY
+    bundle = parcel.readBundle(RemoteEntity::class.java.classLoader) ?: Bundle.EMPTY,
   )
 
   override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -74,7 +74,7 @@ class RemoteEntity(
     fun fromParcelable(metadata: EntityMetadata, parcelable: Parcelable): RemoteEntity {
       return RemoteEntity(
         metadata = metadata,
-        bundle = Bundle().apply { putParcelable(PARCELABLE_KEY, parcelable) }
+        bundle = Bundle().apply { putParcelable(PARCELABLE_KEY, parcelable) },
       )
     }
 
@@ -92,6 +92,7 @@ class RemoteEntity(
     val CREATOR =
       object : Parcelable.Creator<RemoteEntity> {
         override fun createFromParcel(parcel: Parcel): RemoteEntity = RemoteEntity(parcel)
+
         override fun newArray(size: Int): Array<RemoteEntity?> = arrayOfNulls(size)
       }
   }

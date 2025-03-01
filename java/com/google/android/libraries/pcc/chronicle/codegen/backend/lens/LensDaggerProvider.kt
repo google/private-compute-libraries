@@ -31,6 +31,7 @@ import com.squareup.javapoet.WildcardTypeName
 
 /**
  * Implementation of [DaggerModuleContentsProvider] which generates the body of a `@Provides
+ *
  * @IntoSet` method to inject the lens for the given [type]'s [field] into a multibinds set.
  */
 class LensDaggerProvider(
@@ -38,14 +39,14 @@ class LensDaggerProvider(
   field: FieldEntry,
   methodName: String = providerMethodName(type, field),
   private val lensPropertyName: String = lensPropertyName(type, field),
-  private val lensClassName: String = "${type.name}_GeneratedKt"
+  private val lensClassName: String = "${type.name}_GeneratedKt",
 ) :
   DaggerModuleContentsProvider.ProvidesMethod(
     name = methodName,
     providedType = LENS_WILDCARD_TYPE,
     isSingleton = true,
     isIntoSet = true,
-    qualifierAnnotations = listOf()
+    qualifierAnnotations = listOf(),
   ) {
   override val parameters: List<ParameterSpec> = emptyList()
 
@@ -58,7 +59,7 @@ class LensDaggerProvider(
         WildcardTypeName.subtypeOf(TypeName.OBJECT),
         WildcardTypeName.subtypeOf(TypeName.OBJECT),
         WildcardTypeName.subtypeOf(TypeName.OBJECT),
-        WildcardTypeName.subtypeOf(TypeName.OBJECT)
+        WildcardTypeName.subtypeOf(TypeName.OBJECT),
       )
 
     private fun providerMethodName(type: Type, field: FieldEntry): String =

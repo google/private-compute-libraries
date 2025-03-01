@@ -26,21 +26,21 @@ val TestPerson_Name =
   Lens.create<TestPerson, String>(
     focusAccessPath = OpticalAccessPath(TEST_PERSON_GENERATED_DTD, "name"),
     getter = { it.name },
-    setter = { entity, newValue -> entity.copy(name = newValue) }
+    setter = { entity, newValue -> entity.copy(name = newValue) },
   )
 
 val TestPerson_Age =
   Lens.create<TestPerson, Int>(
     focusAccessPath = OpticalAccessPath(TEST_PERSON_GENERATED_DTD, "age"),
     getter = { it.age },
-    setter = { entity, newValue -> entity.copy(age = newValue) }
+    setter = { entity, newValue -> entity.copy(age = newValue) },
   )
 
 val TestPerson_Pet =
   Lens.create<TestPerson, TestPet?>(
     focusAccessPath = OpticalAccessPath(TEST_PERSON_GENERATED_DTD, "pet"),
     getter = { it.pet },
-    setter = { entity, newValue -> entity.copy(pet = newValue) }
+    setter = { entity, newValue -> entity.copy(pet = newValue) },
   )
 
 val TestPerson_Lenses = setOf(TestPerson_Name, TestPerson_Age, TestPerson_Pet)

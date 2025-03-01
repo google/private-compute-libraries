@@ -28,23 +28,23 @@ import com.google.android.libraries.pcc.chronicle.api.error.ChronicleError
  *
  * **Note:** [extras] exists purely as a mechanism to help support forwards compatibility if the
  * need were to arise where we would need to include additional Binders or ParcelFileDescriptors or
- * the like with a [RemoteError]. It should not be used to contain metadata about the response
- * which could otherwise be conveyed via the [RemoteErrorMetadata] proto.
+ * the like with a [RemoteError]. It should not be used to contain metadata about the response which
+ * could otherwise be conveyed via the [RemoteErrorMetadata] proto.
  *
  * Adding, removing, or changing fields in this data class must be done with __extreme__ caution.
  */
-data class RemoteError(
-  val metadata: RemoteErrorMetadata,
-  val extras: Bundle = Bundle.EMPTY,
-) : Parcelable, ChronicleError(metadata.message) {
-  constructor(type: RemoteErrorMetadata.Type, message: String) :
-    this(RemoteErrorMetadata.newBuilder().setErrorType(type).setMessage(message).build())
+data class RemoteError(val metadata: RemoteErrorMetadata, val extras: Bundle = Bundle.EMPTY) :
+  Parcelable, ChronicleError(metadata.message) {
+  constructor(
+    type: RemoteErrorMetadata.Type,
+    message: String,
+  ) : this(RemoteErrorMetadata.newBuilder().setErrorType(type).setMessage(message).build())
 
   constructor(
     parcel: Parcel
   ) : this(
     metadata = RemoteErrorMetadata.parseFrom(requireNotNull(parcel.createByteArray())),
-    extras = parcel.readBundle(RemoteError::class.java.classLoader) ?: Bundle.EMPTY
+    extras = parcel.readBundle(RemoteError::class.java.classLoader) ?: Bundle.EMPTY,
   )
 
   override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -56,6 +56,7 @@ data class RemoteError(
 
   companion object CREATOR : Parcelable.Creator<RemoteError> {
     override fun createFromParcel(parcel: Parcel): RemoteError = RemoteError(parcel)
+
     override fun newArray(size: Int): Array<RemoteError?> = arrayOfNulls(size)
   }
 }

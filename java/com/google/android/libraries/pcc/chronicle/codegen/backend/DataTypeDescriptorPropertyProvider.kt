@@ -27,7 +27,6 @@ import com.squareup.kotlinpoet.PropertySpec
  * [PropertyProvider] implementation which generates a [PropertySpec] for a [DataTypeDescriptor].
  *
  * For example:
- *
  * ```
  * val MY_ENTITY_GENERATED_DTD: DataTypeDescriptor = dataTypeDescriptor("com.google.MyEntity") {
  *     "foo" to FieldType.String
@@ -38,7 +37,7 @@ import com.squareup.kotlinpoet.PropertySpec
 data class DataTypeDescriptorPropertyProvider(
   private val entityClassSimpleName: CharSequence,
   private val typeSet: TypeSet,
-  private val propertyName: String = entityClassSimpleName.toPropertyName()
+  private val propertyName: String = entityClassSimpleName.toPropertyName(),
 ) : PropertyProvider() {
   override fun provideProperty(): PropertySpec {
     return PropertySpec.builder(propertyName, DataTypeDescriptor::class)

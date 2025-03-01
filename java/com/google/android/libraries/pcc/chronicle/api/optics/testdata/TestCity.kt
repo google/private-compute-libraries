@@ -25,35 +25,35 @@ data class TestCity(
   val name: String,
   val mayor: TestPerson,
   val location: TestLocation,
-  val populace: List<TestPerson>
+  val populace: List<TestPerson>,
 )
 
 val TestCity_Name =
   Lens.create<TestCity, String>(
     focusAccessPath = OpticalAccessPath(TEST_CITY_GENERATED_DTD, "name"),
     getter = { it.name },
-    setter = { entity, newValue -> entity.copy(name = newValue) }
+    setter = { entity, newValue -> entity.copy(name = newValue) },
   )
 
 val TestCity_Mayor =
   Lens.create<TestCity, TestPerson>(
     focusAccessPath = OpticalAccessPath(TEST_CITY_GENERATED_DTD, "mayor"),
     getter = { it.mayor },
-    setter = { entity, newValue -> entity.copy(mayor = newValue) }
+    setter = { entity, newValue -> entity.copy(mayor = newValue) },
   )
 
 val TestCity_Location =
   Lens.create<TestCity, TestLocation>(
     focusAccessPath = OpticalAccessPath(TEST_CITY_GENERATED_DTD, "location"),
     getter = { it.location },
-    setter = { entity, newValue -> entity.copy(location = newValue) }
+    setter = { entity, newValue -> entity.copy(location = newValue) },
   )
 
 val TestCity_Populace =
   Lens.create<TestCity, List<TestPerson>>(
     focusAccessPath = OpticalAccessPath(TEST_CITY_GENERATED_DTD, "populace"),
     getter = { it.populace },
-    setter = { entity, newValue -> entity.copy(populace = newValue) }
+    setter = { entity, newValue -> entity.copy(populace = newValue) },
   )
 
 val TestCity_Lenses = setOf(TestCity_Name, TestCity_Mayor, TestCity_Location, TestCity_Populace)
