@@ -64,7 +64,8 @@ class ProtoMapLensBodyBuilderTest {
         """
           clearMyField()
           putAllMyField(newValue)
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -77,15 +78,15 @@ class ProtoMapLensBodyBuilderTest {
           FieldCategory.MapValue(
             location = MAP_LOCATION,
             keyType = FieldCategory.StringValue,
-            valueType = FieldCategory.IntValue
+            valueType = FieldCategory.IntValue,
           ),
-        sourceName = "myFieldMap"
+        sourceName = "myFieldMap",
       )
     private val TYPE =
       Type(
         location = TypeLocation("MyProto", pkg = "com.google"),
         fields = listOf(FIELD),
-        tooling = Type.Tooling.PROTO
+        tooling = Type.Tooling.PROTO,
       )
   }
 }

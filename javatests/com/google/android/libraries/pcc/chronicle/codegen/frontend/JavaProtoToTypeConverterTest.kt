@@ -34,7 +34,7 @@ class JavaProtoToTypeConverterTest {
     descriptorToTypeTest(
       CodegenTestProto.Thing::class,
       ExpectedTypes.protoThing.forProtos(),
-      ExpectedTypes.protoTimestamp.forProtos()
+      ExpectedTypes.protoTimestamp.forProtos(),
     )
   }
 
@@ -53,7 +53,7 @@ class JavaProtoToTypeConverterTest {
       CodegenTestProto.NestedType::class,
       ExpectedTypes.nestedType.forProtos(),
       ExpectedTypes.innerType.forProtos(),
-      ExpectedTypes.innerInnerType.forProtos()
+      ExpectedTypes.innerInnerType.forProtos(),
     )
   }
 
@@ -63,7 +63,7 @@ class JavaProtoToTypeConverterTest {
       CodegenTestProto.Thing1::class,
       ExpectedTypes.thing1.forProtos(),
       ExpectedTypes.thing2.forProtos(),
-      ExpectedTypes.thing3.forProtos()
+      ExpectedTypes.thing3.forProtos(),
     )
   }
 
@@ -74,7 +74,7 @@ class JavaProtoToTypeConverterTest {
       ExpectedTypes.oneOfThing(enableNullable = false).forProtos(),
       ExpectedTypes.stringThing.forProtos(),
       ExpectedTypes.intThing.forProtos(),
-      ExpectedTypes.otherThing.forProtos()
+      ExpectedTypes.otherThing.forProtos(),
     )
   }
 
@@ -112,7 +112,7 @@ class JavaProtoToTypeConverterTest {
       ExpectedTypes.repeatedGroup.forProtos(),
       ExpectedTypes.repeatedGroupInner.forProtos(),
       ExpectedTypes.nestedThing.forProtos(),
-      ExpectedTypes.simpleThing.forProtos()
+      ExpectedTypes.simpleThing.forProtos(),
     )
   }
 

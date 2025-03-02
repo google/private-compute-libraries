@@ -43,7 +43,8 @@ class LensDaggerProviderTest {
         |  public static Lens<?, ?, ?, ?> provideMyTypeMyFieldLens() {
         |    return MyType_GeneratedKt.MY_TYPE_MY_FIELD_GENERATED_LENS;
         |  }
-        """.trimMargin()
+        """
+          .trimMargin()
       )
   }
 
@@ -60,7 +61,8 @@ class LensDaggerProviderTest {
         |  public static Lens<?, ?, ?, ?> provideIt() {
         |    return MyType_GeneratedKt.MY_TYPE_MY_FIELD_GENERATED_LENS;
         |  }
-        """.trimMargin()
+        """
+          .trimMargin()
       )
   }
 
@@ -77,7 +79,8 @@ class LensDaggerProviderTest {
         |  public static Lens<?, ?, ?, ?> provideMyTypeMyFieldLens() {
         |    return MyType_GeneratedKt.THE_LENS;
         |  }
-        """.trimMargin()
+        """
+          .trimMargin()
       )
   }
 
@@ -94,7 +97,8 @@ class LensDaggerProviderTest {
         |  public static Lens<?, ?, ?, ?> provideMyTypeMyFieldLens() {
         |    return MyTypeLenses.MY_TYPE_MY_FIELD_GENERATED_LENS;
         |  }
-        """.trimMargin()
+        """
+          .trimMargin()
       )
   }
 
@@ -118,7 +122,8 @@ class LensDaggerProviderTest {
         |class MyClass {
         |$method
         |}
-      """.trimMargin()
+      """
+        .trimMargin()
     )
   }
 

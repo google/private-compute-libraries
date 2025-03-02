@@ -83,7 +83,7 @@ class DefaultChronicleServiceConnectorTest {
         context = testContext,
         connectionScope = connectionScope,
         serviceComponentName = serviceComponentName,
-        timeout = Duration.ofSeconds(5)
+        timeout = Duration.ofSeconds(5),
       )
 
     val states = connector.connectionState.take(3).toList()
@@ -100,7 +100,7 @@ class DefaultChronicleServiceConnectorTest {
         context = testContext,
         connectionScope = connectionScope,
         serviceComponentName = serviceComponentName,
-        timeout = Duration.ofSeconds(5)
+        timeout = Duration.ofSeconds(5),
       )
 
     launch {
@@ -115,7 +115,8 @@ class DefaultChronicleServiceConnectorTest {
         .toList()
 
     assertWithMessage("Should be an even number of Disconnected, Connecting states with retries.")
-      .that(states.size % 2).isEqualTo(0)
+      .that(states.size % 2)
+      .isEqualTo(0)
     states.forEachIndexed { index, state ->
       if (index % 2 == 0) assertThat(state).isEqualTo(ChronicleServiceConnector.State.Disconnected)
       else assertThat(state).isEqualTo(ChronicleServiceConnector.State.Connecting)
@@ -129,21 +130,23 @@ class DefaultChronicleServiceConnectorTest {
         context = testContext,
         connectionScope = connectionScope,
         serviceComponentName = serviceComponentName,
-        timeout = Duration.ofSeconds(5)
+        timeout = Duration.ofSeconds(5),
       )
 
     application.latch = CountDownLatch(1)
 
-    val states = async(start = CoroutineStart.UNDISPATCHED) {
-      connector.connectionState
-        .takeWhile { it !is ChronicleServiceConnector.State.Connected }
-        .toList()
-    }
+    val states =
+      async(start = CoroutineStart.UNDISPATCHED) {
+        connector.connectionState
+          .takeWhile { it !is ChronicleServiceConnector.State.Connected }
+          .toList()
+      }
 
     application.latch?.countDown()
 
     assertWithMessage("Should be an even number of Disconnected, Connecting states with retries.")
-      .that(states.await().size % 2).isEqualTo(0)
+      .that(states.await().size % 2)
+      .isEqualTo(0)
     states.await().forEachIndexed { index, state ->
       if (index % 2 == 0) assertThat(state).isEqualTo(ChronicleServiceConnector.State.Disconnected)
       else assertThat(state).isEqualTo(ChronicleServiceConnector.State.Connecting)
@@ -157,7 +160,7 @@ class DefaultChronicleServiceConnectorTest {
         context = testContext,
         connectionScope = connectionScope,
         serviceComponentName = serviceComponentName,
-        timeout = Duration.ofSeconds(1)
+        timeout = Duration.ofSeconds(1),
       )
 
     application.unbound = CompletableDeferred()
@@ -180,13 +183,14 @@ class DefaultChronicleServiceConnectorTest {
         connectionScope = connectionScope,
         serviceComponentName = serviceComponentName,
         timeout = Duration.ofSeconds(0),
-        maximumFailures = 3
+        maximumFailures = 3,
       )
 
     application.returnNullBinder = true
 
-    val e = connector.connectionState.first { it is ChronicleServiceConnector.State.Unavailable }
-      as ChronicleServiceConnector.State.Unavailable
+    val e =
+      connector.connectionState.first { it is ChronicleServiceConnector.State.Unavailable }
+        as ChronicleServiceConnector.State.Unavailable
     assertThat(e.cause).hasMessageThat().contains("failed 3 times in a row")
   }
 }

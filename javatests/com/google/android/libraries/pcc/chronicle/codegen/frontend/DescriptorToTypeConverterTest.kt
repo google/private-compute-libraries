@@ -173,16 +173,14 @@ class DescriptorToTypeConverterTest {
     val expected =
       ExpectedTypes.protoThing.forProtos(
         overridePkg = CodegenTestProto.Thing.getDescriptor().file.`package`,
-        timestampOverridePkg = "google.protobuf"
+        timestampOverridePkg = "google.protobuf",
       )
 
     descriptorToTypeTestWithConfig(
       CodegenTestProto.Thing.getDescriptor(),
       DescriptorToTypeConverter.Configuration(useJavaPackageInTypeLocations = false),
       expected,
-      ExpectedTypes.protoTimestamp.forProtos(
-        timestampOverridePkg = "google.protobuf"
-      ),
+      ExpectedTypes.protoTimestamp.forProtos(timestampOverridePkg = "google.protobuf"),
     )
   }
 
@@ -193,7 +191,7 @@ class DescriptorToTypeConverterTest {
   private fun descriptorToTypeTestWithConfig(
     desc: Descriptors.Descriptor,
     config: DescriptorToTypeConverter.Configuration,
-    vararg expect: Type
+    vararg expect: Type,
   ) {
     val types: Set<Type> = DescriptorToTypeConverter(config).convertToTypes(desc)
     assertThat(types).isEqualTo(TypeSet(*expect))

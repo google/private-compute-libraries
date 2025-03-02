@@ -56,7 +56,7 @@ class ClassToTypeConverterWithProtoAlternatesTest {
     classToTypeTest(
       SourceClasses.ListOfEntity::class,
       ExpectedTypes.listOfEntity,
-      ExpectedTypes.simpleThing
+      ExpectedTypes.simpleThing,
     )
   }
 
@@ -65,7 +65,7 @@ class ClassToTypeConverterWithProtoAlternatesTest {
     classToTypeTest(
       SourceClasses.MapOfEntity::class,
       ExpectedTypes.mapOfEntity,
-      ExpectedTypes.simpleThing
+      ExpectedTypes.simpleThing,
     )
   }
 
@@ -79,7 +79,7 @@ class ClassToTypeConverterWithProtoAlternatesTest {
     classToTypeTest(
       SourceClasses.ListOfListOfEntity::class,
       ExpectedTypes.listOfListOfEntity,
-      ExpectedTypes.simpleThing
+      ExpectedTypes.simpleThing,
     )
   }
 
@@ -88,7 +88,7 @@ class ClassToTypeConverterWithProtoAlternatesTest {
     classToTypeTest(
       SourceClasses.MapOfListOfEntity::class,
       ExpectedTypes.mapOfListOfEntity,
-      ExpectedTypes.simpleThing
+      ExpectedTypes.simpleThing,
     )
   }
 
@@ -128,7 +128,7 @@ class ClassToTypeConverterWithProtoAlternatesTest {
       ProtoContainer::class,
       ExpectedTypes.protoContainer,
       ExpectedTypes.protoThing.forProtos(),
-      ExpectedTypes.protoTimestamp.forProtos()
+      ExpectedTypes.protoTimestamp.forProtos(),
     )
   }
 
@@ -139,7 +139,7 @@ class ClassToTypeConverterWithProtoAlternatesTest {
       ExpectedTypes.nestedProtoContainer,
       ExpectedTypes.protoContainer,
       ExpectedTypes.protoThing.forProtos(),
-      ExpectedTypes.protoTimestamp.forProtos()
+      ExpectedTypes.protoTimestamp.forProtos(),
     )
   }
 

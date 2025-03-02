@@ -118,7 +118,7 @@ class AidlTransportTest {
           RemoteEntity(EntityMetadata.getDefaultInstance()),
           RemoteEntity(EntityMetadata.getDefaultInstance()),
           RemoteEntity(EntityMetadata.getDefaultInstance()),
-        )
+        ),
       )
     val secondResponse =
       RemoteResponse(
@@ -126,7 +126,7 @@ class AidlTransportTest {
         listOf(
           RemoteEntity(EntityMetadata.getDefaultInstance()),
           RemoteEntity(EntityMetadata.getDefaultInstance()),
-        )
+        ),
       )
 
     sendResponse(firstResponse)

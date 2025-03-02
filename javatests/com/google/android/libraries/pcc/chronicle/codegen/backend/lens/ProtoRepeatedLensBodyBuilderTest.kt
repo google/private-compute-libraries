@@ -64,7 +64,8 @@ class ProtoRepeatedLensBodyBuilderTest {
         """
           clearMyField()
           addAllMyField(newValue)
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -74,13 +75,13 @@ class ProtoRepeatedLensBodyBuilderTest {
       FieldEntry(
         name = "myField",
         category = FieldCategory.ListValue(LIST_LOCATION, FieldCategory.StringValue),
-        sourceName = "myFieldList"
+        sourceName = "myFieldList",
       )
     private val TYPE =
       Type(
         location = TypeLocation("MyProto", pkg = "com.google"),
         fields = listOf(FIELD),
-        tooling = Type.Tooling.PROTO
+        tooling = Type.Tooling.PROTO,
       )
   }
 }

@@ -71,8 +71,7 @@ class LensPropertyProviderTest {
       ?.bufferedReader()
       ?.lineSequence()
       ?.joinToString("\n")
-      ?.trim()
-      ?: ""
+      ?.trim() ?: ""
   }
 
   data class TestCase(val field: FieldEntry, val goldenFile: String) {
@@ -91,31 +90,31 @@ class LensPropertyProviderTest {
       FieldEntry(
         name = "nullableIntField",
         category = FieldCategory.NullableValue(FieldCategory.IntValue),
-        sourceName = "nullableIntField"
+        sourceName = "nullableIntField",
       )
     private val STRING_FIELD =
       FieldEntry(
         name = "stringField",
         category = FieldCategory.StringValue,
-        sourceName = "stringField"
+        sourceName = "stringField",
       )
     private val NULLABLE_STRING_FIELD =
       FieldEntry(
         name = "nullableStringField",
         category = FieldCategory.NullableValue(FieldCategory.StringValue),
-        sourceName = "nullableStringField"
+        sourceName = "nullableStringField",
       )
     private val LIST_FIELD =
       FieldEntry(
         name = "listField",
         category = FieldCategory.ListValue(LIST_TYPE_LOCATION, FieldCategory.StringValue),
-        sourceName = "listFieldList"
+        sourceName = "listFieldList",
       )
     private val NESTED_FIELD =
       FieldEntry(
         name = "nestedField",
         category = FieldCategory.NestedTypeValue(PROTO_TYPE_LOCATION, JVM_TYPE_LOCATION),
-        sourceName = "nestedField"
+        sourceName = "nestedField",
       )
     private val NULLABLE_NESTED_FIELD =
       FieldEntry(
@@ -124,7 +123,7 @@ class LensPropertyProviderTest {
           FieldCategory.NullableValue(
             FieldCategory.NestedTypeValue(PROTO_TYPE_LOCATION, JVM_TYPE_LOCATION)
           ),
-        sourceName = "nullableNestedField"
+        sourceName = "nullableNestedField",
       )
     private val MAP_FIELD =
       FieldEntry(
@@ -133,9 +132,9 @@ class LensPropertyProviderTest {
           FieldCategory.MapValue(
             location = MAP_TYPE_LOCATION,
             keyType = FieldCategory.StringValue,
-            valueType = FieldCategory.LongValue
+            valueType = FieldCategory.LongValue,
           ),
-        sourceName = "mapFieldMap"
+        sourceName = "mapFieldMap",
       )
     private val FIELDS =
       listOf(
@@ -154,7 +153,7 @@ class LensPropertyProviderTest {
         location = PROTO_TYPE_LOCATION,
         fields = FIELDS,
         jvmLocation = JVM_TYPE_LOCATION,
-        tooling = Type.Tooling.PROTO
+        tooling = Type.Tooling.PROTO,
       )
 
     @JvmStatic

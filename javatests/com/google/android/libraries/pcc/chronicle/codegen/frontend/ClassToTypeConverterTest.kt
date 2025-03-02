@@ -49,7 +49,7 @@ class ClassToTypeConverterTest {
       SourceClasses.NestedType::class,
       ExpectedTypes.nestedType,
       ExpectedTypes.innerType,
-      ExpectedTypes.innerInnerType
+      ExpectedTypes.innerInnerType,
     )
   }
 
@@ -63,7 +63,7 @@ class ClassToTypeConverterTest {
     classToTypeTest(
       SourceClasses.ListOfEntity::class,
       ExpectedTypes.listOfEntity,
-      ExpectedTypes.simpleThing
+      ExpectedTypes.simpleThing,
     )
   }
 
@@ -72,7 +72,7 @@ class ClassToTypeConverterTest {
     classToTypeTest(
       SourceClasses.MapOfEntity::class,
       ExpectedTypes.mapOfEntity,
-      ExpectedTypes.simpleThing
+      ExpectedTypes.simpleThing,
     )
   }
 
@@ -86,7 +86,7 @@ class ClassToTypeConverterTest {
     classToTypeTest(
       SourceClasses.ListOfListOfEntity::class,
       ExpectedTypes.listOfListOfEntity,
-      ExpectedTypes.simpleThing
+      ExpectedTypes.simpleThing,
     )
   }
 
@@ -95,7 +95,7 @@ class ClassToTypeConverterTest {
     classToTypeTest(
       SourceClasses.MapOfListOfEntity::class,
       ExpectedTypes.mapOfListOfEntity,
-      ExpectedTypes.simpleThing
+      ExpectedTypes.simpleThing,
     )
   }
 

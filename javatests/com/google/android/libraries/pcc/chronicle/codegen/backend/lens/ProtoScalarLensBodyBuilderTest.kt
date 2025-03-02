@@ -124,14 +124,14 @@ class ProtoScalarLensBodyBuilderTest {
     val (type1, field1) =
       createTypeAndField(
         FieldCategory.EnumValue(ENUM_TYPE_LOCATION, emptyList()),
-        Type.Tooling.PROTO
+        Type.Tooling.PROTO,
       )
     assertThat(ProtoScalarLensBodyBuilder.supportsField(type1, field1)).isTrue()
 
     val (type2, field2) =
       createTypeAndField(
         FieldCategory.EnumValue(ENUM_TYPE_LOCATION, emptyList()),
-        Type.Tooling.DATA_CLASS
+        Type.Tooling.DATA_CLASS,
       )
     assertThat(ProtoScalarLensBodyBuilder.supportsField(type2, field2)).isFalse()
   }
@@ -172,7 +172,7 @@ class ProtoScalarLensBodyBuilderTest {
     val (type2, field2) =
       createTypeAndField(
         FieldCategory.NestedTypeValue(NESTED_TYPE_LOCATION),
-        Type.Tooling.DATA_CLASS
+        Type.Tooling.DATA_CLASS,
       )
     assertThat(ProtoScalarLensBodyBuilder.supportsField(type2, field2)).isFalse()
   }
@@ -186,7 +186,7 @@ class ProtoScalarLensBodyBuilderTest {
     val (type2, field2) =
       createTypeAndField(
         FieldCategory.NullableValue(FieldCategory.StringValue),
-        Type.Tooling.DATA_CLASS
+        Type.Tooling.DATA_CLASS,
       )
     assertThat(ProtoScalarLensBodyBuilder.supportsField(type2, field2)).isFalse()
   }
@@ -221,7 +221,7 @@ class ProtoScalarLensBodyBuilderTest {
       ProtoScalarLensBodyBuilder.buildGetterBody(
         type = TYPE,
         field = FIELD.copy(sourceName = "lookAtMeImNew"),
-        entityParamName = "entity"
+        entityParamName = "entity",
       )
     assertThat(block.toString()).contains("entity.lookAtMeImNew")
   }
@@ -233,7 +233,7 @@ class ProtoScalarLensBodyBuilderTest {
         type = TYPE,
         field = FIELD,
         entityParamName = "entity",
-        newValueParamName = "newValue"
+        newValueParamName = "newValue",
       )
     assertThat(block.toString()).contains("myField = newValue")
   }
@@ -245,7 +245,7 @@ class ProtoScalarLensBodyBuilderTest {
         type = TYPE,
         field = FIELD.copy(sourceName = "lookAtMeImNew"),
         entityParamName = "entity",
-        newValueParamName = "newValue"
+        newValueParamName = "newValue",
       )
     assertThat(block.toString()).contains("lookAtMeImNew = newValue")
   }
@@ -262,7 +262,7 @@ class ProtoScalarLensBodyBuilderTest {
         name = "myField",
         category = FieldCategory.IntValue,
         sourceName = "myField",
-        presenceCondition = "hasMyField"
+        presenceCondition = "hasMyField",
       )
 
     private val TYPE =
@@ -270,12 +270,12 @@ class ProtoScalarLensBodyBuilderTest {
         location = TypeLocation("MyType", pkg = "com.google"),
         fields = listOf(FIELD),
         jvmLocation = TypeLocation("MyType", pkg = "com.google.jvm"),
-        tooling = Type.Tooling.PROTO
+        tooling = Type.Tooling.PROTO,
       )
 
     private fun createTypeAndField(
       fieldCategory: FieldCategory = FieldCategory.IntValue,
-      tooling: Type.Tooling = Type.Tooling.PROTO
+      tooling: Type.Tooling = Type.Tooling.PROTO,
     ): Pair<Type, FieldEntry> {
       val field = FIELD.copy(category = fieldCategory)
       val type = TYPE.copy(fields = listOf(field), tooling = tooling)

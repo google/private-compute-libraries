@@ -47,7 +47,7 @@ class DescriptorToTypeConverterConfigTest {
       DescriptorToTypeConverter.Configuration(ignoredFieldNames = setOf("field1")),
       CodegenTestProto.NestedThing.getDescriptor(),
       ExpectedTypes.nestedThing.forProtos().withoutFields("field1"),
-      ExpectedTypes.simpleThing.forProtos().withoutFields("field1")
+      ExpectedTypes.simpleThing.forProtos().withoutFields("field1"),
     )
   }
 
@@ -58,7 +58,7 @@ class DescriptorToTypeConverterConfigTest {
         ignoredMessageType =
           setOf(
             Descriptors.FieldDescriptor.Type.FLOAT.name,
-            Descriptors.FieldDescriptor.Type.STRING.name
+            Descriptors.FieldDescriptor.Type.STRING.name,
           )
       ),
       CodegenTestProto.Thing.getDescriptor(),
@@ -72,7 +72,7 @@ class DescriptorToTypeConverterConfigTest {
     descriptorToTypeConfigTest(
       DescriptorToTypeConverter.Configuration(ignoredMessageType = setOf("SimpleThing")),
       CodegenTestProto.NestedThing.getDescriptor(),
-      ExpectedTypes.nestedThing.forProtos().withoutFields("field2")
+      ExpectedTypes.nestedThing.forProtos().withoutFields("field2"),
     )
   }
 
@@ -105,7 +105,7 @@ class DescriptorToTypeConverterConfigTest {
   private fun descriptorToTypeConfigTest(
     config: DescriptorToTypeConverter.Configuration,
     desc: Descriptors.Descriptor,
-    vararg expect: Type
+    vararg expect: Type,
   ) {
     val types: Set<Type> = DescriptorToTypeConverter(config = config).convertToTypes(desc)
     assertThat(types).isEqualTo(TypeSet(*expect))

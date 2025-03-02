@@ -82,7 +82,7 @@ class BaseRemoteClientTest {
               RemoteEntity(metadata = EntityMetadata.newBuilder().setId("1").build()),
               RemoteEntity(metadata = EntityMetadata.newBuilder().setId("2").build()),
               RemoteEntity(metadata = EntityMetadata.newBuilder().setId("3").build()),
-            )
+            ),
         ),
         RemoteResponse(
           metadata = RemoteResponseMetadata.getDefaultInstance(),
@@ -90,7 +90,7 @@ class BaseRemoteClientTest {
             listOf(
               RemoteEntity(metadata = EntityMetadata.newBuilder().setId("4").build()),
               RemoteEntity(metadata = EntityMetadata.newBuilder().setId("5").build()),
-            )
+            ),
         ),
       )
     val transport =
@@ -107,7 +107,7 @@ class BaseRemoteClientTest {
       impl
         .callServeAsWrappedEntityFlow(
           transport,
-          RemoteRequest(RemoteRequestMetadata.getDefaultInstance())
+          RemoteRequest(RemoteRequestMetadata.getDefaultInstance()),
         )
         .toList()
 

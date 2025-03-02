@@ -78,7 +78,7 @@ class DefaultRemoteStoreClientTest {
       flowOf(
         RemoteResponse(
           metadata = RemoteResponseMetadata.getDefaultInstance(),
-          entities = listOf(RemoteEntity(EntityMetadata.newBuilder().setId("one").build()))
+          entities = listOf(RemoteEntity(EntityMetadata.newBuilder().setId("one").build())),
         ),
         RemoteResponse(
           metadata = RemoteResponseMetadata.getDefaultInstance(),
@@ -86,8 +86,8 @@ class DefaultRemoteStoreClientTest {
             listOf(
               RemoteEntity(EntityMetadata.newBuilder().setId("two").build()),
               RemoteEntity(EntityMetadata.newBuilder().setId("three").build()),
-            )
-        )
+            ),
+        ),
       )
 
     val result = client.fetchAll(POLICY).toList()
@@ -114,7 +114,7 @@ class DefaultRemoteStoreClientTest {
       flowOf(
         RemoteResponse(
           metadata = RemoteResponseMetadata.getDefaultInstance(),
-          entities = listOf(RemoteEntity(EntityMetadata.newBuilder().setId("one").build()))
+          entities = listOf(RemoteEntity(EntityMetadata.newBuilder().setId("one").build())),
         ),
         RemoteResponse(
           metadata = RemoteResponseMetadata.getDefaultInstance(),
@@ -122,8 +122,8 @@ class DefaultRemoteStoreClientTest {
             listOf(
               RemoteEntity(EntityMetadata.newBuilder().setId("two").build()),
               RemoteEntity(EntityMetadata.newBuilder().setId("three").build()),
-            )
-        )
+            ),
+        ),
       )
 
     val result = client.fetchById(POLICY, listOf("one", "two", "three")).toList()
@@ -189,7 +189,7 @@ class DefaultRemoteStoreClientTest {
           WrappedEntity(EntityMetadata.newBuilder().setId("one").build(), Foo("one")),
           WrappedEntity(EntityMetadata.newBuilder().setId("two").build(), Foo("two")),
           WrappedEntity(EntityMetadata.newBuilder().setId("three").build(), Foo("three")),
-        )
+        ),
     )
     assertThat(collected).isTrue()
 
@@ -216,7 +216,7 @@ class DefaultRemoteStoreClientTest {
           WrappedEntity(EntityMetadata.newBuilder().setId("one").build(), Foo("one")),
           WrappedEntity(EntityMetadata.newBuilder().setId("two").build(), Foo("two")),
           WrappedEntity(EntityMetadata.newBuilder().setId("three").build(), Foo("three")),
-        )
+        ),
     )
     assertThat(collected).isTrue()
 

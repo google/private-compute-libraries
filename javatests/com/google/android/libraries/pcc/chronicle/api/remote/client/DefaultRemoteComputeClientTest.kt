@@ -77,8 +77,8 @@ class DefaultRemoteComputeClientTest {
               listOf(
                 WrappedEntity(EntityMetadata.getDefaultInstance(), Parameter("one")),
                 WrappedEntity(EntityMetadata.getDefaultInstance(), Parameter("two")),
-              )
-          )
+              ),
+          ),
       )
       .toList()
 
@@ -104,15 +104,12 @@ class DefaultRemoteComputeClientTest {
             listOf(
               RemoteEntity(EntityMetadata.newBuilder().setId("one").build()),
               RemoteEntity(EntityMetadata.newBuilder().setId("two").build()),
-            )
+            ),
         ),
         RemoteResponse(
           RemoteResponseMetadata.getDefaultInstance(),
-          entities =
-            listOf(
-              RemoteEntity(EntityMetadata.newBuilder().setId("three").build()),
-            )
-        )
+          entities = listOf(RemoteEntity(EntityMetadata.newBuilder().setId("three").build())),
+        ),
       )
     whenever(transport.serve(any())) doReturn remoteResponses.asFlow()
 
@@ -125,8 +122,8 @@ class DefaultRemoteComputeClientTest {
             RemoteComputeClient.Parameters(
               dataTypeName = "Parameter",
               serializer = parameterSerializer,
-              arguments = emptyList()
-            )
+              arguments = emptyList(),
+            ),
         )
         .toList()
 
@@ -139,5 +136,6 @@ class DefaultRemoteComputeClientTest {
   }
 
   data class Foo(val name: String)
+
   data class Parameter(val name: String)
 }

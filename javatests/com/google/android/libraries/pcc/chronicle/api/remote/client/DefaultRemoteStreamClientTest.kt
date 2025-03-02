@@ -59,7 +59,7 @@ class DefaultRemoteStreamClientTest {
       listOf(
         WrappedEntity(metadata = EntityMetadata.getDefaultInstance(), entity = Foo("one")),
         WrappedEntity(metadata = EntityMetadata.getDefaultInstance(), entity = Foo("two")),
-      )
+      ),
     )
 
     assertThat(collected).isTrue()
@@ -78,7 +78,7 @@ class DefaultRemoteStreamClientTest {
       listOf(
         WrappedEntity(metadata = EntityMetadata.getDefaultInstance(), entity = Foo("one")),
         WrappedEntity(metadata = EntityMetadata.getDefaultInstance(), entity = Foo("two")),
-      )
+      ),
     )
 
     verify(serializer, times(2)).serialize<Foo>(any())
@@ -112,7 +112,7 @@ class DefaultRemoteStreamClientTest {
       listOf(
         RemoteResponse(
           metadata = RemoteResponseMetadata.getDefaultInstance(),
-          entities = listOf(RemoteEntity(EntityMetadata.getDefaultInstance()))
+          entities = listOf(RemoteEntity(EntityMetadata.getDefaultInstance())),
         ),
         RemoteResponse(
           metadata = RemoteResponseMetadata.getDefaultInstance(),
@@ -121,8 +121,8 @@ class DefaultRemoteStreamClientTest {
               RemoteEntity(EntityMetadata.getDefaultInstance()),
               RemoteEntity(EntityMetadata.getDefaultInstance()),
               RemoteEntity(EntityMetadata.getDefaultInstance()),
-            )
-        )
+            ),
+        ),
       )
     whenever(transport.serve(any())).thenAnswer { responses.asFlow() }
     whenever(serializer.deserialize<Foo>(any())).thenAnswer {

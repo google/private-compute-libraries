@@ -34,17 +34,18 @@ class BaseProtoLensBodyBuilderTest {
     val impl =
       object : BaseProtoLensBodyBuilder() {
         override fun supportsField(type: Type, field: FieldEntry) = true
+
         override fun buildGetterBody(
           type: Type,
           field: FieldEntry,
-          entityParamName: String
+          entityParamName: String,
         ): CodeBlock = fail("Shouldn't be called.")
 
         override fun buildSetterBuilderCode(
           type: Type,
           field: FieldEntry,
           entityParamName: String,
-          newValueParamName: String
+          newValueParamName: String,
         ): CodeBlock = CodeBlock.of("println(\"Hello world\")\n")
       }
 
@@ -53,7 +54,7 @@ class BaseProtoLensBodyBuilderTest {
         type = Type(TypeLocation("foo", pkg = ""), emptyList()),
         field = FieldEntry("field", FieldCategory.IntValue),
         entityParamName = "entity",
-        newValueParamName = "newValue"
+        newValueParamName = "newValue",
       )
 
     assertThat(setterBody.toString())
@@ -64,7 +65,8 @@ class BaseProtoLensBodyBuilderTest {
               println("Hello world")
             }
             .build()
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 }

@@ -36,7 +36,7 @@ class ClassToTypeConverterConfigTest {
     classToTypeConverterConfigTest(
       ClassToTypeConverter.Configuration(ignoredFieldNames = setOf("field1", "field7")),
       SourceClasses.Thing::class,
-      ExpectedTypes.thing.withoutFields("field1", "field7")
+      ExpectedTypes.thing.withoutFields("field1", "field7"),
     )
   }
 
@@ -45,7 +45,7 @@ class ClassToTypeConverterConfigTest {
     classToTypeConverterConfigTest(
       ClassToTypeConverter.Configuration(ignoredType = setOf(String::class.java, Long::class.java)),
       SourceClasses.Thing::class,
-      ExpectedTypes.thing.withoutFields("field1", "field6")
+      ExpectedTypes.thing.withoutFields("field1", "field6"),
     )
   }
 
@@ -56,7 +56,7 @@ class ClassToTypeConverterConfigTest {
         ignoredType = setOf(SourceClasses.SimpleThing::class.java)
       ),
       SourceClasses.NestedThing::class,
-      ExpectedTypes.nestedThing.withoutFields("field2")
+      ExpectedTypes.nestedThing.withoutFields("field2"),
     )
   }
 
@@ -67,7 +67,7 @@ class ClassToTypeConverterConfigTest {
         foreignReferences = setOf(ForeignReference("field1", "PackageName", true, ""))
       ),
       SourceClasses.Thing::class,
-      ExpectedTypes.thing.withForeignReference("field1", "PackageName", true)
+      ExpectedTypes.thing.withForeignReference("field1", "PackageName", true),
     )
   }
 
@@ -78,14 +78,14 @@ class ClassToTypeConverterConfigTest {
         foreignReferences = setOf(ForeignReference("field1", "PackageName", true, "otherName"))
       ),
       SourceClasses.Thing::class,
-      ExpectedTypes.thing.withForeignReference("field1", "PackageName", true, "otherName")
+      ExpectedTypes.thing.withForeignReference("field1", "PackageName", true, "otherName"),
     )
   }
 
   private fun classToTypeConverterConfigTest(
     config: ClassToTypeConverter.Configuration,
     cls: KClass<*>,
-    vararg expect: Type
+    vararg expect: Type,
   ) {
     val converter = ClassToTypeConverter(config)
     assertThat(converter.convertToTypes(cls.java)).isEqualTo(TypeSet(*expect))
