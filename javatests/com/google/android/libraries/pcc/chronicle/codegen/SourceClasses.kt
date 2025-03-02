@@ -43,7 +43,7 @@ class SourceClasses {
   enum class ThingEnum {
     UNKNOWN,
     FIRST,
-    SECOND
+    SECOND,
   }
 
   class Thing {
@@ -74,10 +74,7 @@ class SourceClasses {
   }
 
   data class NestedType(val field1: InnerType) {
-    data class InnerType(
-      val field1: String,
-      val field2: InnerInnerType,
-    ) {
+    data class InnerType(val field1: String, val field2: InnerInnerType) {
       data class InnerInnerType(val field1: String)
     }
   }

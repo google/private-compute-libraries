@@ -70,7 +70,7 @@ class PolicyTargetBuilderTest {
     assertThat(actual.retentions)
       .containsExactly(
         PolicyRetention(StorageMedium.DISK, encryptionRequired = true),
-        PolicyRetention(StorageMedium.RAM)
+        PolicyRetention(StorageMedium.RAM),
       )
   }
 
@@ -140,7 +140,7 @@ class PolicyTargetBuilderTest {
     assertThat(actual.maxAgeMs).isEqualTo(0L)
     assertThat(actual.fields)
       .containsExactly(
-        PolicyFieldBuilder(null, listOf("status")).apply { rawUsage(UsageType.EGRESS) }.build(),
+        PolicyFieldBuilder(null, listOf("status")).apply { rawUsage(UsageType.EGRESS) }.build()
       )
     assertThat(actual.annotations).isEmpty()
     assertThat(actual.retentions).isEmpty()
@@ -171,9 +171,9 @@ class PolicyTargetBuilderTest {
                       fieldPath = listOf("persons", "pets", "breed"),
                       rawUsages = setOf(UsageType.ANY),
                     )
-                  )
+                  ),
               )
-            )
+            ),
         )
       )
   }
@@ -193,7 +193,7 @@ class PolicyTargetBuilderTest {
       .hasMessageThat()
       .contains(
         "Field 'pet' not found in 'com.google.android.libraries.pcc.chronicle.api.policy" +
-        ".builder.NestedPerson'"
+          ".builder.NestedPerson'"
       )
   }
 
@@ -209,7 +209,7 @@ class PolicyTargetBuilderTest {
       .hasMessageThat()
       .contains(
         "Field 'bread' not found in 'com.google.android.libraries.pcc.chronicle.api.policy" +
-        ".builder.NestedPet'"
+          ".builder.NestedPet'"
       )
   }
 

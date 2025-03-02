@@ -49,7 +49,7 @@ class ManagedDataCacheTest {
       media = StorageMedia.MEMORY,
       ttl = Duration.ofMinutes(5),
       deletionTriggers =
-        setOf(DeletionTrigger(trigger = Trigger.PACKAGE_UNINSTALLED, targetField = "packageName"))
+        setOf(DeletionTrigger(trigger = Trigger.PACKAGE_UNINSTALLED, targetField = "packageName")),
     )
 
   private val mockDataStorage = mock<DataCacheStorage>()
@@ -59,13 +59,7 @@ class ManagedDataCacheTest {
   private val testTimeSource = TimeSource { testTime }
 
   private val testDataStorage =
-    ManagedDataCache(
-      TestData::class.java,
-      mockDataStorage,
-      100,
-      Duration.ofMinutes(5),
-      testDataDTD,
-    )
+    ManagedDataCache(TestData::class.java, mockDataStorage, 100, Duration.ofMinutes(5), testDataDTD)
 
   private val testTen =
     WrappedEntity(metadata = EntityMetadata("ten", "Package10", testTime), entity = TestData(10))

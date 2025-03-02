@@ -39,6 +39,6 @@ data class ExampleKotlinType(
   enum class Status {
     ON,
     OFF,
-    UNKNOWN
+    UNKNOWN,
   }
 }

@@ -44,8 +44,7 @@ class ClientDetailsProviderImplTest {
   @Test
   fun getClientDetails_notIsolated() {
     ShadowBinder.setCallingUid(42)
-    shadowPackageManager
-      .setPackagesForUid(42, "com.google.android.as", "com.google.android.odad")
+    shadowPackageManager.setPackagesForUid(42, "com.google.android.as", "com.google.android.odad")
 
     var details = provider.getClientDetails()
     assertThat(details.userId).isEqualTo(42)
@@ -54,8 +53,11 @@ class ClientDetailsProviderImplTest {
     assertThat(details.isolationType).isEqualTo(ClientDetails.IsolationType.DEFAULT_PROCESS)
 
     ShadowBinder.setCallingUid(89999)
-    shadowPackageManager
-      .setPackagesForUid(89999, "com.google.android.as", "com.google.android.odad")
+    shadowPackageManager.setPackagesForUid(
+      89999,
+      "com.google.android.as",
+      "com.google.android.odad",
+    )
 
     details = provider.getClientDetails()
     assertThat(details.userId).isEqualTo(89999)
@@ -64,8 +66,11 @@ class ClientDetailsProviderImplTest {
     assertThat(details.isolationType).isEqualTo(ClientDetails.IsolationType.DEFAULT_PROCESS)
 
     ShadowBinder.setCallingUid(100000)
-    shadowPackageManager
-      .setPackagesForUid(100000, "com.google.android.as", "com.google.android.odad")
+    shadowPackageManager.setPackagesForUid(
+      100000,
+      "com.google.android.as",
+      "com.google.android.odad",
+    )
 
     details = provider.getClientDetails()
     assertThat(details.userId).isEqualTo(100000)
@@ -77,8 +82,11 @@ class ClientDetailsProviderImplTest {
   @Test
   fun getClientDetails_isolated() {
     ShadowBinder.setCallingUid(90000)
-    shadowPackageManager
-      .setPackagesForUid(90000, "com.google.android.as", "com.google.android.odad")
+    shadowPackageManager.setPackagesForUid(
+      90000,
+      "com.google.android.as",
+      "com.google.android.odad",
+    )
 
     var details = provider.getClientDetails()
     assertThat(details.userId).isEqualTo(90000)
@@ -87,8 +95,11 @@ class ClientDetailsProviderImplTest {
     assertThat(details.isolationType).isEqualTo(ClientDetails.IsolationType.ISOLATED_PROCESS)
 
     ShadowBinder.setCallingUid(99999)
-    shadowPackageManager
-      .setPackagesForUid(99999, "com.google.android.as", "com.google.android.odad")
+    shadowPackageManager.setPackagesForUid(
+      99999,
+      "com.google.android.as",
+      "com.google.android.odad",
+    )
 
     details = provider.getClientDetails()
     assertThat(details.userId).isEqualTo(99999)
@@ -97,8 +108,11 @@ class ClientDetailsProviderImplTest {
     assertThat(details.isolationType).isEqualTo(ClientDetails.IsolationType.ISOLATED_PROCESS)
 
     ShadowBinder.setCallingUid(190000)
-    shadowPackageManager
-      .setPackagesForUid(190000, "com.google.android.as", "com.google.android.odad")
+    shadowPackageManager.setPackagesForUid(
+      190000,
+      "com.google.android.as",
+      "com.google.android.odad",
+    )
 
     details = provider.getClientDetails()
     assertThat(details.userId).isEqualTo(190000)
@@ -107,8 +121,11 @@ class ClientDetailsProviderImplTest {
     assertThat(details.isolationType).isEqualTo(ClientDetails.IsolationType.ISOLATED_PROCESS)
 
     ShadowBinder.setCallingUid(199999)
-    shadowPackageManager
-      .setPackagesForUid(199999, "com.google.android.as", "com.google.android.odad")
+    shadowPackageManager.setPackagesForUid(
+      199999,
+      "com.google.android.as",
+      "com.google.android.odad",
+    )
 
     details = provider.getClientDetails()
     assertThat(details.userId).isEqualTo(199999)

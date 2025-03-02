@@ -77,7 +77,7 @@ class RemoteComputeServerHandlerTest {
     val resultPages =
       listOf(
         listOf(ComputeResult("a").wrap(), ComputeResult("b").wrap()),
-        listOf(ComputeResult("c").wrap())
+        listOf(ComputeResult("c").wrap()),
       )
     val onDataCaptor = argumentCaptor<RemoteResponse>()
     val callback =
@@ -91,7 +91,7 @@ class RemoteComputeServerHandlerTest {
       .run(
         policy = eq(POLICY),
         method = eq(ComputeRequest.MethodId.MOIRAI_CLASSIFY),
-        input = eq(arguments.map { it.wrap() })
+        input = eq(arguments.map { it.wrap() }),
       )
     val responses = onDataCaptor.allValues
     assertThat(responses).hasSize(2)
@@ -104,8 +104,10 @@ class RemoteComputeServerHandlerTest {
 
   data class ComputeArgument(val foo: String) {
     fun wrap() = WrappedEntity(EntityMetadata.newBuilder().setId(foo).build(), this)
+
     fun toRemoteEntity() = RemoteEntity(wrap().metadata)
   }
+
   data class ComputeResult(val bar: String) {
     fun wrap(): WrappedEntity<ComputeResult> =
       WrappedEntity(EntityMetadata.newBuilder().setId(bar).build(), this)

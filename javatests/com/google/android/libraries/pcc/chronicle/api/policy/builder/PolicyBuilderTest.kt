@@ -43,6 +43,7 @@ class PolicyBuilderTest {
   object TestContextRule : PolicyContextRule {
     override val name: String = "TestContextRule"
     override val operands: List<PolicyContextRule> = emptyList()
+
     override fun invoke(context: TypedMap): Boolean = false
   }
 
@@ -91,8 +92,10 @@ class PolicyBuilderTest {
         }
         target(
           dataTypeDescriptor = dataTypeDescriptor("Bar", Unit::class),
-          maxAge = Duration.ofDays(2)
-        ) { retention(StorageMedium.DISK, encryptionRequired = true) }
+          maxAge = Duration.ofDays(2),
+        ) {
+          retention(StorageMedium.DISK, encryptionRequired = true)
+        }
       }
 
     assertThat(actual.name).isEqualTo("MyPolicy")
@@ -105,7 +108,7 @@ class PolicyBuilderTest {
         target(FOO_DTD, maxAge = Duration.ofMinutes(15)) { retention(StorageMedium.RAM) },
         target(BAR_DTD, maxAge = Duration.ofDays(2)) {
           retention(StorageMedium.DISK, encryptionRequired = true)
-        }
+        },
       )
   }
 
@@ -126,7 +129,7 @@ class PolicyBuilderTest {
         "DiskStorage",
         PolicyConfigBuilder().apply { "engine" to "innoDB" }.build(),
         "Cache",
-        PolicyConfigBuilder().apply { "maxItems" to "15" }.build()
+        PolicyConfigBuilder().apply { "maxItems" to "15" }.build(),
       )
     assertThat(actual.targets).isEmpty()
   }

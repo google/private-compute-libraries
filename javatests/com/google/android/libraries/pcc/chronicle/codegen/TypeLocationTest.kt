@@ -50,7 +50,7 @@ class TypeLocationTest {
       TypeLocation(
         name = "name",
         enclosingNames = listOf("innermost", "middle", "outermost"),
-        pkg = "pkg"
+        pkg = "pkg",
       )
 
     assertThat(location.toString()).isEqualTo("pkg.outermost.middle.innermost.name")

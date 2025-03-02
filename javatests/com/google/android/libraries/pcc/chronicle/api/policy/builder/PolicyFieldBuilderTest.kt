@@ -63,13 +63,15 @@ class PolicyFieldBuilderTest {
 
   @Test
   fun withConditionalUsages() {
-    val stringApi = PolicyFieldBuilder(null, listOf("foo"))
+    val stringApi =
+      PolicyFieldBuilder(null, listOf("foo"))
         .apply {
           conditionalUsage("bucketed", UsageType.JOIN, UsageType.EGRESS)
           conditionalUsage("truncatedToDays", UsageType.ANY)
         }
         .build()
-    val enumApi = PolicyFieldBuilder(null, listOf("foo"))
+    val enumApi =
+      PolicyFieldBuilder(null, listOf("foo"))
         .apply {
           ConditionalUsage.Bucketed.whenever(UsageType.JOIN, UsageType.EGRESS)
           ConditionalUsage.TruncatedToDays.whenever(UsageType.ANY)
@@ -84,7 +86,7 @@ class PolicyFieldBuilderTest {
           "bucketed",
           setOf(UsageType.JOIN, UsageType.EGRESS),
           "truncatedToDays",
-          setOf(UsageType.ANY)
+          setOf(UsageType.ANY),
         )
       assertThat(actual.subfields).isEmpty()
     }
@@ -102,7 +104,7 @@ class PolicyFieldBuilderTest {
     assertThat(actual.redactedUsages).isEmpty()
     assertThat(actual.subfields)
       .containsExactly(
-        PolicyField(fieldPath = listOf("person", "name"), rawUsages = setOf(UsageType.EGRESS)),
+        PolicyField(fieldPath = listOf("person", "name"), rawUsages = setOf(UsageType.EGRESS))
       )
   }
 
@@ -131,7 +133,7 @@ class PolicyFieldBuilderTest {
                 rawUsages = setOf(UsageType.ANY),
               )
             ),
-        )
+        ),
       )
   }
 

@@ -21,8 +21,7 @@ object ExpectedTypes {
   const val packageName = "com.google.android.libraries.pcc.chronicle.codegen"
 
   private val LIST_TYPE_LOCATION = TypeLocation("List", pkg = "java.util")
-  private val TIMESTAMP_PROTO_TYPE_LOCATION =
-    TypeLocation("Timestamp", pkg = "com.google.protobuf")
+  private val TIMESTAMP_PROTO_TYPE_LOCATION = TypeLocation("Timestamp", pkg = "com.google.protobuf")
   private val IMMUTABLELIST_TYPE_LOCATION =
     TypeLocation("ImmutableList", pkg = "com.google.common.collect")
   private val SET_TYPE_LOCATION = TypeLocation("Set", pkg = "java.util")
@@ -31,7 +30,7 @@ object ExpectedTypes {
   private val thingEnum =
     FieldCategory.EnumValue(
       typeLocation("ThingEnum"),
-      SourceClasses.ThingEnum.values().map { v -> v.toString() }
+      SourceClasses.ThingEnum.values().map { v -> v.toString() },
     )
 
   /**
@@ -48,10 +47,9 @@ object ExpectedTypes {
     copy(
       location = location.forProtos(overridePkg, timestampOverridePkg),
       jvmLocation = jvmLocation.forProtos(),
-      fields = fields.map {
-        it.forProtos(overridePkg, convertBytesToStrings, timestampOverridePkg)
-      },
-      tooling = Type.Tooling.PROTO
+      fields =
+        fields.map { it.forProtos(overridePkg, convertBytesToStrings, timestampOverridePkg) },
+      tooling = Type.Tooling.PROTO,
     )
 
   val thing =
@@ -70,7 +68,7 @@ object ExpectedTypes {
           FieldEntry("field9", FieldCategory.BooleanValue),
           FieldEntry(
             "field10",
-            FieldCategory.ListValue(LIST_TYPE_LOCATION, FieldCategory.StringValue)
+            FieldCategory.ListValue(LIST_TYPE_LOCATION, FieldCategory.StringValue),
           ),
           FieldEntry("field11", FieldCategory.SetValue(SET_TYPE_LOCATION, FieldCategory.IntValue)),
           FieldEntry(
@@ -78,8 +76,8 @@ object ExpectedTypes {
             FieldCategory.MapValue(
               MAP_TYPE_LOCATION,
               FieldCategory.StringValue,
-              FieldCategory.BooleanValue
-            )
+              FieldCategory.BooleanValue,
+            ),
           ),
           FieldEntry("field13", thingEnum),
           FieldEntry("field14", FieldCategory.InstantValue),
@@ -89,10 +87,10 @@ object ExpectedTypes {
             FieldCategory.MapValue(
               MAP_TYPE_LOCATION,
               FieldCategory.StringValue,
-              FieldCategory.BooleanValue
-            )
+              FieldCategory.BooleanValue,
+            ),
           ),
-          FieldEntry("field17", FieldCategory.ByteArrayValue)
+          FieldEntry("field17", FieldCategory.ByteArrayValue),
         ),
     )
 
@@ -111,21 +109,18 @@ object ExpectedTypes {
           FieldEntry("field8", thingEnum),
           FieldEntry(
             "field9",
-            FieldCategory.ListValue(LIST_TYPE_LOCATION, FieldCategory.StringValue)
+            FieldCategory.ListValue(LIST_TYPE_LOCATION, FieldCategory.StringValue),
           ),
           FieldEntry(
             "field10",
             FieldCategory.MapValue(
               MAP_TYPE_LOCATION,
               FieldCategory.StringValue,
-              FieldCategory.BooleanValue
+              FieldCategory.BooleanValue,
             ),
-            sourceName = "field10Map"
+            sourceName = "field10Map",
           ),
-          FieldEntry(
-            "field11",
-            FieldCategory.NestedTypeValue(TIMESTAMP_PROTO_TYPE_LOCATION)
-          )
+          FieldEntry("field11", FieldCategory.NestedTypeValue(TIMESTAMP_PROTO_TYPE_LOCATION)),
         ),
     )
 
@@ -135,9 +130,9 @@ object ExpectedTypes {
       fields =
         listOf(
           FieldEntry("seconds", FieldCategory.LongValue),
-          FieldEntry("nanos", FieldCategory.IntValue)
+          FieldEntry("nanos", FieldCategory.IntValue),
         ),
-      tooling = Type.Tooling.PROTO
+      tooling = Type.Tooling.PROTO,
     )
 
   val simpleUnenclosedType =
@@ -146,7 +141,7 @@ object ExpectedTypes {
       fields =
         listOf(
           FieldEntry("field1", FieldCategory.StringValue),
-          FieldEntry("field2", FieldCategory.IntValue)
+          FieldEntry("field2", FieldCategory.IntValue),
         ),
     )
 
@@ -177,7 +172,7 @@ object ExpectedTypes {
       } else {
         FieldCategory.NestedTypeValue(location)
       },
-      presenceCondition = "has${name.capitalize()}"
+      presenceCondition = "has${name.capitalize()}",
     )
 
   fun oneOfThing(enableNullable: Boolean = false) =
@@ -190,7 +185,7 @@ object ExpectedTypes {
           oneOfEntry("otherThing", otherThing.location, enableNullable),
           oneOfEntry("stringThing2", stringThing.location, enableNullable),
           oneOfEntry("intThing2", intThing.location, enableNullable),
-          oneOfEntry("otherThing2", otherThing.location, enableNullable)
+          oneOfEntry("otherThing2", otherThing.location, enableNullable),
         ),
       oneOfs =
         OneOfs(
@@ -201,14 +196,14 @@ object ExpectedTypes {
               "otherThing" to "field1",
               "stringThing2" to "field2",
               "intThing2" to "field2",
-              "otherThing2" to "field2"
+              "otherThing2" to "field2",
             ),
           fieldsForOneOf =
             mapOf(
               "field1" to listOf("stringThing", "intThing", "otherThing"),
-              "field2" to listOf("stringThing2", "intThing2", "otherThing2")
-            )
-        )
+              "field2" to listOf("stringThing2", "intThing2", "otherThing2"),
+            ),
+        ),
     )
 
   val simpleThing =
@@ -224,19 +219,16 @@ object ExpectedTypes {
         listOf(
           FieldEntry(
             "field1",
-            FieldCategory.ListValue(LIST_TYPE_LOCATION, FieldCategory.StringValue)
+            FieldCategory.ListValue(LIST_TYPE_LOCATION, FieldCategory.StringValue),
           ),
-          FieldEntry("field2", FieldCategory.NestedTypeValue(simpleThing.location))
+          FieldEntry("field2", FieldCategory.NestedTypeValue(simpleThing.location)),
         ),
     )
 
   val innerInnerType =
     Type(
       location = typeLocation("InnerInnerType", "InnerType", "NestedType"),
-      fields =
-        listOf(
-          FieldEntry("field1", FieldCategory.StringValue),
-        ),
+      fields = listOf(FieldEntry("field1", FieldCategory.StringValue)),
     )
 
   val innerType =
@@ -252,10 +244,7 @@ object ExpectedTypes {
   val nestedType =
     Type(
       location = typeLocation("NestedType"),
-      fields =
-        listOf(
-          FieldEntry("field1", FieldCategory.NestedTypeValue(innerType.location)),
-        ),
+      fields = listOf(FieldEntry("field1", FieldCategory.NestedTypeValue(innerType.location))),
     )
 
   val thing3 =
@@ -285,8 +274,8 @@ object ExpectedTypes {
             "listOfEntity",
             FieldCategory.ListValue(
               LIST_TYPE_LOCATION,
-              FieldCategory.NestedTypeValue(simpleThing.location)
-            )
+              FieldCategory.NestedTypeValue(simpleThing.location),
+            ),
           )
         ),
     )
@@ -302,9 +291,9 @@ object ExpectedTypes {
               LIST_TYPE_LOCATION,
               FieldCategory.ListValue(
                 LIST_TYPE_LOCATION,
-                FieldCategory.NestedTypeValue(simpleThing.location)
-              )
-            )
+                FieldCategory.NestedTypeValue(simpleThing.location),
+              ),
+            ),
           )
         ),
     )
@@ -319,8 +308,8 @@ object ExpectedTypes {
             FieldCategory.MapValue(
               location = MAP_TYPE_LOCATION,
               keyType = FieldCategory.StringValue,
-              valueType = FieldCategory.NestedTypeValue(simpleThing.location)
-            )
+              valueType = FieldCategory.NestedTypeValue(simpleThing.location),
+            ),
           )
         ),
     )
@@ -338,9 +327,9 @@ object ExpectedTypes {
               valueType =
                 FieldCategory.ListValue(
                   LIST_TYPE_LOCATION,
-                  FieldCategory.NestedTypeValue(simpleThing.location)
-                )
-            )
+                  FieldCategory.NestedTypeValue(simpleThing.location),
+                ),
+            ),
           )
         ),
     )
@@ -355,8 +344,8 @@ object ExpectedTypes {
             FieldCategory.MapValue(
               location = MAP_TYPE_LOCATION,
               keyType = thingEnum,
-              valueType = FieldCategory.StringValue
-            )
+              valueType = FieldCategory.StringValue,
+            ),
           )
         ),
     )
@@ -384,8 +373,8 @@ object ExpectedTypes {
             "others",
             FieldCategory.ListValue(
               LIST_TYPE_LOCATION,
-              FieldCategory.NestedTypeValue(recursiveListRefBLocation)
-            )
+              FieldCategory.NestedTypeValue(recursiveListRefBLocation),
+            ),
           )
         ),
     )
@@ -399,8 +388,8 @@ object ExpectedTypes {
             "others",
             FieldCategory.ListValue(
               LIST_TYPE_LOCATION,
-              FieldCategory.NestedTypeValue(recursiveListRefA.location)
-            )
+              FieldCategory.NestedTypeValue(recursiveListRefA.location),
+            ),
           )
         ),
     )
@@ -416,8 +405,8 @@ object ExpectedTypes {
             FieldCategory.MapValue(
               MAP_TYPE_LOCATION,
               FieldCategory.StringValue,
-              FieldCategory.NestedTypeValue(recursiveMapRefBLocation)
-            )
+              FieldCategory.NestedTypeValue(recursiveMapRefBLocation),
+            ),
           )
         ),
     )
@@ -432,8 +421,8 @@ object ExpectedTypes {
             FieldCategory.MapValue(
               MAP_TYPE_LOCATION,
               FieldCategory.StringValue,
-              FieldCategory.NestedTypeValue(recursiveMapRefA.location)
-            )
+              FieldCategory.NestedTypeValue(recursiveMapRefA.location),
+            ),
           )
         ),
     )
@@ -447,8 +436,8 @@ object ExpectedTypes {
             "inner",
             FieldCategory.ListValue(
               LIST_TYPE_LOCATION,
-              FieldCategory.NestedTypeValue(typeLocation("Inner", "RepeatedGroup"))
-            )
+              FieldCategory.NestedTypeValue(typeLocation("Inner", "RepeatedGroup")),
+            ),
           )
         ),
     )
@@ -459,45 +448,33 @@ object ExpectedTypes {
       fields =
         listOf(
           FieldEntry("field1", FieldCategory.StringValue),
-          FieldEntry("field2", FieldCategory.NestedTypeValue(nestedThing.location))
+          FieldEntry("field2", FieldCategory.NestedTypeValue(nestedThing.location)),
         ),
     )
 
   val protoContainer =
     Type(
-      location =
-        TypeLocation(
-          name = "ProtoContainer",
-          pkg = packageName,
-        ),
+      location = TypeLocation(name = "ProtoContainer", pkg = packageName),
       fields =
         listOf(
           FieldEntry("name", FieldCategory.StringValue),
-          FieldEntry("proto", FieldCategory.NestedTypeValue(thing.forProtos().location))
+          FieldEntry("proto", FieldCategory.NestedTypeValue(thing.forProtos().location)),
         ),
     )
 
   val nestedProtoContainer =
     Type(
-      location =
-        TypeLocation(
-          name = "NestedProtoContainer",
-          pkg = packageName,
-        ),
+      location = TypeLocation(name = "NestedProtoContainer", pkg = packageName),
       fields =
         listOf(
           FieldEntry("wrapperName", FieldCategory.StringValue),
-          FieldEntry("container", FieldCategory.NestedTypeValue(protoContainer.location))
+          FieldEntry("container", FieldCategory.NestedTypeValue(protoContainer.location)),
         ),
     )
 
   val simpleAutoValue =
     Type(
-      location =
-        TypeLocation(
-          name = "SimpleAutoValue",
-          pkg = packageName,
-        ),
+      location = TypeLocation(name = "SimpleAutoValue", pkg = packageName),
       fields =
         listOf(
           FieldEntry("field1", FieldCategory.StringValue),
@@ -506,8 +483,8 @@ object ExpectedTypes {
             "field3",
             FieldCategory.ListValue(
               location = IMMUTABLELIST_TYPE_LOCATION,
-              listType = FieldCategory.StringValue
-            )
+              listType = FieldCategory.StringValue,
+            ),
           ),
           FieldEntry("field4", FieldCategory.StringValue),
         ),
@@ -515,11 +492,7 @@ object ExpectedTypes {
 
   val nestedAutoValue =
     Type(
-      location =
-        TypeLocation(
-          name = "NestedAutoValue",
-          pkg = packageName,
-        ),
+      location = TypeLocation(name = "NestedAutoValue", pkg = packageName),
       fields =
         listOf(
           FieldEntry("field1", FieldCategory.StringValue),
@@ -528,8 +501,8 @@ object ExpectedTypes {
             "field3",
             FieldCategory.ListValue(
               location = IMMUTABLELIST_TYPE_LOCATION,
-              listType = FieldCategory.StringValue
-            )
+              listType = FieldCategory.StringValue,
+            ),
           ),
           FieldEntry("field4", FieldCategory.StringValue),
           FieldEntry("field5", FieldCategory.NestedTypeValue(location = simpleAutoValue.location)),
@@ -545,11 +518,7 @@ object ExpectedTypes {
 
   val autoValueInDataClass =
     Type(
-      location =
-        TypeLocation(
-          name = "AutoValueInDataClass",
-          pkg = packageName,
-        ),
+      location = TypeLocation(name = "AutoValueInDataClass", pkg = packageName),
       fields =
         listOf(
           FieldEntry("field1", FieldCategory.StringValue),
@@ -569,7 +538,7 @@ object ExpectedTypes {
           FieldEntry("isBaseFlag", FieldCategory.BooleanValue),
           FieldEntry("subField", FieldCategory.StringValue),
           FieldEntry("isFlag", FieldCategory.BooleanValue),
-        )
+        ),
     )
 
   /** Helper used to generate the [TypeLocation] used by most of these classes. */
@@ -577,13 +546,13 @@ object ExpectedTypes {
     TypeLocation(
       name = name,
       enclosingNames = additionalNames.asList() + "SourceClasses",
-      pkg = packageName
+      pkg = packageName,
     )
 
   private fun TypeLocation.withEnclosingName(name: String) =
     copy(
-      enclosingNames = enclosingNames.dropLast(1) +
-        if (name.isNotEmpty()) listOf(name) else emptyList()
+      enclosingNames =
+        enclosingNames.dropLast(1) + if (name.isNotEmpty()) listOf(name) else emptyList()
     )
 
   private fun TypeLocation.withPackage(pkg: String) = copy(pkg = pkg)
@@ -620,19 +589,19 @@ object ExpectedTypes {
   private fun FieldEntry.forProtos(
     overridePkg: String? = null,
     convertBytesToStrings: Boolean = true,
-    timestampOverridePkg: String? = null
+    timestampOverridePkg: String? = null,
   ): FieldEntry {
     return copy(
       name = name,
       category = category.forProtos(overridePkg, convertBytesToStrings, timestampOverridePkg),
-      sourceName = protoName(convertBytesToStrings)
+      sourceName = protoName(convertBytesToStrings),
     )
   }
 
   private fun FieldCategory.forProtos(
     overridePkg: String? = null,
     convertBytesToStrings: Boolean = true,
-    timestampOverridePkg: String? = null
+    timestampOverridePkg: String? = null,
   ): FieldCategory {
     return when (this) {
       is FieldCategory.ByteArrayValue ->
@@ -640,7 +609,7 @@ object ExpectedTypes {
       is FieldCategory.NestedTypeValue ->
         copy(
           location = location.forProtos(overridePkg, timestampOverridePkg),
-          jvmLocation = jvmLocation.forProtos()
+          jvmLocation = jvmLocation.forProtos(),
         )
       is FieldCategory.NullableValue ->
         copy(
@@ -655,7 +624,7 @@ object ExpectedTypes {
       is FieldCategory.MapValue ->
         copy(
           keyType = keyType.forProtos(),
-          valueType = valueType.forProtos(overridePkg, timestampOverridePkg = timestampOverridePkg)
+          valueType = valueType.forProtos(overridePkg, timestampOverridePkg = timestampOverridePkg),
         )
       else -> this
     }

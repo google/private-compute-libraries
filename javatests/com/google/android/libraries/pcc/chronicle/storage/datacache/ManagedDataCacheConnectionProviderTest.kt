@@ -49,7 +49,7 @@ class ManagedDataCacheConnectionProviderTest {
       media = StorageMedia.MEMORY,
       ttl = Duration.ofMinutes(5),
       deletionTriggers =
-        setOf(DeletionTrigger(trigger = Trigger.PACKAGE_UNINSTALLED, targetField = "packageName"))
+        setOf(DeletionTrigger(trigger = Trigger.PACKAGE_UNINSTALLED, targetField = "packageName")),
     )
 
   private val testTimeSource = TimeSource { Instant.ofEpochMilli(12345) }
@@ -61,6 +61,7 @@ class ManagedDataCacheConnectionProviderTest {
     }
 
   interface TestReadConnection : ReadConnection
+
   interface TestWriteConnection : WriteConnection
 
   @Test
@@ -69,7 +70,7 @@ class ManagedDataCacheConnectionProviderTest {
       object :
         ManagedDataCacheConnectionProvider<TestData>(
           mockDataStorage,
-          setOf(TestReadConnection::class.java, TestWriteConnection::class.java)
+          setOf(TestReadConnection::class.java, TestWriteConnection::class.java),
         ) {
         override fun getConnection(
           connectionRequest: ConnectionRequest<out Connection>

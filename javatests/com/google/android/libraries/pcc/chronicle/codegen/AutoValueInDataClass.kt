@@ -22,5 +22,5 @@ data class AutoValueInDataClass(
   val field1: String,
   val field2: SimpleAutoValue,
   val field3: NestedAutoValue,
-  val field4: NotAutoValue
+  val field4: NotAutoValue,
 )

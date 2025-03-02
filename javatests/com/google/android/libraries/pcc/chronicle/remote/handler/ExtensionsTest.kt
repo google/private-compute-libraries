@@ -57,9 +57,11 @@ class ExtensionsTest {
   data class Foo(val name: String) {
     fun wrap() = WrappedEntity(EntityMetadata.newBuilder().setId(name).build(), this)
   }
+
   object FooSerializer : Serializer<Foo> {
     override fun <P : Foo> serialize(wrappedEntity: WrappedEntity<P>) =
       RemoteEntity(wrappedEntity.metadata)
+
     @Suppress("UNCHECKED_CAST")
     override fun <P : Foo> deserialize(remoteEntity: RemoteEntity): WrappedEntity<P> {
       return WrappedEntity(remoteEntity.metadata, Foo(remoteEntity.metadata.id) as P)

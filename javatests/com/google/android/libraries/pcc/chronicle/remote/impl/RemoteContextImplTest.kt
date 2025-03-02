@@ -167,5 +167,6 @@ class RemoteContextImplTest {
   }
 
   data class Foo(val name: String)
+
   data class Bar(val name: String)
 }

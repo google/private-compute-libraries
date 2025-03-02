@@ -99,14 +99,14 @@ class RemoteStreamServerHandlerTest {
         Foo.asRemoteEntity("larry"),
         Foo.asRemoteEntity("sergey"),
       ),
-      callback
+      callback,
     )
 
     verify(server, times(1)).serializer
     verify(server, times(1))
       .publish(
         eq(POLICY),
-        eq(listOf(Foo("sundar").wrap(), Foo("larry").wrap(), Foo("sergey").wrap()))
+        eq(listOf(Foo("sundar").wrap(), Foo("larry").wrap(), Foo("sergey").wrap())),
       )
     verify(serializer, times(3)).deserialize<Foo>(any())
     verify(callback).onComplete()

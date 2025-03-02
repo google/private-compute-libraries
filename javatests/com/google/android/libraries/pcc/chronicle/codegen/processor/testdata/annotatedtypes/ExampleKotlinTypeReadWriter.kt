@@ -23,5 +23,6 @@ import com.google.android.libraries.pcc.chronicle.api.WriteConnection
 @ChronicleConnection(dataClass = ExampleKotlinType::class)
 interface ExampleKotlinTypeReadWriter : ReadConnection, WriteConnection {
   fun getExampleKotlinType(): ExampleKotlinType
+
   fun writeExampleKotlinType(exampleKotlinType: ExampleKotlinType)
 }

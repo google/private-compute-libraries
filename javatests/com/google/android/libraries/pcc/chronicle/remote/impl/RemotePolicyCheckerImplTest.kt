@@ -72,7 +72,7 @@ class RemotePolicyCheckerImplTest {
         dataTypeName = dataTypeNameCaptor.capture(),
         policy = notNull(),
         isForReading = eq(true),
-        requester = processorNodeCaptor.capture()
+        requester = processorNodeCaptor.capture(),
       )
 
     checker.checkAndGetPolicyOrThrow(FOUND_POLICY_READ_REQUEST_METADATA, server, DEFAULT_DETAILS)
@@ -91,7 +91,7 @@ class RemotePolicyCheckerImplTest {
         dataTypeName = dataTypeNameCaptor.capture(),
         policy = notNull(),
         isForReading = eq(true),
-        requester = processorNodeCaptor.capture()
+        requester = processorNodeCaptor.capture(),
       )
 
     checker.checkAndGetPolicyOrThrow(
@@ -100,8 +100,8 @@ class RemotePolicyCheckerImplTest {
       ClientDetails(
         userId = 42,
         isolationType = ClientDetails.IsolationType.ISOLATED_PROCESS,
-        associatedPackages = listOf("com.google.android.as")
-      )
+        associatedPackages = listOf("com.google.android.as"),
+      ),
     )
 
     assertThat(processorNodeCaptor.firstValue).isInstanceOf(SandboxProcessorNode::class.java)
@@ -121,8 +121,8 @@ class RemotePolicyCheckerImplTest {
       ClientDetails(
         userId = 42,
         isolationType = ClientDetails.IsolationType.ISOLATED_PROCESS,
-        associatedPackages = listOf("com.google.android.as")
-      )
+        associatedPackages = listOf("com.google.android.as"),
+      ),
     )
 
     checker.checkAndGetPolicyOrThrow(
@@ -131,8 +131,8 @@ class RemotePolicyCheckerImplTest {
       ClientDetails(
         userId = 43,
         isolationType = ClientDetails.IsolationType.ISOLATED_PROCESS,
-        associatedPackages = listOf("com.google.android.as")
-      )
+        associatedPackages = listOf("com.google.android.as"),
+      ),
     )
 
     with(processorNodeCaptor) { assertThat(this.firstValue).isNotSameInstanceAs(this.secondValue) }
@@ -172,7 +172,7 @@ class RemotePolicyCheckerImplTest {
         checker.checkAndGetPolicyOrThrow(
           FOUND_POLICY_READ_REQUEST_METADATA,
           server,
-          DEFAULT_DETAILS
+          DEFAULT_DETAILS,
         )
       }
 
@@ -180,7 +180,9 @@ class RemotePolicyCheckerImplTest {
   }
 
   data class Foo(val name: String)
+
   object FooReader : ReadConnection
+
   object FooWriter : WriteConnection
 
   open class FakeChronicle(var onCheckPolicy: () -> Result<Unit>) : Chronicle {
@@ -188,7 +190,7 @@ class RemotePolicyCheckerImplTest {
       dataTypeName: String,
       policy: Policy?,
       isForReading: Boolean,
-      requester: ProcessorNode
+      requester: ProcessorNode,
     ): Result<Unit> = onCheckPolicy()
 
     override fun getAvailableConnectionTypes(dataTypeClass: KClass<*>): Chronicle.ConnectionTypes =
@@ -236,7 +238,7 @@ class RemotePolicyCheckerImplTest {
       ClientDetails(
         userId = 42,
         isolationType = ClientDetails.IsolationType.DEFAULT_PROCESS,
-        associatedPackages = listOf("com.google.android.as")
+        associatedPackages = listOf("com.google.android.as"),
       )
   }
 }

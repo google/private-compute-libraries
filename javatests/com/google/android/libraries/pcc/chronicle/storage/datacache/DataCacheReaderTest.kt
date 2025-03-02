@@ -45,7 +45,7 @@ class DataCacheReaderTest {
     assertThat(all)
       .containsExactly(
         DUMMY_LABEL_WRAPPER_2.asTimestampedInstance(),
-        DUMMY_LABEL_WRAPPER_1.asTimestampedInstance()
+        DUMMY_LABEL_WRAPPER_1.asTimestampedInstance(),
       )
   }
 
@@ -74,14 +74,14 @@ class DataCacheReaderTest {
       .isEqualTo(
         Timestamped(
           DUMMY_LABEL_WRAPPER_1.entity,
-          DUMMY_LABEL_WRAPPER_1.metadata.updated.toInstant()
+          DUMMY_LABEL_WRAPPER_1.metadata.updated.toInstant(),
         )
       )
     assertThat(reader.forEntityTimestamped("2"))
       .isEqualTo(
         Timestamped(
           DUMMY_LABEL_WRAPPER_2.entity,
-          DUMMY_LABEL_WRAPPER_2.metadata.updated.toInstant()
+          DUMMY_LABEL_WRAPPER_2.metadata.updated.toInstant(),
         )
       )
     assertThat(reader.forEntityTimestamped("3")).isEqualTo(null)
@@ -91,12 +91,12 @@ class DataCacheReaderTest {
     val DUMMY_LABEL_WRAPPER_1: WrappedEntity<DummyTestLabel> =
       WrappedEntity(
         metadata = EntityMetadata("one", "package_1", Instant.ofEpochSecond(10000)),
-        entity = DummyTestLabel(value = 1)
+        entity = DummyTestLabel(value = 1),
       )
     val DUMMY_LABEL_WRAPPER_2: WrappedEntity<DummyTestLabel> =
       WrappedEntity(
         metadata = EntityMetadata("two", "package_1", Instant.ofEpochSecond(20000)),
-        entity = DummyTestLabel(value = 2)
+        entity = DummyTestLabel(value = 2),
       )
   }
 }
