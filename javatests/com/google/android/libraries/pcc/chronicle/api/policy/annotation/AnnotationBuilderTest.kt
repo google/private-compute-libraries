@@ -43,35 +43,45 @@ class AnnotationBuilderTest {
 
   @Test
   fun annotation_withParamBlock() {
-    val actual = annotation("ttl") {
-      param("stringParam", "My String Value")
-      param("intParam", 42)
-      param("boolParam", true)
-    }
+    val actual =
+      annotation("ttl") {
+        param("stringParam", "My String Value")
+        param("intParam", 42)
+        param("boolParam", true)
+      }
 
     assertThat(actual.name).isEqualTo("ttl")
     assertThat(actual.params).hasSize(3)
-    assertThat(actual.params).containsExactly(
-      "stringParam", AnnotationParam.Str("My String Value"),
-      "intParam", AnnotationParam.Num(42),
-      "boolParam", AnnotationParam.Bool(true)
-    )
+    assertThat(actual.params)
+      .containsExactly(
+        "stringParam",
+        AnnotationParam.Str("My String Value"),
+        "intParam",
+        AnnotationParam.Num(42),
+        "boolParam",
+        AnnotationParam.Bool(true),
+      )
   }
 
   @Test
   fun javaStyle() {
-    val actual = AnnotationBuilder("ttl")
-      .param("stringParam", "My String Value")
-      .param("intParam", 42)
-      .param("boolParam", true)
-      .build()
+    val actual =
+      AnnotationBuilder("ttl")
+        .param("stringParam", "My String Value")
+        .param("intParam", 42)
+        .param("boolParam", true)
+        .build()
 
     assertThat(actual.name).isEqualTo("ttl")
     assertThat(actual.params).hasSize(3)
-    assertThat(actual.params).containsExactly(
-      "stringParam", AnnotationParam.Str("My String Value"),
-      "intParam", AnnotationParam.Num(42),
-      "boolParam", AnnotationParam.Bool(true)
-    )
+    assertThat(actual.params)
+      .containsExactly(
+        "stringParam",
+        AnnotationParam.Str("My String Value"),
+        "intParam",
+        AnnotationParam.Num(42),
+        "boolParam",
+        AnnotationParam.Bool(true),
+      )
   }
 }

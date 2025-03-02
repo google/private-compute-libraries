@@ -53,7 +53,7 @@ class ChronicleDataAnnotationProcessorCompileTest {
       .withProcessors(
         ChronicleDataAnnotationProcessor(),
         DataCacheStoreAnnotationProcessor(),
-        ChronicleConnectionAnnotationProcessor()
+        ChronicleConnectionAnnotationProcessor(),
       )
       .compile(pathToFile.map { getFile(it) })
   }

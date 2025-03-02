@@ -58,7 +58,7 @@ class ElementToTypeConverterTest {
       SourceClasses.Thing1::class,
       ExpectedTypes.thing1,
       ExpectedTypes.thing2,
-      ExpectedTypes.thing3
+      ExpectedTypes.thing3,
     )
   }
 
@@ -67,7 +67,7 @@ class ElementToTypeConverterTest {
     testForType(
       SourceClasses.ListOfEntity::class,
       ExpectedTypes.listOfEntity,
-      ExpectedTypes.simpleThing
+      ExpectedTypes.simpleThing,
     )
   }
 
@@ -76,7 +76,7 @@ class ElementToTypeConverterTest {
     testForType(
       SourceClasses.MapOfEntity::class,
       ExpectedTypes.mapOfEntity,
-      ExpectedTypes.simpleThing
+      ExpectedTypes.simpleThing,
     )
   }
 
@@ -90,7 +90,7 @@ class ElementToTypeConverterTest {
     testForType(
       SourceClasses.ListOfListOfEntity::class,
       ExpectedTypes.listOfListOfEntity,
-      ExpectedTypes.simpleThing
+      ExpectedTypes.simpleThing,
     )
   }
 
@@ -99,7 +99,7 @@ class ElementToTypeConverterTest {
     testForType(
       SourceClasses.MapOfListOfEntity::class,
       ExpectedTypes.mapOfListOfEntity,
-      ExpectedTypes.simpleThing
+      ExpectedTypes.simpleThing,
     )
   }
 
@@ -114,7 +114,7 @@ class ElementToTypeConverterTest {
       NestedAutoValue::class,
       ExpectedTypes.nestedAutoValue,
       ExpectedTypes.simpleAutoValue,
-      ExpectedTypes.simpleThing
+      ExpectedTypes.simpleThing,
     )
   }
 

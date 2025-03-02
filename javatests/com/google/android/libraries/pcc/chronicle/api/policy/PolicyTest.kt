@@ -37,10 +37,10 @@ class PolicyTest {
         retentions =
           listOf(
             PolicyRetention(medium = StorageMedium.DISK, encryptionRequired = true),
-            PolicyRetention(medium = StorageMedium.RAM)
+            PolicyRetention(medium = StorageMedium.RAM),
           ),
         fields = emptyList(),
-        annotations = emptyList()
+        annotations = emptyList(),
       )
     val capabilities = policyTarget.toCapabilities()
     assertThat(capabilities).hasSize(2)
@@ -67,9 +67,9 @@ class PolicyTest {
         targets =
           listOf(
             PolicyTarget("target1", fields = listOf(parent)),
-            PolicyTarget("target2", fields = listOf(other))
+            PolicyTarget("target2", fields = listOf(other)),
           ),
-        egressType = "Logging"
+        egressType = "Logging",
       )
 
     assertThat(policy.allFields).containsExactly(child, parent, other)
@@ -81,19 +81,19 @@ class PolicyTest {
       PolicyField(
         fieldPath = listOf("parent", "child"),
         redactedUsages =
-          mapOf("label1" to setOf(UsageType.EGRESS), "label2" to setOf(UsageType.JOIN))
+          mapOf("label1" to setOf(UsageType.EGRESS), "label2" to setOf(UsageType.JOIN)),
       )
     val parent =
       PolicyField(
         fieldPath = listOf("parent"),
         subfields = listOf(child),
         redactedUsages =
-          mapOf("label2" to setOf(UsageType.EGRESS), "label3" to setOf(UsageType.EGRESS))
+          mapOf("label2" to setOf(UsageType.EGRESS), "label3" to setOf(UsageType.EGRESS)),
       )
     val other =
       PolicyField(
         fieldPath = listOf("other"),
-        redactedUsages = mapOf("label4" to setOf(UsageType.EGRESS))
+        redactedUsages = mapOf("label4" to setOf(UsageType.EGRESS)),
       )
     val policy =
       Policy(
@@ -101,9 +101,9 @@ class PolicyTest {
         targets =
           listOf(
             PolicyTarget("target1", fields = listOf(parent)),
-            PolicyTarget("target2", fields = listOf(other))
+            PolicyTarget("target2", fields = listOf(other)),
           ),
-        egressType = "Logging"
+        egressType = "Logging",
       )
 
     assertThat(policy.allRedactionLabels).containsExactly("label1", "label2", "label3", "label4")
@@ -121,7 +121,7 @@ class PolicyTest {
     // Passes:
     PolicyField(
       fieldPath = listOf("correct"),
-      subfields = listOf(childWithRightParent, grandchildWithRightParent)
+      subfields = listOf(childWithRightParent, grandchildWithRightParent),
     )
 
     // Fails:

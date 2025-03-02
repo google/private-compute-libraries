@@ -38,7 +38,7 @@ import org.robolectric.annotation.Config
 @Config(minSdk = Build.VERSION_CODES.R)
 class DataCacheStorageDataRemovalDownstreamListenerTest {
   private val defaultDataRemovalRequest =
-    DataRemovalRequest.Builder().addLocusId(LocusId("unused"), /* flags = */ 0).build()
+    DataRemovalRequest.Builder().addLocusId(LocusId("unused"), /* flags= */ 0).build()
 
   private lateinit var dataCacheStorage: DataCacheStorage
 

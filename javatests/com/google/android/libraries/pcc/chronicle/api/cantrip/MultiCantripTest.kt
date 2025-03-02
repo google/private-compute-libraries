@@ -42,21 +42,21 @@ class MultiCantripTest {
         OpticalCantrip(optic = TestCity_Name.asTraversal(), operation = nameReverser),
         OpticalCantrip(
           optic = TestCity_Mayor.asTraversal() compose TestPerson_Name.asTraversal(),
-          operation = nameReverser
+          operation = nameReverser,
         ),
         OpticalCantrip(
           optic =
             TestCity_Mayor.asTraversal() compose
               TestPerson_Pet.asTraversal() compose
               TestPet_Name.asTraversal(),
-          operation = nameReverser
+          operation = nameReverser,
         ),
         OpticalCantrip(
           optic =
             TestCity_Populace.asTraversal() compose
               Traversal.list() compose
               TestPerson_Name.asTraversal(),
-          operation = nameReverser
+          operation = nameReverser,
         ),
         OpticalCantrip(
           optic =
@@ -64,8 +64,8 @@ class MultiCantripTest {
               Traversal.list() compose
               TestPerson_Pet.asTraversal() compose
               TestPet_Name.asTraversal(),
-          operation = nameReverser
-        )
+          operation = nameReverser,
+        ),
       )
 
     val updated = cantrip(CITY_MOUNTAIN_VIEW)

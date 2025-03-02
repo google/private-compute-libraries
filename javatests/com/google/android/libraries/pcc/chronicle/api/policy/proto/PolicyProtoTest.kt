@@ -41,6 +41,7 @@ class PolicyProtoTest {
   private object TestContextRule : PolicyContextRule {
     override val name: String = "TestContextRule"
     override val operands: List<PolicyContextRule> = emptyList()
+
     override fun invoke(context: TypedMap): Boolean = true
   }
 
@@ -53,7 +54,7 @@ class PolicyProtoTest {
         egressType = "baz",
         targets = emptyList(),
         configs = emptyMap(),
-        annotations = listOf(ANNOTATION)
+        annotations = listOf(ANNOTATION),
       )
     assertThat(policy.encode().decode()).isEqualTo(policy)
   }
@@ -68,7 +69,7 @@ class PolicyProtoTest {
         targets = emptyList(),
         configs = emptyMap(),
         annotations = listOf(ANNOTATION),
-        allowedContext = All
+        allowedContext = All,
       )
     assertThat(policy.encode().decode()).isEqualTo(policy)
   }
@@ -83,7 +84,7 @@ class PolicyProtoTest {
         targets = emptyList(),
         configs = emptyMap(),
         annotations = listOf(ANNOTATION),
-        allowedContext = TestContextRule
+        allowedContext = TestContextRule,
       )
 
     val e = assertFailsWith<IllegalArgumentException> { policy.encode() }
@@ -119,9 +120,9 @@ class PolicyProtoTest {
               retentions =
                 listOf(PolicyRetention(medium = StorageMedium.DISK, encryptionRequired = true)),
               fields = emptyList(),
-              annotations = listOf(ANNOTATION)
+              annotations = listOf(ANNOTATION),
             )
-          )
+          ),
       )
     assertThat(policy.encode().decode()).isEqualTo(policy)
   }
@@ -159,17 +160,17 @@ class PolicyProtoTest {
                     rawUsages = setOf(UsageType.JOIN),
                     redactedUsages = mapOf("label" to setOf(UsageType.EGRESS, UsageType.JOIN)),
                     subfields = emptyList(),
-                    annotations = listOf(ANNOTATION)
+                    annotations = listOf(ANNOTATION),
                   ),
                   PolicyField(
                     fieldPath = listOf("field2"),
                     rawUsages = setOf(UsageType.ANY),
                     subfields = emptyList(),
-                    annotations = listOf(ANNOTATION)
-                  )
-                )
+                    annotations = listOf(ANNOTATION),
+                  ),
+                ),
             )
-          )
+          ),
       )
     assertThat(policy.encode().decode()).isEqualTo(policy)
   }
@@ -197,14 +198,14 @@ class PolicyProtoTest {
                           rawUsages = emptySet(),
                           redactedUsages = emptyMap(),
                           subfields = emptyList(),
-                          annotations = emptyList()
+                          annotations = emptyList(),
                         )
                       ),
-                    annotations = emptyList()
+                    annotations = emptyList(),
                   )
-                )
+                ),
             )
-          )
+          ),
       )
     assertThat(policy.encode().decode()).isEqualTo(policy)
   }
@@ -215,7 +216,7 @@ class PolicyProtoTest {
       Policy(
         name = "foo",
         egressType = "Logging",
-        configs = mapOf("config" to mapOf("k1" to "v1", "k2" to "v2"))
+        configs = mapOf("config" to mapOf("k1" to "v1", "k2" to "v2")),
       )
     assertThat(policy.encode().decode()).isEqualTo(policy)
   }

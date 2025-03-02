@@ -29,7 +29,9 @@ class TypedMapTest {
   private val temp = 73
 
   object NameKey : Key<String>
+
   object WeatherKey : Key<String>
+
   object TemperatureKey : Key<Int>
 
   lateinit var mutableTypedMap: MutableTypedMap

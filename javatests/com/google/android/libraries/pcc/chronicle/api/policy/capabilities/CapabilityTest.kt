@@ -184,15 +184,15 @@ class CapabilityTest {
     assertThat(Persistence.ON_DISK.toRange().isEquivalent(Persistence.IN_MEMORY.toRange()))
       .isFalse()
     assertThat(
-      Range(Persistence.ON_DISK, Persistence.NONE).isEquivalent(
-        Range(Persistence.IN_MEMORY, Persistence.NONE)
+        Range(Persistence.ON_DISK, Persistence.NONE)
+          .isEquivalent(Range(Persistence.IN_MEMORY, Persistence.NONE))
       )
-    ).isFalse()
+      .isFalse()
     assertThat(
-      Range(Persistence.ON_DISK, Persistence.IN_MEMORY).isEquivalent(
         Range(Persistence.ON_DISK, Persistence.IN_MEMORY)
+          .isEquivalent(Range(Persistence.ON_DISK, Persistence.IN_MEMORY))
       )
-    ).isTrue()
+      .isTrue()
   }
 
   @Test
@@ -206,8 +206,9 @@ class CapabilityTest {
     assertThat(Range(Ttl.Hours(2), Ttl.Minutes(2)).isEquivalent(Ttl.Minutes(100).toRange()))
       .isFalse()
     assertThat(
-      Range(Ttl.Hours(2), Ttl.Minutes(2)).isEquivalent(Range(Ttl.Minutes(100), Ttl.Hours(1)))
-    ).isFalse()
+        Range(Ttl.Hours(2), Ttl.Minutes(2)).isEquivalent(Range(Ttl.Minutes(100), Ttl.Hours(1)))
+      )
+      .isFalse()
     assertThat(Range(Ttl.Days(2), Ttl.Days(2)).isEquivalent(Ttl.Hours(48).toRange())).isTrue()
     assertThat(Range(Ttl.Days(2), Ttl.Hours(24)).isEquivalent(Range(Ttl.Hours(48), Ttl.Days(1))))
       .isTrue()
@@ -422,36 +423,27 @@ class CapabilityTest {
 
   @Test
   fun contains_capabilityTtl() {
-    assertThat(
-      Range(Ttl.Hours(10), Ttl.Hours(3)).contains(Range(Ttl.Hours(10), Ttl.Hours(3)))
-    ).isTrue()
-    assertThat(
-      Range(Ttl.Hours(10), Ttl.Hours(3)).contains(Range(Ttl.Hours(8), Ttl.Hours(6)))
-    ).isTrue()
-    assertThat(
-      Range(Ttl.Hours(10), Ttl.Hours(3)).contains(Range(Ttl.Hours(8), Ttl.Hours(2)))
-    ).isFalse()
-    assertThat(
-      Range(Ttl.Infinite(), Ttl.Hours(3)).contains(Range(Ttl.Hours(8), Ttl.Hours(3)))
-    ).isTrue()
-    assertThat(
-      Range(Ttl.Hours(8), Ttl.Hours(3)).contains(Range(Ttl.Infinite(), Ttl.Hours(3)))
-    ).isFalse()
+    assertThat(Range(Ttl.Hours(10), Ttl.Hours(3)).contains(Range(Ttl.Hours(10), Ttl.Hours(3))))
+      .isTrue()
+    assertThat(Range(Ttl.Hours(10), Ttl.Hours(3)).contains(Range(Ttl.Hours(8), Ttl.Hours(6))))
+      .isTrue()
+    assertThat(Range(Ttl.Hours(10), Ttl.Hours(3)).contains(Range(Ttl.Hours(8), Ttl.Hours(2))))
+      .isFalse()
+    assertThat(Range(Ttl.Infinite(), Ttl.Hours(3)).contains(Range(Ttl.Hours(8), Ttl.Hours(3))))
+      .isTrue()
+    assertThat(Range(Ttl.Hours(8), Ttl.Hours(3)).contains(Range(Ttl.Infinite(), Ttl.Hours(3))))
+      .isFalse()
 
+    assertThat(Range(Ttl.Minutes(240), Ttl.Minutes(5)).contains(Range(Ttl.Hours(4), Ttl.Hours(3))))
+      .isTrue()
+    assertThat(Range(Ttl.Minutes(100), Ttl.Minutes(50)).contains(Range(Ttl.Hours(8), Ttl.Hours(3))))
+      .isFalse()
+    assertThat(Range(Ttl.Days(5), Ttl.Days(2)).contains(Range(Ttl.Days(4), Ttl.Days(2)))).isTrue()
     assertThat(
-      Range(Ttl.Minutes(240), Ttl.Minutes(5)).contains(Range(Ttl.Hours(4), Ttl.Hours(3)))
-    ).isTrue()
-    assertThat(
-      Range(Ttl.Minutes(100), Ttl.Minutes(50)).contains(Range(Ttl.Hours(8), Ttl.Hours(3)))
-    ).isFalse()
-    assertThat(
-      Range(Ttl.Days(5), Ttl.Days(2)).contains(Range(Ttl.Days(4), Ttl.Days(2)))
-    ).isTrue()
-    assertThat(
-      Range(Ttl.Minutes(3 * 24 * 60), Ttl.Minutes(24 * 60)).contains(
-        Range(Ttl.Hours(40), Ttl.Hours(30))
+        Range(Ttl.Minutes(3 * 24 * 60), Ttl.Minutes(24 * 60))
+          .contains(Range(Ttl.Hours(40), Ttl.Hours(30)))
       )
-    ).isTrue()
+      .isTrue()
 
     assertThat(Ttl.ANY.contains(Ttl.Infinite())).isTrue()
     assertThat(Ttl.ANY.contains(Range(Ttl.Infinite(), Ttl.Hours(3)))).isTrue()
@@ -463,12 +455,12 @@ class CapabilityTest {
     assertThat(Range(Ttl.Hours(3), Ttl.Minutes(1)).contains(Ttl.ANY)).isFalse()
     assertThat(Range(Ttl.Minutes(30), Ttl.Minutes(10)).contains(Ttl.ANY)).isFalse()
   }
-  @Test
-  fun contains_rangeTtl() {}
-  @Test
-  fun contains_capabilityAndRangeTtl() {}
-  @Test
-  fun contains_rangeAndCapabilityTtl() {}
+
+  @Test fun contains_rangeTtl() {}
+
+  @Test fun contains_capabilityAndRangeTtl() {}
+
+  @Test fun contains_rangeAndCapabilityTtl() {}
 
   @Test
   fun contains_capabilityEncryption() {
@@ -598,24 +590,12 @@ class CapabilityTest {
 
   @Test
   fun init_capabilityRangeIncompatible_fail() {
-    assertFailsWith<IllegalArgumentException> {
-      Range(Persistence.ON_DISK, Encryption(false))
-    }
-    assertFailsWith<IllegalArgumentException> {
-      Range(Ttl.Days(1), Persistence.ON_DISK)
-    }
-    assertFailsWith<IllegalArgumentException> {
-      Range(Ttl.Days(10), Queryable(false))
-    }
-    assertFailsWith<IllegalArgumentException> {
-      Range(Encryption(false), Shareable(false))
-    }
-    assertFailsWith<IllegalArgumentException> {
-      Range(Queryable(false), Shareable(true))
-    }
-    assertFailsWith<IllegalArgumentException> {
-      Range(Encryption(true), Encryption(false))
-    }
+    assertFailsWith<IllegalArgumentException> { Range(Persistence.ON_DISK, Encryption(false)) }
+    assertFailsWith<IllegalArgumentException> { Range(Ttl.Days(1), Persistence.ON_DISK) }
+    assertFailsWith<IllegalArgumentException> { Range(Ttl.Days(10), Queryable(false)) }
+    assertFailsWith<IllegalArgumentException> { Range(Encryption(false), Shareable(false)) }
+    assertFailsWith<IllegalArgumentException> { Range(Queryable(false), Shareable(true)) }
+    assertFailsWith<IllegalArgumentException> { Range(Encryption(true), Encryption(false)) }
   }
 
   @Test
@@ -623,18 +603,10 @@ class CapabilityTest {
     assertFailsWith<IllegalArgumentException> {
       Range(Persistence.ON_DISK, Persistence.UNRESTRICTED)
     }
-    assertFailsWith<IllegalArgumentException> {
-      Range(Ttl.Minutes(1), Ttl.Hours(1))
-    }
-    assertFailsWith<IllegalArgumentException> {
-      Range(Queryable(true), Queryable(false))
-    }
-    assertFailsWith<IllegalArgumentException> {
-      Range(Encryption(true), Encryption(false))
-    }
-    assertFailsWith<IllegalArgumentException> {
-      Range(Shareable(true), Shareable(false))
-    }
+    assertFailsWith<IllegalArgumentException> { Range(Ttl.Minutes(1), Ttl.Hours(1)) }
+    assertFailsWith<IllegalArgumentException> { Range(Queryable(true), Queryable(false)) }
+    assertFailsWith<IllegalArgumentException> { Range(Encryption(true), Encryption(false)) }
+    assertFailsWith<IllegalArgumentException> { Range(Shareable(true), Shareable(false)) }
   }
 
   @Test
@@ -726,136 +698,144 @@ class CapabilityTest {
   @Test
   fun fromAnnotations_persistence_errorMultiple() {
     assertThat(
-      assertFailsWith<IllegalArgumentException> {
-        Persistence.fromAnnotations(
-          listOf(
-            Annotation.createCapability("onDisk"),
-            Annotation.createCapability("inMemory")
+        assertFailsWith<IllegalArgumentException> {
+          Persistence.fromAnnotations(
+            listOf(Annotation.createCapability("onDisk"), Annotation.createCapability("inMemory"))
           )
-        )
-      }
-    ).hasMessageThat().contains("Containing multiple persistence capabilities")
+        }
+      )
+      .hasMessageThat()
+      .contains("Containing multiple persistence capabilities")
   }
+
   @Test
   fun fromAnnotations_persistence_errorParams() {
     assertThat(
-      assertFailsWith<IllegalArgumentException> {
-        Persistence.fromAnnotations(
-          listOf(
-            Annotation(
-              name = "onDisk",
-              params = mapOf("invalid" to AnnotationParam.Str("param"))
+        assertFailsWith<IllegalArgumentException> {
+          Persistence.fromAnnotations(
+            listOf(
+              Annotation(name = "onDisk", params = mapOf("invalid" to AnnotationParam.Str("param")))
             )
           )
-        )
-      }
-    ).hasMessageThat().contains("Unexpected parameter")
+        }
+      )
+      .hasMessageThat()
+      .contains("Unexpected parameter")
     assertThat(
-      assertFailsWith<IllegalArgumentException> {
-        Persistence.fromAnnotations(
-          listOf(
-            Annotation(
-              name = "inMemory",
-              params = mapOf("invalid" to AnnotationParam.Str("param"))
+        assertFailsWith<IllegalArgumentException> {
+          Persistence.fromAnnotations(
+            listOf(
+              Annotation(
+                name = "inMemory",
+                params = mapOf("invalid" to AnnotationParam.Str("param")),
+              )
             )
           )
-        )
-      }
-    ).hasMessageThat().contains("Unexpected parameter")
+        }
+      )
+      .hasMessageThat()
+      .contains("Unexpected parameter")
   }
 
   @Test
   fun fromAnnotations_persistence_empty() {
     assertThat(Persistence.fromAnnotations(emptyList<Annotation>())).isNull()
-    assertThat(
-      Persistence.fromAnnotations(listOf(Annotation("something"), Annotation("else")))
-    ).isNull()
+    assertThat(Persistence.fromAnnotations(listOf(Annotation("something"), Annotation("else"))))
+      .isNull()
   }
 
   @Test
   fun fromAnnotations_persistence_ok() {
-    assertThat(
-      Persistence.fromAnnotations(listOf(Annotation("onDisk"), Annotation("other")))
-    ).isEqualTo(Persistence.ON_DISK)
+    assertThat(Persistence.fromAnnotations(listOf(Annotation("onDisk"), Annotation("other"))))
+      .isEqualTo(Persistence.ON_DISK)
     // Two persistence annotations that represent the same Capability.
+    assertThat(Persistence.fromAnnotations(listOf(Annotation("onDisk"), Annotation("persistent"))))
+      .isEqualTo(Persistence.ON_DISK)
     assertThat(
-      Persistence.fromAnnotations(listOf(Annotation("onDisk"), Annotation("persistent")))
-    ).isEqualTo(Persistence.ON_DISK)
-    assertThat(
-      Persistence.fromAnnotations(listOf(Annotation("a"), Annotation("inMemory"), Annotation("b")))
-    ).isEqualTo(Persistence.IN_MEMORY)
+        Persistence.fromAnnotations(
+          listOf(Annotation("a"), Annotation("inMemory"), Annotation("b"))
+        )
+      )
+      .isEqualTo(Persistence.IN_MEMORY)
   }
 
   @Test
   fun fromAnnotations_ttl_errorMultiple() {
     assertThat(
-      assertFailsWith<IllegalArgumentException> {
-        Ttl.fromAnnotations(
-          listOf(Annotation.createTtl("30d"), Annotation.createTtl("5 hours"))
-        )
-      }
-    ).hasMessageThat().contains("Containing multiple ttl capabilities")
+        assertFailsWith<IllegalArgumentException> {
+          Ttl.fromAnnotations(listOf(Annotation.createTtl("30d"), Annotation.createTtl("5 hours")))
+        }
+      )
+      .hasMessageThat()
+      .contains("Containing multiple ttl capabilities")
   }
 
   @Test
   fun fromAnnotations_ttl_errorNoParams() {
     assertThat(
-      assertFailsWith<IllegalArgumentException> {
-        Ttl.fromAnnotations(listOf(Annotation("ttl")))
-      }
-    ).hasMessageThat().contains("missing 'value' parameter")
+        assertFailsWith<IllegalArgumentException> { Ttl.fromAnnotations(listOf(Annotation("ttl"))) }
+      )
+      .hasMessageThat()
+      .contains("missing 'value' parameter")
   }
 
   @Test
   fun fromAnnotations_ttl_errorMultipleParams() {
     assertThat(
-      assertFailsWith<IllegalArgumentException> {
-        Ttl.fromAnnotations(
-          listOf(
-            Annotation(
-              "ttl",
-              mapOf("value" to AnnotationParam.Str("2h"), "x" to AnnotationParam.Str("y"))
+        assertFailsWith<IllegalArgumentException> {
+          Ttl.fromAnnotations(
+            listOf(
+              Annotation(
+                "ttl",
+                mapOf("value" to AnnotationParam.Str("2h"), "x" to AnnotationParam.Str("y")),
+              )
             )
           )
-        )
-      }
-    ).hasMessageThat().contains("Unexpected parameter for Ttl Capability annotation")
+        }
+      )
+      .hasMessageThat()
+      .contains("Unexpected parameter for Ttl Capability annotation")
   }
 
   @Test
   fun fromAnnotations_ttl_invalid() {
     assertThat(
-      assertFailsWith<IllegalArgumentException> {
-        Ttl.fromAnnotations(listOf(Annotation.createTtl("foo")))
-      }
-    ).hasMessageThat().isEqualTo("Invalid TTL foo.")
+        assertFailsWith<IllegalArgumentException> {
+          Ttl.fromAnnotations(listOf(Annotation.createTtl("foo")))
+        }
+      )
+      .hasMessageThat()
+      .isEqualTo("Invalid TTL foo.")
     assertThat(
-      assertFailsWith<IllegalArgumentException> {
-        Ttl.fromAnnotations(listOf(Annotation.createTtl("200years")))
-      }
-    ).hasMessageThat().isEqualTo("Invalid TTL 200years.")
+        assertFailsWith<IllegalArgumentException> {
+          Ttl.fromAnnotations(listOf(Annotation.createTtl("200years")))
+        }
+      )
+      .hasMessageThat()
+      .isEqualTo("Invalid TTL 200years.")
     assertThat(
-      assertFailsWith<IllegalArgumentException> {
-        Ttl.fromAnnotations(listOf(Annotation.createTtl("124")))
-      }
-    ).hasMessageThat().isEqualTo("Invalid TTL 124.")
+        assertFailsWith<IllegalArgumentException> {
+          Ttl.fromAnnotations(listOf(Annotation.createTtl("124")))
+        }
+      )
+      .hasMessageThat()
+      .isEqualTo("Invalid TTL 124.")
   }
 
   @Test
   fun fromAnnotations_ttl_empty() {
     assertThat(Ttl.fromAnnotations(emptyList<Annotation>())).isNull()
-    assertThat(
-      Ttl.fromAnnotations(listOf(Annotation("something"), Annotation("else")))
-    ).isNull()
+    assertThat(Ttl.fromAnnotations(listOf(Annotation("something"), Annotation("else")))).isNull()
   }
 
   @Test
   fun fromAnnotations_ttl_ok() {
     assertThat(
-      Ttl.fromAnnotations(
-        listOf(Annotation("something"), Annotation.createTtl("30d"), Annotation("else"))
+        Ttl.fromAnnotations(
+          listOf(Annotation("something"), Annotation.createTtl("30d"), Annotation("else"))
+        )
       )
-    ).isEqualTo(Ttl.Days(30))
+      .isEqualTo(Ttl.Days(30))
   }
 
   @Test
@@ -868,10 +848,11 @@ class CapabilityTest {
   @Test
   fun fromAnnotations_encryption_ok() {
     assertThat(
-      Encryption.fromAnnotations(
-        listOf(Annotation("something"), Annotation("encrypted"), Annotation("else"))
+        Encryption.fromAnnotations(
+          listOf(Annotation("something"), Annotation("encrypted"), Annotation("else"))
+        )
       )
-    ).isEqualTo(Encryption(true))
+      .isEqualTo(Encryption(true))
   }
 
   @Test

@@ -85,7 +85,7 @@ val PERSON_DATA_TYPE =
   ManagedDataType(
     descriptor = PERSON_DESCRIPTOR,
     managementStrategy = ManagementStrategy.PassThru,
-    connectionTypes = setOf(PersonReader::class.java, PersonWriter::class.java)
+    connectionTypes = setOf(PersonReader::class.java, PersonWriter::class.java),
   )
 
 val PET_DATA_TYPE =
@@ -95,9 +95,9 @@ val PET_DATA_TYPE =
       ManagementStrategy.Stored(
         encrypted = true,
         media = StorageMedia.LOCAL_DISK,
-        ttl = Duration.ofMinutes(5)
+        ttl = Duration.ofMinutes(5),
       ),
-    connectionTypes = setOf(PetReader::class.java, PetWriter::class.java)
+    connectionTypes = setOf(PetReader::class.java, PetWriter::class.java),
   )
 
 val HOUSEHOLD_DATA_TYPE =
@@ -107,9 +107,9 @@ val HOUSEHOLD_DATA_TYPE =
       ManagementStrategy.Stored(
         encrypted = true,
         media = StorageMedia.MEMORY,
-        ttl = Duration.ofMinutes(5)
+        ttl = Duration.ofMinutes(5),
       ),
-    connectionTypes = setOf(HouseholdReader::class.java, HouseholdWriter::class.java)
+    connectionTypes = setOf(HouseholdReader::class.java, HouseholdWriter::class.java),
   )
 
 val PET_DATA_TYPE_UNENCRYPTED_DISK =
@@ -119,9 +119,9 @@ val PET_DATA_TYPE_UNENCRYPTED_DISK =
       ManagementStrategy.Stored(
         encrypted = false,
         media = StorageMedia.LOCAL_DISK,
-        ttl = Duration.ofMinutes(5)
+        ttl = Duration.ofMinutes(5),
       ),
-    connectionTypes = setOf(PetReader::class.java, PetWriter::class.java)
+    connectionTypes = setOf(PetReader::class.java, PetWriter::class.java),
   )
 
 val BUSINESS_DATA_TYPE =
@@ -129,7 +129,7 @@ val BUSINESS_DATA_TYPE =
     descriptor = BUSINESS_DESCRIPTOR,
     managementStrategy =
       ManagementStrategy.Stored(encrypted = false, media = StorageMedia.REMOTE_DISK, ttl = null),
-    connectionTypes = setOf(BusinessReader::class.java, BusinessWriter::class.java)
+    connectionTypes = setOf(BusinessReader::class.java, BusinessWriter::class.java),
   )
 
 data class HousePerson(val name: String, val age: Int, val pet: HousePet)
@@ -162,7 +162,7 @@ class EmptyConnectionProvider : ConnectionProvider {
       descriptor = dataTypeDescriptor("dummy", Unit::class) {},
       managementStrategy =
         ManagementStrategy.Stored(encrypted = false, media = StorageMedia.REMOTE_DISK, ttl = null),
-      connectionTypes = emptySet()
+      connectionTypes = emptySet(),
     )
 
   override fun getConnection(connectionRequest: ConnectionRequest<out Connection>): Connection =

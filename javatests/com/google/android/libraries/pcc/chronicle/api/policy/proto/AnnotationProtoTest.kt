@@ -27,14 +27,16 @@ import org.junit.runners.JUnit4
 class AnnotationProtoTest {
   @Test
   fun roundTrip() {
-    val annotation = Annotation(
-      name = "MyAnnotation",
-      params = mapOf(
-        "str" to AnnotationParam.Str("abc"),
-        "bool" to AnnotationParam.Bool(true),
-        "num" to AnnotationParam.Num(123)
+    val annotation =
+      Annotation(
+        name = "MyAnnotation",
+        params =
+          mapOf(
+            "str" to AnnotationParam.Str("abc"),
+            "bool" to AnnotationParam.Bool(true),
+            "num" to AnnotationParam.Num(123),
+          ),
       )
-    )
     assertThat(annotation.encode().decode()).isEqualTo(annotation)
   }
 }

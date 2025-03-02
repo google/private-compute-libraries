@@ -114,25 +114,25 @@ class ManagedEntityStreamServerTest {
         listOf(
           WrappedEntity(
             metadata = EntityMetadata.getDefaultInstance(),
-            entity = Person.newBuilder().setName("sundar").build()
+            entity = Person.newBuilder().setName("sundar").build(),
           )
         ),
         listOf(
           WrappedEntity(
             metadata = EntityMetadata.getDefaultInstance(),
-            entity = Person.newBuilder().setName("larry").build()
+            entity = Person.newBuilder().setName("larry").build(),
           ),
           WrappedEntity(
             metadata = EntityMetadata.getDefaultInstance(),
-            entity = Person.newBuilder().setName("sergey").build()
+            entity = Person.newBuilder().setName("sergey").build(),
           ),
-        )
+        ),
       )
     val server =
       ManagedEntityStreamServer(
         dataTypeDescriptor = PERSON_DTD,
         serializer = serializer,
-        entityStreamProvider = entityStreamProvider
+        entityStreamProvider = entityStreamProvider,
       )
 
     val subscriptionResults =
@@ -145,7 +145,9 @@ class ManagedEntityStreamServerTest {
   }
 
   class PersonReader : ReadConnection
+
   class PersonWriter : WriteConnection
+
   object ProcNode : ProcessorNode {
     override val requiredConnectionTypes: Set<Class<out Connection>> = emptySet()
   }

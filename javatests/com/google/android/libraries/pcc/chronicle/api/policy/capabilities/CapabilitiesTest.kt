@@ -117,7 +117,7 @@ class CapabilitiesTest {
         listOf<Capability.Range>(
           Persistence.ON_DISK.toRange(),
           Capability.Range(Capability.Ttl.Days(30), Capability.Ttl.Hours(1)),
-          Capability.Queryable(true).toRange()
+          Capability.Queryable(true).toRange(),
         )
       )
     assertThat(capabilities.contains(Persistence.ON_DISK)).isTrue()
@@ -141,7 +141,7 @@ class CapabilitiesTest {
           Capabilities(
             listOf<Capability.Range>(
               Persistence.ON_DISK.toRange(),
-              Capability.Ttl.Days(10).toRange()
+              Capability.Ttl.Days(10).toRange(),
             )
           )
         )
@@ -152,7 +152,7 @@ class CapabilitiesTest {
           Capabilities(
             listOf<Capability.Range>(
               Capability.Ttl.Days(10).toRange(),
-              Capability.Shareable(true).toRange()
+              Capability.Shareable(true).toRange(),
             )
           )
         )

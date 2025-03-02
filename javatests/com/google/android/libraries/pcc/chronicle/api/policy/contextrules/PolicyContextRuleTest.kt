@@ -34,6 +34,7 @@ class PolicyContextRuleTest {
   object TestName : PolicyContextRule {
     override val name = "TestName"
     override val operands: List<PolicyContextRule> = emptyList()
+
     override fun invoke(context: TypedMap): Boolean = context[NameKey] == "Test"
   }
 
@@ -41,6 +42,7 @@ class PolicyContextRuleTest {
   object None : PolicyContextRule {
     override val name = "None"
     override val operands: List<PolicyContextRule> = emptyList()
+
     override fun invoke(context: TypedMap): Boolean = false
   }
 

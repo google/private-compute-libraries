@@ -33,21 +33,16 @@ class ParcelableSerializerTest {
   fun serialize_deserialize_roundTrip() {
     val serializer = ParcelableSerializer.createFrom(Person::class)
     val parcel = Parcel.obtain()
-    val entity =
-      Person(
-        name = "Sergey Brin",
-        age = 42,
-        hometown = City(name = "Mountain View")
+    val entity = Person(name = "Sergey Brin", age = 42, hometown = City(name = "Mountain View"))
+    val metadata =
+      EntityMetadata(
+        id = "sergey",
+        associatedPackageName = "com.google.android.as.oss",
+        created = Instant.now().minusSeconds(1337),
+        updated = Instant.now(),
       )
-    val metadata = EntityMetadata(
-      id = "sergey",
-      associatedPackageName = "com.google.android.as.oss",
-      created = Instant.now().minusSeconds(1337),
-      updated = Instant.now()
-    )
 
-    serializer.serialize(WrappedEntity(metadata, entity))
-      .writeToParcel(parcel, 0)
+    serializer.serialize(WrappedEntity(metadata, entity)).writeToParcel(parcel, 0)
     parcel.setDataPosition(0)
     val deserialized = serializer.deserialize<Person>(RemoteEntity.CREATOR.createFromParcel(parcel))
 
@@ -56,10 +51,12 @@ class ParcelableSerializerTest {
   }
 
   data class Person(val name: String, val age: Int, val hometown: City) : Parcelable {
-    constructor(parcel: Parcel) : this(
+    constructor(
+      parcel: Parcel
+    ) : this(
       parcel.readString()!!,
       parcel.readInt(),
-      parcel.readParcelable(City::class.java.classLoader)!!
+      parcel.readParcelable(City::class.java.classLoader)!!,
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -72,6 +69,7 @@ class ParcelableSerializerTest {
 
     companion object CREATOR : Parcelable.Creator<Person> {
       override fun createFromParcel(parcel: Parcel): Person = Person(parcel)
+
       override fun newArray(size: Int): Array<Person?> = arrayOfNulls(size)
     }
   }
@@ -87,6 +85,7 @@ class ParcelableSerializerTest {
 
     companion object CREATOR : Parcelable.Creator<City> {
       override fun createFromParcel(parcel: Parcel): City = City(parcel)
+
       override fun newArray(size: Int): Array<City?> = arrayOfNulls(size)
     }
   }

@@ -76,19 +76,19 @@ class EntityStreamImplTest {
         listOf(
           WrappedEntity(
             metadata = EntityMetadata.getDefaultInstance(),
-            entity = Person.newBuilder().setName("sundar").build()
-          ),
+            entity = Person.newBuilder().setName("sundar").build(),
+          )
         ),
         listOf(
           WrappedEntity(
             metadata = EntityMetadata.getDefaultInstance(),
-            entity = Person.newBuilder().setName("larry").build()
+            entity = Person.newBuilder().setName("larry").build(),
           ),
           WrappedEntity(
             metadata = EntityMetadata.getDefaultInstance(),
-            entity = Person.newBuilder().setName("sergey").build()
+            entity = Person.newBuilder().setName("sergey").build(),
           ),
-        )
+        ),
       )
 
     private val INDIVIDUAL_DATA = GROUPED_DATA.flatten()

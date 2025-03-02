@@ -36,12 +36,13 @@ class ExtensionsTest {
 
   @Test
   fun timestamp_toInstant() {
-    val timestamp = Timestamp.newBuilder()
-      .apply {
-        seconds = 31337
-        nanos = 42
-      }
-      .build()
+    val timestamp =
+      Timestamp.newBuilder()
+        .apply {
+          seconds = 31337
+          nanos = 42
+        }
+        .build()
     val instant = timestamp.toInstant()
 
     assertThat(instant.epochSecond).isEqualTo(timestamp.seconds)

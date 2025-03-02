@@ -34,24 +34,23 @@ class ProtoSerializerTest {
   fun serialize_deserialize_roundTrip() {
     val serializer = ProtoSerializer.createFrom(Person.getDefaultInstance())
     val parcel = Parcel.obtain()
-    val entity = Person.newBuilder()
-      .apply {
-        name = "Sergey Brin"
-        age = 42
-        hometown = City.newBuilder()
-          .apply { name = "Mountain View" }
-          .build()
-      }
-      .build()
-    val metadata = EntityMetadata(
-      id = "sergey",
-      associatedPackageName = "com.google.android.as.oss",
-      created = Instant.now().minusSeconds(1337),
-      updated = Instant.now()
-    )
+    val entity =
+      Person.newBuilder()
+        .apply {
+          name = "Sergey Brin"
+          age = 42
+          hometown = City.newBuilder().apply { name = "Mountain View" }.build()
+        }
+        .build()
+    val metadata =
+      EntityMetadata(
+        id = "sergey",
+        associatedPackageName = "com.google.android.as.oss",
+        created = Instant.now().minusSeconds(1337),
+        updated = Instant.now(),
+      )
 
-    serializer.serialize(WrappedEntity(metadata, entity))
-      .writeToParcel(parcel, 0)
+    serializer.serialize(WrappedEntity(metadata, entity)).writeToParcel(parcel, 0)
     parcel.setDataPosition(0)
     val deserialized = serializer.deserialize<Person>(RemoteEntity.CREATOR.createFromParcel(parcel))
 

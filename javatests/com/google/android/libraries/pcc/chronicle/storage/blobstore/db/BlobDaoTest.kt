@@ -125,11 +125,11 @@ class BlobDaoTest {
       mapOf(
         blobKey1Dtd1 to listOf(PACKAGE_1),
         blobKey2Dtd1 to listOf(PACKAGE_1, PACKAGE_2),
-        blobKey3Dtd1 to listOf(PACKAGE_3)
+        blobKey3Dtd1 to listOf(PACKAGE_3),
       ),
       blobKey1Dtd1.dtdName,
       QuotaInfo(maxRowCount = 3, minRowsAfterTrim = 2, trimOrder = TrimOrder.OLDEST),
-      THRESHOLD_1
+      THRESHOLD_1,
     )
 
     assertThat(dao.blobEntitiesWithPackagesByDtdName(DTD_NAME_1, THRESHOLD_1)).hasSize(3)
@@ -143,11 +143,11 @@ class BlobDaoTest {
           mapOf(
             blobKey1Dtd1 to listOf(PACKAGE_1),
             blobKey2Dtd1 to listOf(PACKAGE_1, PACKAGE_2),
-            blobKey3Dtd1 to listOf(PACKAGE_3)
+            blobKey3Dtd1 to listOf(PACKAGE_3),
           ),
           blobKey1Dtd1.dtdName,
           QuotaInfo(maxRowCount = 2, minRowsAfterTrim = 1, trimOrder = TrimOrder.OLDEST),
-          THRESHOLD_1
+          THRESHOLD_1,
         )
       }
 
@@ -167,7 +167,7 @@ class BlobDaoTest {
       mapOf(blobKey2Dtd1 to listOf(PACKAGE_1, PACKAGE_2), blobKey3Dtd1 to listOf(PACKAGE_3)),
       blobKey1Dtd1.dtdName,
       QuotaInfo(maxRowCount = 2, minRowsAfterTrim = 1, trimOrder = TrimOrder.OLDEST),
-      THRESHOLD_1
+      THRESHOLD_1,
     )
 
     assertThat(dao.blobEntitiesWithPackagesByDtdName(DTD_NAME_1, THRESHOLD_1)).hasSize(1)
@@ -193,10 +193,10 @@ class BlobDaoTest {
       blobKey1Dtd1.copy(
         createdTimestampMillis = UPDATE_1,
         updateTimestampMillis = UPDATE_1,
-        blob = "Test blob 3".toByteArray()
+        blob = "Test blob 3".toByteArray(),
       ),
       emptyList(),
-      THRESHOLD_1
+      THRESHOLD_1,
     )
 
     val blobWithPackages3 =
@@ -208,7 +208,7 @@ class BlobDaoTest {
     checkBlob(
       blobKey1Dtd1.copy(updateTimestampMillis = UPDATE_1, blob = "Test blob 3".toByteArray()),
       listOf(PACKAGE_1),
-      blobWithPackages3
+      blobWithPackages3,
     )
     assertThat(blobWithPackages4).isEqualTo(blobWithPackages2)
   }
@@ -219,7 +219,7 @@ class BlobDaoTest {
     dao.insertOrUpdateBlobWithPackages(
       blobKey2Dtd1.copy(createdTimestampMillis = CREATED_1, updateTimestampMillis = CREATED_1),
       listOf(PACKAGE_1, PACKAGE_2),
-      THRESHOLD_1
+      THRESHOLD_1,
     )
     val blobWithPackages1 =
       dao.blobEntityWithPackagesByKeyAndDtdName(KEY_1, DTD_NAME_1, THRESHOLD_1)
@@ -230,22 +230,22 @@ class BlobDaoTest {
     checkBlob(
       blobKey2Dtd1.copy(createdTimestampMillis = CREATED_1, updateTimestampMillis = CREATED_1),
       listOf(PACKAGE_1, PACKAGE_2),
-      blobWithPackages2
+      blobWithPackages2,
     )
 
     dao.insertOrUpdateBlobWithPackages(
       blobKey1Dtd1.copy(
         createdTimestampMillis = UPDATE_1,
         updateTimestampMillis = UPDATE_1,
-        blob = "Test blob 3".toByteArray()
+        blob = "Test blob 3".toByteArray(),
       ),
       listOf(PACKAGE_1, PACKAGE_2),
-      THRESHOLD_2
+      THRESHOLD_2,
     )
     dao.insertOrUpdateBlobWithPackages(
       blobKey2Dtd1.copy(createdTimestampMillis = UPDATE_1, updateTimestampMillis = UPDATE_1),
       listOf(PACKAGE_2),
-      THRESHOLD_2
+      THRESHOLD_2,
     )
 
     val blobWithPackages3 =
@@ -260,15 +260,15 @@ class BlobDaoTest {
       blobKey1Dtd1.copy(
         createdTimestampMillis = UPDATE_1,
         updateTimestampMillis = UPDATE_1,
-        blob = "Test blob 3".toByteArray()
+        blob = "Test blob 3".toByteArray(),
       ),
       listOf(PACKAGE_1, PACKAGE_2),
-      blobWithPackages3
+      blobWithPackages3,
     )
     checkBlob(
       blobKey2Dtd1.copy(createdTimestampMillis = UPDATE_1, updateTimestampMillis = UPDATE_1),
       listOf(PACKAGE_2),
-      blobWithPackages4
+      blobWithPackages4,
     )
   }
 
@@ -337,12 +337,12 @@ class BlobDaoTest {
     dao.insertOrUpdateBlobWithPackages(
       blobKey2Dtd1.copy(locusId = LOCUS_ID_1),
       listOf(PACKAGE_1, PACKAGE_2),
-      THRESHOLD_1
+      THRESHOLD_1,
     )
     dao.insertOrUpdateBlobWithPackages(
       blobKey1Dtd2.copy(locusId = LOCUS_ID_1),
       listOf(PACKAGE_3),
-      THRESHOLD_1
+      THRESHOLD_1,
     )
     val blobsWithPackages1 =
       dao.blobEntitiesWithPackagesByLocusIdAndDtdName(LOCUS_ID_1, DTD_NAME_1, THRESHOLD_1)
@@ -362,12 +362,12 @@ class BlobDaoTest {
     dao.insertOrUpdateBlobWithPackages(
       blobKey2Dtd1.copy(locusId = LOCUS_ID_1),
       listOf(PACKAGE_1, PACKAGE_2),
-      THRESHOLD_1
+      THRESHOLD_1,
     )
     dao.insertOrUpdateBlobWithPackages(
       blobKey1Dtd2.copy(locusId = LOCUS_ID_1),
       listOf(PACKAGE_3),
-      THRESHOLD_1
+      THRESHOLD_1,
     )
     val blobsWithPackages1 =
       dao.blobEntitiesWithPackagesByLocusIdAndDtdName(LOCUS_ID_1, DTD_NAME_1, THRESHOLD_2)
@@ -774,7 +774,7 @@ class BlobDaoTest {
   private fun checkBlob(
     expectedBlob: BlobEntity,
     expectedPackages: List<String>,
-    result: BlobEntityWithPackages?
+    result: BlobEntityWithPackages?,
   ) {
     with(result!!.blobEntity) {
       assertThat(key).isEqualTo(expectedBlob.key)

@@ -118,12 +118,12 @@ class ChronicleHelperTest {
       ChronicleHelper(
         policies = setOf(PEOPLE_PROTO_POLICY),
         connectionProviders = emptySet(),
-        remoteServers = setOf(peopleServer)
+        remoteServers = setOf(peopleServer),
       )
     val binder: IRemote =
       helper.createRemoteConnectionBinder(
         ApplicationProvider.getApplicationContext(),
-        CoroutineScope(SupervisorJob())
+        CoroutineScope(SupervisorJob()),
       )
     val request =
       RemoteRequest(
@@ -145,6 +145,7 @@ class ChronicleHelperTest {
         val callback =
           object : IResponseCallback.Stub() {
             override fun onData(data: RemoteResponse?) = Unit
+
             override fun provideCancellationSignal(signal: ICancellationSignal?) = Unit
 
             override fun onError(error: RemoteError?) {
@@ -170,10 +171,7 @@ class ChronicleHelperTest {
       ManagedDataType(
         PERSON_GENERATED_DTD,
         ManagementStrategy.Stored(false, StorageMedia.MEMORY, Duration.ofHours(5)),
-        setOf(
-          PeopleReader::class.java,
-          PeopleWriter::class.java,
-        )
+        setOf(PeopleReader::class.java, PeopleWriter::class.java),
       )
     override val dataTypeDescriptor: DataTypeDescriptor = dataType.descriptor
     override val serializer: Serializer<Person> =
@@ -188,14 +186,20 @@ class ChronicleHelperTest {
     }
 
     override suspend fun count(policy: Policy?): Int = 42
+
     override fun fetchById(policy: Policy?, ids: List<String>): Flow<List<WrappedEntity<Person>>> =
       emptyFlow()
+
     override fun fetchAll(policy: Policy?): Flow<List<WrappedEntity<Person>>> = emptyFlow()
+
     override suspend fun create(policy: Policy?, wrappedEntities: List<WrappedEntity<Person>>) =
       Unit
+
     override suspend fun update(policy: Policy?, wrappedEntities: List<WrappedEntity<Person>>) =
       Unit
+
     override suspend fun deleteAll(policy: Policy?) = Unit
+
     override suspend fun deleteById(policy: Policy?, ids: List<String>) = Unit
   }
 
@@ -205,7 +209,9 @@ class ChronicleHelperTest {
 
   open class PeopleWriterImpl : PeopleWriter {
     override suspend fun putPerson(person: Person) = Unit
+
     override suspend fun deletePerson(name: String) = Unit
+
     override suspend fun deleteAll() = Unit
   }
 }

@@ -71,10 +71,7 @@ class ProtoChronicleDataGeneratorTest {
     val testProtoClasses = fileDescriptor.javaClasses()
 
     assertThat(testProtoClasses.asSequence().toList())
-      .containsExactly(
-        SimpleTestProto1::class.java,
-        SimpleTestProto2::class.java,
-      )
+      .containsExactly(SimpleTestProto1::class.java, SimpleTestProto2::class.java)
   }
 
   @Test
@@ -98,7 +95,7 @@ class ProtoChronicleDataGeneratorTest {
         .provideIntoKotlinFile(
           FileSpec.builder(
             packageName = "com.google.android.libraries.pcc.chronicle.codegen",
-            fileName = "Thing_Generated.kt"
+            fileName = "Thing_Generated.kt",
           )
         )
         .build()
@@ -117,7 +114,7 @@ class ProtoChronicleDataGeneratorTest {
     val daggerFile =
       JavaFile.builder(
           "com.google.android.libraries.pcc.chronicle.codegen",
-          daggerModule.provideModule()
+          daggerModule.provideModule(),
         )
         .build()
 
@@ -133,7 +130,6 @@ class ProtoChronicleDataGeneratorTest {
       ?.bufferedReader()
       ?.lineSequence()
       ?.joinToString("\n")
-      ?.trim()
-      ?: ""
+      ?.trim() ?: ""
   }
 }

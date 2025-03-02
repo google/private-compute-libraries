@@ -366,9 +366,13 @@ class RemoteRouterTest {
       }
 
     override fun onData(data: RemoteResponse) = Unit
+
     override fun onError(error: RemoteError) = Unit
+
     override fun onComplete() = Unit
+
     override fun provideCancellationSignal(signal: ICancellationSignal) = Unit
+
     override fun asBinder(): IBinder = spyBinder
   }
 
@@ -377,6 +381,7 @@ class RemoteRouterTest {
     private val doOnComplete: () -> Unit,
   ) : AbstractIResponseCallback() {
     override fun onComplete() = doOnComplete()
+
     override fun provideCancellationSignal(signal: ICancellationSignal) =
       receiveCancellationSignal(signal)
   }

@@ -33,7 +33,7 @@ class OpticalCantripTest {
     val cantrip =
       OpticalCantrip(
         optic = TestCity_Name.asTraversal(),
-        operation = Operation.create("OmitFromParent") { Action.OmitFromParent }
+        operation = Operation.create("OmitFromParent") { Action.OmitFromParent },
       )
 
     val result = cantrip(CITY_MOUNTAIN_VIEW)
@@ -46,7 +46,7 @@ class OpticalCantripTest {
     val cantrip =
       OpticalCantrip(
         optic = TestCity_Name.asTraversal(),
-        operation = Operation.create("OmitFromRoot") { Action.OmitFromRoot }
+        operation = Operation.create("OmitFromRoot") { Action.OmitFromRoot },
       )
 
     val result = cantrip(CITY_MOUNTAIN_VIEW)
@@ -60,7 +60,7 @@ class OpticalCantripTest {
     val cantrip =
       OpticalCantrip(
         optic = TestCity_Name.asTraversal(),
-        operation = Operation.create("Throw") { Action.Throw(exception) }
+        operation = Operation.create("Throw") { Action.Throw(exception) },
       )
 
     val thrown = assertFailsWith<IllegalArgumentException> { cantrip(CITY_MOUNTAIN_VIEW) }
@@ -73,7 +73,7 @@ class OpticalCantripTest {
     val cantrip =
       OpticalCantrip(
         optic = TestCity_Name.asTraversal(),
-        operation = Operation.create("Update") { Action.Update("Seattle") }
+        operation = Operation.create("Update") { Action.Update("Seattle") },
       )
 
     val result = cantrip(CITY_MOUNTAIN_VIEW)

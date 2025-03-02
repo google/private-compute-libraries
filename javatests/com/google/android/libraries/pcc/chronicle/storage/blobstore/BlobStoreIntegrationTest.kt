@@ -85,9 +85,9 @@ class BlobStoreIntegrationTest {
         id = KEY_1,
         associatedPackageNames = listOf(PACKAGE_1, PACKAGE_2),
         created = Instant.ofEpochMilli(CREATED_1),
-        updated = Instant.ofEpochMilli(CREATED_1)
+        updated = Instant.ofEpochMilli(CREATED_1),
       ),
-      testMessage
+      testMessage,
     )
 
   private val wrapped2 =
@@ -96,9 +96,9 @@ class BlobStoreIntegrationTest {
         id = KEY_2,
         associatedPackageNames = listOf(PACKAGE_2),
         created = Instant.ofEpochMilli(CREATED_1),
-        updated = Instant.ofEpochMilli(CREATED_1)
+        updated = Instant.ofEpochMilli(CREATED_1),
       ),
-      testMessage
+      testMessage,
     )
 
   private val wrapped3 =
@@ -107,9 +107,9 @@ class BlobStoreIntegrationTest {
         id = KEY_3,
         associatedPackageNames = listOf(PACKAGE_1),
         created = Instant.ofEpochMilli(CREATED_1),
-        updated = Instant.ofEpochMilli(CREATED_1)
+        updated = Instant.ofEpochMilli(CREATED_1),
       ),
-      testMessage
+      testMessage,
     )
 
   private val wrapped4 =
@@ -118,9 +118,9 @@ class BlobStoreIntegrationTest {
         id = KEY_4,
         associatedPackageNames = listOf(PACKAGE_1),
         created = Instant.ofEpochMilli(CREATED_1),
-        updated = Instant.ofEpochMilli(CREATED_1)
+        updated = Instant.ofEpochMilli(CREATED_1),
       ),
-      testMessage
+      testMessage,
     )
 
   private val wrapped5 =
@@ -129,9 +129,9 @@ class BlobStoreIntegrationTest {
         id = KEY_1,
         associatedPackageNames = listOf(PACKAGE_1),
         created = Instant.ofEpochMilli(CREATED_1),
-        updated = Instant.ofEpochMilli(CREATED_1)
+        updated = Instant.ofEpochMilli(CREATED_1),
       ),
-      testPerson
+      testPerson,
     )
 
   private val wrapped6 =
@@ -140,9 +140,9 @@ class BlobStoreIntegrationTest {
         id = KEY_2,
         associatedPackageNames = listOf(PACKAGE_1),
         created = Instant.ofEpochMilli(CREATED_1),
-        updated = Instant.ofEpochMilli(CREATED_1)
+        updated = Instant.ofEpochMilli(CREATED_1),
       ),
-      testPerson
+      testPerson,
     )
 
   private val wrapped7 =
@@ -151,9 +151,9 @@ class BlobStoreIntegrationTest {
         id = KEY_3,
         associatedPackageNames = listOf(PACKAGE_2),
         created = Instant.ofEpochMilli(CREATED_1),
-        updated = Instant.ofEpochMilli(CREATED_1)
+        updated = Instant.ofEpochMilli(CREATED_1),
       ),
-      testPerson
+      testPerson,
     )
 
   private val wrapped8 =
@@ -162,9 +162,9 @@ class BlobStoreIntegrationTest {
         id = KEY_1,
         associatedPackageNames = listOf(PACKAGE_1, PACKAGE_2),
         created = Instant.ofEpochMilli(CREATED_1),
-        updated = Instant.ofEpochMilli(CREATED_1)
+        updated = Instant.ofEpochMilli(CREATED_1),
       ),
-      testPlace
+      testPlace,
     )
 
   private val wrapped9 =
@@ -173,9 +173,9 @@ class BlobStoreIntegrationTest {
         id = KEY_2,
         associatedPackageNames = listOf(PACKAGE_2),
         created = Instant.ofEpochMilli(CREATED_1),
-        updated = Instant.ofEpochMilli(CREATED_1)
+        updated = Instant.ofEpochMilli(CREATED_1),
       ),
-      testPlace
+      testPlace,
     )
 
   private val wrapped10 =
@@ -184,9 +184,9 @@ class BlobStoreIntegrationTest {
         id = KEY_3,
         associatedPackageNames = listOf(PACKAGE_1),
         created = Instant.ofEpochMilli(CREATED_1),
-        updated = Instant.ofEpochMilli(CREATED_1)
+        updated = Instant.ofEpochMilli(CREATED_1),
       ),
-      testPlace
+      testPlace,
     )
 
   private val wrapped11 =
@@ -195,9 +195,9 @@ class BlobStoreIntegrationTest {
         id = KEY_4,
         associatedPackageNames = listOf(PACKAGE_1),
         created = Instant.ofEpochMilli(CREATED_1),
-        updated = Instant.ofEpochMilli(CREATED_1)
+        updated = Instant.ofEpochMilli(CREATED_1),
       ),
-      testPlace
+      testPlace,
     )
 
   private val wrapped12 =
@@ -206,9 +206,9 @@ class BlobStoreIntegrationTest {
         id = KEY_1,
         associatedPackageNames = listOf(PACKAGE_1),
         created = Instant.ofEpochMilli(CREATED_1),
-        updated = Instant.ofEpochMilli(CREATED_1)
+        updated = Instant.ofEpochMilli(CREATED_1),
       ),
-      testShape
+      testShape,
     )
 
   private val wrapped13 =
@@ -217,9 +217,9 @@ class BlobStoreIntegrationTest {
         id = KEY_2,
         associatedPackageNames = listOf(PACKAGE_1),
         created = Instant.ofEpochMilli(CREATED_1),
-        updated = Instant.ofEpochMilli(CREATED_1)
+        updated = Instant.ofEpochMilli(CREATED_1),
       ),
-      testShape
+      testShape,
     )
 
   private val wrapped14 =
@@ -228,9 +228,9 @@ class BlobStoreIntegrationTest {
         id = KEY_3,
         associatedPackageNames = listOf(PACKAGE_2),
         created = Instant.ofEpochMilli(CREATED_1),
-        updated = Instant.ofEpochMilli(CREATED_1)
+        updated = Instant.ofEpochMilli(CREATED_1),
       ),
-      testShape
+      testShape,
     )
 
   private var fakeTime = Instant.ofEpochMilli(CREATED_1)
@@ -247,7 +247,7 @@ class BlobStoreIntegrationTest {
           dtdName = DTD_MESSAGE,
           ttlMillis = 200,
           quotaInfo = QuotaInfo(3, 2, TrimOrder.OLDEST),
-          deserializer = TestMessage::parseFrom
+          deserializer = TestMessage::parseFrom,
         )
       )
     testPersonPersistedBlobStore =
@@ -256,7 +256,7 @@ class BlobStoreIntegrationTest {
           dtdName = DTD_PERSON,
           ttlMillis = 500,
           quotaInfo = QuotaInfo(2, 1, TrimOrder.OLDEST),
-          deserializer = TestPerson::parseFrom
+          deserializer = TestPerson::parseFrom,
         )
       )
 
@@ -291,7 +291,7 @@ class BlobStoreIntegrationTest {
       CREATED_1,
       CREATED_1,
       listOf(PACKAGE_1, PACKAGE_2),
-      testMessage
+      testMessage,
     )
     checkTestPerson(
       testPersonPersistedBlobStore.getEntityByKey(KEY_1),
@@ -299,7 +299,7 @@ class BlobStoreIntegrationTest {
       CREATED_1,
       CREATED_1,
       listOf(PACKAGE_1),
-      testPerson
+      testPerson,
     )
     checkTestPlace(
       testPlaceInMemoryBlobStore.getEntityByKey(KEY_1),
@@ -307,7 +307,7 @@ class BlobStoreIntegrationTest {
       CREATED_1,
       CREATED_1,
       listOf(PACKAGE_1, PACKAGE_2),
-      testPlace
+      testPlace,
     )
     checkTestShape(
       testShapeInMemoryBlobStore.getEntityByKey(KEY_1),
@@ -315,7 +315,7 @@ class BlobStoreIntegrationTest {
       CREATED_1,
       CREATED_1,
       listOf(PACKAGE_1),
-      testShape
+      testShape,
     )
   }
 
@@ -436,7 +436,7 @@ class BlobStoreIntegrationTest {
       CREATED_3,
       CREATED_3,
       listOf(PACKAGE_2),
-      testMessage
+      testMessage,
     )
     checkTestMessage(
       testMessagePersistedBlobStore.getEntityByKey(KEY_3),
@@ -444,7 +444,7 @@ class BlobStoreIntegrationTest {
       CREATED_3,
       CREATED_3,
       listOf(PACKAGE_1),
-      testMessage
+      testMessage,
     )
     checkTestMessage(
       testMessagePersistedBlobStore.getEntityByKey(KEY_4),
@@ -452,7 +452,7 @@ class BlobStoreIntegrationTest {
       CREATED_3,
       CREATED_3,
       listOf(PACKAGE_1),
-      testMessage
+      testMessage,
     )
     checkTestPerson(
       testPersonPersistedBlobStore.getEntityByKey(KEY_3),
@@ -460,7 +460,7 @@ class BlobStoreIntegrationTest {
       CREATED_3,
       CREATED_3,
       listOf(PACKAGE_2),
-      testPerson
+      testPerson,
     )
     checkTestPlace(
       testPlaceInMemoryBlobStore.getEntityByKey(KEY_2),
@@ -468,7 +468,7 @@ class BlobStoreIntegrationTest {
       CREATED_3,
       CREATED_3,
       listOf(PACKAGE_2),
-      testPlace
+      testPlace,
     )
     checkTestPlace(
       testPlaceInMemoryBlobStore.getEntityByKey(KEY_3),
@@ -476,7 +476,7 @@ class BlobStoreIntegrationTest {
       CREATED_3,
       CREATED_3,
       listOf(PACKAGE_1),
-      testPlace
+      testPlace,
     )
     checkTestShape(
       testShapeInMemoryBlobStore.getEntityByKey(KEY_2),
@@ -484,7 +484,7 @@ class BlobStoreIntegrationTest {
       CREATED_2,
       CREATED_2,
       listOf(PACKAGE_1),
-      testShape
+      testShape,
     )
     checkTestShape(
       testShapeInMemoryBlobStore.getEntityByKey(KEY_3),
@@ -492,7 +492,7 @@ class BlobStoreIntegrationTest {
       CREATED_3,
       CREATED_3,
       listOf(PACKAGE_2),
-      testShape
+      testShape,
     )
   }
 
@@ -522,7 +522,7 @@ class BlobStoreIntegrationTest {
       CREATED_1,
       CREATED_1,
       listOf(PACKAGE_2),
-      testMessage
+      testMessage,
     )
     checkTestPerson(
       testPersonPersistedBlobStore.getEntityByKey(KEY_3),
@@ -530,7 +530,7 @@ class BlobStoreIntegrationTest {
       CREATED_1,
       CREATED_1,
       listOf(PACKAGE_2),
-      testPerson
+      testPerson,
     )
     checkTestPlace(
       testPlaceInMemoryBlobStore.getEntityByKey(KEY_2),
@@ -538,7 +538,7 @@ class BlobStoreIntegrationTest {
       CREATED_1,
       CREATED_1,
       listOf(PACKAGE_2),
-      testPlace
+      testPlace,
     )
     checkTestShape(
       testShapeInMemoryBlobStore.getEntityByKey(KEY_3),
@@ -546,7 +546,7 @@ class BlobStoreIntegrationTest {
       CREATED_1,
       CREATED_1,
       listOf(PACKAGE_2),
-      testShape
+      testShape,
     )
   }
 
@@ -576,7 +576,7 @@ class BlobStoreIntegrationTest {
       CREATED_1,
       CREATED_1,
       listOf(PACKAGE_2),
-      testMessage
+      testMessage,
     )
     checkTestPerson(
       testPersonPersistedBlobStore.getEntityByKey(KEY_3),
@@ -584,7 +584,7 @@ class BlobStoreIntegrationTest {
       CREATED_1,
       CREATED_1,
       listOf(PACKAGE_2),
-      testPerson
+      testPerson,
     )
     checkTestPlace(
       testPlaceInMemoryBlobStore.getEntityByKey(KEY_2),
@@ -592,7 +592,7 @@ class BlobStoreIntegrationTest {
       CREATED_1,
       CREATED_1,
       listOf(PACKAGE_2),
-      testPlace
+      testPlace,
     )
     checkTestShape(
       testShapeInMemoryBlobStore.getEntityByKey(KEY_3),
@@ -600,7 +600,7 @@ class BlobStoreIntegrationTest {
       CREATED_1,
       CREATED_1,
       listOf(PACKAGE_2),
-      testShape
+      testShape,
     )
   }
 
@@ -638,7 +638,7 @@ class BlobStoreIntegrationTest {
       CREATED_3,
       CREATED_3,
       listOf(PACKAGE_1),
-      testMessage
+      testMessage,
     )
     checkTestPerson(
       testPersonPersistedBlobStore.getEntityByKey(KEY_3),
@@ -646,7 +646,7 @@ class BlobStoreIntegrationTest {
       CREATED_3,
       CREATED_3,
       listOf(PACKAGE_2),
-      testPerson
+      testPerson,
     )
     checkTestPlace(
       testPlaceInMemoryBlobStore.getEntityByKey(KEY_4),
@@ -654,7 +654,7 @@ class BlobStoreIntegrationTest {
       CREATED_3,
       CREATED_3,
       listOf(PACKAGE_1),
-      testPlace
+      testPlace,
     )
     checkTestShape(
       testShapeInMemoryBlobStore.getEntityByKey(KEY_3),
@@ -662,7 +662,7 @@ class BlobStoreIntegrationTest {
       CREATED_3,
       CREATED_3,
       listOf(PACKAGE_2),
-      testShape
+      testShape,
     )
   }
 
@@ -696,7 +696,7 @@ class BlobStoreIntegrationTest {
           dtdName = DTD_PERSON,
           ttlMillis = 10000,
           quotaInfo = QuotaInfo(2, 1, TrimOrder.OLDEST),
-          deserializer = TestPerson::parseFrom
+          deserializer = TestPerson::parseFrom,
         )
       )
     val memoryResult =
@@ -723,7 +723,7 @@ class BlobStoreIntegrationTest {
             dtdName = DTD_PLACE,
             ttlMillis = 10000,
             quotaInfo = QuotaInfo(2, 1, TrimOrder.OLDEST),
-            deserializer = TestPerson::parseFrom
+            deserializer = TestPerson::parseFrom,
           )
         )
       }
@@ -745,7 +745,7 @@ class BlobStoreIntegrationTest {
             dtdName = DTD_PLACE,
             ttlMillis = 10000,
             quotaInfo = QuotaInfo(2, 2, TrimOrder.OLDEST),
-            deserializer = TestPerson::parseFrom
+            deserializer = TestPerson::parseFrom,
           )
         )
       }
@@ -761,7 +761,7 @@ class BlobStoreIntegrationTest {
     created: Long,
     updated: Long,
     packages: List<String>,
-    testMessage: TestMessage
+    testMessage: TestMessage,
   ) {
     assertThat(result?.metadata?.id).isEqualTo(key)
     assertThat(result?.metadata?.created?.toInstant()?.toEpochMilli()).isEqualTo(created)
@@ -776,7 +776,7 @@ class BlobStoreIntegrationTest {
     created: Long,
     updated: Long,
     packages: List<String>,
-    testPerson: TestPerson
+    testPerson: TestPerson,
   ) {
     assertThat(result?.metadata?.id).isEqualTo(key)
     assertThat(result?.metadata?.created?.toInstant()?.toEpochMilli()).isEqualTo(created)
@@ -791,7 +791,7 @@ class BlobStoreIntegrationTest {
     created: Long,
     updated: Long,
     packages: List<String>,
-    testPlace: TestPlace
+    testPlace: TestPlace,
   ) {
     assertThat(result?.metadata?.id).isEqualTo(key)
     assertThat(result?.metadata?.created?.toInstant()?.toEpochMilli()).isEqualTo(created)
@@ -806,7 +806,7 @@ class BlobStoreIntegrationTest {
     created: Long,
     updated: Long,
     packages: List<String>,
-    testShape: TestShape
+    testShape: TestShape,
   ) {
     assertThat(result?.metadata?.id).isEqualTo(key)
     assertThat(result?.metadata?.created?.toInstant()?.toEpochMilli()).isEqualTo(created)

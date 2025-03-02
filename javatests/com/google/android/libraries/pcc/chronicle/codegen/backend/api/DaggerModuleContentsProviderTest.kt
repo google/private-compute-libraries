@@ -37,9 +37,10 @@ class DaggerModuleContentsProviderTest {
         DaggerModuleContentsProvider.ProvidesMethod(
           name = "provideTestStuff",
           providedType = ClassName.get("com.google", "TestStuff"),
-          isSingleton = false
+          isSingleton = false,
         ) {
         override val parameters: List<ParameterSpec> = emptyList()
+
         override fun provideBody(): CodeBlock =
           CodeBlock.of("throw UnsupportedOperationException();")
       }
@@ -53,7 +54,8 @@ class DaggerModuleContentsProviderTest {
               throw UnsupportedOperationException();
             }
           }
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -64,9 +66,10 @@ class DaggerModuleContentsProviderTest {
         DaggerModuleContentsProvider.ProvidesMethod(
           name = "provideTestStuff",
           providedType = ClassName.get("com.google", "TestStuff"),
-          isSingleton = true
+          isSingleton = true,
         ) {
         override val parameters: List<ParameterSpec> = emptyList()
+
         override fun provideBody(): CodeBlock =
           CodeBlock.of("throw UnsupportedOperationException();")
       }
@@ -81,7 +84,8 @@ class DaggerModuleContentsProviderTest {
               throw UnsupportedOperationException();
             }
           }
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -93,9 +97,10 @@ class DaggerModuleContentsProviderTest {
           name = "provideTestStuff",
           providedType = ClassName.get("com.google", "TestStuff"),
           isSingleton = false,
-          isIntoSet = true
+          isIntoSet = true,
         ) {
         override val parameters: List<ParameterSpec> = emptyList()
+
         override fun provideBody(): CodeBlock =
           CodeBlock.of("throw UnsupportedOperationException();")
       }
@@ -110,7 +115,8 @@ class DaggerModuleContentsProviderTest {
               throw UnsupportedOperationException();
             }
           }
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -123,9 +129,10 @@ class DaggerModuleContentsProviderTest {
           providedType = ClassName.get("com.google", "TestStuff"),
           isSingleton = false,
           qualifierAnnotations =
-            listOf(PRIVACY_REVIEWED_QUALIFIER, ClassName.get("com.google", "MyQualifier"))
+            listOf(PRIVACY_REVIEWED_QUALIFIER, ClassName.get("com.google", "MyQualifier")),
         ) {
         override val parameters: List<ParameterSpec> = emptyList()
+
         override fun provideBody(): CodeBlock =
           CodeBlock.of("throw UnsupportedOperationException();")
       }
@@ -141,7 +148,8 @@ class DaggerModuleContentsProviderTest {
               throw UnsupportedOperationException();
             }
           }
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -152,13 +160,14 @@ class DaggerModuleContentsProviderTest {
         DaggerModuleContentsProvider.ProvidesMethod(
           name = "provideTestStuff",
           providedType = ClassName.get("com.google", "TestStuff"),
-          isSingleton = false
+          isSingleton = false,
         ) {
         override val parameters: List<ParameterSpec> =
           listOf(
             ParameterSpec.builder(TypeName.BOOLEAN, "boolParam").build(),
             ParameterSpec.builder(TypeName.INT, "intParam").build(),
           )
+
         override fun provideBody(): CodeBlock =
           CodeBlock.of("throw UnsupportedOperationException();")
       }
@@ -172,7 +181,8 @@ class DaggerModuleContentsProviderTest {
               throw UnsupportedOperationException();
             }
           }
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
