@@ -26,8 +26,7 @@ import org.junit.runners.JUnit4
 class DataTypeDescriptorBuilderTest {
   @Test
   fun minimal() {
-    val actual =
-      dataTypeDescriptor("Foo", Foo::class)
+    val actual = dataTypeDescriptor("Foo", Foo::class)
     assertThat(actual).isEqualTo(DataTypeDescriptor("Foo", emptyMap(), emptySet(), Foo::class))
   }
 
@@ -45,7 +44,7 @@ class DataTypeDescriptorBuilderTest {
           name = "Foo",
           fields = mapOf("name" to FieldType.String, "age" to FieldType.Integer),
           innerTypes = emptySet(),
-          cls = Foo::class
+          cls = Foo::class,
         )
       )
   }
@@ -142,6 +141,7 @@ class DataTypeDescriptorBuilderTest {
   }
 
   data class Other(val name: String, val age: Int)
+
   data class Foo(val other1: Other, val other2: Other)
 
   companion object {
@@ -150,12 +150,9 @@ class DataTypeDescriptorBuilderTest {
       DataTypeDescriptor(
         name = "Foo",
         fields =
-          mapOf(
-            "other1" to FieldType.Nested("Other"),
-            "other2" to FieldType.Nested("Other"),
-          ),
+          mapOf("other1" to FieldType.Nested("Other"), "other2" to FieldType.Nested("Other")),
         innerTypes = emptySet(),
-        cls = Foo::class
+        cls = Foo::class,
       )
 
     private val DTD_WITH_INNER_TYPES =
@@ -166,7 +163,7 @@ class DataTypeDescriptorBuilderTest {
               name = "Other",
               fields = mapOf("name" to FieldType.String, "age" to FieldType.Integer),
               innerTypes = emptySet(),
-              cls = Other::class
+              cls = Other::class,
             )
           )
       )
@@ -184,7 +181,7 @@ class DataTypeDescriptorBuilderTest {
               name = "Other",
               fields = mapOf("name" to FieldType.String, "age" to FieldType.Integer),
               innerTypes = emptySet(),
-              cls = Other::class
+              cls = Other::class,
             )
           ),
       )
@@ -202,9 +199,9 @@ class DataTypeDescriptorBuilderTest {
               name = "Other",
               fields = mapOf("name" to FieldType.String, "age" to FieldType.Integer),
               innerTypes = emptySet(),
-              cls = Other::class
+              cls = Other::class,
             )
-          )
+          ),
       )
   }
 }

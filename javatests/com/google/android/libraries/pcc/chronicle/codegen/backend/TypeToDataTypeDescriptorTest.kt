@@ -56,7 +56,7 @@ class TypeToDataTypeDescriptorTest {
       "triplenested.txt",
       ExpectedTypes.thing1,
       ExpectedTypes.thing2,
-      ExpectedTypes.thing3
+      ExpectedTypes.thing3,
     )
   }
 
@@ -65,7 +65,7 @@ class TypeToDataTypeDescriptorTest {
     dataTypeDescriptorTest(
       "listofentity.txt",
       ExpectedTypes.listOfEntity,
-      ExpectedTypes.simpleThing
+      ExpectedTypes.simpleThing,
     )
   }
 
@@ -82,7 +82,7 @@ class TypeToDataTypeDescriptorTest {
   private fun dataTypeDescriptorTest(
     name: String,
     primaryType: Type,
-    vararg additionalTypes: Type
+    vararg additionalTypes: Type,
   ) {
     val testSpec = FileSpec.builder("chronicle.test", "test")
 
@@ -97,11 +97,7 @@ class TypeToDataTypeDescriptorTest {
 
     val output = "/* ktlint-disable */\n" + testSpec.build().toString()
 
-    val expectedOutput =
-      readTestData(
-        "datatypedescriptor",
-        name,
-      )
+    val expectedOutput = readTestData("datatypedescriptor", name)
     assertThat(output).isEqualTo(expectedOutput)
   }
 }

@@ -33,19 +33,18 @@ import org.junit.runners.JUnit4
 @RunWith(JUnit4::class)
 class PolicyContextVerificationTest {
   object NameKey : Key<String>
+
   object NamePolicy : PolicyContextRule {
     override val name: String = "NamePolicy"
     override val operands: List<PolicyContextRule> = emptyList()
+
     override fun invoke(context: TypedMap): Boolean {
       return "test" == context[NameKey]
     }
   }
 
   val TEST_POLICY =
-    policy(
-      "Test",
-      "TestingEgress",
-    ) {
+    policy("Test", "TestingEgress") {
       allowedContext = NamePolicy
       target(PERSON_DESCRIPTOR, maxAge = Duration.ZERO) {
         retention(StorageMedium.RAM, true)

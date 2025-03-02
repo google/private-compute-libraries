@@ -63,7 +63,7 @@ class CantripFactoryImplTest {
           sourceEntityType = eq(TestLocation::class.java),
           targetEntityType = eq(TestLocation::class.java),
           sourceFieldType = eq(Float::class.java),
-          targetFieldType = eq(Float::class.java)
+          targetFieldType = eq(Float::class.java),
         )
       } doReturn (TestLocation_Latitude.asTraversal())
       on {
@@ -72,7 +72,7 @@ class CantripFactoryImplTest {
           sourceEntityType = eq(TestLocation::class.java),
           targetEntityType = eq(TestLocation::class.java),
           sourceFieldType = eq(Float::class.java),
-          targetFieldType = eq(Float::class.java)
+          targetFieldType = eq(Float::class.java),
         )
       } doReturn (TestLocation_Longitude.asTraversal())
     }
@@ -96,7 +96,7 @@ class CantripFactoryImplTest {
         TEST_CITY_GENERATED_DTD,
         MyProcessorNode,
         null,
-        UsageType.EGRESS
+        UsageType.EGRESS,
       )
 
     result as MultiCantrip
@@ -112,7 +112,7 @@ class CantripFactoryImplTest {
         TEST_CITY_GENERATED_DTD,
         MyProcessorNode,
         POLICY,
-        UsageType.EGRESS
+        UsageType.EGRESS,
       )
 
     result as MultiCantrip
@@ -129,7 +129,7 @@ class CantripFactoryImplTest {
         TEST_CITY_GENERATED_DTD,
         MyProcessorNode,
         POLICY,
-        UsageType.EGRESS
+        UsageType.EGRESS,
       )
 
     result as MultiCantrip
@@ -146,7 +146,7 @@ class CantripFactoryImplTest {
         TEST_CITY_GENERATED_DTD,
         MyProcessorNode,
         POLICY,
-        UsageType.SANDBOX
+        UsageType.SANDBOX,
       )
 
     result as MultiCantrip
@@ -166,7 +166,7 @@ class CantripFactoryImplTest {
           TEST_LOCATION_GENERATED_DTD,
           MyProcessorNode,
           POLICY,
-          UsageType.EGRESS
+          UsageType.EGRESS,
         )
       }
 
@@ -187,7 +187,7 @@ class CantripFactoryImplTest {
         TEST_LOCATION_GENERATED_DTD,
         MyProcessorNode,
         POLICY,
-        UsageType.SANDBOX
+        UsageType.SANDBOX,
       )
 
     val inputLocation = TestLocation(42.1f, 133.7f)

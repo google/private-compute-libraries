@@ -65,9 +65,11 @@ class ChroniclePolicyEngineTest {
   private val engine = ChroniclePolicyEngine()
 
   object NameKey : Key<String>
+
   object NameRule : PolicyContextRule {
     override val name: String = "NameRule"
     override val operands: List<PolicyContextRule> = emptyList()
+
     override fun invoke(context: TypedMap): Boolean {
       return "test" == context[NameKey]
     }
@@ -79,7 +81,7 @@ class ChroniclePolicyEngineTest {
       checkPolicyOnRead(
         processorNode = PeopleReader(),
         connectionProviders = setOf(PersonConnectionProvider()),
-        policy = EVERYTHING_PERSON_ALLOWED_POLICY
+        policy = EVERYTHING_PERSON_ALLOWED_POLICY,
       )
 
     assertThat(result).isEqualTo(PolicyCheckResult.Pass)
@@ -92,7 +94,7 @@ class ChroniclePolicyEngineTest {
         processorNode = PeopleReader(),
         connectionProviders = setOf(PersonConnectionProvider()),
         policy = EVERYTHING_PERSON_ALLOWED_POLICY,
-        dataTypeDescriptor = PERSON_DESCRIPTOR
+        dataTypeDescriptor = PERSON_DESCRIPTOR,
       )
 
     assertThat(result).isEqualTo(PolicyCheckResult.Pass)
@@ -175,6 +177,7 @@ class ChroniclePolicyEngineTest {
 
     assertThat(result).isInstanceOf(PolicyCheckResult.Fail::class.java)
   }
+
   @Test
   fun checkPolicy_householdAllAllowedPolicy_succeeds() {
     val result =
@@ -211,7 +214,7 @@ class ChroniclePolicyEngineTest {
         connectionProviders =
           setOf(BusinessConnectionProvider(), PetConnectionProvider(), PersonConnectionProvider()),
         policy = PET_VALID_POLICY,
-        dataTypeDescriptor = PET_DESCRIPTOR
+        dataTypeDescriptor = PET_DESCRIPTOR,
       )
 
     assertThat(result).isInstanceOf(PolicyCheckResult.Pass::class.java)
@@ -224,7 +227,7 @@ class ChroniclePolicyEngineTest {
         processorNode = PetProcessor(),
         connectionProviders = setOf(PetConnectionProvider(), PersonConnectionProvider()),
         policy = PET_INVALID_POLICY_MAX_AGE_TOO_SHORT,
-        dataTypeDescriptor = PET_DESCRIPTOR
+        dataTypeDescriptor = PET_DESCRIPTOR,
       )
 
     assertThat(result).isInstanceOf(PolicyCheckResult.Fail::class.java)
@@ -237,7 +240,7 @@ class ChroniclePolicyEngineTest {
         processorNode = PetProcessor(),
         connectionProviders = setOf(UnencryptedPetConnectionProvider(), PersonConnectionProvider()),
         policy = PET_POLICY_DISK_ENCRYPTION_REQUIRED,
-        dataTypeDescriptor = PET_DESCRIPTOR
+        dataTypeDescriptor = PET_DESCRIPTOR,
       )
 
     assertThat(result).isInstanceOf(PolicyCheckResult.Fail::class.java)
@@ -253,7 +256,7 @@ class ChroniclePolicyEngineTest {
         processorNode = PeopleReader(),
         connectionProviders = setOf(PersonConnectionProvider()),
         policy = NAME_CONTEXT_POLICY,
-        connectionContext = TypedMap(testContext)
+        connectionContext = TypedMap(testContext),
       )
 
     assertThat(result).isInstanceOf(PolicyCheckResult.Fail::class.java)
@@ -269,7 +272,7 @@ class ChroniclePolicyEngineTest {
         processorNode = PeopleReader(),
         connectionProviders = setOf(PersonConnectionProvider()),
         policy = NAME_CONTEXT_POLICY,
-        connectionContext = TypedMap(testContext)
+        connectionContext = TypedMap(testContext),
       )
 
     assertThat(result).isInstanceOf(PolicyCheckResult.Pass::class.java)
@@ -280,14 +283,14 @@ class ChroniclePolicyEngineTest {
     val policy = EVERYTHING_PERSON_ALLOWED_POLICY
     val connectionProvider =
       connectionProvider(
-        ManagedDataType(PERSON_DESCRIPTOR, ManagementStrategy.PassThru, PersonWriter::class),
+        ManagedDataType(PERSON_DESCRIPTOR, ManagementStrategy.PassThru, PersonWriter::class)
       )
     val context =
       DefaultChronicleContext(
         setOf(connectionProvider),
         emptySet(),
         DefaultPolicySet(setOf(policy)),
-        mock()
+        mock(),
       )
 
     val result = engine.checkWriteConnections(context)
@@ -305,17 +308,17 @@ class ChroniclePolicyEngineTest {
           ManagementStrategy.Stored(
             encrypted = false,
             media = StorageMedia.MEMORY,
-            ttl = Duration.ofMillis(10)
+            ttl = Duration.ofMillis(10),
           ),
-          PetWriter::class
-        ),
+          PetWriter::class,
+        )
       )
     val context =
       DefaultChronicleContext(
         setOf(connectionProvider),
         emptySet(),
         DefaultPolicySet(setOf(policy)),
-        mock()
+        mock(),
       )
 
     val result = engine.checkWriteConnections(context)
@@ -339,7 +342,7 @@ class ChroniclePolicyEngineTest {
         setOf(personConnectionProvider, petConnectionProvider),
         emptySet(),
         DefaultPolicySet(setOf(policy)),
-        mock()
+        mock(),
       )
     val result = engine.checkWriteConnections(context)
 
@@ -362,7 +365,7 @@ class ChroniclePolicyEngineTest {
         setOf(personConnectionProvider, petConnectionProvider),
         emptySet(),
         DefaultPolicySet(setOf(policy)),
-        mock()
+        mock(),
       )
 
     val result = engine.checkWriteConnections(context)
@@ -382,17 +385,17 @@ class ChroniclePolicyEngineTest {
           ManagementStrategy.Stored(
             encrypted = false,
             media = StorageMedia.LOCAL_DISK,
-            ttl = Duration.ofMillis(10)
+            ttl = Duration.ofMillis(10),
           ),
-          PetWriter::class
-        ),
+          PetWriter::class,
+        )
       )
     val context =
       DefaultChronicleContext(
         setOf(connectionProvider),
         emptySet(),
         DefaultPolicySet(setOf(policy)),
-        mock()
+        mock(),
       )
 
     val result = engine.checkWriteConnections(context)
@@ -410,17 +413,17 @@ class ChroniclePolicyEngineTest {
           ManagementStrategy.Stored(
             encrypted = true,
             media = StorageMedia.LOCAL_DISK,
-            ttl = Duration.ofDays(10)
+            ttl = Duration.ofDays(10),
           ),
-          PetWriter::class
-        ),
+          PetWriter::class,
+        )
       )
     val context =
       DefaultChronicleContext(
         setOf(connectionProvider),
         emptySet(),
         DefaultPolicySet(setOf(policy)),
-        mock()
+        mock(),
       )
 
     val result = engine.checkWriteConnections(context)
@@ -437,23 +440,20 @@ class ChroniclePolicyEngineTest {
           ManagementStrategy.Stored(
             encrypted = true,
             media = StorageMedia.LOCAL_DISK,
-            ttl = Duration.ofDays(10)
+            ttl = Duration.ofDays(10),
           ),
-          PetWriter::class
-        ),
+          PetWriter::class,
+        )
       )
 
-    listOf(
-        setOf(PET_MULTIPLE_RETENTION_POLICY),
-        setOf(PET_VALID_POLICY, PET_MEMORY_POLICY),
-      )
+    listOf(setOf(PET_MULTIPLE_RETENTION_POLICY), setOf(PET_VALID_POLICY, PET_MEMORY_POLICY))
       .forEach { policySet ->
         val context =
           DefaultChronicleContext(
             setOf(connectionProvider),
             emptySet(),
             DefaultPolicySet(policySet),
-            mock()
+            mock(),
           )
 
         val result = engine.checkWriteConnections(context)
@@ -471,23 +471,20 @@ class ChroniclePolicyEngineTest {
           ManagementStrategy.Stored(
             encrypted = true,
             media = StorageMedia.LOCAL_DISK,
-            ttl = Duration.ofMinutes(10)
+            ttl = Duration.ofMinutes(10),
           ),
-          PetWriter::class
-        ),
+          PetWriter::class,
+        )
       )
 
-    listOf(
-        setOf(PET_MULTIPLE_RETENTION_POLICY),
-        setOf(PET_VALID_POLICY, PET_MEMORY_POLICY),
-      )
+    listOf(setOf(PET_MULTIPLE_RETENTION_POLICY), setOf(PET_VALID_POLICY, PET_MEMORY_POLICY))
       .forEach { policySet ->
         val context =
           DefaultChronicleContext(
             setOf(connectionProvider),
             emptySet(),
             DefaultPolicySet(policySet),
-            mock()
+            mock(),
           )
 
         val result = engine.checkWriteConnections(context)
@@ -505,6 +502,7 @@ class ChroniclePolicyEngineTest {
       }
     }
   }
+
   /**
    * Get a connection with the given [processorNode], [connectionProviders], and [policy] as part of
    * the [ChronicleContext].
@@ -515,7 +513,7 @@ class ChroniclePolicyEngineTest {
     policy: Policy,
     connectionContext: TypedMap = TypedMap(),
     dataTypeDescriptor: DataTypeDescriptor =
-      connectionProviders.map { it.dataType.descriptor }.first()
+      connectionProviders.map { it.dataType.descriptor }.first(),
   ): PolicyCheckResult {
     val context =
       DefaultChronicleContext(
@@ -523,7 +521,7 @@ class ChroniclePolicyEngineTest {
         setOf(processorNode),
         DefaultPolicySet(emptySet()),
         DefaultDataTypeDescriptorSet(connectionProviders.map { it.dataType.descriptor }.toSet()),
-        connectionContext
+        connectionContext,
       )
     return engine.checkPolicy(policy, context, dataTypeDescriptor, processorNode)
   }
@@ -540,10 +538,7 @@ class ChroniclePolicyEngineTest {
       }
 
     val NAME_CONTEXT_POLICY =
-      policy(
-        "NameContextRule",
-        "TestingEgress",
-      ) {
+      policy("NameContextRule", "TestingEgress") {
         allowedContext = NameRule
         target(PERSON_DESCRIPTOR, maxAge = Duration.ZERO) {
           retention(StorageMedium.RAM, true)

@@ -42,7 +42,7 @@ class DefaultDataRemovalRequestListenerTest {
         DataRemovalDownstreamListener { listener0CallCount++ },
         DataRemovalDownstreamListener { listener1CallCount++ },
       ),
-      flags
+      flags,
     )
 
   @Before

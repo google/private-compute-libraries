@@ -74,8 +74,12 @@ class ConnectionTest {
   }
 
   interface TestReadConnection : ReadConnection
+
   interface TestWriteConnection : WriteConnection
+
   interface TestReadWriteConnection : ReadConnection, WriteConnection
+
   interface GrandchildReadConnection : TestReadConnection
+
   interface GrandchildWriteConnection : TestWriteConnection
 }

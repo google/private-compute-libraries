@@ -36,7 +36,7 @@ class DataTypeDescriptorPropertyProviderTest {
         "MyEntity",
         TypeSet(
           primary = Type(TypeLocation("MyEntity", emptyList(), "com.google"), fields = emptyList())
-        )
+        ),
       )
 
     val source = provider.getGeneratedSource()
@@ -47,7 +47,8 @@ class DataTypeDescriptorPropertyProviderTest {
           public val MY_ENTITY_GENERATED_DTD: DataTypeDescriptor = dataTypeDescriptor(name =
               "com.google.MyEntity", cls = MyEntity::class) {
               }
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -56,7 +57,7 @@ class DataTypeDescriptorPropertyProviderTest {
     val provider =
       DataTypeDescriptorPropertyProvider(
         ExpectedTypes.simpleUnenclosedType.name,
-        TypeSet(ExpectedTypes.simpleUnenclosedType)
+        TypeSet(ExpectedTypes.simpleUnenclosedType),
       )
 
     val source = provider.getGeneratedSource()
@@ -80,7 +81,7 @@ class DataTypeDescriptorPropertyProviderTest {
       DataTypeDescriptorPropertyProvider(
         entityClassSimpleName = ExpectedTypes.simpleUnenclosedType.name,
         typeSet = TypeSet(ExpectedTypes.simpleUnenclosedType),
-        propertyName = "myDtd"
+        propertyName = "myDtd",
       )
 
     val source = provider.getGeneratedSource()

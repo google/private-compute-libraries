@@ -39,7 +39,8 @@ class DataTypeDescriptorDaggerProviderTest {
         |  public static DataTypeDescriptor provideMyDataClassDataTypeDescriptor() {
         |    return MyDataClass_GeneratedKt.MY_DATA_CLASS_GENERATED_DTD;
         |  }
-        """.trimMargin()
+        """
+          .trimMargin()
       )
   }
 
@@ -48,7 +49,7 @@ class DataTypeDescriptorDaggerProviderTest {
     val provider =
       DataTypeDescriptorDaggerProvider(
         elementName = "MyDataClass",
-        dtdContainingClassName = "MyDtds"
+        dtdContainingClassName = "MyDtds",
       )
 
     assertThat(provider)
@@ -60,7 +61,8 @@ class DataTypeDescriptorDaggerProviderTest {
         |  public static DataTypeDescriptor provideMyDataClassDataTypeDescriptor() {
         |    return MyDtds.MY_DATA_CLASS_GENERATED_DTD;
         |  }
-        """.trimMargin()
+        """
+          .trimMargin()
       )
   }
 
@@ -84,7 +86,8 @@ class DataTypeDescriptorDaggerProviderTest {
         |class MyClass {
         |$method
         |}
-      """.trimMargin()
+      """
+        .trimMargin()
     )
   }
 }

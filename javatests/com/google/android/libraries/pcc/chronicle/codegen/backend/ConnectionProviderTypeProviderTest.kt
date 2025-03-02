@@ -34,7 +34,7 @@ class ConnectionProviderTypeProviderTest {
       ConnectionProviderTypeProvider(
         MyDataClass::class.asTypeName(),
         listOf(MyReadConnection::class.asTypeName()),
-        listOf(MyWriteConnection::class.asTypeName())
+        listOf(MyWriteConnection::class.asTypeName()),
       )
     val fileContents = typeProvider.getGeneratedSource()
     assertThat(fileContents).isEqualTo(expectedOutputOneReadConnectionOneWriteConnection)
@@ -46,7 +46,7 @@ class ConnectionProviderTypeProviderTest {
       ConnectionProviderTypeProvider(
         MyDataClass::class.asTypeName(),
         listOf(MyReadConnection::class.asTypeName()),
-        listOf()
+        listOf(),
       )
     val fileContents = typeProvider.getGeneratedSource()
     assertThat(fileContents).isEqualTo(expectedOutputOneReadConnection)
@@ -58,7 +58,7 @@ class ConnectionProviderTypeProviderTest {
       ConnectionProviderTypeProvider(
         MyDataClass::class.asTypeName(),
         listOf(),
-        listOf(MyWriteConnection0::class.asTypeName(), MyWriteConnection1::class.asTypeName())
+        listOf(MyWriteConnection0::class.asTypeName(), MyWriteConnection1::class.asTypeName()),
       )
     val fileContents = typeProvider.getGeneratedSource()
     assertThat(fileContents).isEqualTo(expectedOutputMultipleWriteConnection)

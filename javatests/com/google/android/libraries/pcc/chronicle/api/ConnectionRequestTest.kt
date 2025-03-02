@@ -62,7 +62,7 @@ class ConnectionRequestTest {
       ConnectionRequest(
         ConnectionName.Writer<WriteConnection>(Name("foo")),
         testProcessorNode,
-        null
+        null,
       )
     assertThat(request.isReadConnection()).isFalse()
   }
@@ -74,6 +74,7 @@ class ConnectionRequestTest {
       }
 
     class FooReader : ReadConnection
+
     class FooWriter : WriteConnection
   }
 }

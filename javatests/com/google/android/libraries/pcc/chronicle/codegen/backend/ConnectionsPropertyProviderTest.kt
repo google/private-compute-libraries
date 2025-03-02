@@ -33,7 +33,7 @@ class ConnectionsPropertyProviderTest {
     val provider =
       ConnectionsPropertyProvider(
         entityClassSimpleName = "MyEntity",
-        connectionTypeNames = emptySet()
+        connectionTypeNames = emptySet(),
       )
 
     val fileContents = provider.getGeneratedSource()
@@ -48,7 +48,7 @@ class ConnectionsPropertyProviderTest {
       ConnectionsPropertyProvider(
         entityClassSimpleName = "MyEntity",
         connectionTypeNames =
-          listOf(MyEntityReader::class.asTypeName(), MyEntityWriter::class.asTypeName())
+          listOf(MyEntityReader::class.asTypeName(), MyEntityWriter::class.asTypeName()),
       )
 
     val fileContents = provider.getGeneratedSource()

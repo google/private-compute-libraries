@@ -31,18 +31,19 @@ class ManagedDataTypeTest {
         descriptor = dummyDescriptor,
         managementStrategy = ManagementStrategy.PassThru,
         DummyReadConnection::class,
-        DummyWriteConnection::class
+        DummyWriteConnection::class,
       )
 
     val expected =
       ManagedDataType(
         descriptor = dummyDescriptor,
         managementStrategy = ManagementStrategy.PassThru,
-        setOf(DummyReadConnection::class.java, DummyWriteConnection::class.java)
+        setOf(DummyReadConnection::class.java, DummyWriteConnection::class.java),
       )
     assertThat(ktype).isEqualTo(expected)
   }
 
   interface DummyReadConnection : ReadConnection
+
   interface DummyWriteConnection : WriteConnection
 }

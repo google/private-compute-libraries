@@ -43,7 +43,7 @@ class DataTypeTest {
             encrypted = false,
             media = StorageMedia.MEMORY,
             ttl = Duration.ofDays(2),
-            deletionTriggers = emptySet()
+            deletionTriggers = emptySet(),
           )
         override val connectionTypes = emptySet<Class<Connection>>()
       }
@@ -51,5 +51,6 @@ class DataTypeTest {
   }
 
   interface DummyReadConnection : ReadConnection
+
   interface DummyWriteConnection : WriteConnection
 }

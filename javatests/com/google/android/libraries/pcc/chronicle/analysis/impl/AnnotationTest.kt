@@ -66,7 +66,7 @@ class AnnotationTest {
       ManagementStrategy.Stored(
           encrypted = false,
           media = StorageMedia.MEMORY,
-          ttl = Duration.ofMinutes(5)
+          ttl = Duration.ofMinutes(5),
         )
         .toAnnotations()
 
@@ -80,7 +80,7 @@ class AnnotationTest {
       ManagementStrategy.Stored(
           encrypted = true,
           media = StorageMedia.REMOTE_DISK,
-          ttl = Duration.ofMinutes(500)
+          ttl = Duration.ofMinutes(500),
         )
         .toAnnotations()
 
@@ -88,7 +88,7 @@ class AnnotationTest {
       .containsExactly(
         ANNOTATION_REMOTE_PERSISTENT,
         ANNOTATION_ENCRYPTED,
-        Duration.ofMinutes(500).toAnnotation()
+        Duration.ofMinutes(500).toAnnotation(),
       )
   }
 }

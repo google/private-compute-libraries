@@ -68,9 +68,9 @@ class ManagementStrategyValidationTest {
                   setOf(
                     DeletionTrigger(Trigger.PACKAGE_UNINSTALLED, "pkg"),
                     DeletionTrigger(Trigger.PACKAGE_UNINSTALLED, "optional_trigger"),
-                  )
+                  ),
               ),
-            connectionTypes = emptySet()
+            connectionTypes = emptySet(),
           )
         ),
         makeConnectionProvider(
@@ -80,11 +80,11 @@ class ManagementStrategyValidationTest {
               ManagementStrategy.Stored(
                 encrypted = false,
                 media = StorageMedia.MEMORY,
-                ttl = Duration.ofMinutes(5)
+                ttl = Duration.ofMinutes(5),
               ),
-            connectionTypes = emptySet()
+            connectionTypes = emptySet(),
           )
-        )
+        ),
       )
 
     assertThat(policy.verifyManagementStrategies(connectionProviders)).isEmpty()
@@ -99,9 +99,9 @@ class ManagementStrategyValidationTest {
           ManagementStrategy.Stored(
             encrypted = true,
             media = StorageMedia.MEMORY,
-            ttl = Duration.ofMinutes(5)
+            ttl = Duration.ofMinutes(5),
           ),
-        connectionTypes = emptySet()
+        connectionTypes = emptySet(),
       )
 
     assertThat(FOO_TARGET.verifyRetentionSatisfiedBy(dataType)).isEmpty()
@@ -116,9 +116,9 @@ class ManagementStrategyValidationTest {
           ManagementStrategy.Stored(
             encrypted = true,
             media = StorageMedia.LOCAL_DISK,
-            ttl = Duration.ofMinutes(5)
+            ttl = Duration.ofMinutes(5),
           ),
-        connectionTypes = emptySet()
+        connectionTypes = emptySet(),
       )
 
     assertThat(FOO_TARGET.verifyRetentionSatisfiedBy(dataType)).hasSize(1)
@@ -143,7 +143,7 @@ class ManagementStrategyValidationTest {
             DeletionTrigger(Trigger.PACKAGE_UNINSTALLED, "pkg1"),
             DeletionTrigger(Trigger.PACKAGE_UNINSTALLED, "pkg2"),
             DeletionTrigger(Trigger.PACKAGE_UNINSTALLED, "optional_trigger"),
-          )
+          ),
       )
 
     FOO_TARGET.deletionTriggers().forEach { assertThat(strategy.satisfies(it)).isTrue() }
@@ -160,11 +160,9 @@ class ManagementStrategyValidationTest {
             media = StorageMedia.MEMORY,
             ttl = Duration.ofMinutes(5),
             deletionTriggers =
-              setOf(
-                DeletionTrigger(Trigger.PACKAGE_UNINSTALLED, "optional_trigger"),
-              )
+              setOf(DeletionTrigger(Trigger.PACKAGE_UNINSTALLED, "optional_trigger")),
           ),
-        connectionTypes = emptySet()
+        connectionTypes = emptySet(),
       )
 
     FOO_TARGET.deletionTriggers().forEach {
@@ -177,7 +175,7 @@ class ManagementStrategyValidationTest {
         ),
         PolicyCheck(
           "h:${FOO_DTD.name} is DeletionTrigger(trigger=PACKAGE_UNINSTALLED, targetField=pkg2)"
-        )
+        ),
       )
   }
 
@@ -187,7 +185,7 @@ class ManagementStrategyValidationTest {
     val expectedTriggers =
       setOf(
         DeletionTrigger(Trigger.PACKAGE_UNINSTALLED, "pkg1"),
-        DeletionTrigger(Trigger.PACKAGE_UNINSTALLED, "pkg2")
+        DeletionTrigger(Trigger.PACKAGE_UNINSTALLED, "pkg2"),
       )
     assertThat(triggers).isEqualTo(expectedTriggers)
   }
