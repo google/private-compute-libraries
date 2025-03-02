@@ -30,45 +30,40 @@ import org.junit.runner.RunWith
 class RemoteRequestTest {
   @Test
   fun writeToParcel_createFromParcel_roundtrip() {
-    val metadata = RemoteRequestMetadata.newBuilder()
-      .setStore(
-        StoreRequest.newBuilder()
-          .setDataTypeName("Person")
-          .setCreate(Empty.getDefaultInstance())
-      )
-      .setUsageType("Testing Usage")
-      .build()
+    val metadata =
+      RemoteRequestMetadata.newBuilder()
+        .setStore(
+          StoreRequest.newBuilder().setDataTypeName("Person").setCreate(Empty.getDefaultInstance())
+        )
+        .setUsageType("Testing Usage")
+        .build()
     val entities =
       listOf(
         RemoteEntity.fromProto(
           metadata = EntityMetadata.getDefaultInstance(),
-          message = Person.newBuilder().setName("Larry").setAge(35).build()
+          message = Person.newBuilder().setName("Larry").setAge(35).build(),
         ),
         RemoteEntity.fromProto(
           metadata = EntityMetadata.getDefaultInstance(),
-          message = Person.newBuilder().setName("Sergey").setAge(38).build()
+          message = Person.newBuilder().setName("Sergey").setAge(38).build(),
         ),
       )
-    val extras =
-      Bundle()
-        .apply {
-          putString("MyString", "MyStringValue")
-        }
+    val extras = Bundle().apply { putString("MyString", "MyStringValue") }
 
     val request = RemoteRequest(metadata, entities, extras)
 
     val parcel = Parcel.obtain()
-    val output = try {
-      request.writeToParcel(parcel, 0)
-      parcel.setDataPosition(0)
-      RemoteRequest.CREATOR.createFromParcel(parcel).also { it.extras.keySet() }
-    } finally {
-      parcel.recycle()
-    }
+    val output =
+      try {
+        request.writeToParcel(parcel, 0)
+        parcel.setDataPosition(0)
+        RemoteRequest.CREATOR.createFromParcel(parcel).also { it.extras.keySet() }
+      } finally {
+        parcel.recycle()
+      }
 
     assertThat(output.metadata).isEqualTo(request.metadata)
     assertThat(output.entities).hasSize(request.entities.size)
-    assertThat(output.extras.getString("MyString"))
-      .isEqualTo(request.extras.getString("MyString"))
+    assertThat(output.extras.getString("MyString")).isEqualTo(request.extras.getString("MyString"))
   }
 }

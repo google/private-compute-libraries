@@ -26,10 +26,8 @@ import org.junit.runner.RunWith
 class RemoteRequestMetadataExtTest {
   @Test
   fun isReadRequest_storeOps() {
-    val builder = RemoteRequestMetadata.newBuilder()
-      .setUsageType("Testing")
-    val storeReqBuilder = StoreRequest.newBuilder()
-      .setDataTypeName("Foo")
+    val builder = RemoteRequestMetadata.newBuilder().setUsageType("Testing")
+    val storeReqBuilder = StoreRequest.newBuilder().setDataTypeName("Foo")
 
     storeReqBuilder.count = Empty.getDefaultInstance()
     assertThat(builder.setStore(storeReqBuilder).build().isReadRequest).isTrue()
@@ -60,10 +58,8 @@ class RemoteRequestMetadataExtTest {
 
   @Test
   fun isReadRequest_streamOps() {
-    val builder = RemoteRequestMetadata.newBuilder()
-      .setUsageType("Testing")
-    val streamReqBuilder = StreamRequest.newBuilder()
-      .setDataTypeName("Foo")
+    val builder = RemoteRequestMetadata.newBuilder().setUsageType("Testing")
+    val streamReqBuilder = StreamRequest.newBuilder().setDataTypeName("Foo")
 
     streamReqBuilder.operation = StreamRequest.Operation.SUBSCRIBE
     assertThat(builder.setStream(streamReqBuilder).build().isReadRequest).isTrue()
@@ -80,20 +76,19 @@ class RemoteRequestMetadataExtTest {
 
   @Test
   fun isReadRquest_computeOp() {
-    val builder = RemoteRequestMetadata.newBuilder()
-      .setUsageType("Testing")
-    val computeRequestBuilder = ComputeRequest.newBuilder()
-      .setResultDataTypeName("Foo")
-      .addAllParameterDataTypeNames(listOf("Bar"))
-      .setMethodId(ComputeRequest.MethodId.MOIRAI_CLASSIFY)
+    val builder = RemoteRequestMetadata.newBuilder().setUsageType("Testing")
+    val computeRequestBuilder =
+      ComputeRequest.newBuilder()
+        .setResultDataTypeName("Foo")
+        .addAllParameterDataTypeNames(listOf("Bar"))
+        .setMethodId(ComputeRequest.MethodId.MOIRAI_CLASSIFY)
 
     assertThat(builder.setCompute(computeRequestBuilder).build().isReadRequest).isTrue()
   }
 
   @Test
   fun isReadRequest_noRequestType() {
-    val builder = RemoteRequestMetadata.newBuilder()
-      .setUsageType("Testing")
+    val builder = RemoteRequestMetadata.newBuilder().setUsageType("Testing")
 
     assertThat(builder.build().isReadRequest).isFalse()
   }

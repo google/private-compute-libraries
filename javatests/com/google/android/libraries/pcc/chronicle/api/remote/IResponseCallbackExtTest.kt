@@ -41,15 +41,18 @@ import org.junit.runner.RunWith
 class IResponseCallbackExtTest {
   private lateinit var scope: CoroutineScope
   private var errorCaught: RemoteError? = null
-  private val callback = object : IResponseCallback.Stub() {
-    override fun onError(error: RemoteError?) {
-      errorCaught = error
-    }
+  private val callback =
+    object : IResponseCallback.Stub() {
+      override fun onError(error: RemoteError?) {
+        errorCaught = error
+      }
 
-    override fun onData(data: RemoteResponse?) = Unit
-    override fun onComplete() = Unit
-    override fun provideCancellationSignal(signal: ICancellationSignal?) = Unit
-  }
+      override fun onData(data: RemoteResponse?) = Unit
+
+      override fun onComplete() = Unit
+
+      override fun provideCancellationSignal(signal: ICancellationSignal?) = Unit
+    }
 
   @Before
   fun setUp() {
@@ -65,14 +68,16 @@ class IResponseCallbackExtTest {
   @Test
   fun createCoroutineExceptionHandler_handleRemoteError() {
     runBlocking {
-      scope.launch(callback.createCoroutineExceptionHandler()) {
-        throw RemoteError(
-          RemoteErrorMetadata.newBuilder()
-            .setErrorType(Type.INVALID)
-            .setMessage("Hello World")
-            .build()
-        )
-      }.join()
+      scope
+        .launch(callback.createCoroutineExceptionHandler()) {
+          throw RemoteError(
+            RemoteErrorMetadata.newBuilder()
+              .setErrorType(Type.INVALID)
+              .setMessage("Hello World")
+              .build()
+          )
+        }
+        .join()
     }
 
     assertThat(errorCaught!!.metadata.errorType).isEqualTo(Type.INVALID)
@@ -85,9 +90,11 @@ class IResponseCallbackExtTest {
   @Test
   fun createCoroutineExceptionHandler_handlePolicyViolation() {
     runBlocking {
-      scope.launch(callback.createCoroutineExceptionHandler()) {
-        throw PolicyViolation("A policy was violated!!!!")
-      }.join()
+      scope
+        .launch(callback.createCoroutineExceptionHandler()) {
+          throw PolicyViolation("A policy was violated!!!!")
+        }
+        .join()
     }
 
     assertThat(errorCaught!!.metadata.errorType).isEqualTo(Type.POLICY_VIOLATION)
@@ -101,9 +108,11 @@ class IResponseCallbackExtTest {
   @Test
   fun createCoroutineExceptionHandler_handleUnexpectedException() {
     runBlocking {
-      scope.launch(callback.createCoroutineExceptionHandler()) {
-        throw IllegalArgumentException("You used bad data....")
-      }.join()
+      scope
+        .launch(callback.createCoroutineExceptionHandler()) {
+          throw IllegalArgumentException("You used bad data....")
+        }
+        .join()
     }
 
     assertThat(errorCaught!!.metadata.errorType).isEqualTo(Type.UNKNOWN)
@@ -119,23 +128,23 @@ class IResponseCallbackExtTest {
   fun createCoroutineExceptionHandler_handleExceptionThrownWhileDeeplyNested() {
     var secondWasCanceled = false
     runBlocking {
-      scope.launch(callback.createCoroutineExceptionHandler()) {
-        coroutineScope {
-          launch(Executors.newCachedThreadPool().asCoroutineDispatcher()) {
-            coroutineScope {
-              async {
-                throw IllegalArgumentException("You used bad data....")
-              }.await()
+      scope
+        .launch(callback.createCoroutineExceptionHandler()) {
+          coroutineScope {
+            launch(Executors.newCachedThreadPool().asCoroutineDispatcher()) {
+              coroutineScope {
+                async { throw IllegalArgumentException("You used bad data....") }.await()
+              }
             }
-          }
 
-          launch {
-            suspendCancellableCoroutine<Unit> {
-              it.invokeOnCancellation { secondWasCanceled = true }
+            launch {
+              suspendCancellableCoroutine<Unit> {
+                it.invokeOnCancellation { secondWasCanceled = true }
+              }
             }
           }
         }
-      }.join()
+        .join()
     }
 
     assertThat(errorCaught!!.metadata.errorType).isEqualTo(Type.UNKNOWN)
@@ -145,9 +154,9 @@ class IResponseCallbackExtTest {
       .that(scope.isActive)
       .isTrue()
     assertWithMessage(
-      "Sibling coroutines which are both children of original launched parent " +
-        "coroutine should get canceled."
-    )
+        "Sibling coroutines which are both children of original launched parent " +
+          "coroutine should get canceled."
+      )
       .that(secondWasCanceled)
       .isTrue()
   }

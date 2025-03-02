@@ -101,7 +101,7 @@ class RemoteEntityTest {
       RemoteEntity(
         metadata = metadata,
         bytes = person.toByteArray(),
-        bundle = Bundle().apply { putParcelable(parcelableKey, originalSimpleParcelable) }
+        bundle = Bundle().apply { putParcelable(parcelableKey, originalSimpleParcelable) },
       )
 
     val parcel = Parcel.obtain()
@@ -137,6 +137,7 @@ class RemoteEntityTest {
 
     companion object CREATOR : Parcelable.Creator<SimpleParcelable> {
       override fun createFromParcel(parcel: Parcel): SimpleParcelable = SimpleParcelable(parcel)
+
       override fun newArray(size: Int): Array<SimpleParcelable?> = arrayOfNulls(size)
     }
   }

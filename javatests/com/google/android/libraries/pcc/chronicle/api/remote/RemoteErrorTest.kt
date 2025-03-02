@@ -33,22 +33,19 @@ class RemoteErrorTest {
         .setErrorType(POLICY_VIOLATION)
         .setMessage("A policy was invalid!")
         .build()
-    val extras =
-      Bundle()
-        .apply {
-          putString("MyString", "MyStringValue")
-        }
+    val extras = Bundle().apply { putString("MyString", "MyStringValue") }
 
     val request = RemoteError(metadata, extras)
 
     val parcel = Parcel.obtain()
-    val output = try {
-      request.writeToParcel(parcel, 0)
-      parcel.setDataPosition(0)
-      RemoteError.CREATOR.createFromParcel(parcel).also { it.extras.keySet() }
-    } finally {
-      parcel.recycle()
-    }
+    val output =
+      try {
+        request.writeToParcel(parcel, 0)
+        parcel.setDataPosition(0)
+        RemoteError.CREATOR.createFromParcel(parcel).also { it.extras.keySet() }
+      } finally {
+        parcel.recycle()
+      }
 
     Truth.assertThat(output.metadata).isEqualTo(request.metadata)
     Truth.assertThat(output.extras.getString("MyString"))

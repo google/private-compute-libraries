@@ -34,29 +34,26 @@ class RemoteResponseTest {
       listOf(
         RemoteEntity.fromProto(
           metadata = EntityMetadata.getDefaultInstance(),
-          message = Person.newBuilder().setName("Larry").setAge(35).build()
+          message = Person.newBuilder().setName("Larry").setAge(35).build(),
         ),
         RemoteEntity.fromProto(
           metadata = EntityMetadata.getDefaultInstance(),
-          message = Person.newBuilder().setName("Sergey").setAge(38).build()
+          message = Person.newBuilder().setName("Sergey").setAge(38).build(),
         ),
       )
-    val extras =
-      Bundle()
-        .apply {
-          putString("MyString", "MyStringValue")
-        }
+    val extras = Bundle().apply { putString("MyString", "MyStringValue") }
 
     val request = RemoteResponse(metadata, entities, extras)
 
     val parcel = Parcel.obtain()
-    val output = try {
-      request.writeToParcel(parcel, 0)
-      parcel.setDataPosition(0)
-      RemoteResponse.CREATOR.createFromParcel(parcel).also { it.extras.keySet() }
-    } finally {
-      parcel.recycle()
-    }
+    val output =
+      try {
+        request.writeToParcel(parcel, 0)
+        parcel.setDataPosition(0)
+        RemoteResponse.CREATOR.createFromParcel(parcel).also { it.extras.keySet() }
+      } finally {
+        parcel.recycle()
+      }
 
     Truth.assertThat(output.metadata).isEqualTo(request.metadata)
     Truth.assertThat(output.entities).hasSize(request.entities.size)

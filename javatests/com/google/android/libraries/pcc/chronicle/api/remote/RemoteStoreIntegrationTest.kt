@@ -162,7 +162,7 @@ class RemoteStoreIntegrationTest {
     assertFailsWith<PolicyViolation> {
       client.chronicle.getConnectionOrThrow<SimpleProtoMessageReader>(
         processorNode,
-        INVALID_POLICY_MISSING_FIELDS
+        INVALID_POLICY_MISSING_FIELDS,
       )
     }
   }
@@ -260,24 +260,24 @@ class RemoteStoreIntegrationTest {
     val clientWriteConnection =
       client.chronicle.getConnectionOrThrow<SimpleProtoMessagePublisher>(
         processorNode,
-        VALID_POLICY
+        VALID_POLICY,
       )
     val clientReadConnection =
       client.chronicle.getConnectionOrThrow<SimpleProtoMessageSubscriber>(
         processorNode,
-        VALID_POLICY
+        VALID_POLICY,
       )
 
     // Get connections from our server "process"'s Chronicle
     val serverWriteConnection =
       server.chronicle.getConnectionOrThrow<SimpleProtoMessagePublisher>(
         processorNode,
-        VALID_POLICY
+        VALID_POLICY,
       )
     val serverReadConnection =
       server.chronicle.getConnectionOrThrow<SimpleProtoMessageSubscriber>(
         processorNode,
-        VALID_POLICY
+        VALID_POLICY,
       )
 
     // Create some data.
@@ -370,14 +370,14 @@ class RemoteStoreIntegrationTest {
       DefaultRemoteStoreClient(
         dataTypeName = SIMPLE_PROTO_MESSAGE_DTD.name,
         serializer = ProtoSerializer.createFrom(SimpleProtoMessage.getDefaultInstance()),
-        transport = AidlTransport(serviceConnector)
+        transport = AidlTransport(serviceConnector),
       )
 
     private val remoteStreamClient =
       DefaultRemoteStreamClient(
         dataTypeName = SIMPLE_PROTO_MESSAGE_DTD.name,
         serializer = ProtoSerializer.createFrom(SimpleProtoMessage.getDefaultInstance()),
-        transport = AidlTransport(serviceConnector)
+        transport = AidlTransport(serviceConnector),
       )
 
     /**
@@ -395,7 +395,7 @@ class RemoteStoreIntegrationTest {
                 SimpleProtoMessageReader::class.java,
                 SimpleProtoMessageWriter::class.java,
                 SimpleProtoMessageSubscriber::class.java,
-                SimpleProtoMessagePublisher::class.java
+                SimpleProtoMessagePublisher::class.java,
               )
           }
 
@@ -425,9 +425,9 @@ class RemoteStoreIntegrationTest {
                           .setCreated(timestamp)
                           .setUpdated(timestamp)
                           .build(),
-                        message
+                        message,
                       )
-                    )
+                    ),
                   )
                 }
               }
@@ -445,9 +445,9 @@ class RemoteStoreIntegrationTest {
                     listOf(
                       WrappedEntity(
                         EntityMetadata.newBuilder().setId(message.toString()).build(),
-                        message
+                        message,
                       )
-                    )
+                    ),
                   )
                 }
               }
@@ -464,15 +464,15 @@ class RemoteStoreIntegrationTest {
             setOf(connectionProvider),
             emptySet(),
             DefaultPolicySet(policies),
-            DefaultDataTypeDescriptorSet(setOf(connectionProvider.dataType.descriptor))
+            DefaultDataTypeDescriptorSet(setOf(connectionProvider.dataType.descriptor)),
           ),
         policyEngine = ChroniclePolicyEngine(),
         config =
           DefaultChronicle.Config(
             DefaultChronicle.Config.PolicyMode.STRICT,
-            DefaultPolicyConformanceCheck()
+            DefaultPolicyConformanceCheck(),
           ),
-        flags = configReader
+        flags = configReader,
       )
   }
 
@@ -491,7 +491,7 @@ class RemoteStoreIntegrationTest {
   class ServerProcess(
     private val policies: Set<Policy>,
     enableStoreServer: Boolean = false,
-    enableStreamServer: Boolean = false
+    enableStreamServer: Boolean = false,
   ) {
     private val fakeTime = Instant.now()
     private val timeSource = TimeSource { fakeTime }
@@ -506,7 +506,7 @@ class RemoteStoreIntegrationTest {
         cache = dataCache,
         maxSize = 100,
         ttl = MANAGEMENT_STRATEGY.ttl!!,
-        dataTypeDescriptor = SIMPLE_PROTO_MESSAGE_DTD
+        dataTypeDescriptor = SIMPLE_PROTO_MESSAGE_DTD,
       )
 
     /** [RemoteStoreServer] instance to expose the [managedDataCache] to the client "process". */
@@ -516,7 +516,7 @@ class RemoteStoreIntegrationTest {
           ManagedDataType(
             SIMPLE_PROTO_MESSAGE_DTD,
             managedDataCache.managementStrategy,
-            setOf(SimpleProtoMessageReader::class.java, SimpleProtoMessageWriter::class.java)
+            setOf(SimpleProtoMessageReader::class.java, SimpleProtoMessageWriter::class.java),
           )
 
         override val dataTypeDescriptor = SIMPLE_PROTO_MESSAGE_DTD
@@ -537,7 +537,7 @@ class RemoteStoreIntegrationTest {
 
         override fun fetchById(
           policy: Policy?,
-          ids: List<String>
+          ids: List<String>,
         ): Flow<List<WrappedEntity<SimpleProtoMessage>>> = flow {
           emit(ids.mapNotNull { managedDataCache.get(it) })
         }
@@ -549,7 +549,7 @@ class RemoteStoreIntegrationTest {
 
         override suspend fun create(
           policy: Policy?,
-          wrappedEntities: List<WrappedEntity<SimpleProtoMessage>>
+          wrappedEntities: List<WrappedEntity<SimpleProtoMessage>>,
         ) {
           wrappedEntities.forEach {
             if (managedDataCache.get(it.entity.stringField) == null) {
@@ -560,7 +560,7 @@ class RemoteStoreIntegrationTest {
 
         override suspend fun update(
           policy: Policy?,
-          wrappedEntities: List<WrappedEntity<SimpleProtoMessage>>
+          wrappedEntities: List<WrappedEntity<SimpleProtoMessage>>,
         ) = wrappedEntities.forEach { managedDataCache.put(it) }
 
         override suspend fun deleteAll(policy: Policy?) = managedDataCache.removeAll()
@@ -600,7 +600,7 @@ class RemoteStoreIntegrationTest {
         entityStreamProvider,
         mapOf<
           Class<out Connection>,
-          (ConnectionRequest<out Connection>, EntityStream<SimpleProtoMessage>) -> Connection
+          (ConnectionRequest<out Connection>, EntityStream<SimpleProtoMessage>) -> Connection,
         >(
           SimpleProtoMessageSubscriber::class.java to
             { _, stream: EntityStream<SimpleProtoMessage> ->
@@ -617,13 +617,13 @@ class RemoteStoreIntegrationTest {
                   stream.publish(
                     WrappedEntity(
                       EntityMetadata.newBuilder().setId(message.toString()).build(),
-                      message
+                      message,
                     )
                   )
                 }
               }
-            }
-        )
+            },
+        ),
       )
 
     val servers = buildSet {
@@ -639,15 +639,15 @@ class RemoteStoreIntegrationTest {
             servers,
             emptySet(),
             DefaultPolicySet(policies),
-            DefaultDataTypeDescriptorSet(servers.map { it.dataTypeDescriptor }.toSet())
+            DefaultDataTypeDescriptorSet(servers.map { it.dataTypeDescriptor }.toSet()),
           ),
         policyEngine = ChroniclePolicyEngine(),
         config =
           DefaultChronicle.Config(
             DefaultChronicle.Config.PolicyMode.STRICT,
-            DefaultPolicyConformanceCheck()
+            DefaultPolicyConformanceCheck(),
           ),
-        flags = configReader
+        flags = configReader,
       )
 
     val router: RemoteRouter =
@@ -656,7 +656,7 @@ class RemoteStoreIntegrationTest {
         RemoteContextImpl(servers),
         RemotePolicyCheckerImpl(chronicle, DefaultPolicySet(policies)),
         RemoteServerHandlerFactory(),
-        ClientDetailsProviderImpl(ApplicationProvider.getApplicationContext())
+        ClientDetailsProviderImpl(ApplicationProvider.getApplicationContext()),
       )
   }
 
@@ -677,7 +677,7 @@ class RemoteStoreIntegrationTest {
 
   class SimpleProtoMessageWriterImpl(
     val managedDataCache: ManagedDataCache<SimpleProtoMessage>,
-    val timeSource: TimeSource
+    val timeSource: TimeSource,
   ) : SimpleProtoMessageWriter {
     override suspend fun writeMessage(message: SimpleProtoMessage) {
       managedDataCache.put(
@@ -699,7 +699,7 @@ class RemoteStoreIntegrationTest {
       ManagementStrategy.Stored(
         encrypted = false,
         media = StorageMedia.MEMORY,
-        ttl = Duration.ofDays(1)
+        ttl = Duration.ofDays(1),
       )
 
     private val VALID_POLICY =
