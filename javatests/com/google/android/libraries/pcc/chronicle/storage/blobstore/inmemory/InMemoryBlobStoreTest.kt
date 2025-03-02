@@ -51,9 +51,9 @@ class InMemoryBlobStoreTest {
         id = KEY_1,
         associatedPackageNames = listOf(PACKAGE_1, PACKAGE_2),
         created = Instant.ofEpochMilli(999),
-        updated = Instant.ofEpochMilli(999)
+        updated = Instant.ofEpochMilli(999),
       ),
-      testMessage
+      testMessage,
     )
 
   private val wrapped2 =
@@ -62,9 +62,9 @@ class InMemoryBlobStoreTest {
         id = KEY_2,
         associatedPackageNames = listOf(PACKAGE_1),
         created = Instant.ofEpochMilli(999),
-        updated = Instant.ofEpochMilli(999)
+        updated = Instant.ofEpochMilli(999),
       ),
-      testMessage
+      testMessage,
     )
 
   private val wrapped3 =
@@ -73,9 +73,9 @@ class InMemoryBlobStoreTest {
         id = KEY_3,
         associatedPackageNames = listOf(PACKAGE_1),
         created = Instant.ofEpochMilli(999),
-        updated = Instant.ofEpochMilli(999)
+        updated = Instant.ofEpochMilli(999),
       ),
-      testMessage
+      testMessage,
     )
 
   private var fakeTime = Instant.ofEpochMilli(CREATED)
@@ -86,7 +86,7 @@ class InMemoryBlobStoreTest {
     blobStore =
       InMemoryBlobStore(
         inMemoryStorage.registerDataTypeStore(InMemoryManagementInfo(DTD, 500, 2)),
-        timeSource
+        timeSource,
       )
   }
 
@@ -103,7 +103,7 @@ class InMemoryBlobStoreTest {
       CREATED,
       CREATED,
       listOf(PACKAGE_1, PACKAGE_2),
-      testMessage
+      testMessage,
     )
     checkResult(
       blobStore.getEntityByKey(KEY_2),
@@ -111,7 +111,7 @@ class InMemoryBlobStoreTest {
       CREATED,
       CREATED,
       listOf(PACKAGE_1),
-      testMessage
+      testMessage,
     )
 
     fakeTime = fakeTime.plusMillis(250)
@@ -132,9 +132,9 @@ class InMemoryBlobStoreTest {
             id = KEY_1,
             associatedPackageNames = listOf(PACKAGE_1),
             created = Instant.ofEpochMilli(1001),
-            updated = Instant.ofEpochMilli(1001)
+            updated = Instant.ofEpochMilli(1001),
           ),
-        entity = message
+        entity = message,
       )
     )
 
@@ -147,7 +147,7 @@ class InMemoryBlobStoreTest {
       CREATED,
       1250L,
       listOf(PACKAGE_1, PACKAGE_2),
-      message
+      message,
     )
     checkResult(
       blobStore.getEntityByKey(KEY_2),
@@ -155,7 +155,7 @@ class InMemoryBlobStoreTest {
       CREATED,
       CREATED,
       listOf(PACKAGE_1),
-      testMessage
+      testMessage,
     )
   }
 
@@ -172,7 +172,7 @@ class InMemoryBlobStoreTest {
       CREATED,
       CREATED,
       listOf(PACKAGE_1, PACKAGE_2),
-      testMessage
+      testMessage,
     )
 
     fakeTime = fakeTime.plusMillis(1000)
@@ -193,9 +193,9 @@ class InMemoryBlobStoreTest {
             id = KEY_1,
             associatedPackageNames = listOf(PACKAGE_1),
             created = Instant.ofEpochMilli(1001),
-            updated = Instant.ofEpochMilli(1001)
+            updated = Instant.ofEpochMilli(1001),
           ),
-        entity = message
+        entity = message,
       )
     )
 
@@ -222,9 +222,9 @@ class InMemoryBlobStoreTest {
           id = KEY_1,
           associatedPackageNames = listOf(PACKAGE_1, PACKAGE_2),
           created = Instant.ofEpochMilli(CREATED),
-          updated = Instant.ofEpochMilli(CREATED)
+          updated = Instant.ofEpochMilli(CREATED),
         ),
-        testMessage
+        testMessage,
       )
     )
 
@@ -252,9 +252,9 @@ class InMemoryBlobStoreTest {
           id = KEY_1,
           associatedPackageNames = listOf(PACKAGE_1, PACKAGE_2),
           created = Instant.ofEpochMilli(CREATED),
-          updated = Instant.ofEpochMilli(CREATED)
+          updated = Instant.ofEpochMilli(CREATED),
         ),
-        testMessage
+        testMessage,
       )
     )
 
@@ -266,9 +266,9 @@ class InMemoryBlobStoreTest {
           id = KEY_2,
           associatedPackageNames = listOf(PACKAGE_1),
           created = Instant.ofEpochMilli(CREATED),
-          updated = Instant.ofEpochMilli(CREATED)
+          updated = Instant.ofEpochMilli(CREATED),
         ),
-        testMessage
+        testMessage,
       )
     )
 
@@ -328,7 +328,7 @@ class InMemoryBlobStoreTest {
     created: Long,
     updated: Long,
     packages: List<String>,
-    testMessage: TestMessage
+    testMessage: TestMessage,
   ) {
     assertThat(result?.metadata?.id).isEqualTo(key)
     assertThat(result?.metadata?.created?.toInstant()?.toEpochMilli()).isEqualTo(created)

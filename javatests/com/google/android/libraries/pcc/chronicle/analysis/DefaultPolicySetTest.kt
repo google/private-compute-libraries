@@ -70,13 +70,13 @@ class DefaultPolicySetTest {
         ManagementStrategy.Stored(
           encrypted = false,
           media = StorageMedia.MEMORY,
-          ttl = Duration.ofMinutes(15)
+          ttl = Duration.ofMinutes(15),
         ),
         ManagementStrategy.Stored(
           encrypted = false,
           media = StorageMedia.MEMORY,
-          ttl = Duration.ofHours(1)
-        )
+          ttl = Duration.ofHours(1),
+        ),
       )
   }
 

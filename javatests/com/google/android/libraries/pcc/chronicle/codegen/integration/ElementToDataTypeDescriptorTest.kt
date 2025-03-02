@@ -91,10 +91,7 @@ class ElementToDataTypeDescriptorTest {
    * those types to a dataTypeDescriptor, and then compares the results to the contents of the
    * provided test data file.
    */
-  private fun dataTypeDescriptorTest(
-    cls: KClass<*>,
-    testDataFileName: String,
-  ) {
+  private fun dataTypeDescriptorTest(cls: KClass<*>, testDataFileName: String) {
     val processor = TestAnnotationProcessor { processingEnv, element ->
       ElementToTypeConverter(processingEnv).convertElement(element)
     }
@@ -112,11 +109,7 @@ class ElementToDataTypeDescriptorTest {
 
     val output = "/* ktlint-disable */\n" + testSpec.build().toString()
 
-    val expectedOutput =
-      readTestData(
-        "datatypedescriptor",
-        testDataFileName,
-      )
+    val expectedOutput = readTestData("datatypedescriptor", testDataFileName)
     assertThat(output).isEqualTo(expectedOutput)
   }
 }

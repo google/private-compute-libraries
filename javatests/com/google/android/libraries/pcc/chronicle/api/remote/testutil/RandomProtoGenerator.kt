@@ -24,9 +24,7 @@ import kotlin.random.Random
 class RandomProtoGenerator(seed: Long) {
   private val random = Random(seed)
 
-  /**
-   * Generates a random [SimpleProtoMessage].
-   */
+  /** Generates a random [SimpleProtoMessage]. */
   fun generateSimpleProtoMessage(): SimpleProtoMessage {
     return SimpleProtoMessage.newBuilder()
       .apply {
@@ -56,17 +54,11 @@ class RandomProtoGenerator(seed: Long) {
    */
   fun generateRepeatedProtoMessage(maxLength: Int): RepeatedProtoMessage {
     return RepeatedProtoMessage.newBuilder()
-      .apply {
-        repeat(random.nextInt(maxLength + 1)) {
-          addIntValues(random.nextInt())
-        }
-      }
+      .apply { repeat(random.nextInt(maxLength + 1)) { addIntValues(random.nextInt()) } }
       .build()
   }
 
-  /**
-   * Generates a random [TreeProtoMessage] recursively.
-   */
+  /** Generates a random [TreeProtoMessage] recursively. */
   fun generateTreeProtoMessage(depth: Int, maxWidth: Int): TreeProtoMessage {
     return TreeProtoMessage.newBuilder()
       .apply {
@@ -74,9 +66,7 @@ class RandomProtoGenerator(seed: Long) {
 
         if (depth > 1) {
           repeat(random.nextInt(1, maxWidth + 1)) {
-            addChildren(
-              generateTreeProtoMessage(depth - 1, maxWidth)
-            )
+            addChildren(generateTreeProtoMessage(depth - 1, maxWidth))
           }
         }
       }
@@ -108,7 +98,9 @@ class RandomProtoGenerator(seed: Long) {
         felis sed mi malesuada aliquam ut ac lorem. Suspendisse auctor metus sapien, eu auctor
         nisl pellentesque non. Vivamus quis vulputate neque, eget euismod neque. Aenean ultricies
         convallis justo eu imperdiet.
-      """.trimIndent().split(". ")
+      """
+        .trimIndent()
+        .split(". ")
     private val BYTES_OPTIONS =
       STRING_OPTIONS.map { ByteString.copyFrom(it.toByteArray(Charsets.UTF_8)) }
   }

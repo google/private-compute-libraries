@@ -63,9 +63,9 @@ class InMemoryBlobStoreManagementTest {
         id = KEY_1,
         associatedPackageNames = listOf(PACKAGE_1, PACKAGE_2),
         created = Instant.ofEpochMilli(CREATED),
-        updated = Instant.ofEpochMilli(CREATED)
+        updated = Instant.ofEpochMilli(CREATED),
       ),
-      testMessage
+      testMessage,
     )
 
   private val wrapped2 =
@@ -74,9 +74,9 @@ class InMemoryBlobStoreManagementTest {
         id = KEY_2,
         associatedPackageNames = listOf(PACKAGE_1),
         created = Instant.ofEpochMilli(CREATED),
-        updated = Instant.ofEpochMilli(CREATED)
+        updated = Instant.ofEpochMilli(CREATED),
       ),
-      testMessage
+      testMessage,
     )
 
   private val wrapped3 =
@@ -85,9 +85,9 @@ class InMemoryBlobStoreManagementTest {
         id = KEY_1,
         associatedPackageNames = listOf(PACKAGE_1),
         created = Instant.ofEpochMilli(CREATED),
-        updated = Instant.ofEpochMilli(CREATED)
+        updated = Instant.ofEpochMilli(CREATED),
       ),
-      testPerson
+      testPerson,
     )
 
   private val wrapped4 =
@@ -96,9 +96,9 @@ class InMemoryBlobStoreManagementTest {
         id = KEY_2,
         associatedPackageNames = listOf(PACKAGE_2),
         created = Instant.ofEpochMilli(CREATED),
-        updated = Instant.ofEpochMilli(CREATED)
+        updated = Instant.ofEpochMilli(CREATED),
       ),
-      testPerson
+      testPerson,
     )
 
   private val managementInfo1 = InMemoryManagementInfo(DTD_MESSAGE, 500, 10)

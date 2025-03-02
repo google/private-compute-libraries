@@ -23,7 +23,7 @@ import com.google.android.libraries.pcc.chronicle.api.dataTypeDescriptor
 val SIMPLE_PROTO_MESSAGE_DTD =
   dataTypeDescriptor(
     "chronicle.api.remote.testutil.SimpleProtoMessage",
-    SimpleProtoMessage::class
+    SimpleProtoMessage::class,
   ) {
     "double_field" to FieldType.Double
     "float_field" to FieldType.Float
@@ -46,8 +46,10 @@ val SIMPLE_PROTO_MESSAGE_DTD =
 val REPEATED_PROTO_MESSAGE_DTD =
   dataTypeDescriptor(
     "chronicle.serializer.testutil.RepeatedProtoMessage",
-    RepeatedProtoMessage::class
-  ) { "int_values" to FieldType.List(FieldType.Integer) }
+    RepeatedProtoMessage::class,
+  ) {
+    "int_values" to FieldType.List(FieldType.Integer)
+  }
 
 /** [DataTypeDescriptor] for [TreeProtoMessage]. */
 val TREE_PROTO_MESSAGE_DTD =
@@ -60,7 +62,7 @@ val TREE_PROTO_MESSAGE_DTD =
 val NESTED_PROTO_MESSAGE_DTD =
   dataTypeDescriptor(
     "chronicle.serializer.testutil.NestedProtoMessage",
-    NestedProtoMessage::class
+    NestedProtoMessage::class,
   ) {
     "simple_message" to FieldType.Nested(SIMPLE_PROTO_MESSAGE_DTD.name)
     "repeated_message" to FieldType.Nested(REPEATED_PROTO_MESSAGE_DTD.name)

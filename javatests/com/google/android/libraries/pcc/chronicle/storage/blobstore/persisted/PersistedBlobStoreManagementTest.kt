@@ -84,14 +84,14 @@ class PersistedBlobStoreManagementTest {
       dtdName = DTD_NAME_1,
       ttlMillis = 1500,
       QuotaInfo(3, 1, TrimOrder.OLDEST),
-      TestMessage::parseFrom
+      TestMessage::parseFrom,
     )
   private val managementInfo2 =
     PersistedManagementInfo<TestPerson>(
       dtdName = DTD_NAME_2,
       ttlMillis = 2500,
       QuotaInfo(3, 1, TrimOrder.NEWEST),
-      TestPerson::parseFrom
+      TestPerson::parseFrom,
     )
 
   @Before
@@ -133,7 +133,7 @@ class PersistedBlobStoreManagementTest {
 
     blobStorePersistedManagement.deleteExpiredEntities(
       CREATED_3,
-      setOf(managementInfo1, managementInfo2)
+      setOf(managementInfo1, managementInfo2),
     )
 
     assertThat(dao.countBlobsByDtdName(blobKey1Dtd1.dtdName)).isEqualTo(1)

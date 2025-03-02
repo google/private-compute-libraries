@@ -58,9 +58,9 @@ class PersistedBlobStoreTest {
         id = KEY_1,
         associatedPackageNames = listOf(PACKAGE_1, PACKAGE_2),
         created = Instant.ofEpochMilli(CREATED),
-        updated = Instant.ofEpochMilli(CREATED)
+        updated = Instant.ofEpochMilli(CREATED),
       ),
-      testMessage
+      testMessage,
     )
 
   private val wrapped2 =
@@ -69,9 +69,9 @@ class PersistedBlobStoreTest {
         id = KEY_2,
         associatedPackageNames = listOf(PACKAGE_1),
         created = Instant.ofEpochMilli(CREATED),
-        updated = Instant.ofEpochMilli(CREATED)
+        updated = Instant.ofEpochMilli(CREATED),
       ),
-      testMessage
+      testMessage,
     )
 
   private var fakeTime = Instant.ofEpochMilli(CREATED)
@@ -91,9 +91,9 @@ class PersistedBlobStoreTest {
           DTD,
           500,
           QuotaInfo(10, 5, TrimOrder.OLDEST),
-          TestMessage::parseFrom
+          TestMessage::parseFrom,
         ),
-        timeSource
+        timeSource,
       )
   }
 
@@ -125,9 +125,9 @@ class PersistedBlobStoreTest {
             id = KEY_1,
             associatedPackageNames = listOf(PACKAGE_1),
             created = Instant.ofEpochMilli(1001),
-            updated = Instant.ofEpochMilli(1001)
+            updated = Instant.ofEpochMilli(1001),
           ),
-        entity = message
+        entity = message,
       )
     )
 
@@ -140,7 +140,7 @@ class PersistedBlobStoreTest {
       CREATED,
       1250L,
       listOf(PACKAGE_1, PACKAGE_2),
-      message
+      message,
     )
     checkResult(
       blobStore.getEntityByKey(KEY_2),
@@ -148,7 +148,7 @@ class PersistedBlobStoreTest {
       CREATED,
       CREATED,
       listOf(PACKAGE_1),
-      testMessage
+      testMessage,
     )
   }
 
@@ -165,7 +165,7 @@ class PersistedBlobStoreTest {
       CREATED,
       CREATED,
       listOf(PACKAGE_1, PACKAGE_2),
-      testMessage
+      testMessage,
     )
 
     fakeTime = fakeTime.plusMillis(1000)
@@ -186,9 +186,9 @@ class PersistedBlobStoreTest {
             id = KEY_1,
             associatedPackageNames = listOf(PACKAGE_1),
             created = Instant.ofEpochMilli(1001),
-            updated = Instant.ofEpochMilli(1001)
+            updated = Instant.ofEpochMilli(1001),
           ),
-        entity = message
+        entity = message,
       )
     )
 
@@ -257,7 +257,7 @@ class PersistedBlobStoreTest {
     created: Long,
     updated: Long,
     packages: List<String>,
-    testMessage: TestMessage
+    testMessage: TestMessage,
   ) {
     assertThat(result?.metadata?.id).isEqualTo(key)
     assertThat(result?.metadata?.created?.toInstant()?.toEpochMilli()).isEqualTo(created)

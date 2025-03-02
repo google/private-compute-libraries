@@ -279,9 +279,13 @@ class DefaultDataTypeDescriptorSetTest {
 
   // Fields aren't needed for these, we only care about the DTDs.
   class InnerDtdClass
+
   class NestedDtdClass
+
   class DoublyNestedDtdClass
+
   class UnnestedDtdClass
+
   class OpaqueClass
 
   companion object {

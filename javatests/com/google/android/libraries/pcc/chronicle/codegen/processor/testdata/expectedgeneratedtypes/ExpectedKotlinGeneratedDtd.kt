@@ -55,7 +55,7 @@ val EXPECTED_EXAMPLE_KOTLIN_TYPE_GENERATED_DTD =
       FieldType.Enum(
         "com.google.android.libraries.pcc.chronicle.codegen.processor.testdata." +
           "annotatedtypes.ExampleKotlinType.Status",
-        listOf("ON", "OFF", "UNKNOWN")
+        listOf("ON", "OFF", "UNKNOWN"),
       )
   }
 
@@ -63,7 +63,7 @@ val EXPECTED_EXAMPLE_KOTLIN_TYPE_GENERATED_DTD =
 val EXPECTED_EXAMPLE_NESTED_KOTLIN_TYPE_GENERATED_DTD =
   dataTypeDescriptor(
     ExampleNestedKotlinType::class.qualifiedName!!,
-    cls = ExampleNestedKotlinType::class
+    cls = ExampleNestedKotlinType::class,
   ) {
     "name" to FieldType.String
     "nested" to
@@ -88,7 +88,7 @@ val EXPECTED_EXAMPLE_NESTED_KOTLIN_TYPE_GENERATED_DTD =
           FieldType.Enum(
             "com.google.android.libraries.pcc.chronicle.codegen.processor.testdata." +
               "annotatedtypes.ExampleKotlinType.Status",
-            listOf("ON", "OFF", "UNKNOWN")
+            listOf("ON", "OFF", "UNKNOWN"),
           )
       }
   }
@@ -97,7 +97,7 @@ val EXPECTED_EXAMPLE_NESTED_KOTLIN_TYPE_GENERATED_DTD =
 val EXPECTED_EXAMPLE_KOTLIN_OPAQUE_TYPE_GENERATED_DTD =
   dataTypeDescriptor(
     ExampleKotlinOpaqueType::class.qualifiedName!!,
-    cls = ExampleKotlinOpaqueType::class
+    cls = ExampleKotlinOpaqueType::class,
   ) {
     "name" to FieldType.String
     "iBinder" to FieldType.Opaque("android.os.IBinder")
@@ -107,7 +107,7 @@ val EXPECTED_EXAMPLE_KOTLIN_OPAQUE_TYPE_GENERATED_DTD =
 val EXPECTED_EXAMPLE_SELF_REFERENTIAL_KOTLIN_TYPE_GENERATED_DTD =
   dataTypeDescriptor(
     ExampleSelfReferentialKotlinType::class.qualifiedName!!,
-    cls = ExampleSelfReferentialKotlinType::class
+    cls = ExampleSelfReferentialKotlinType::class,
   ) {
     "children" to
       FieldType.List(FieldType.Reference(ExampleSelfReferentialKotlinType::class.qualifiedName!!))

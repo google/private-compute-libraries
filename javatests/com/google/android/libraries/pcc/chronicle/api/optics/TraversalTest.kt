@@ -89,7 +89,7 @@ class TraversalTest {
         listOf("alice", "bob", "claire"),
         listOf("diego"),
         listOf("eliza", "francisco"),
-        listOf()
+        listOf(),
       )
 
     assertThat(lifted(data))
@@ -292,7 +292,7 @@ class TraversalTest {
         listOf("alice", "bob", "claire"),
         listOf("diego"),
         listOf("eliza", "francisco"),
-        listOf()
+        listOf(),
       )
 
     assertThat(composed.every(listOfLists).toList()).isEqualTo(listOfLists.flatten())
@@ -316,17 +316,12 @@ class TraversalTest {
           name = "Dunedin",
           mayor = zach,
           location = TestLocation(1.0f, 2.0f),
-          populace = listOf(zach)
-        )
+          populace = listOf(zach),
+        ),
       )
 
     assertThat(namesOfAllPeopleAcrossAllCities.every(data).toList())
-      .containsExactly(
-        "Sundar",
-        "Larry",
-        "Sergey",
-        "Zach",
-      )
+      .containsExactly("Sundar", "Larry", "Sergey", "Zach")
   }
 
   @Test
@@ -354,7 +349,7 @@ class TraversalTest {
     assertThat(peoplePetNames.modify(listOf(personWithNoPet, personWithPet)) { "Bob" })
       .containsExactly(
         personWithNoPet,
-        personWithPet.copy(pet = TestPet.Dog(name = "Bob", age = 3))
+        personWithPet.copy(pet = TestPet.Dog(name = "Bob", age = 3)),
       )
   }
 

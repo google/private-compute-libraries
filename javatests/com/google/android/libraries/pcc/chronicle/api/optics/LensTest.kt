@@ -73,7 +73,7 @@ class LensTest {
         TestPet.Cat(
           name = PET_DOG_GERALT.name,
           age = PET_DOG_GERALT.age,
-          likesMilk = PET_DOG_GERALT.favoriteToy.length % 2 == 0
+          likesMilk = PET_DOG_GERALT.favoriteToy.length % 2 == 0,
         )
       )
     assertThat(dogToCat(PET_DOG_MORAINE))
@@ -81,7 +81,7 @@ class LensTest {
         TestPet.Cat(
           name = PET_DOG_MORAINE.name,
           age = PET_DOG_MORAINE.age,
-          likesMilk = PET_DOG_MORAINE.favoriteToy.length % 2 == 0
+          likesMilk = PET_DOG_MORAINE.favoriteToy.length % 2 == 0,
         )
       )
   }
@@ -116,7 +116,7 @@ class LensTest {
                   name = CITY_MOUNTAIN_VIEW.mayor.pet!!.name,
                   age = CITY_MOUNTAIN_VIEW.mayor.pet!!.age,
                   likesMilk =
-                    (CITY_MOUNTAIN_VIEW.mayor.pet as TestPet.Dog).favoriteToy.length % 2 == 0
+                    (CITY_MOUNTAIN_VIEW.mayor.pet as TestPet.Dog).favoriteToy.length % 2 == 0,
                 )
             )
         )
@@ -211,7 +211,7 @@ class LensTest {
         sourceAccessPath = OpticalAccessPath("TestPet.Dog", "favoriteToy"),
         targetAccessPath = OpticalAccessPath("TestPet.Cat", "likesMilk"),
         getter = { it.favoriteToy },
-        setter = { entity, newValue -> TestPet.Cat(entity.name, entity.age, newValue) }
+        setter = { entity, newValue -> TestPet.Cat(entity.name, entity.age, newValue) },
       )
   }
 }

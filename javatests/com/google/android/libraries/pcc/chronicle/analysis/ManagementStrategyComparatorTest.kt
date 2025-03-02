@@ -62,8 +62,7 @@ class ManagementStrategyComparatorTest {
   fun compare_bPassThru_returnsNegativeOne() {
     STRATEGIES_IN_ORDER.forEach {
       if (it == ManagementStrategy.PassThru) return@forEach
-      assertThat(ManagementStrategyComparator.compare(it, ManagementStrategy.PassThru))
-        .isEqualTo(1)
+      assertThat(ManagementStrategyComparator.compare(it, ManagementStrategy.PassThru)).isEqualTo(1)
     }
   }
 
@@ -72,25 +71,27 @@ class ManagementStrategyComparatorTest {
     val shuffled = STRATEGIES_IN_ORDER.shuffled()
 
     assertThat(shuffled.sortedWith(ManagementStrategyComparator))
-      .containsExactlyElementsIn(STRATEGIES_IN_ORDER).inOrder()
+      .containsExactlyElementsIn(STRATEGIES_IN_ORDER)
+      .inOrder()
   }
 
   companion object {
-    private val STRATEGIES_IN_ORDER = listOf(
-      ManagementStrategy.PassThru,
-      ManagementStrategy.Stored(true, StorageMedia.MEMORY, Duration.ofMillis(15)),
-      ManagementStrategy.Stored(true, StorageMedia.MEMORY, Duration.ofDays(15)),
-      ManagementStrategy.Stored(false, StorageMedia.MEMORY, Duration.ofMillis(15)),
-      ManagementStrategy.Stored(false, StorageMedia.MEMORY, Duration.ofDays(15)),
-      ManagementStrategy.Stored(true, StorageMedia.LOCAL_DISK, Duration.ofMillis(15)),
-      ManagementStrategy.Stored(true, StorageMedia.LOCAL_DISK, Duration.ofDays(15)),
-      ManagementStrategy.Stored(false, StorageMedia.LOCAL_DISK, Duration.ofMillis(15)),
-      ManagementStrategy.Stored(false, StorageMedia.LOCAL_DISK, Duration.ofDays(15)),
-      ManagementStrategy.Stored(true, StorageMedia.REMOTE_DISK, Duration.ofMillis(15)),
-      ManagementStrategy.Stored(true, StorageMedia.REMOTE_DISK, Duration.ofDays(15)),
-      ManagementStrategy.Stored(false, StorageMedia.REMOTE_DISK, Duration.ofMillis(15)),
-      ManagementStrategy.Stored(false, StorageMedia.REMOTE_DISK, Duration.ofDays(15)),
-      null,
-    )
+    private val STRATEGIES_IN_ORDER =
+      listOf(
+        ManagementStrategy.PassThru,
+        ManagementStrategy.Stored(true, StorageMedia.MEMORY, Duration.ofMillis(15)),
+        ManagementStrategy.Stored(true, StorageMedia.MEMORY, Duration.ofDays(15)),
+        ManagementStrategy.Stored(false, StorageMedia.MEMORY, Duration.ofMillis(15)),
+        ManagementStrategy.Stored(false, StorageMedia.MEMORY, Duration.ofDays(15)),
+        ManagementStrategy.Stored(true, StorageMedia.LOCAL_DISK, Duration.ofMillis(15)),
+        ManagementStrategy.Stored(true, StorageMedia.LOCAL_DISK, Duration.ofDays(15)),
+        ManagementStrategy.Stored(false, StorageMedia.LOCAL_DISK, Duration.ofMillis(15)),
+        ManagementStrategy.Stored(false, StorageMedia.LOCAL_DISK, Duration.ofDays(15)),
+        ManagementStrategy.Stored(true, StorageMedia.REMOTE_DISK, Duration.ofMillis(15)),
+        ManagementStrategy.Stored(true, StorageMedia.REMOTE_DISK, Duration.ofDays(15)),
+        ManagementStrategy.Stored(false, StorageMedia.REMOTE_DISK, Duration.ofMillis(15)),
+        ManagementStrategy.Stored(false, StorageMedia.REMOTE_DISK, Duration.ofDays(15)),
+        null,
+      )
   }
 }

@@ -46,7 +46,7 @@ class DefaultChronicleContextTest {
           ManagedDataType(
             descriptor = dataTypeDescriptor("Foo", Unit::class),
             managementStrategy = ManagementStrategy.PassThru,
-            connectionTypes = setOf(FooReader::class.java)
+            connectionTypes = setOf(FooReader::class.java),
           )
 
         override fun getConnection(
@@ -61,7 +61,7 @@ class DefaultChronicleContextTest {
           ManagedDataType(
             descriptor = dataTypeDescriptor("Bar", Unit::class),
             managementStrategy = ManagementStrategy.PassThru,
-            connectionTypes = setOf(FooReader::class.java)
+            connectionTypes = setOf(FooReader::class.java),
           )
 
         override fun getConnection(
@@ -83,7 +83,7 @@ class DefaultChronicleContextTest {
         setOf(readerConnectionProvider, writerConnectionProvider),
         emptySet(),
         DefaultPolicySet(emptySet()),
-        mock()
+        mock(),
       )
 
     assertThat(context.findConnectionProvider(FooReader::class.java))
@@ -102,11 +102,11 @@ class DefaultChronicleContextTest {
         setOf(
           fooReaderConnectionProvider,
           fooWriterConnectionProvider,
-          barReaderWriterConnectionProvider
+          barReaderWriterConnectionProvider,
         ),
         emptySet(),
         DefaultPolicySet(emptySet()),
-        mock()
+        mock(),
       )
 
     assertThat(context.findDataType(FooReader::class.java))
@@ -126,7 +126,7 @@ class DefaultChronicleContextTest {
         setOf(FooReaderConnectionProvider()),
         emptySet(),
         DefaultPolicySet(emptySet()),
-        mock()
+        mock(),
       )
 
     val updated = context.withNode(FooBarProcessor())
@@ -137,7 +137,7 @@ class DefaultChronicleContextTest {
           setOf(FooReaderConnectionProvider()),
           emptySet(),
           DefaultPolicySet(emptySet()),
-          mock()
+          mock(),
         )
       )
     assertThat(updated).isNotEqualTo(context)
@@ -147,7 +147,7 @@ class DefaultChronicleContextTest {
           setOf(FooReaderConnectionProvider()),
           setOf(FooBarProcessor()),
           DefaultPolicySet(emptySet()),
-          mock()
+          mock(),
         )
       )
   }
@@ -162,7 +162,7 @@ class DefaultChronicleContextTest {
         emptySet(),
         DefaultPolicySet(emptySet()),
         mock(),
-        connectionContext
+        connectionContext,
       )
 
     // Update the `connectionContext`
@@ -179,7 +179,7 @@ class DefaultChronicleContextTest {
           emptySet(),
           DefaultPolicySet(emptySet()),
           mock(),
-          connectionContext
+          connectionContext,
         )
       )
 
@@ -193,7 +193,7 @@ class DefaultChronicleContextTest {
           emptySet(),
           DefaultPolicySet(emptySet()),
           mock(),
-          otherConnectionContext
+          otherConnectionContext,
         )
       )
   }
@@ -202,8 +202,11 @@ class DefaultChronicleContextTest {
   private object Name : Key<String>
 
   class FooReader : ReadConnection
+
   class FooWriter : WriteConnection
+
   class BarReader : ReadConnection
+
   class BarWriter : WriteConnection
 
   class FooReaderConnectionProvider : ConnectionProvider {
@@ -211,13 +214,14 @@ class DefaultChronicleContextTest {
       ManagedDataType(
         descriptor = dataTypeDescriptor("Foo", Unit::class),
         managementStrategy = ManagementStrategy.PassThru,
-        connectionTypes = setOf(FooReader::class.java)
+        connectionTypes = setOf(FooReader::class.java),
       )
 
     override fun getConnection(connectionRequest: ConnectionRequest<out Connection>): Connection =
       FooReader()
 
     override fun equals(other: Any?): Boolean = other is FooReaderConnectionProvider
+
     override fun hashCode(): Int {
       return javaClass.hashCode()
     }
@@ -228,13 +232,14 @@ class DefaultChronicleContextTest {
       ManagedDataType(
         descriptor = dataTypeDescriptor("Foo", Unit::class),
         managementStrategy = ManagementStrategy.PassThru,
-        connectionTypes = setOf(FooWriter::class.java)
+        connectionTypes = setOf(FooWriter::class.java),
       )
 
     override fun getConnection(connectionRequest: ConnectionRequest<out Connection>): Connection =
       FooWriter()
 
     override fun equals(other: Any?): Boolean = other is FooWriterConnectionProvider
+
     override fun hashCode(): Int {
       return javaClass.hashCode()
     }
@@ -245,13 +250,14 @@ class DefaultChronicleContextTest {
       ManagedDataType(
         descriptor = dataTypeDescriptor("Bar", Unit::class),
         managementStrategy = ManagementStrategy.PassThru,
-        connectionTypes = setOf(BarReader::class.java, BarWriter::class.java)
+        connectionTypes = setOf(BarReader::class.java, BarWriter::class.java),
       )
 
     override fun getConnection(connectionRequest: ConnectionRequest<out Connection>): Connection =
       BarWriter()
 
     override fun equals(other: Any?): Boolean = other is BarReaderWriterConnectionProvider
+
     override fun hashCode(): Int {
       return javaClass.hashCode()
     }
@@ -263,10 +269,11 @@ class DefaultChronicleContextTest {
         FooReader::class.java,
         FooWriter::class.java,
         BarReader::class.java,
-        BarWriter::class.java
+        BarWriter::class.java,
       )
 
     override fun equals(other: Any?): Boolean = other is FooBarProcessor
+
     override fun hashCode(): Int {
       return javaClass.hashCode()
     }

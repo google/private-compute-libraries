@@ -42,7 +42,7 @@ class ProtoDataTest {
     data =
       MY_SAMPLE_MESSAGE_TYPE_FOREIGN_GENERATED_LENS.set(
         data,
-        ForeignNested.newBuilder().setFirstField("Nested").build()
+        ForeignNested.newBuilder().setFirstField("Nested").build(),
       )
 
     assertThat(MY_SAMPLE_MESSAGE_TYPE_FIRST_FIELD_GENERATED_LENS.get(data)).isEqualTo("Hello")

@@ -77,7 +77,7 @@ class DefaultChronicleTest {
         setOf(FooConnectionProvider, FooStreamConnectionProvider, BarConnectionProvider),
       processorNodes = emptySet(),
       policySet = policySet,
-      dataTypeDescriptorSet = DefaultDataTypeDescriptorSet(setOf(FOO_DTD, BAR_DTD))
+      dataTypeDescriptorSet = DefaultDataTypeDescriptorSet(setOf(FOO_DTD, BAR_DTD)),
     )
   private val policyEngine =
     mock<PolicyEngine> {
@@ -120,7 +120,7 @@ class DefaultChronicleTest {
           FOO_DTD.name,
           request.policy,
           request.isReadConnection(),
-          request.requester
+          request.requester,
         )
       )
       .isEqualTo(Result.success(Unit))
@@ -137,7 +137,7 @@ class DefaultChronicleTest {
             dataTypeName = "Baz",
             request.policy,
             request.isReadConnection(),
-            request.requester
+            request.requester,
           )
           .exceptionOrNull()
       )
@@ -300,8 +300,11 @@ class DefaultChronicleTest {
   data class UnsupportedType(val code: Int)
 
   data class Foo(val name: String)
+
   interface FooReader : ReadConnection
+
   interface FooWriter : WriteConnection
+
   interface FooStream : ReadConnection
 
   object FooConnectionProvider : ConnectionProvider {
@@ -330,7 +333,9 @@ class DefaultChronicleTest {
   }
 
   data class Bar(val name: String, val age: Int)
+
   interface BarReader : ReadConnection
+
   interface BarWriter : WriteConnection
 
   object BarConnectionProvider : ConnectionProvider {

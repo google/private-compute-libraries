@@ -66,11 +66,8 @@ class NoOpChronicleTest {
   @Test
   fun getConnection_returnsDisabled() {
     val result =
-      NoOpChronicle()
-        .getConnection<DummyReadConnection>(
-          dummyProcessorNode,
-          dummyPolicy,
-        ) as ConnectionResult.Failure
+      NoOpChronicle().getConnection<DummyReadConnection>(dummyProcessorNode, dummyPolicy)
+        as ConnectionResult.Failure
     assertThat(result.error).isInstanceOf(Disabled::class.java)
   }
 

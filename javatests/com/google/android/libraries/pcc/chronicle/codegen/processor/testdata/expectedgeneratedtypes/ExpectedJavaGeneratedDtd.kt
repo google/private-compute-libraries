@@ -54,7 +54,7 @@ val EXPECTED_EXAMPLE_JAVA_TYPE_GENERATED_DTD =
       FieldType.Enum(
         "com.google.android.libraries.pcc.chronicle.codegen.processor.testdata.annotatedtypes" +
           ".ExampleJavaType.Status",
-        listOf("ON", "OFF", "UNKNOWN")
+        listOf("ON", "OFF", "UNKNOWN"),
       )
   }
 
@@ -62,7 +62,7 @@ val EXPECTED_EXAMPLE_JAVA_TYPE_GENERATED_DTD =
 val EXPECTED_EXAMPLE_NESTED_JAVA_TYPE_GENERATED_DTD =
   dataTypeDescriptor(
     ExampleNestedJavaType::class.qualifiedName!!,
-    cls = ExampleNestedJavaType::class
+    cls = ExampleNestedJavaType::class,
   ) {
     "name" to FieldType.String
     "nested" to
@@ -85,7 +85,7 @@ val EXPECTED_EXAMPLE_NESTED_JAVA_TYPE_GENERATED_DTD =
           FieldType.Enum(
             "com.google.android.libraries.pcc.chronicle.codegen.processor.testdata." +
               "annotatedtypes.ExampleJavaType.Status",
-            listOf("ON", "OFF", "UNKNOWN")
+            listOf("ON", "OFF", "UNKNOWN"),
           )
       }
   }
@@ -94,7 +94,7 @@ val EXPECTED_EXAMPLE_NESTED_JAVA_TYPE_GENERATED_DTD =
 val EXPECTED_EXAMPLE_JAVA_OPAQUE_TYPE_GENERATED_DTD =
   dataTypeDescriptor(
     ExampleJavaOpaqueType::class.qualifiedName!!,
-    cls = ExampleJavaOpaqueType::class
+    cls = ExampleJavaOpaqueType::class,
   ) {
     "name" to FieldType.String
     "iBinder" to FieldType.Opaque("android.os.IBinder")
@@ -104,7 +104,7 @@ val EXPECTED_EXAMPLE_JAVA_OPAQUE_TYPE_GENERATED_DTD =
 val EXPECTED_EXAMPLE_SELF_REFERENTIAL_JAVA_TYPE_GENERATED_DTD =
   dataTypeDescriptor(
     ExampleSelfReferentialJavaType::class.qualifiedName!!,
-    cls = ExampleSelfReferentialJavaType::class
+    cls = ExampleSelfReferentialJavaType::class,
   ) {
     "children" to
       FieldType.List(FieldType.Reference(ExampleSelfReferentialJavaType::class.qualifiedName!!))

@@ -51,9 +51,9 @@ class DefaultOpticsManifestTest {
           TEST_PERSON_GENERATED_DTD,
           TEST_CITY_GENERATED_DTD,
           TEST_LOCATION_GENERATED_DTD,
-          TEST_PET_GENERATED_DTD
-        ),
-      )
+          TEST_PET_GENERATED_DTD,
+        )
+      ),
     )
 
   @Test
@@ -125,11 +125,7 @@ class DefaultOpticsManifestTest {
       )
 
     assertThat(cityPopulationNameTraversal.every(CITY_MOUNTAIN_VIEW).toList())
-      .containsExactly(
-        "Sundar",
-        "Larry",
-        "Sergey",
-      )
+      .containsExactly("Sundar", "Larry", "Sergey")
   }
 
   @Test

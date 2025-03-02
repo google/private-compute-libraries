@@ -75,7 +75,7 @@ class ClassToDataTypeDescriptorTest {
   private fun dataTypeDescriptorTest(
     klass: KClass<*>,
     testDataFileName: String,
-    config: ClassToTypeConverter.Configuration = ClassToTypeConverter.Configuration()
+    config: ClassToTypeConverter.Configuration = ClassToTypeConverter.Configuration(),
   ) {
     val classConverter = ClassToTypeConverter(config = config)
     val types = classConverter.convertToTypes(klass.java)
@@ -92,11 +92,7 @@ class ClassToDataTypeDescriptorTest {
 
     val output = "/* ktlint-disable */\n" + testSpec.build().toString()
 
-    val expectedOutput =
-      readTestData(
-        "datatypedescriptor",
-        testDataFileName,
-      )
+    val expectedOutput = readTestData("datatypedescriptor", testDataFileName)
     assertThat(output).isEqualTo(expectedOutput)
   }
 }
