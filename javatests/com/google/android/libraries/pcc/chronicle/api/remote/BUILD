@@ -87,6 +87,9 @@ kt_android_local_test(
 kt_android_local_test(
     name = "RemoteStoreIntegrationTest",
     srcs = ["RemoteStoreIntegrationTest.kt"],
+    custom_kotlincopts = [
+        "//tools/build_defs/kotlin/opts/opt_in/delicate_coroutines_api:delicate_coroutines_api",
+    ],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
     deps = [
         "//java/com/google/android/libraries/pcc/chronicle/analysis",
