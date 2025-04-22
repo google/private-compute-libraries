@@ -1,5 +1,4 @@
-load("//third_party/bazel_rules/rules_java/java:java_plugin.bzl", "java_plugin")
-load("//tools/build_defs/kotlin:rules.bzl", "kt_jvm_library")
+load("//tools/build_defs/kotlin:rules.bzl", "kt_codegen_plugin", "kt_codegen_processor", "kt_codegen_processor_type", "kt_jvm_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -53,23 +52,56 @@ kt_jvm_library(
 )
 
 # Builds our annotation processor as a compiler plugin.
-java_plugin(
+kt_codegen_plugin(
     name = "chronicle_data_plugin",
-    generates_api = True,
-    processor_class = "com.google.android.libraries.pcc.chronicle.codegen.processor.ChronicleDataAnnotationProcessor",
+    processors = [":ChronicleDataAnnotationProcessor"],
     deps = [":chronicle_data_processor"],
 )
 
-java_plugin(
-    name = "chronicle_connection_plugin",
+kt_codegen_processor(
+    name = "ChronicleDataAnnotationProcessor",
     generates_api = True,
-    processor_class = "com.google.android.libraries.pcc.chronicle.codegen.processor.ChronicleConnectionAnnotationProcessor",
+    output_intents = [
+        "java",
+        "kotlin",
+    ],
+    processor_class = "com.google.android.libraries.pcc.chronicle.codegen.processor.ChronicleDataAnnotationProcessor",
+    processor_type = kt_codegen_processor_type.KAPT,
+    visibility = ["//visibility:private"],
+)
+
+kt_codegen_plugin(
+    name = "chronicle_connection_plugin",
+    processors = [":ChronicleConnectionAnnotationProcessor"],
     deps = [":chronicle_connection_processor"],
 )
 
-java_plugin(
-    name = "data_cache_store_plugin",
+kt_codegen_processor(
+    name = "ChronicleConnectionAnnotationProcessor",
     generates_api = True,
-    processor_class = "com.google.android.libraries.pcc.chronicle.codegen.processor.DataCacheStoreAnnotationProcessor",
+    output_intents = [
+        "java",
+        "kotlin",
+    ],
+    processor_class = "com.google.android.libraries.pcc.chronicle.codegen.processor.ChronicleConnectionAnnotationProcessor",
+    processor_type = kt_codegen_processor_type.KAPT,
+    visibility = ["//visibility:private"],
+)
+
+kt_codegen_plugin(
+    name = "data_cache_store_plugin",
+    processors = [":DataCacheStoreAnnotationProcessor"],
     deps = [":data_cache_store_processor"],
+)
+
+kt_codegen_processor(
+    name = "DataCacheStoreAnnotationProcessor",
+    generates_api = True,
+    output_intents = [
+        "java",
+        "kotlin",
+    ],
+    processor_class = "com.google.android.libraries.pcc.chronicle.codegen.processor.DataCacheStoreAnnotationProcessor",
+    processor_type = kt_codegen_processor_type.KAPT,
+    visibility = ["//visibility:private"],
 )
