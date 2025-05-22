@@ -34,7 +34,7 @@ android_library(
         "//java/com/google/android/libraries/pcc/chronicle/api/remote/server",
         "//java/com/google/android/libraries/pcc/chronicle/remote",
         "//java/com/google/android/libraries/pcc/chronicle/util:typed_map",
-        "@maven//:com_google_code_gson_gson",
+        "@maven//:com_google_code_gson_gson:gson-android",
         "@maven//:com_google_truth_truth",
     ],
 )

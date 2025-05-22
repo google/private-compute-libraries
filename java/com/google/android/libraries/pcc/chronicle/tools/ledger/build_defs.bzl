@@ -50,7 +50,7 @@ def chronicle_ledger(name, src, test_class, manifest, app_library_dep, additiona
             "@maven//:com_google_dagger_dagger",
             "@maven//:com_google_dagger_hilt_android",
             "@maven//:com_google_dagger_hilt_android_testing",
-            "@maven//:com_google_code_gson_gson",
+            "@maven//:com_google_code_gson_gson:gson-android",
             "@maven//:com_google_truth_truth",
         ] + [app_library_dep] + additional_deps,
     )
@@ -70,6 +70,6 @@ def chronicle_ledger(name, src, test_class, manifest, app_library_dep, additiona
             "@maven//:com_google_dagger_dagger",
             "@maven//:com_google_dagger_hilt_android",
             "@maven//:com_google_dagger_hilt_android_testing",
-            "@maven//:com_google_code_gson_gson",
+            "@maven//:com_google_code_gson_gson:gson-android",
         ] + [app_library_dep] + additional_deps,
     )
