@@ -20,7 +20,7 @@ import com.google.android.libraries.pcc.chronicle.annotation.ChronicleData
 import com.google.android.libraries.pcc.chronicle.codegen.backend.DataTypeDescriptorPropertyProvider
 import com.google.android.libraries.pcc.chronicle.codegen.backend.api.FileSpecContentsProvider
 import com.google.android.libraries.pcc.chronicle.codegen.frontend.element.ElementToTypeConverter
-import com.google.devtools.kotlin.ksp.metainf.MetaInfServices
+import com.google.auto.service.AutoService
 import com.squareup.kotlinpoet.FileSpec
 import javax.annotation.processing.Processor
 import javax.annotation.processing.RoundEnvironment
@@ -32,7 +32,7 @@ import javax.lang.model.element.TypeElement
  * For a type `TypeName`, it will create a file `TypeName_Generated.kt`, containing a top-level
  * property `TypeName_GENERATED_DTD` containing the generated DTD contents.
  */
-@MetaInfServices(implementing = [Processor::class])
+@AutoService(Processor::class)
 class ChronicleDataAnnotationProcessor : AnnotationProcessor() {
   override fun getSupportedAnnotationTypes() = setOf(ChronicleData::class.java.canonicalName!!)
 

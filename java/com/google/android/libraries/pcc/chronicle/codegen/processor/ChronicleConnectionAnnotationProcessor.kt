@@ -21,7 +21,7 @@ import com.google.android.libraries.pcc.chronicle.annotation.ChronicleData
 import com.google.android.libraries.pcc.chronicle.codegen.backend.ConnectionProviderTypeProvider
 import com.google.android.libraries.pcc.chronicle.codegen.backend.ConnectionsPropertyProvider
 import com.google.android.libraries.pcc.chronicle.codegen.backend.api.FileSpecContentsProvider
-import com.google.devtools.kotlin.ksp.metainf.MetaInfServices
+import com.google.auto.service.AutoService
 import com.google.errorprone.annotations.CheckReturnValue
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.TypeName
@@ -46,7 +46,7 @@ import javax.lang.model.type.TypeMirror
  * containing implementations for each Connection class annotated with [ChronicleConnection], and a
  * `TypeNameConnectionProvider` class.
  */
-@MetaInfServices(implementing = [Processor::class])
+@AutoService(Processor::class)
 class ChronicleConnectionAnnotationProcessor : AnnotationProcessor() {
   private val connectionTypeMirror: TypeMirror by lazy {
     processingEnv.elementUtils.getTypeElement(CONNECTION_CLASS_PATH).asType()

@@ -19,7 +19,7 @@ kt_jvm_library(
         "//java/com/google/android/libraries/pcc/chronicle/codegen/backend:datahub",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/backend/api",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/frontend/element",
-        "//third_party/kotlin/kotlin_symbol_processing:meta_inf_services",
+        "//third_party/java/auto:auto_service",
         "@maven//:com_squareup_kotlinpoet",
     ],
 )
@@ -33,7 +33,7 @@ kt_jvm_library(
         "//java/com/google/android/libraries/pcc/chronicle/annotation:chronicle_data_annotation",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/backend:datahub",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/backend/api",
-        "//third_party/kotlin/kotlin_symbol_processing:meta_inf_services",
+        "//third_party/java/auto:auto_service",
         "@maven//:com_google_errorprone_error_prone_annotations",
         "@maven//:com_squareup_kotlinpoet",
     ],
