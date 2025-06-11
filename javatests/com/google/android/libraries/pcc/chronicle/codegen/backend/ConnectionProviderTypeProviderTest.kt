@@ -20,6 +20,7 @@ import com.google.android.libraries.pcc.chronicle.api.ReadConnection
 import com.google.android.libraries.pcc.chronicle.api.WriteConnection
 import com.google.android.libraries.pcc.chronicle.codegen.backend.api.FileSpecContentsProvider
 import com.google.common.truth.Truth.assertThat
+import com.google.ktfmt.KtfmtComparer
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.asTypeName
 import org.junit.Test
@@ -37,7 +38,7 @@ class ConnectionProviderTypeProviderTest {
         listOf(MyWriteConnection::class.asTypeName()),
       )
     val fileContents = typeProvider.getGeneratedSource()
-    assertThat(fileContents).isEqualTo(expectedOutputOneReadConnectionOneWriteConnection)
+    compareWithGolden(fileContents, expectedOutputOneReadConnectionOneWriteConnection)
   }
 
   @Test
@@ -49,7 +50,7 @@ class ConnectionProviderTypeProviderTest {
         listOf(),
       )
     val fileContents = typeProvider.getGeneratedSource()
-    assertThat(fileContents).isEqualTo(expectedOutputOneReadConnection)
+    compareWithGolden(fileContents, expectedOutputOneReadConnection)
   }
 
   @Test
@@ -61,7 +62,7 @@ class ConnectionProviderTypeProviderTest {
         listOf(MyWriteConnection0::class.asTypeName(), MyWriteConnection1::class.asTypeName()),
       )
     val fileContents = typeProvider.getGeneratedSource()
-    assertThat(fileContents).isEqualTo(expectedOutputMultipleWriteConnection)
+    compareWithGolden(fileContents, expectedOutputMultipleWriteConnection)
   }
 
   private fun FileSpecContentsProvider.getGeneratedSource(): String {
@@ -69,6 +70,14 @@ class ConnectionProviderTypeProviderTest {
       FileSpec.builder("com.google", "FileName").apply { provideContentsInto(this) }.build()
 
     return StringBuilder().also { fileSpec.writeTo(it) }.toString()
+  }
+
+  private fun compareWithGolden(actualSource: String, expectedSource: String) {
+    if (!KtfmtComparer().equalAfterFormatting(actualSource, expectedSource)) {
+      // This assert will fail, and give us a diff instead of just saying that equalAfterFormatting
+      // is false.
+      assertThat(actualSource).isEqualTo(expectedSource)
+    }
   }
 
   companion object {

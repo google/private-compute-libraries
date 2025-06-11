@@ -21,6 +21,7 @@ import com.google.android.libraries.pcc.chronicle.codegen.FieldEntry
 import com.google.android.libraries.pcc.chronicle.codegen.Type
 import com.google.android.libraries.pcc.chronicle.codegen.TypeLocation
 import com.google.common.truth.Truth.assertThat
+import com.google.ktfmt.KtfmtComparer
 import com.squareup.kotlinpoet.FileSpec
 import kotlin.test.assertFailsWith
 import org.junit.Test
@@ -39,7 +40,13 @@ class LensPropertyProviderTest {
         .addProperty(provider.provideProperty())
         .build()
 
-    assertThat(fileSpec.toString().trim()).isEqualTo(loadGolden(testCase.goldenFile))
+    val expected = loadGolden(testCase.goldenFile)
+    val actual = fileSpec.toString()
+    if (!KtfmtComparer().equalAfterFormatting(actual, expected)) {
+      // This assert will fail, and give us a diff instead of just saying that equalAfterFormatting
+      // is false.
+      assertThat(actual).isEqualTo(expected)
+    }
   }
 
   @Test

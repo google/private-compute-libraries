@@ -14,7 +14,7 @@ kt_jvm_library(
         "//java/com/google/android/libraries/pcc/chronicle/codegen/tool:proto_chronicle_data_generator_lib",
         "//javatests/com/google/android/libraries/pcc/chronicle/codegen:simple_test_java_proto",
         "//javatests/com/google/android/libraries/pcc/chronicle/codegen:test_java_proto",
-        "@maven//:com_google_protobuf_protobuf_java",
+        "//third_party/kotlin/ktfmt/google/java/com/google/ktfmt:KtfmtComparer",
         "@maven//:com_google_truth_truth",
         "@maven//:com_squareup_javapoet",
         "@maven//:com_squareup_kotlinpoet",

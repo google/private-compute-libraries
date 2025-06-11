@@ -22,6 +22,7 @@ import com.google.android.libraries.pcc.chronicle.codegen.backend.dataTypeDescri
 import com.google.android.libraries.pcc.chronicle.codegen.frontend.ClassToTypeConverter
 import com.google.android.libraries.pcc.chronicle.codegen.readTestData
 import com.google.common.truth.Truth.assertThat
+import com.google.ktfmt.KtfmtComparer
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.PropertySpec
 import kotlin.reflect.KClass
@@ -93,6 +94,10 @@ class ClassToDataTypeDescriptorTest {
     val output = "/* ktlint-disable */\n" + testSpec.build().toString()
 
     val expectedOutput = readTestData("datatypedescriptor", testDataFileName)
-    assertThat(output).isEqualTo(expectedOutput)
+    if (!KtfmtComparer().equalAfterFormatting(output, expectedOutput)) {
+      // This assert will fail, and give us a diff instead of just saying that equalAfterFormatting
+      // is false.
+      assertThat(output).isEqualTo(expectedOutput)
+    }
   }
 }

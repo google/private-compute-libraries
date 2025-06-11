@@ -12,6 +12,7 @@ kt_jvm_library(
     deps = [
         "//java/com/google/android/libraries/pcc/chronicle/codegen",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/backend/lens",
+        "//third_party/kotlin/ktfmt/google/java/com/google/ktfmt:KtfmtComparer",
         "@maven//:com_google_truth_truth",
         "@maven//:com_squareup_javapoet",
         "@maven//:com_squareup_kotlinpoet",

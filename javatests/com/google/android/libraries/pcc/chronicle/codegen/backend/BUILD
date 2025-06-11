@@ -17,6 +17,7 @@ load(
                 "//java/com/google/android/libraries/pcc/chronicle/codegen/backend/api",
                 "//javatests/com/google/android/libraries/pcc/chronicle/codegen:expected_types",
                 "//javatests/com/google/android/libraries/pcc/chronicle/codegen:source_classes",
+                "//third_party/kotlin/ktfmt/google/java/com/google/ktfmt:KtfmtComparer",
                 "@maven//:com_google_truth_truth",
                 "@maven//:com_squareup_javapoet",
                 "@maven//:com_squareup_kotlinpoet",

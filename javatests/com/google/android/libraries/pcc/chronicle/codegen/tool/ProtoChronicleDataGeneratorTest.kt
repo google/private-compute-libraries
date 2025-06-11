@@ -23,6 +23,7 @@ import com.google.android.libraries.pcc.chronicle.codegen.SimpleTestProto2
 import com.google.android.libraries.pcc.chronicle.codegen.backend.api.DaggerModuleProvider
 import com.google.android.libraries.pcc.chronicle.codegen.tool.ProtoChronicleDataGenerator.Companion.javaClasses
 import com.google.common.truth.Truth.assertThat
+import com.google.ktfmt.KtfmtComparer
 import com.squareup.javapoet.JavaFile
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.PropertySpec
@@ -102,7 +103,11 @@ class ProtoChronicleDataGeneratorTest {
 
     val expectedContents = loadResourceAsString("goldens/ThingGolden.txt")
     val actualContents = StringBuilder().also { spec.writeTo(it) }.toString().trim()
-    assertThat(actualContents).isEqualTo(expectedContents)
+    if (!KtfmtComparer().equalAfterFormatting(actualContents, expectedContents)) {
+      // This assert will fail, and give us a diff instead of just saying that equalAfterFormatting
+      // is false.
+      assertThat(actualContents).isEqualTo(expectedContents)
+    }
   }
 
   @Test

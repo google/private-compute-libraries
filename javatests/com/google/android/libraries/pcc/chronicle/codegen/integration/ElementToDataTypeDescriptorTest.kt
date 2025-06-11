@@ -26,6 +26,7 @@ import com.google.android.libraries.pcc.chronicle.codegen.frontend.element.Eleme
 import com.google.android.libraries.pcc.chronicle.codegen.readTestData
 import com.google.android.libraries.pcc.chronicle.codegen.testutil.TestAnnotationProcessor
 import com.google.common.truth.Truth.assertThat
+import com.google.ktfmt.KtfmtComparer
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.PropertySpec
 import kotlin.reflect.KClass
@@ -110,6 +111,10 @@ class ElementToDataTypeDescriptorTest {
     val output = "/* ktlint-disable */\n" + testSpec.build().toString()
 
     val expectedOutput = readTestData("datatypedescriptor", testDataFileName)
-    assertThat(output).isEqualTo(expectedOutput)
+    if (!KtfmtComparer().equalAfterFormatting(output, expectedOutput)) {
+      // This assert will fail, and give us a diff instead of just saying that equalAfterFormatting
+      // is false.
+      assertThat(output).isEqualTo(expectedOutput)
+    }
   }
 }
