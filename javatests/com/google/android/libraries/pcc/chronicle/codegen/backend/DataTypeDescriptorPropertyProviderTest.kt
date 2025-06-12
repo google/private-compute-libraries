@@ -41,15 +41,15 @@ class DataTypeDescriptorPropertyProviderTest {
 
     val source = provider.getGeneratedSource()
 
-    assertThat(source)
-      .contains(
-        """
-          public val MY_ENTITY_GENERATED_DTD: DataTypeDescriptor = dataTypeDescriptor(name =
-              "com.google.MyEntity", cls = MyEntity::class) {
-              }
-        """
-          .trimIndent()
-      )
+    assertThatSourceContains(
+      source,
+      """
+      public val MY_ENTITY_GENERATED_DTD: DataTypeDescriptor = dataTypeDescriptor(name =
+          "com.google.MyEntity", cls = MyEntity::class) {
+          }
+      """
+        .trimIndent(),
+    )
   }
 
   @Test
@@ -62,17 +62,18 @@ class DataTypeDescriptorPropertyProviderTest {
 
     val source = provider.getGeneratedSource()
 
-    /* ktlint-disable max-line-length */
-    assertThat(source)
-      .contains(
-        "val SIMPLE_UNENCLOSED_TYPE_GENERATED_DTD: DataTypeDescriptor = dataTypeDescriptor(name =\n" +
-          "    \"com.google.android.libraries.pcc.chronicle.codegen.SimpleUnenclosedType\", cls =\n" +
-          "    SimpleUnenclosedType::class) {\n" +
-          "      \"field1\" to FieldType.String\n" +
-          "      \"field2\" to FieldType.Integer\n" +
-          "    }"
-      )
-    /* ktlint-enable max-line-length */
+    assertThatSourceContains(
+      source,
+      """
+      val SIMPLE_UNENCLOSED_TYPE_GENERATED_DTD: DataTypeDescriptor = dataTypeDescriptor(name =
+          "com.google.android.libraries.pcc.chronicle.codegen.SimpleUnenclosedType", cls =
+          SimpleUnenclosedType::class) {
+            "field1" to FieldType.String
+            "field2" to FieldType.Integer
+          }
+      """
+        .trimIndent(),
+    )
   }
 
   @Test
@@ -86,23 +87,39 @@ class DataTypeDescriptorPropertyProviderTest {
 
     val source = provider.getGeneratedSource()
 
-    /* ktlint-disable max-line-length */
-    assertThat(source)
-      .contains(
-        "val myDtd: DataTypeDescriptor = dataTypeDescriptor(name =\n" +
-          "    \"com.google.android.libraries.pcc.chronicle.codegen.SimpleUnenclosedType\", cls =\n" +
-          "    SimpleUnenclosedType::class) {\n" +
-          "      \"field1\" to FieldType.String\n" +
-          "      \"field2\" to FieldType.Integer\n" +
-          "    }"
-      )
-    /* ktlint-enable max-line-length */
+    assertThatSourceContains(
+      source,
+      """
+      val myDtd: DataTypeDescriptor = dataTypeDescriptor(name =
+          "com.google.android.libraries.pcc.chronicle.codegen.SimpleUnenclosedType", cls =
+          SimpleUnenclosedType::class) {
+            "field1" to FieldType.String
+            "field2" to FieldType.Integer
+          }
+      """
+        .trimIndent(),
+    )
   }
 
   private fun PropertyProvider.getGeneratedSource(): String {
     val fileSpec =
       FileSpec.builder("com.google", "FileName").apply { provideContentsInto(this) }.build()
-
     return StringBuilder().also { fileSpec.writeTo(it) }.toString()
+  }
+
+  private fun assertThatSourceContains(source: String, expectedSubstring: String) {
+    // Check that the source code contains the expected substring, ignoring whitespace differences.
+    // We do this by changing each stretch of whitespace into a \s+ regex, which matches one or more
+    // whitespace characters. In order for the result to be a valid regex, we need to escape
+    // braces and parentheses. Unfortunately Regex.escape doesn't work for this, because it operates
+    // by surrounding its input with \Q and \E, not by escaping each special character individually.
+    val quotedSubstringRegex =
+      expectedSubstring
+        .replace("{", "\\{")
+        .replace("}", "\\}")
+        .replace("(", "\\(")
+        .replace(")", "\\)")
+        .replace(Regex("\\s+"), "\\\\s+")
+    assertThat(source).containsMatch(quotedSubstringRegex)
   }
 }
