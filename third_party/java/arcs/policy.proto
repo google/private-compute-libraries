@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-edition = "2023";
+edition = "2024";
 
 package arcs;
 
 import "third_party/java/arcs/annotation.proto";
 
+option java_outer_classname = "Policy";
 option features.field_presence = IMPLICIT;
 option java_package = "arcs.core.data.proto";
-option java_multiple_files = true;
 
 // Defines a data usage policy.
 message PolicyProto {
