@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-edition = "2023";
+edition = "2024";
 
 package pcc.chronicle.api.remote;
 
 import "google/protobuf/empty.proto";
 
+option java_outer_classname = "RemoteApi";
 option features.field_presence = IMPLICIT;
-option java_multiple_files = true;
 option java_package = "com.google.android.libraries.pcc.chronicle.api.remote";
 
 // Metadata accompanying a request to a Chronicle remote server.
@@ -116,7 +116,8 @@ message ComputeRequest {
    */
   repeated string parameter_data_type_names = 2;
 
-  /** Specifies which method to run on the server. */ MethodId method_id = 3;
+  /** Specifies which method to run on the server. */
+  MethodId method_id = 3;
 
   enum MethodId {
     UNKNOWN = 0;
@@ -136,8 +137,7 @@ message RemoteResponseMetadata {
 // client.
 message RemoteErrorMetadata {
   Type error_type = 1;  // Type of error.
-
-  string message = 2;  // Human-readable message about the error.
+  string message = 2;   // Human-readable message about the error.
 
   enum Type {
     // Catch-all for as-yet-unknown issues. This value is used when an
