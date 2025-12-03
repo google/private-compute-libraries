@@ -102,7 +102,7 @@ class ManagedDataCacheTest {
 
     assertThat(testDataStorage.get("10")).isEqualTo(testTen)
     assertThat(testDataStorage.get("30")).isEqualTo(testThirty)
-    assertThat(testDataStorage.get("5")).isEqualTo(null)
+    assertThat(testDataStorage.get("5")).isNull()
   }
 
   @Test
@@ -132,7 +132,7 @@ class ManagedDataCacheTest {
 
     assertThat(testDataStorage.remove("ten")).isEqualTo(testTen)
     assertThat(testDataStorage.remove("thirty")).isEqualTo(testThirty)
-    assertThat(testDataStorage.remove("5")).isEqualTo(null)
+    assertThat(testDataStorage.remove("5")).isNull()
   }
 
   @Test

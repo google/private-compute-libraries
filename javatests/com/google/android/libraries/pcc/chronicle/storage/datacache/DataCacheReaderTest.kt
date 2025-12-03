@@ -59,7 +59,7 @@ class DataCacheReaderTest {
 
     assertThat(reader.forEntity("1")).isEqualTo(DUMMY_LABEL_WRAPPER_1.entity)
     assertThat(reader.forEntity("2")).isEqualTo(DUMMY_LABEL_WRAPPER_2.entity)
-    assertThat(reader.forEntity("3")).isEqualTo(null)
+    assertThat(reader.forEntity("3")).isNull()
   }
 
   @Test
@@ -84,7 +84,7 @@ class DataCacheReaderTest {
           DUMMY_LABEL_WRAPPER_2.metadata.updated.toInstant(),
         )
       )
-    assertThat(reader.forEntityTimestamped("3")).isEqualTo(null)
+    assertThat(reader.forEntityTimestamped("3")).isNull()
   }
 
   companion object {
