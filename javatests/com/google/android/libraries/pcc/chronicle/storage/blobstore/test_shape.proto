@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-edition = "2023";
+edition = "2024";
 
 package com.google.android.libraries.pcc.chronicle.storage.blobstore;
 
+option java_outer_classname = "TestShapeOuterClass";
 option features.field_presence = IMPLICIT;
-option java_multiple_files = true;
 option java_package = "com.google.android.libraries.pcc.chronicle.storage.blobstore";
 
 message TestShape {
