@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-edition = "2023";
+edition = "2024";
 
 package pcc.chronicle.api.storage;
 
 import "google/protobuf/timestamp.proto";
 
-option features.field_presence = IMPLICIT;
-option java_multiple_files = true;
+option java_outer_classname = "EntityMetadataOuterClass";
 option java_package = "com.google.android.libraries.pcc.chronicle.api.storage";
 
 /**
@@ -28,7 +27,7 @@ option java_package = "com.google.android.libraries.pcc.chronicle.api.storage";
  */
 message EntityMetadata {
   /** Unique Identifier for the entity associated with this metadata. */
-  string id = 1;
+  string id = 1 [features.field_presence = IMPLICIT];
 
   /**
    * Timestamp corresponding to when the entity associated with this metadata
