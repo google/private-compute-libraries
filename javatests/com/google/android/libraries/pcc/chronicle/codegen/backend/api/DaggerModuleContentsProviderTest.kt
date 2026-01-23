@@ -48,12 +48,12 @@ class DaggerModuleContentsProviderTest {
     assertThat(providesMethod)
       .generatesTestModule(
         """
-          class TestModule {
-            @dagger.Provides
-            public static com.google.TestStuff provideTestStuff() {
-              throw UnsupportedOperationException();
-            }
+        class TestModule {
+          @dagger.Provides
+          public static com.google.TestStuff provideTestStuff() {
+            throw UnsupportedOperationException();
           }
+        }
         """
           .trimIndent()
       )
@@ -77,13 +77,13 @@ class DaggerModuleContentsProviderTest {
     assertThat(providesMethod)
       .generatesTestModule(
         """
-          class TestModule {
-            @dagger.Provides
-            @javax.inject.Singleton
-            public static com.google.TestStuff provideTestStuff() {
-              throw UnsupportedOperationException();
-            }
+        class TestModule {
+          @dagger.Provides
+          @javax.inject.Singleton
+          public static com.google.TestStuff provideTestStuff() {
+            throw UnsupportedOperationException();
           }
+        }
         """
           .trimIndent()
       )
@@ -108,13 +108,13 @@ class DaggerModuleContentsProviderTest {
     assertThat(providesMethod)
       .generatesTestModule(
         """
-          class TestModule {
-            @dagger.Provides
-            @dagger.multibindings.IntoSet
-            public static com.google.TestStuff provideTestStuff() {
-              throw UnsupportedOperationException();
-            }
+        class TestModule {
+          @dagger.Provides
+          @dagger.multibindings.IntoSet
+          public static com.google.TestStuff provideTestStuff() {
+            throw UnsupportedOperationException();
           }
+        }
         """
           .trimIndent()
       )
@@ -140,14 +140,14 @@ class DaggerModuleContentsProviderTest {
     assertThat(providesMethod)
       .generatesTestModule(
         """
-          class TestModule {
-            @dagger.Provides
-            @com.google.android.libraries.pcc.chronicle.api.qualifier.PrivacyReviewed
-            @com.google.MyQualifier
-            public static com.google.TestStuff provideTestStuff() {
-              throw UnsupportedOperationException();
-            }
+        class TestModule {
+          @dagger.Provides
+          @com.google.android.libraries.pcc.chronicle.api.qualifier.PrivacyReviewed
+          @com.google.MyQualifier
+          public static com.google.TestStuff provideTestStuff() {
+            throw UnsupportedOperationException();
           }
+        }
         """
           .trimIndent()
       )
@@ -175,12 +175,12 @@ class DaggerModuleContentsProviderTest {
     assertThat(providesMethod)
       .generatesTestModule(
         """
-          class TestModule {
-            @dagger.Provides
-            public static com.google.TestStuff provideTestStuff(boolean boolParam, int intParam) {
-              throw UnsupportedOperationException();
-            }
+        class TestModule {
+          @dagger.Provides
+          public static com.google.TestStuff provideTestStuff(boolean boolParam, int intParam) {
+            throw UnsupportedOperationException();
           }
+        }
         """
           .trimIndent()
       )

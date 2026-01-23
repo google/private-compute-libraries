@@ -91,13 +91,13 @@ class RandomProtoGenerator(seed: Long) {
   companion object {
     private val STRING_OPTIONS =
       """
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur in mauris quis felis
-        malesuada congue non ultricies mi. Aenean pretium metus in viverra convallis. In hendrerit
-        lorem eu imperdiet posuere. Nullam tristique eleifend aliquam. Mauris condimentum nibh a
-        lacus tincidunt tempus. Vivamus semper est velit, vel fringilla ipsum lacinia a. Aenean eu
-        felis sed mi malesuada aliquam ut ac lorem. Suspendisse auctor metus sapien, eu auctor
-        nisl pellentesque non. Vivamus quis vulputate neque, eget euismod neque. Aenean ultricies
-        convallis justo eu imperdiet.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur in mauris quis felis
+      malesuada congue non ultricies mi. Aenean pretium metus in viverra convallis. In hendrerit
+      lorem eu imperdiet posuere. Nullam tristique eleifend aliquam. Mauris condimentum nibh a
+      lacus tincidunt tempus. Vivamus semper est velit, vel fringilla ipsum lacinia a. Aenean eu
+      felis sed mi malesuada aliquam ut ac lorem. Suspendisse auctor metus sapien, eu auctor
+      nisl pellentesque non. Vivamus quis vulputate neque, eget euismod neque. Aenean ultricies
+      convallis justo eu imperdiet.
       """
         .trimIndent()
         .split(". ")

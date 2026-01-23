@@ -62,8 +62,8 @@ class ProtoRepeatedLensBodyBuilderTest {
     assertThat(builderCode.toString())
       .contains(
         """
-          clearMyField()
-          addAllMyField(newValue)
+        clearMyField()
+        addAllMyField(newValue)
         """
           .trimIndent()
       )

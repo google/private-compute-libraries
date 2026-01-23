@@ -58,9 +58,9 @@ fun TypeSet.dataTypeDescriptor(
     CodeBlock.builder()
       .add(
         """
-    %T(name = %S, cls = %T::class) {
-    ⇥
-    """
+        %T(name = %S, cls = %T::class) {
+        ⇥
+        """
           .trimIndent(),
         dataTypeConstructorName,
         typeToGenerateLocation.toString(),
@@ -92,7 +92,7 @@ private fun TypeSet.mapEntryDtd(
         """
         dataTypeDescriptor(name = %S, cls = %T::class) {
         ⇥
-  """
+        """
           .trimIndent(),
         mapDTDName,
         Map.Entry::class.asClassName(),

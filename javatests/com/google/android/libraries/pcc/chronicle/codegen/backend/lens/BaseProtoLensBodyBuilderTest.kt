@@ -60,11 +60,11 @@ class BaseProtoLensBodyBuilderTest {
     assertThat(setterBody.toString())
       .contains(
         """
-          entity.toBuilder()
-            .apply {
-              println("Hello world")
-            }
-            .build()
+        entity.toBuilder()
+          .apply {
+            println("Hello world")
+          }
+          .build()
         """
           .trimIndent()
       )

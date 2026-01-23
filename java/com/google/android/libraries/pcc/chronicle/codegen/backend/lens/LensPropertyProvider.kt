@@ -70,9 +70,9 @@ class LensPropertyProvider(
       .add(
         format =
           """
-              %T.create<%T, %T>(
-                focusAccessPath = %T(%S, %S),
-            """
+          %T.create<%T, %T>(
+            focusAccessPath = %T(%S, %S),
+          """
             .trimIndent(),
         Lens::class.asClassName(),
         typeClassName,

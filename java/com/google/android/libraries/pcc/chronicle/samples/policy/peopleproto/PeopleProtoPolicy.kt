@@ -27,8 +27,8 @@ val PEOPLE_PROTO_POLICY =
   policy(name = "PeopleProtoPolicy", egressType = "UI Display") {
     description =
       """
-        Allows the user to access Person data with the purpose of displaying and providing editing
-        capability via a user interface.
+      Allows the user to access Person data with the purpose of displaying and providing editing
+      capability via a user interface.
       """
         .trimIndent()
 

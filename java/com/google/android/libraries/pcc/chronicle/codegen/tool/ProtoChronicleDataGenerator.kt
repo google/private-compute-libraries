@@ -96,12 +96,12 @@ class ProtoChronicleDataGenerator(private val protoClass: Class<*>) {
           CliktCommand(
             help =
               """
-          |Generates Chronicle Data code from Protocol Buffer Descriptors. This is
-          |intended to be run from blaze, not directly.
-          |
-          |Note: in order for this to be able to work correctly, the proto's generated java class
-          |must be available on the classpath.
-          |"""
+              |Generates Chronicle Data code from Protocol Buffer Descriptors. This is
+              |intended to be run from blaze, not directly.
+              |
+              |Note: in order for this to be able to work correctly, the proto's generated java class
+              |must be available on the classpath.
+              |"""
                 .trimMargin()
           ) {
           val kotlinOutputFilePath by argument().path()

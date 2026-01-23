@@ -17,5 +17,4 @@
 package com.google.android.libraries.pcc.chronicle.api.error
 
 /** Thrown when data was requested from a policy but that data isn't present. */
-class NoSuchDataInPolicy(message: String, cause: Throwable? = null) :
-  ChronicleError(message, cause)
+class NoSuchDataInPolicy(message: String, cause: Throwable? = null) : ChronicleError(message, cause)

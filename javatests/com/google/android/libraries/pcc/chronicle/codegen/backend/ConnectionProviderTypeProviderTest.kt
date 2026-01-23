@@ -83,97 +83,97 @@ class ConnectionProviderTypeProviderTest {
   companion object {
     private val expectedOutputOneReadConnectionOneWriteConnection =
       """
-    package com.google
+      package com.google
 
-    import com.google.android.libraries.pcc.chronicle.codegen.backend.MyDataClass
-    import com.google.android.libraries.pcc.chronicle.codegen.backend.MyReadConnection
-    import com.google.android.libraries.pcc.chronicle.codegen.backend.MyWriteConnection
-    import com.google.android.libraries.pcc.chronicle.storage.datacache.DataCacheReader
-    import com.google.android.libraries.pcc.chronicle.storage.datacache.DataCacheWriter
-    import com.google.android.libraries.pcc.chronicle.storage.datacache.DefaultManagedDataCacheConnectionProvider
-    import com.google.android.libraries.pcc.chronicle.storage.datacache.ManagedDataCache
-    import com.google.android.libraries.pcc.chronicle.storage.datacache.TypedDataCacheReader
-    import com.google.android.libraries.pcc.chronicle.storage.datacache.TypedDataCacheWriter
-    import com.google.android.libraries.pcc.chronicle.util.TimeSource
+      import com.google.android.libraries.pcc.chronicle.codegen.backend.MyDataClass
+      import com.google.android.libraries.pcc.chronicle.codegen.backend.MyReadConnection
+      import com.google.android.libraries.pcc.chronicle.codegen.backend.MyWriteConnection
+      import com.google.android.libraries.pcc.chronicle.storage.datacache.DataCacheReader
+      import com.google.android.libraries.pcc.chronicle.storage.datacache.DataCacheWriter
+      import com.google.android.libraries.pcc.chronicle.storage.datacache.DefaultManagedDataCacheConnectionProvider
+      import com.google.android.libraries.pcc.chronicle.storage.datacache.ManagedDataCache
+      import com.google.android.libraries.pcc.chronicle.storage.datacache.TypedDataCacheReader
+      import com.google.android.libraries.pcc.chronicle.storage.datacache.TypedDataCacheWriter
+      import com.google.android.libraries.pcc.chronicle.util.TimeSource
 
-    public class MyReadConnectionImpl(
-      cache: TypedDataCacheReader<MyDataClass>,
-    ) : MyReadConnection, DataCacheReader<MyDataClass> by DataCacheReader.createDefault(cache)
+      public class MyReadConnectionImpl(
+        cache: TypedDataCacheReader<MyDataClass>,
+      ) : MyReadConnection, DataCacheReader<MyDataClass> by DataCacheReader.createDefault(cache)
 
-    public class MyWriteConnectionImpl(
-      cache: TypedDataCacheWriter<MyDataClass>,
-      timeSource: TimeSource,
-    ) : MyWriteConnection, DataCacheWriter<MyDataClass> by DataCacheWriter.createDefault(cache,
-        timeSource)
+      public class MyWriteConnectionImpl(
+        cache: TypedDataCacheWriter<MyDataClass>,
+        timeSource: TimeSource,
+      ) : MyWriteConnection, DataCacheWriter<MyDataClass> by DataCacheWriter.createDefault(cache,
+          timeSource)
 
-    public class MyDataClassConnectionProvider(
-      cache: ManagedDataCache<MyDataClass>,
-      timeSource: TimeSource,
-    ) : DefaultManagedDataCacheConnectionProvider<MyDataClass>(cache, mapOf(MyReadConnection::class.java
-        to { MyReadConnectionImpl(cache) }, MyWriteConnection::class.java to {
-        MyWriteConnectionImpl(cache, timeSource) }, ))
+      public class MyDataClassConnectionProvider(
+        cache: ManagedDataCache<MyDataClass>,
+        timeSource: TimeSource,
+      ) : DefaultManagedDataCacheConnectionProvider<MyDataClass>(cache, mapOf(MyReadConnection::class.java
+          to { MyReadConnectionImpl(cache) }, MyWriteConnection::class.java to {
+          MyWriteConnectionImpl(cache, timeSource) }, ))
 
-    """
+      """
         .trimIndent()
 
     private val expectedOutputOneReadConnection =
       """
-    package com.google
+      package com.google
 
-    import com.google.android.libraries.pcc.chronicle.codegen.backend.MyDataClass
-    import com.google.android.libraries.pcc.chronicle.codegen.backend.MyReadConnection
-    import com.google.android.libraries.pcc.chronicle.storage.datacache.DataCacheReader
-    import com.google.android.libraries.pcc.chronicle.storage.datacache.DefaultManagedDataCacheConnectionProvider
-    import com.google.android.libraries.pcc.chronicle.storage.datacache.ManagedDataCache
-    import com.google.android.libraries.pcc.chronicle.storage.datacache.TypedDataCacheReader
-    import com.google.android.libraries.pcc.chronicle.util.TimeSource
+      import com.google.android.libraries.pcc.chronicle.codegen.backend.MyDataClass
+      import com.google.android.libraries.pcc.chronicle.codegen.backend.MyReadConnection
+      import com.google.android.libraries.pcc.chronicle.storage.datacache.DataCacheReader
+      import com.google.android.libraries.pcc.chronicle.storage.datacache.DefaultManagedDataCacheConnectionProvider
+      import com.google.android.libraries.pcc.chronicle.storage.datacache.ManagedDataCache
+      import com.google.android.libraries.pcc.chronicle.storage.datacache.TypedDataCacheReader
+      import com.google.android.libraries.pcc.chronicle.util.TimeSource
 
-    public class MyReadConnectionImpl(
-      cache: TypedDataCacheReader<MyDataClass>,
-    ) : MyReadConnection, DataCacheReader<MyDataClass> by DataCacheReader.createDefault(cache)
+      public class MyReadConnectionImpl(
+        cache: TypedDataCacheReader<MyDataClass>,
+      ) : MyReadConnection, DataCacheReader<MyDataClass> by DataCacheReader.createDefault(cache)
 
-    public class MyDataClassConnectionProvider(
-      cache: ManagedDataCache<MyDataClass>,
-      timeSource: TimeSource,
-    ) : DefaultManagedDataCacheConnectionProvider<MyDataClass>(cache, mapOf(MyReadConnection::class.java
-        to { MyReadConnectionImpl(cache) }, ))
+      public class MyDataClassConnectionProvider(
+        cache: ManagedDataCache<MyDataClass>,
+        timeSource: TimeSource,
+      ) : DefaultManagedDataCacheConnectionProvider<MyDataClass>(cache, mapOf(MyReadConnection::class.java
+          to { MyReadConnectionImpl(cache) }, ))
 
-    """
+      """
         .trimIndent()
 
     private val expectedOutputMultipleWriteConnection =
       """
-    package com.google
+      package com.google
 
-    import com.google.android.libraries.pcc.chronicle.codegen.backend.MyDataClass
-    import com.google.android.libraries.pcc.chronicle.codegen.backend.MyWriteConnection0
-    import com.google.android.libraries.pcc.chronicle.codegen.backend.MyWriteConnection1
-    import com.google.android.libraries.pcc.chronicle.storage.datacache.DataCacheWriter
-    import com.google.android.libraries.pcc.chronicle.storage.datacache.DefaultManagedDataCacheConnectionProvider
-    import com.google.android.libraries.pcc.chronicle.storage.datacache.ManagedDataCache
-    import com.google.android.libraries.pcc.chronicle.storage.datacache.TypedDataCacheWriter
-    import com.google.android.libraries.pcc.chronicle.util.TimeSource
+      import com.google.android.libraries.pcc.chronicle.codegen.backend.MyDataClass
+      import com.google.android.libraries.pcc.chronicle.codegen.backend.MyWriteConnection0
+      import com.google.android.libraries.pcc.chronicle.codegen.backend.MyWriteConnection1
+      import com.google.android.libraries.pcc.chronicle.storage.datacache.DataCacheWriter
+      import com.google.android.libraries.pcc.chronicle.storage.datacache.DefaultManagedDataCacheConnectionProvider
+      import com.google.android.libraries.pcc.chronicle.storage.datacache.ManagedDataCache
+      import com.google.android.libraries.pcc.chronicle.storage.datacache.TypedDataCacheWriter
+      import com.google.android.libraries.pcc.chronicle.util.TimeSource
 
-    public class MyWriteConnection0Impl(
-      cache: TypedDataCacheWriter<MyDataClass>,
-      timeSource: TimeSource,
-    ) : MyWriteConnection0, DataCacheWriter<MyDataClass> by DataCacheWriter.createDefault(cache,
-        timeSource)
+      public class MyWriteConnection0Impl(
+        cache: TypedDataCacheWriter<MyDataClass>,
+        timeSource: TimeSource,
+      ) : MyWriteConnection0, DataCacheWriter<MyDataClass> by DataCacheWriter.createDefault(cache,
+          timeSource)
 
-    public class MyWriteConnection1Impl(
-      cache: TypedDataCacheWriter<MyDataClass>,
-      timeSource: TimeSource,
-    ) : MyWriteConnection1, DataCacheWriter<MyDataClass> by DataCacheWriter.createDefault(cache,
-        timeSource)
+      public class MyWriteConnection1Impl(
+        cache: TypedDataCacheWriter<MyDataClass>,
+        timeSource: TimeSource,
+      ) : MyWriteConnection1, DataCacheWriter<MyDataClass> by DataCacheWriter.createDefault(cache,
+          timeSource)
 
-    public class MyDataClassConnectionProvider(
-      cache: ManagedDataCache<MyDataClass>,
-      timeSource: TimeSource,
-    ) : DefaultManagedDataCacheConnectionProvider<MyDataClass>(cache,
-        mapOf(MyWriteConnection0::class.java to { MyWriteConnection0Impl(cache, timeSource) },
-        MyWriteConnection1::class.java to { MyWriteConnection1Impl(cache, timeSource) }, ))
+      public class MyDataClassConnectionProvider(
+        cache: ManagedDataCache<MyDataClass>,
+        timeSource: TimeSource,
+      ) : DefaultManagedDataCacheConnectionProvider<MyDataClass>(cache,
+          mapOf(MyWriteConnection0::class.java to { MyWriteConnection0Impl(cache, timeSource) },
+          MyWriteConnection1::class.java to { MyWriteConnection1Impl(cache, timeSource) }, ))
 
-    """
+      """
         .trimIndent()
   }
 }
