@@ -32,8 +32,6 @@ kt_android_local_test(
     deps = [
         ":foreign_java_proto_lite",
         ":proto_data",
-        "//java/com/google/android/libraries/pcc/chronicle/api",
-        "//java/com/google/android/libraries/pcc/chronicle/api/optics",
         "@maven//:com_google_truth_truth",
     ],
 )
