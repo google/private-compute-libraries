@@ -33,7 +33,7 @@ android_library(
         ":remote_policy_checker",
     ],
     deps = [
-        "//java/com/google/android/libraries/pcc/chronicle/api",
+        "//java/com/google/android/libraries/pcc/chronicle/api:data_type_descriptor",
         "//java/com/google/android/libraries/pcc/chronicle/api/remote",
         "//java/com/google/android/libraries/pcc/chronicle/api/remote/server",
         "//java/com/google/android/libraries/pcc/chronicle/remote",
