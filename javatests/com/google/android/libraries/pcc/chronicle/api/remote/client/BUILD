@@ -11,9 +11,8 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api/storage",
         "@maven//:com_google_truth_truth",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm:kotlinx_coroutines-jvm",
         "@maven//:org_mockito_kotlin_mockito_kotlin",
-        "@maven//:org_mockito_mockito_core",
     ],
 )
 
@@ -29,10 +28,8 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api/remote/serialization",
         "//java/com/google/android/libraries/pcc/chronicle/api/storage",
         "@maven//:com_google_truth_truth",
-        "@maven//:org_jetbrains_kotlin_kotlin_test",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm:kotlinx_coroutines-jvm",
         "@maven//:org_mockito_kotlin_mockito_kotlin",
-        "@maven//:org_mockito_mockito_core",
     ],
 )
 
@@ -41,16 +38,13 @@ kt_android_local_test(
     srcs = ["DefaultRemoteComputeClientTest.kt"],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
     deps = [
-        "//java/com/google/android/libraries/pcc/chronicle/api/policy/builder",
         "//java/com/google/android/libraries/pcc/chronicle/api/remote",
         "//java/com/google/android/libraries/pcc/chronicle/api/remote/client",
         "//java/com/google/android/libraries/pcc/chronicle/api/remote/serialization",
         "//java/com/google/android/libraries/pcc/chronicle/api/storage",
         "@maven//:com_google_truth_truth",
-        "@maven//:org_jetbrains_kotlin_kotlin_test",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm:kotlinx_coroutines-jvm",
         "@maven//:org_mockito_kotlin_mockito_kotlin",
-        "@maven//:org_mockito_mockito_core",
     ],
 )
 
@@ -65,10 +59,8 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api/remote/serialization",
         "//java/com/google/android/libraries/pcc/chronicle/api/storage",
         "@maven//:com_google_truth_truth",
-        "@maven//:org_jetbrains_kotlin_kotlin_test",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm:kotlinx_coroutines-jvm",
         "@maven//:org_mockito_kotlin_mockito_kotlin",
-        "@maven//:org_mockito_mockito_core",
     ],
 )
 
@@ -83,10 +75,8 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api/remote/serialization",
         "//java/com/google/android/libraries/pcc/chronicle/api/storage",
         "@maven//:com_google_truth_truth",
-        "@maven//:org_jetbrains_kotlin_kotlin_test",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm:kotlinx_coroutines-jvm",
         "@maven//:org_mockito_kotlin_mockito_kotlin",
-        "@maven//:org_mockito_mockito_core",
     ],
 )
 
@@ -98,9 +88,6 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api/remote",
         "//java/com/google/android/libraries/pcc/chronicle/api/remote/client",
         "@maven//:com_google_truth_truth",
-        "@maven//:org_jetbrains_kotlin_kotlin_test",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
-        "@maven//:org_mockito_kotlin_mockito_kotlin",
-        "@maven//:org_mockito_mockito_core",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm:kotlinx_coroutines-jvm",
     ],
 )
