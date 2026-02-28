@@ -31,8 +31,7 @@ android_library(
         "//java/com/google/android/libraries/pcc/chronicle/api/storage",
         "//java/com/google/android/libraries/pcc/chronicle/util:logcat",
         "//third_party/java/proto:empty_java_proto_lite",
-        "@maven//:com_google_flogger_flogger",
-        "@maven//:org_jetbrains_kotlinx_atomicfu",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
+        "@maven//:org_jetbrains_kotlinx_atomicfu:kotlinx_atomicfu-jvm",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm:kotlinx_coroutines-jvm",
     ],
 )
