@@ -18,8 +18,6 @@ android_library(
         "//java/com/google/android/libraries/pcc/chronicle/storage/datacache",
         "//java/com/google/android/libraries/pcc/chronicle/util:logcat",
         "//java/com/google/android/libraries/pcc/chronicle/util:timesource",
-        "@maven//:androidx_annotation_annotation",
-        "@maven//:org_jetbrains_kotlinx_atomicfu",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_guava",
+        "@maven//:org_jetbrains_kotlinx_atomicfu:kotlinx_atomicfu-jvm",
     ],
 )
