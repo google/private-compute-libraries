@@ -8,9 +8,6 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/remote",
         "//java/com/google/android/libraries/pcc/chronicle/remote/impl",
         "@maven//:com_google_truth_truth",
-        "@maven//:org_jetbrains_kotlin_kotlin_test",
-        "@maven//:org_mockito_kotlin_mockito_kotlin",
-        "@maven//:org_mockito_mockito_core",
     ],
 )
 
@@ -19,14 +16,12 @@ kt_android_local_test(
     srcs = ["RemoteContextImplTest.kt"],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
     deps = [
-        "//java/com/google/android/libraries/pcc/chronicle/api",
+        "//java/com/google/android/libraries/pcc/chronicle/api:data_type_descriptor",
         "//java/com/google/android/libraries/pcc/chronicle/api/remote",
         "//java/com/google/android/libraries/pcc/chronicle/api/remote/server",
         "//java/com/google/android/libraries/pcc/chronicle/remote/impl",
         "@maven//:com_google_truth_truth",
-        "@maven//:org_jetbrains_kotlin_kotlin_test",
         "@maven//:org_mockito_kotlin_mockito_kotlin",
-        "@maven//:org_mockito_mockito_core",
     ],
 )
 
@@ -50,6 +45,5 @@ kt_android_local_test(
         "@maven//:com_google_truth_truth",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
         "@maven//:org_mockito_kotlin_mockito_kotlin",
-        "@maven//:org_mockito_mockito_core",
     ],
 )
