@@ -11,7 +11,6 @@ kt_jvm_library(
     ],
     deps = [
         "//java/com/google/android/libraries/pcc/chronicle/codegen",
-        "@maven//:com_google_guava_guava",
         "@maven//:com_google_testing_compile_compile_testing",
     ],
 )
