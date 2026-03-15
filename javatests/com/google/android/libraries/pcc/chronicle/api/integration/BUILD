@@ -18,7 +18,6 @@ kt_android_local_test(
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
     deps = [
         "//java/com/google/android/libraries/pcc/chronicle/analysis",
-        "//java/com/google/android/libraries/pcc/chronicle/analysis/impl",
         "//java/com/google/android/libraries/pcc/chronicle/api",
         "//java/com/google/android/libraries/pcc/chronicle/api:chronicle",
         "//java/com/google/android/libraries/pcc/chronicle/api/error",
@@ -29,9 +28,8 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api/policy/builder",
         "@maven//:com_google_truth_truth",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm:kotlinx_coroutines-jvm",
         "@maven//:org_mockito_kotlin_mockito_kotlin",
-        "@maven//:org_mockito_mockito_core",
     ],
 )
 
