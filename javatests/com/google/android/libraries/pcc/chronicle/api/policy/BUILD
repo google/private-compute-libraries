@@ -17,7 +17,7 @@ kt_android_local_test(
     srcs = ["DefaultPolicyConformanceCheckTest.kt"],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
     deps = [
-        "//java/com/google/android/libraries/pcc/chronicle/api",
+        "//java/com/google/android/libraries/pcc/chronicle/api:data_type_descriptor",
         "//java/com/google/android/libraries/pcc/chronicle/api/error",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy:default_policy_conformance_check",
