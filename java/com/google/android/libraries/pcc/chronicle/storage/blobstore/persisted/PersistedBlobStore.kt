@@ -48,11 +48,10 @@ class PersistedBlobStore<T : MessageLite>(
   }
 
   override suspend fun putEntities(wrappedEntities: Collection<WrappedEntity<T>>) {
-    val map =
-      wrappedEntities.associate {
-        wrappedEntityToPersistedEntity(it, timeSource.now().toEpochMilli()) to
-          it.metadata.associatedPackageNamesList
-      }
+    val map = wrappedEntities.associate {
+      wrappedEntityToPersistedEntity(it, timeSource.now().toEpochMilli()) to
+        it.metadata.associatedPackageNamesList
+    }
     dao.insertOrUpdateBlobsWithPackages(
       map,
       managementInfo.dtdName,

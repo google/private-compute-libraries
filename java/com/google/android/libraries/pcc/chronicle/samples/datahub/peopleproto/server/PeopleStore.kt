@@ -71,11 +71,10 @@ class PeopleStore(private val ttl: Duration, private val pageSize: Int = 10) {
     ttlOverride: Duration? = null,
   ): Flow<List<WrappedEntity<Person>>> {
     return flow {
-      val filtered =
-        mutex.withLock {
-          cleanupInternal()
-          names.mapNotNull { people[it] }.filterToTtlOverride(ttlOverride)
-        }
+      val filtered = mutex.withLock {
+        cleanupInternal()
+        names.mapNotNull { people[it] }.filterToTtlOverride(ttlOverride)
+      }
 
       filtered.chunked(pageSize).forEach { emit(it) }
     }
@@ -88,11 +87,10 @@ class PeopleStore(private val ttl: Duration, private val pageSize: Int = 10) {
    */
   fun fetchAll(ttlOverride: Duration? = null): Flow<List<WrappedEntity<Person>>> {
     return flow {
-      val filtered =
-        mutex.withLock {
-          cleanupInternal()
-          people.values.filterToTtlOverride(ttlOverride)
-        }
+      val filtered = mutex.withLock {
+        cleanupInternal()
+        people.values.filterToTtlOverride(ttlOverride)
+      }
 
       filtered.chunked(pageSize).forEach { emit(it) }
     }

@@ -55,6 +55,7 @@ class RemoteContextImpl(private val servers: Set<RemoteServer<*>>) : RemoteConte
     }
   }
 
-  override fun findServers(dtd: DataTypeDescriptor): Collection<RemoteServer<*>> =
-    servers.filter { it.dataTypeDescriptor == dtd }
+  override fun findServers(dtd: DataTypeDescriptor): Collection<RemoteServer<*>> = servers.filter {
+    it.dataTypeDescriptor == dtd
+  }
 }

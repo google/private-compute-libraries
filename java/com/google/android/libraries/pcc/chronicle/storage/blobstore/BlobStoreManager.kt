@@ -71,8 +71,9 @@ class BlobStoreManager(val timeSource: TimeSource, val managements: Set<BlobStor
   override suspend fun deleteFor(
     value: PackageDeletionListener.PackageInstallInfo
   ): ChronicleDeletionListener.PackageDeletionInfo {
-    var numberOfEntitiesDeleted =
-      managements.sumOf { management -> management.deletePackage(value.packageName) }
+    var numberOfEntitiesDeleted = managements.sumOf { management ->
+      management.deletePackage(value.packageName)
+    }
     return ChronicleDeletionListener.PackageDeletionInfo(
       ChronicleAnalyticsClient.BLOBSTORE,
       numberOfEntitiesDeleted,
@@ -87,8 +88,9 @@ class BlobStoreManager(val timeSource: TimeSource, val managements: Set<BlobStor
     fullSet: Set<PackageDeletionListener.PackageInstallInfo>
   ): ChronicleDeletionListener.PackageDeletionInfo {
     val allowedPackages = fullSet.map { it.packageName }.toSet()
-    var numberOfEntitiesDeleted =
-      managements.sumOf { management -> management.reconcilePackages(allowedPackages) }
+    var numberOfEntitiesDeleted = managements.sumOf { management ->
+      management.reconcilePackages(allowedPackages)
+    }
     return ChronicleDeletionListener.PackageDeletionInfo(
       ChronicleAnalyticsClient.BLOBSTORE,
       numberOfEntitiesDeleted,
