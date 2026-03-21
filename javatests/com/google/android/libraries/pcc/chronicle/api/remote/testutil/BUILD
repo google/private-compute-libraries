@@ -27,7 +27,7 @@ android_library(
     ],
     deps = [
         ":testutil_java_proto_lite",
-        "//java/com/google/android/libraries/pcc/chronicle/api",
+        "//java/com/google/android/libraries/pcc/chronicle/api:data_type_descriptor",
         "@maven//:com_google_protobuf_protobuf_javalite",
     ],
 )
