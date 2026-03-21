@@ -7,6 +7,6 @@ android_library(
     srcs = glob(["*.kt"]),
     deps = [
         "//java/com/google/android/libraries/pcc/chronicle/api",
-        "@maven//:org_jetbrains_kotlinx_atomicfu",
+        "@maven//:org_jetbrains_kotlinx_atomicfu:kotlinx_atomicfu-jvm",
     ],
 )
