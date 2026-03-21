@@ -17,8 +17,7 @@ android_library(
         "//java/com/google/android/libraries/pcc/chronicle/util:logcat",
         "@maven//:com_google_dagger_dagger",
         "@maven//:com_google_dagger_hilt_android",
-        "@maven//:com_google_flogger_flogger",
         "@maven//:javax_inject_javax_inject",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm:kotlinx_coroutines-jvm",
     ],
 )
