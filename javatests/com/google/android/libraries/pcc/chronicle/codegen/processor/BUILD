@@ -19,7 +19,6 @@ kt_android_local_test(
     srcs = ["ChronicleDataAnnotationProcessorKotlinTest.kt"],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
     deps = [
-        "//java/com/google/android/libraries/pcc/chronicle/api:data_type_descriptor",
         "//java/com/google/android/libraries/pcc/chronicle/storage/datacache",
         "//javatests/com/google/android/libraries/pcc/chronicle/codegen/processor/testdata/annotatedtypes:chronicle_data_kt",
         "//javatests/com/google/android/libraries/pcc/chronicle/codegen/processor/testdata/expectedgeneratedtypes:expected_generated_kotlin_types",
@@ -32,7 +31,6 @@ kt_android_local_test(
     srcs = ["ChronicleDataAnnotationProcessorJavaTest.java"],
     manifest = "//java/com/google/android/libraries/pcc/chronicle:AndroidManifest.xml",
     deps = [
-        "//java/com/google/android/libraries/pcc/chronicle/api:data_type_descriptor",
         "//java/com/google/android/libraries/pcc/chronicle/storage/datacache",
         "//javatests/com/google/android/libraries/pcc/chronicle/codegen/processor/testdata/annotatedtypes:chronicle_data_java",
         "//javatests/com/google/android/libraries/pcc/chronicle/codegen/processor/testdata/expectedgeneratedtypes:expected_generated_java_types",
@@ -50,12 +48,12 @@ kt_jvm_library(
     srcs = ["ChronicleDataAnnotationProcessorCompileTest.kt"],
     resources = ["//javatests/com/google/android/libraries/pcc/chronicle/codegen/processor/testdata/annotatedtypes"],
     deps = [
-        ":jvm_deps",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/processor:chronicle_connection_processor",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/processor:chronicle_data_processor",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/processor:data_cache_store_processor",
         "@maven//:com_google_guava_guava",
         "@maven//:com_google_testing_compile_compile_testing",  # TODO(b/198787009): support Kotlin compile testing
+        "@maven//:com_google_truth_truth",
         "@maven//:junit_junit",
     ],
 )
