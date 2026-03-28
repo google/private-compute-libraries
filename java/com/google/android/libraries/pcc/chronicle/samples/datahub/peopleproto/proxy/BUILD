@@ -15,5 +15,6 @@ android_library(
         "//java/com/google/android/libraries/pcc/chronicle/samples/datahub/peopleproto:person_proto_java_proto_lite",
         "@maven//:androidx_annotation_annotation",
         "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm:kotlinx_coroutines-jvm",
     ],
 )
