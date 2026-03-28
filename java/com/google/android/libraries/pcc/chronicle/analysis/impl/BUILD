@@ -19,6 +19,5 @@ android_library(
         "//java/com/google/android/libraries/pcc/chronicle/api/policy/annotation",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy/builder",
         "//java/com/google/android/libraries/pcc/chronicle/util:typed_map",
-        "@maven//:androidx_annotation_annotation",
     ],
 )
