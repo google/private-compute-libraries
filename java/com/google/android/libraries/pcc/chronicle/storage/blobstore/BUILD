@@ -37,7 +37,7 @@ android_library(
         ":management_info",
         "//java/com/google/android/libraries/pcc/chronicle/api",
         "//java/com/google/android/libraries/pcc/chronicle/util:timesource",
-        "@maven//:org_jetbrains_kotlinx_atomicfu",
+        "@maven//:org_jetbrains_kotlinx_atomicfu:kotlinx_atomicfu-jvm",
     ],
 )
 
@@ -60,6 +60,7 @@ android_library(
         "//java/com/google/android/libraries/pcc/chronicle/storage/blobstore/persisted",
         "//java/com/google/android/libraries/pcc/chronicle/util:timesource",
         "//third_party/java/androidx/room",
+        "//third_party/java/androidx/room:room-android",
     ],
 )
 
