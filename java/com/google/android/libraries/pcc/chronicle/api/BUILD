@@ -12,7 +12,6 @@ android_library(
         ":api",
         "//java/com/google/android/libraries/pcc/chronicle/api/error:chronicle_error",
         "//java/com/google/android/libraries/pcc/chronicle/api/policy",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_guava",
     ],
 )
 
@@ -144,8 +143,5 @@ android_library(
         ":api",
         "//java/com/google/android/libraries/pcc/chronicle/api/flags",
         "//java/com/google/android/libraries/pcc/chronicle/util:logcat",
-        "@maven//:androidx_annotation_annotation",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_guava",
     ],
 )
