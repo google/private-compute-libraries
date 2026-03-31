@@ -13,6 +13,7 @@ android_library(
     deps = [
         "//java/com/google/android/libraries/pcc/chronicle/storage/blobstore:management_info",
         "//third_party/java/androidx/room",
+        "//third_party/java/androidx/room:room-android",
         "@maven//:androidx_room_room_ktx",
     ],
 )
