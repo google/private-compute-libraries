@@ -46,16 +46,11 @@ kt_android_local_test(
     deps = [
         "//java/com/google/android/libraries/pcc/chronicle/analysis",
         "//java/com/google/android/libraries/pcc/chronicle/api",
-        "//java/com/google/android/libraries/pcc/chronicle/api/cantrip",
         "//java/com/google/android/libraries/pcc/chronicle/api/error",
         "//java/com/google/android/libraries/pcc/chronicle/api/optics/testdata",
-        "//java/com/google/android/libraries/pcc/chronicle/api/policy",
-        "//java/com/google/android/libraries/pcc/chronicle/api/policy/builder",
-        "//java/com/google/android/libraries/pcc/chronicle/api/policy/contextrules",
         "//java/com/google/android/libraries/pcc/chronicle/util:typed_map",
         "@maven//:com_google_truth_truth",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
         "@maven//:org_mockito_kotlin_mockito_kotlin",
-        "@maven//:org_mockito_mockito_core",
     ],
 )
