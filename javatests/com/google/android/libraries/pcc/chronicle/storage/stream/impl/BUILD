@@ -7,10 +7,9 @@ kt_android_local_test(
     deps = [
         "//java/com/google/android/libraries/pcc/chronicle/api/remote/testutil:testdata_java_proto_lite",
         "//java/com/google/android/libraries/pcc/chronicle/api/storage",
-        "//java/com/google/android/libraries/pcc/chronicle/storage/stream",
         "//java/com/google/android/libraries/pcc/chronicle/storage/stream/impl",
         "@maven//:com_google_truth_truth",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm:kotlinx_coroutines-jvm",
     ],
 )
 
@@ -22,6 +21,5 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/storage/stream",
         "//java/com/google/android/libraries/pcc/chronicle/storage/stream/impl",
         "@maven//:com_google_truth_truth",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
     ],
 )
