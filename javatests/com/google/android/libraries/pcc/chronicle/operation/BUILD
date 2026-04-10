@@ -12,6 +12,5 @@ kt_android_local_test(
         "//java/com/google/android/libraries/pcc/chronicle/api/operation",
         "//java/com/google/android/libraries/pcc/chronicle/operation:empties",
         "@maven//:com_google_truth_truth",
-        "@maven//:org_jetbrains_kotlin_kotlin_test",
     ],
 )
