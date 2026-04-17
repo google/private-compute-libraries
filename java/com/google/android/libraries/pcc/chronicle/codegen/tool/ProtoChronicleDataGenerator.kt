@@ -17,6 +17,8 @@
 package com.google.android.libraries.pcc.chronicle.codegen.tool
 
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.Context
+import com.github.ajalt.clikt.core.main
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.path
 import com.google.android.libraries.pcc.chronicle.codegen.TypeSet
@@ -82,8 +84,9 @@ class ProtoChronicleDataGenerator(private val protoClass: Class<*>) {
    * module based around the lenses gleaned from the [protoClass].
    */
   fun buildDaggerProviders(kotlinFileClassName: String): List<DaggerModuleContentsProvider> {
-    val lensContents =
-      lenses.map { LensDaggerProvider(it.type, it.field, lensClassName = kotlinFileClassName) }
+    val lensContents = lenses.map {
+      LensDaggerProvider(it.type, it.field, lensClassName = kotlinFileClassName)
+    }
     val dtdContents =
       listOf(DataTypeDescriptorDaggerProvider(protoClass.simpleName, kotlinFileClassName))
     return lensContents + dtdContents
@@ -92,18 +95,17 @@ class ProtoChronicleDataGenerator(private val protoClass: Class<*>) {
   companion object {
     @JvmStatic
     fun main(args: Array<String>) {
-      object :
-          CliktCommand(
-            help =
-              """
-              |Generates Chronicle Data code from Protocol Buffer Descriptors. This is
-              |intended to be run from blaze, not directly.
-              |
-              |Note: in order for this to be able to work correctly, the proto's generated java class
-              |must be available on the classpath.
-              |"""
-                .trimMargin()
-          ) {
+      object : CliktCommand() {
+          override fun help(context: Context): String =
+            """
+            Generates Chronicle Data code from Protocol Buffer Descriptors. This is
+            intended to be run from blaze, not directly.
+
+            Note: in order for this to be able to work correctly, the proto's generated java class
+            must be available on the classpath.
+            """
+              .trimIndent()
+
           val kotlinOutputFilePath by argument().path()
           val moduleOutputFilePath by argument().path()
           val descriptorFile by argument().path(mustBeReadable = true)
