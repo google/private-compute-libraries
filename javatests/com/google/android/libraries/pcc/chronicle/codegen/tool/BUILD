@@ -9,7 +9,7 @@ kt_jvm_library(
     srcs = ["ProtoChronicleDataGeneratorTest.kt"],
     resources = glob(["goldens/**"]),
     deps = [
-        "//java/com/google/android/libraries/pcc/chronicle/api:api_jvm",
+        "//java/com/google/android/libraries/pcc/chronicle/api:data_type_descriptor_jvm",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/backend/api",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/tool:proto_chronicle_data_generator_lib",
         "//javatests/com/google/android/libraries/pcc/chronicle/codegen:simple_test_java_proto",
