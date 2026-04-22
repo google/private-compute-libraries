@@ -15,6 +15,6 @@ android_library(
         "//java/com/google/android/libraries/pcc/chronicle/api/remote",
         "//java/com/google/android/libraries/pcc/chronicle/api/remote/serialization",
         "//java/com/google/android/libraries/pcc/chronicle/api/storage",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_core_jvm:kotlinx_coroutines-jvm",
     ],
 )
