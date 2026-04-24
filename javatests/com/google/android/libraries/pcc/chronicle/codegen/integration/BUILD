@@ -9,7 +9,7 @@ kt_jvm_library(
     srcs = ["ClassToDataTypeDescriptorTest.kt"],
     data = ["//javatests/com/google/android/libraries/pcc/chronicle/codegen:dtd_data"],
     deps = [
-        "//java/com/google/android/libraries/pcc/chronicle/api:api_jvm",
+        "//java/com/google/android/libraries/pcc/chronicle/api:data_type_descriptor_jvm",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/backend:datahub",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/frontend",
         "//javatests/com/google/android/libraries/pcc/chronicle/codegen:source_classes",
@@ -30,7 +30,7 @@ kt_jvm_library(
     srcs = ["ElementToDataTypeDescriptorTest.kt"],
     data = ["//javatests/com/google/android/libraries/pcc/chronicle/codegen:dtd_data"],
     deps = [
-        "//java/com/google/android/libraries/pcc/chronicle/api:api_jvm",
+        "//java/com/google/android/libraries/pcc/chronicle/api:data_type_descriptor_jvm",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/backend:datahub",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/frontend/element",
         "//java/com/google/android/libraries/pcc/chronicle/codegen/testutil",
