@@ -8,9 +8,6 @@ package(default_visibility = [
 android_library(
     name = "logcat",
     srcs = ["Logcat.kt"],
-    deps = [
-        "@maven//:com_google_flogger_flogger",
-    ],
 )
 
 kt_jvm_library(
