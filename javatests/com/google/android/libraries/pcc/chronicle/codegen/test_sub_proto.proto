@@ -15,7 +15,7 @@
 // LINT: ALLOW_GROUPS
 // Groups are deprecated, but lets make sure we support them.
 
-edition = "2023";
+edition = "2024";
 
 package javatest.com.google.android.libraries.pcc.chronicle.codegen;
 
@@ -23,5 +23,7 @@ option java_package = "com.google.android.libraries.pcc.chronicle.codegen";
 option java_outer_classname = "CodegenTestSubProto";
 
 message SimpleThing {
+  option features.(pb.java).nest_in_file_class = YES;
+
   string field1 = 1;
 }

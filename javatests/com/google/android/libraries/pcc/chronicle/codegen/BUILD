@@ -94,6 +94,7 @@ proto_library(
         "test_proto.proto",
         "test_sub_proto.proto",
     ],
+    option_deps = ["//third_party/java/protobuf:java_features_proto"],
     deps = [
         "@com_google_protobuf//:timestamp_proto",
     ],

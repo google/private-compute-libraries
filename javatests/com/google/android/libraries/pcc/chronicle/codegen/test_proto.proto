@@ -15,12 +15,14 @@
 // LINT: ALLOW_GROUPS
 // Groups are deprecated, but lets make sure we support them.
 
-edition = "2023";
+edition = "2024";
 
 package javatest.com.google.android.libraries.pcc.chronicle.codegen;
 
 import "google/protobuf/timestamp.proto";
 import "javatests/com/google/android/libraries/pcc/chronicle/codegen/test_sub_proto.proto";
+
+import option "third_party/java/protobuf/java_features.proto";
 
 option features.utf8_validation = NONE;
 
@@ -28,6 +30,7 @@ option java_package = "com.google.android.libraries.pcc.chronicle.codegen";
 option java_outer_classname = "CodegenTestProto";
 
 enum ThingEnum {
+  option features.(pb.java).nest_in_file_class = YES;
   option features.enum_type = CLOSED;
 
   UNKNOWN = 0;
@@ -36,6 +39,8 @@ enum ThingEnum {
 }
 
 message Thing {
+  option features.(pb.java).nest_in_file_class = YES;
+
   string field1 = 1;
   bytes field2 = 2;
   int32 field3 = 3;
@@ -52,11 +57,15 @@ message Thing {
 // Below are the protos for the nested tests, both nested and non-nested message
 // definitions are used to confirm they both work with the codegen.
 message NestedThing {
+  option features.(pb.java).nest_in_file_class = YES;
+
   repeated string field1 = 1;
   SimpleThing field2 = 2;
 }
 
 message NestedType {
+  option features.(pb.java).nest_in_file_class = YES;
+
   message InnerType {
     string field1 = 1;
 
@@ -71,18 +80,26 @@ message NestedType {
 }
 
 message Thing1 {
+  option features.(pb.java).nest_in_file_class = YES;
+
   Thing2 field1 = 1;
 }
 
 message Thing2 {
+  option features.(pb.java).nest_in_file_class = YES;
+
   Thing3 field1 = 1;
 }
 
 message Thing3 {
+  option features.(pb.java).nest_in_file_class = YES;
+
   string field1 = 1;
 }
 
 message OneOfThing {
+  option features.(pb.java).nest_in_file_class = YES;
+
   message StringThing {
     string field1 = 1;
   }
@@ -103,45 +120,66 @@ message OneOfThing {
   }
 
   oneof field2 {
-    StringThing string_thing_2 = 4;
-    IntThing int_thing_2 = 5;
-    OtherThing other_thing_2 = 6;
+    StringThing string_thing_2 = 4
+        [features.enforce_naming_style = STYLE_LEGACY];
+
+    IntThing int_thing_2 = 5 [features.enforce_naming_style = STYLE_LEGACY];
+
+    OtherThing other_thing_2 = 6 [features.enforce_naming_style = STYLE_LEGACY];
   }
 }
 
 message ListOfEntity {
+  option features.(pb.java).nest_in_file_class = YES;
+
   repeated SimpleThing list_of_entity = 1;
 }
 
 message MapOfEntity {
+  option features.(pb.java).nest_in_file_class = YES;
+
   map<string, SimpleThing> map_of_entity = 1;
 }
 
 message RecursiveRefA {
+  option features.(pb.java).nest_in_file_class = YES;
+
   RecursiveRefB other = 1;
 }
 
 message RecursiveRefB {
+  option features.(pb.java).nest_in_file_class = YES;
+
   RecursiveRefA other = 1;
 }
 
 message RecursiveListRefA {
+  option features.(pb.java).nest_in_file_class = YES;
+
   repeated RecursiveListRefB others = 1;
 }
 
 message RecursiveListRefB {
+  option features.(pb.java).nest_in_file_class = YES;
+
   repeated RecursiveListRefA others = 1;
 }
 
 message RecursiveMapRefA {
+  option features.(pb.java).nest_in_file_class = YES;
+
   map<string, RecursiveMapRefB> others = 10;
 }
 
 message RecursiveMapRefB {
+  option features.(pb.java).nest_in_file_class = YES;
+
   map<string, RecursiveMapRefA> others = 10;
 }
 
 message RepeatedGroup {
+  option features.(pb.java).nest_in_file_class = YES;
+
   message Inner {
     string field1 = 1;
     NestedThing field2 = 2;
