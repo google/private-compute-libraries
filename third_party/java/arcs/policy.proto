@@ -18,12 +18,13 @@ package arcs;
 
 import "third_party/java/arcs/annotation.proto";
 
+option features.default_symbol_visibility = STRICT;
 option java_outer_classname = "Policy";
 option features.field_presence = IMPLICIT;
 option java_package = "arcs.core.data.proto";
 
 // Defines a data usage policy.
-message PolicyProto {
+export message PolicyProto {
   // Policy name.
   string name = 1;
 

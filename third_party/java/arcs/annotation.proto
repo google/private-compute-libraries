@@ -16,12 +16,13 @@ edition = "2024";
 
 package arcs;
 
+option features.default_symbol_visibility = STRICT;
 option java_outer_classname = "Annotation";
 option features.field_presence = IMPLICIT;
 option java_package = "arcs.core.data.proto";
 
 // Represents the usage of an annotation.
-message AnnotationProto {
+export message AnnotationProto {
   string name = 1;
   repeated AnnotationParamProto params = 2;
 }

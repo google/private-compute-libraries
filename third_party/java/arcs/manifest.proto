@@ -19,6 +19,7 @@ package arcs;
 import "third_party/java/arcs/annotation.proto";
 import "third_party/java/arcs/policy.proto";
 
+option features.default_symbol_visibility = STRICT;
 option java_outer_classname = "Manifest";
 option features.field_presence = IMPLICIT;
 option java_package = "arcs.core.data.proto";
