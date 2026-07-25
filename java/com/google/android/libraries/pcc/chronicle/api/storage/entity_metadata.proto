@@ -18,6 +18,7 @@ package pcc.chronicle.api.storage;
 
 import "google/protobuf/timestamp.proto";
 
+option features.default_symbol_visibility = STRICT;
 option java_outer_classname = "EntityMetadataOuterClass";
 option java_package = "com.google.android.libraries.pcc.chronicle.api.storage";
 

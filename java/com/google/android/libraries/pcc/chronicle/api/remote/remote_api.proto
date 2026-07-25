@@ -18,6 +18,7 @@ package pcc.chronicle.api.remote;
 
 import "google/protobuf/empty.proto";
 
+option features.default_symbol_visibility = STRICT;
 option java_outer_classname = "RemoteApi";
 option features.field_presence = IMPLICIT;
 option java_package = "com.google.android.libraries.pcc.chronicle.api.remote";
