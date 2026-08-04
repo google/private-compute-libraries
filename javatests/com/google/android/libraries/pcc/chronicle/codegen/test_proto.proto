@@ -24,6 +24,7 @@ import "javatests/com/google/android/libraries/pcc/chronicle/codegen/test_sub_pr
 
 import option "third_party/java/protobuf/java_features.proto";
 
+option features.default_symbol_visibility = STRICT;
 option features.utf8_validation = NONE;
 
 option java_package = "com.google.android.libraries.pcc.chronicle.codegen";

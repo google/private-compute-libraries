@@ -22,7 +22,7 @@ package javatest.com.google.android.libraries.pcc.chronicle.codegen;
 option java_package = "com.google.android.libraries.pcc.chronicle.codegen";
 option java_outer_classname = "CodegenTestSubProto";
 
-message SimpleThing {
+export message SimpleThing {
   option features.(pb.java).nest_in_file_class = YES;
 
   string field1 = 1;
