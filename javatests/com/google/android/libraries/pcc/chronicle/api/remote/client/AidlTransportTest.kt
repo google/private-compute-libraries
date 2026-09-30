@@ -33,6 +33,7 @@ import com.google.android.libraries.pcc.chronicle.api.remote.client.ChronicleSer
 import com.google.android.libraries.pcc.chronicle.api.storage.EntityMetadata
 import com.google.common.truth.Truth.assertThat
 import kotlin.test.assertFailsWith
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
@@ -201,6 +202,51 @@ class AidlTransportTest {
     iRemote.verifyDeathRecipientLinkedAndUnlinked()
   }
 
+  @Test
+  fun serve_binderDeath_causesCancellationWithConnectionLost(): Unit = runBlocking {
+    val transport = AidlTransport(connector)
+    connectionState.emit(State.Connected(stub))
+
+    val results = async {
+      assertFailsWith<CancellationException> { transport.serve(request).toList() }
+    }
+
+    // Await the call.
+    serveCall.first { it != null }
+
+    val deathRecipient = stub.getLinkedDeathRecipient()
+    deathRecipient.binderDied()
+
+    val exception = results.await()
+    assertThat(exception).hasMessageThat().isEqualTo("Connection to Chronicle service lost")
+    assertThat(exception.cause).isEqualTo(AidlTransport.CONNECTION_LOST)
+
+    stub.verifyDeathRecipientUnlinked(deathRecipient)
+  }
+
+  @Test
+  fun serve_binderDeathAfterCancellation_doesNotCrash(): Unit = runBlocking {
+    val transport = AidlTransport(connector)
+    connectionState.emit(State.Connected(stub))
+
+    val job = launch { transport.serve(request).toList() }
+
+    // Await the call to ensure serve() has been invoked and deathRecipient linked.
+    serveCall.first { it != null }
+
+    val deathRecipient = stub.getLinkedDeathRecipient()
+
+    // Cancel downstream flow collection and await completion of cancellation cleanup.
+    job.cancel()
+    job.join()
+
+    // Trigger binder death after downstream flow has already been cancelled.
+    // This must not throw or crash the client process (b/543304066).
+    deathRecipient.binderDied()
+
+    stub.verifyDeathRecipientUnlinked(deathRecipient)
+  }
+
   private fun sendResponse(response: RemoteResponse) {
     serveCall.value?.second?.onData(response)
   }
@@ -237,10 +283,18 @@ class AidlTransportTest {
 
     override fun asBinder(): IBinder = spyBinder
 
-    fun verifyDeathRecipientLinkedAndUnlinked() {
+    fun getLinkedDeathRecipient(): IBinder.DeathRecipient {
       val deathCaptor = argumentCaptor<IBinder.DeathRecipient>()
       verify(spyBinder).linkToDeath(deathCaptor.capture(), eq(0))
-      verify(spyBinder).unlinkToDeath(eq(deathCaptor.firstValue), eq(0))
+      return deathCaptor.firstValue
+    }
+
+    fun verifyDeathRecipientUnlinked(deathRecipient: IBinder.DeathRecipient) {
+      verify(spyBinder).unlinkToDeath(eq(deathRecipient), eq(0))
+    }
+
+    fun verifyDeathRecipientLinkedAndUnlinked() {
+      verifyDeathRecipientUnlinked(getLinkedDeathRecipient())
     }
   }
 }

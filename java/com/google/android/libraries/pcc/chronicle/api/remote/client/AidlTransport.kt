@@ -27,6 +27,7 @@ import com.google.android.libraries.pcc.chronicle.api.remote.RemoteResponse
 import com.google.android.libraries.pcc.chronicle.util.Logcat
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.getAndUpdate
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
@@ -52,13 +53,16 @@ class AidlTransport(private val connector: ChronicleServiceConnector) : Transpor
     // We will need to be careful to manage the reference to our cancellation signal so that it is
     // releasable. At the end of any operation, this reference should be nulled-out.
     val cancellationSignal = atomic<ICancellationSignal?>(null)
-    val deathRecipient =
-      IBinder.DeathRecipient {
-        logcat.d("AidlTransport: iRemote death recipient triggered")
-        // Ensure we null-out the cancellation signal reference to not leak it.
-        cancellationSignal.value = null
-        channel.close(CONNECTION_LOST.copy())
-      }
+    val deathRecipient = IBinder.DeathRecipient {
+      logcat.d("AidlTransport: iRemote death recipient triggered")
+      // Ensure we null-out the cancellation signal reference to not leak it.
+      cancellationSignal.value = null
+      // Using cancel() instead of channel.close() ensures the coroutine scope is cancelled
+      // gracefully with a CancellationException. If channel.close(error) were used and the flow
+      // was already cancelled or closed by downstream collectors, it could trigger an uncaught
+      // exception crash in client processes (b/543304066).
+      cancel("Connection to Chronicle service lost", CONNECTION_LOST.copy())
+    }
     iRemote.asBinder().linkToDeath(deathRecipient, 0)
     val callback =
       object : IResponseCallback.Stub() {
