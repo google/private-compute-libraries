@@ -65,7 +65,7 @@ fun Descriptors.EnumDescriptor.typeLocation(useJavaPackage: Boolean): TypeLocati
   )
 
 /** Return the field name to use when accessing it from generated code. */
-fun Descriptors.FieldDescriptor.toProtoFieldName(bytesAsStrings: Boolean = true) =
+fun Descriptors.FieldDescriptor.toProtoFieldName(bytesAsStrings: Boolean = true): String =
   when {
     isMapField -> "${name.toChronicleFieldName()}Map"
     isRepeated && !isMapField -> "${name.toChronicleFieldName()}List"

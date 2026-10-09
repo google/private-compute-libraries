@@ -212,14 +212,13 @@ class ClassToTypeConverter(
     val includeNormalField =
       foreignReference == null || foreignReference.additionalNamedField.isNotEmpty()
 
-    val foreignReferenceFieldEntry =
-      foreignReference?.let {
-        FieldEntry(
-          if (it.additionalNamedField.isEmpty()) name else it.additionalNamedField,
-          FieldCategory.ForeignReference(foreignReference.schemaName, foreignReference.hard),
-          name,
-        )
-      }
+    val foreignReferenceFieldEntry = foreignReference?.let {
+      FieldEntry(
+        if (it.additionalNamedField.isEmpty()) name else it.additionalNamedField,
+        FieldCategory.ForeignReference(foreignReference.schemaName, foreignReference.hard),
+        name,
+      )
+    }
 
     return listOfNotNull(
       if (includeNormalField) FieldEntry(name, toFieldCategory()) else null,
@@ -272,5 +271,5 @@ class ClassToTypeConverter(
  * For example, `java.util.Map.Entry` will return ["Map"].
  * `some.package.OuterMost.Middle.Inner.ClassName` will return ["Inner", "Middle", "OuterMost"]
  */
-fun Class<*>.enclosingNames() =
+fun Class<*>.enclosingNames(): List<String> =
   generateSequence(enclosingClass) { it.enclosingClass }.map { it.simpleName }.toList()

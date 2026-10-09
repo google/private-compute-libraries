@@ -31,7 +31,7 @@ interface Connection {
      * [ConnectionName.Writer].
      */
     @JvmStatic
-    fun <T : Connection> connectionName(clazz: Class<T>) =
+    fun <T : Connection> connectionName(clazz: Class<T>): ConnectionName<T> =
       if (clazz.isReadConnection) {
         ReadConnection.connectionName(clazz)
       } else {

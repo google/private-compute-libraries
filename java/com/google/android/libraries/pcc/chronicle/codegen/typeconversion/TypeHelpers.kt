@@ -114,7 +114,7 @@ fun FieldCategory.identifierFriendlyArcsType(): String {
 }
 
 /** Generate the KotlinPoet [ClassName] for a [TypeLocation]. */
-fun TypeLocation.asClassName() =
+fun TypeLocation.asClassName(): ClassName =
   if (enclosingNames.isEmpty()) {
     ClassName(pkg, name)
   } else {

@@ -95,7 +95,7 @@ class ChronicleConnectionAnnotationProcessor : AnnotationProcessor() {
       element.validateConnection()
     }
 
-    val dataClass = element.validateAndExtractDataClass()
+    val dataClass: Element = element.validateAndExtractDataClass()
     val generateConnectionProviderCode: Boolean =
       element.getAnnotation(ChronicleConnection::class.java).generateConnectionProvider
   }

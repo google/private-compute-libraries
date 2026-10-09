@@ -27,7 +27,8 @@ fun CharSequence.upperSnake(): String =
     .uppercase(Locale.ROOT)
 
 /** Convert proto "field_name" to Chronicle "fieldName". */
-fun String.toChronicleFieldName() = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, this)
+fun String.toChronicleFieldName(): String =
+  CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, this)
 
 /** Capitalizes the string by ensuring the first character is capital. */
 fun String.capitalize(): String = replaceFirstChar {
