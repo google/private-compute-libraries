@@ -23,27 +23,30 @@ import java.time.Duration
  * A simple helper interface to access [DataCacheStorage.registerDataType] interface with type
  * parameter. Example : DataCacheStorage.registerDataType<T>(maxSize).
  */
-inline fun <reified T : Any> DataCacheStorage.registerDataType(maxSize: Int, ttl: Duration) =
+inline fun <reified T : Any> DataCacheStorage.registerDataType(maxSize: Int, ttl: Duration) {
   registerDataType(cls = T::class.java, maxSize = maxSize, ttl = ttl)
+}
 
 /**
  * A simple helper interface to access [DataCacheStorage.unregisterDataType] interface with type
  * parameter. Example : DataCacheStorage.unregisterDataType<T>().
  */
-inline fun <reified T : Any> DataCacheStorage.unregisterDataType() =
+inline fun <reified T : Any> DataCacheStorage.unregisterDataType() {
   unregisterDataType(T::class.java)
+}
 
 /**
  * A simple helper interface to access [DataCacheStorage.size] interface with type parameter.
  * Example : DataCacheStorage.size<T>().
  */
-inline fun <reified T : Any> DataCacheStorage.size() = size(T::class.java)
+inline fun <reified T : Any> DataCacheStorage.size(): Int = size(T::class.java)
 
 /**
  * A simple helper interface to access [DataCacheStorage.get] interface with type parameter. Example
  * : DataCacheStorage.get<T>(id).
  */
-inline fun <reified T : Any> DataCacheStorage.get(id: String) = get(T::class.java, id)
+inline fun <reified T : Any> DataCacheStorage.get(id: String): WrappedEntity<T>? =
+  get(T::class.java, id)
 
 /**
  * A simple helper interface to access [DataCacheStorage.put] interface with type parameter. Example
@@ -63,10 +66,12 @@ inline fun <reified T : Any> DataCacheStorage.remove(id: String): WrappedEntity<
  * A simple helper interface to access [DataCacheStorage.all] interface with type parameter. Example
  * : DataCacheStorage.all<T>().
  */
-inline fun <reified T : Any> DataCacheStorage.all() = all(T::class.java)
+inline fun <reified T : Any> DataCacheStorage.all(): List<WrappedEntity<T>> = all(T::class.java)
 
 /**
  * A simple helper interface to access [DataCacheStorage.removeAll] interface with type parameter.
  * Example : DataCacheStorage.removeAll<T>().
  */
-inline fun <reified T : Any> DataCacheStorage.removeAll() = removeAll(T::class.java)
+inline fun <reified T : Any> DataCacheStorage.removeAll() {
+  removeAll(T::class.java)
+}

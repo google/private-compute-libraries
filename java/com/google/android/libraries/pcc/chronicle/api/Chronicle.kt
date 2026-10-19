@@ -114,7 +114,7 @@ sealed class ConnectionResult<T : Connection> {
 inline fun <reified T : Connection> Chronicle.getConnection(
   requester: ProcessorNode,
   policy: Policy? = null,
-) = getConnection(ConnectionRequest(T::class.java, requester, policy))
+): ConnectionResult<T> = getConnection(ConnectionRequest(T::class.java, requester, policy))
 
 /**
  * A convenience method that will create a [ConnectionRequest] using the class provided as a type
@@ -127,7 +127,7 @@ inline fun <reified T : Connection> Chronicle.getConnectionOrNull(
   requester: ProcessorNode,
   policy: Policy? = null,
   noinline onError: (ChronicleError) -> Unit = {},
-) = getConnectionOrNull(ConnectionRequest(T::class.java, requester, policy), onError)
+): T? = getConnectionOrNull(ConnectionRequest(T::class.java, requester, policy), onError)
 
 /**
  * A convenience method that will create a [ConnectionRequest] using the class provided as a type
@@ -136,4 +136,4 @@ inline fun <reified T : Connection> Chronicle.getConnectionOrNull(
 inline fun <reified T : Connection> Chronicle.getConnectionOrThrow(
   requester: ProcessorNode,
   policy: Policy? = null,
-) = getConnectionOrThrow(ConnectionRequest(T::class.java, requester, policy))
+): T = getConnectionOrThrow(ConnectionRequest(T::class.java, requester, policy))

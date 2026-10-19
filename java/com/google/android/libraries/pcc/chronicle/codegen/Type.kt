@@ -56,9 +56,9 @@ data class Type(
   val jvmLocation: TypeLocation = location,
   val tooling: Tooling = Tooling.UNKNOWN,
 ) {
-  val name = location.name
-  val enclosingNames = location.enclosingNames
-  val pkg = location.pkg
+  val name: String = location.name
+  val enclosingNames: List<String> = location.enclosingNames
+  val pkg: String = location.pkg
 
   /**
    * The library or framework within which the type was defined.

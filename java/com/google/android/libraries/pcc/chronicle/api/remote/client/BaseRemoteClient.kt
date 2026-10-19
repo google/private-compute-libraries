@@ -22,6 +22,7 @@ import com.google.android.libraries.pcc.chronicle.api.remote.RemoteRequestMetada
 import com.google.android.libraries.pcc.chronicle.api.remote.serialization.Serializer
 import com.google.android.libraries.pcc.chronicle.api.storage.WrappedEntity
 import com.google.android.libraries.pcc.chronicle.util.Logcat
+import com.google.android.libraries.pcc.chronicle.util.TaggedLogger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -64,6 +65,6 @@ abstract class BaseRemoteClient<T : Any>(protected val serializer: Serializer<T>
     }
 
   companion object {
-    @JvmStatic protected val logcat = Logcat.clientSide
+    @JvmStatic protected val logcat: TaggedLogger = Logcat.clientSide
   }
 }

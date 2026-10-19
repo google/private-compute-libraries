@@ -69,6 +69,7 @@ constructor(
       maxSize: Int,
       ttl: Duration,
       dataTypeDescriptor: DataTypeDescriptor,
-    ) = ManagedDataCache(T::class.java, cache, maxSize, ttl, dataTypeDescriptor)
+    ): ManagedDataCache<T> =
+      ManagedDataCache(T::class.java, cache, maxSize, ttl, dataTypeDescriptor)
   }
 }

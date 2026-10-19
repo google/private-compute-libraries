@@ -31,7 +31,7 @@ sealed class PolicyCheckResult {
 
   /** Denotes a failed policy check. */
   data class Fail(val failingChecks: List<PolicyCheck>) : PolicyCheckResult() {
-    val message = failingChecks.toString()
+    val message: String = failingChecks.toString()
   }
 
   companion object {

@@ -61,7 +61,7 @@ class Capabilities(capabilities: List<Capability> = emptyList()) {
   val isShareable: Boolean?
     get() = getCapability<Capability.Shareable>()?.let { it.value }
 
-  val isEmpty = ranges.isEmpty()
+  val isEmpty: Boolean = ranges.isEmpty()
 
   /**
    * Returns true, if the given [Capability] is within the corresponding [Capability.Range] of same
@@ -107,6 +107,6 @@ class Capabilities(capabilities: List<Capability> = emptyList()) {
       return Capabilities(ranges)
     }
 
-    fun fromAnnotation(annotation: Annotation) = fromAnnotations(listOf(annotation))
+    fun fromAnnotation(annotation: Annotation): Capabilities = fromAnnotations(listOf(annotation))
   }
 }

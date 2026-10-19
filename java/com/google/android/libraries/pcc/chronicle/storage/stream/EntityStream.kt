@@ -33,7 +33,9 @@ interface EntityStream<T : Any> {
   suspend fun publishGroup(group: List<WrappedEntity<T>>)
 
   /** Publishes the provided [entity] to the [EntityStream]. */
-  suspend fun publish(entity: WrappedEntity<T>) = publishGroup(listOf(entity))
+  suspend fun publish(entity: WrappedEntity<T>) {
+    publishGroup(listOf(entity))
+  }
 
   /**
    * Returns a [Flow] of groups of [WrappedEntities][WrappedEntity].

@@ -16,6 +16,7 @@
 
 package com.google.android.libraries.pcc.chronicle.samples.policy.peopleproto
 
+import com.google.android.libraries.pcc.chronicle.api.policy.Policy
 import com.google.android.libraries.pcc.chronicle.api.policy.StorageMedium
 import com.google.android.libraries.pcc.chronicle.api.policy.UsageType
 import com.google.android.libraries.pcc.chronicle.api.policy.builder.policy
@@ -23,7 +24,7 @@ import com.google.android.libraries.pcc.chronicle.samples.datahub.peopleproto.PE
 import java.time.Duration
 
 /** [Policy] which can be used when requesting a [ReadConnection] to [Person] data. */
-val PEOPLE_PROTO_POLICY =
+val PEOPLE_PROTO_POLICY: Policy =
   policy(name = "PeopleProtoPolicy", egressType = "UI Display") {
     description =
       """
