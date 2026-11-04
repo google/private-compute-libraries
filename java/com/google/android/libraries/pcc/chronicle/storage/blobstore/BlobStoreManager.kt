@@ -29,7 +29,7 @@ import kotlinx.atomicfu.update
  */
 class BlobStoreManager(val timeSource: TimeSource, val managements: Set<BlobStoreManagement>) :
   PackageDeletionListener {
-  private var managementInfos = atomic(emptySet<ManagementInfo>())
+  private val managementInfos = atomic(emptySet<ManagementInfo>())
 
   /**
    * This function takes in a [ManagementInfo] as a parameter and attempts to add it to the set of
