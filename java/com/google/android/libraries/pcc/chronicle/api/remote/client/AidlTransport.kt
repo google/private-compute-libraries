@@ -25,8 +25,7 @@ import com.google.android.libraries.pcc.chronicle.api.remote.RemoteErrorMetadata
 import com.google.android.libraries.pcc.chronicle.api.remote.RemoteRequest
 import com.google.android.libraries.pcc.chronicle.api.remote.RemoteResponse
 import com.google.android.libraries.pcc.chronicle.util.Logcat
-import kotlinx.atomicfu.atomic
-import kotlinx.atomicfu.getAndUpdate
+import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
@@ -52,11 +51,11 @@ class AidlTransport(private val connector: ChronicleServiceConnector) : Transpor
 
     // We will need to be careful to manage the reference to our cancellation signal so that it is
     // releasable. At the end of any operation, this reference should be nulled-out.
-    val cancellationSignal = atomic<ICancellationSignal?>(null)
+    val cancellationSignal = AtomicReference<ICancellationSignal?>(null)
     val deathRecipient = IBinder.DeathRecipient {
       logcat.d("AidlTransport: iRemote death recipient triggered")
       // Ensure we null-out the cancellation signal reference to not leak it.
-      cancellationSignal.value = null
+      cancellationSignal.set(null)
       // Using cancel() instead of channel.close() ensures the coroutine scope is cancelled
       // gracefully with a CancellationException. If channel.close(error) were used and the flow
       // was already cancelled or closed by downstream collectors, it could trigger an uncaught
@@ -75,7 +74,7 @@ class AidlTransport(private val connector: ChronicleServiceConnector) : Transpor
           // We null-out the signal before closing the channel so we avoid attempting to send a
           // cancel signal in the awaitClose block below.
           logcat.v(error, "AidlTransport: onError")
-          cancellationSignal.value = null
+          cancellationSignal.set(null)
           channel.close(error)
         }
 
@@ -83,13 +82,13 @@ class AidlTransport(private val connector: ChronicleServiceConnector) : Transpor
           // We null-out the signal before closing the channel so we avoid attempting to send a
           // cancel signal in the awaitClose block below.
           logcat.v("AidlTransport: onComplete")
-          cancellationSignal.value = null
+          cancellationSignal.set(null)
           channel.close()
         }
 
         override fun provideCancellationSignal(signal: ICancellationSignal) {
           logcat.v("AidlTransport: provideCancellationSignal")
-          cancellationSignal.value = signal
+          cancellationSignal.set(signal)
         }
       }
     try {
