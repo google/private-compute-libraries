@@ -15,7 +15,7 @@
 // LINT: ALLOW_GROUPS
 // Groups are deprecated, but lets make sure we support them.
 
-edition = "2024";
+edition = "2026";
 
 package javatest.com.google.android.libraries.pcc.chronicle.codegen;
 
